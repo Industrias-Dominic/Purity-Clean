@@ -549,11 +549,126 @@ function initReferidos() {
 }
 
 if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", () => {
-    initReferidos();
-    initBookingForm();
-  });
+  document.addEventListener("DOMContentLoaded", initReferidos);
 } else {
   initReferidos();
-  initBookingForm();
+}
+
+const NEWSLETTER_STORAGE_KEY = "purity_newsletter_subscribed";
+
+function initNewsletter() {
+  if (localStorage.getItem(NEWSLETTER_STORAGE_KEY)) {
+    const form = document.getElementById("newsletter-form");
+    const success = document.getElementById("newsletter-success");
+    if (form) form.hidden = true;
+    if (success) success.hidden = false;
+    return;
+  }
+
+  const form = document.getElementById("newsletter-form");
+  if (!form) return;
+
+  const emailInput = form.querySelector("#newsletter-email");
+  const nameInput = form.querySelector("#newsletter-name");
+
+  if (emailInput) {
+    emailInput.addEventListener("blur", () => validateField(emailInput));
+    emailInput.addEventListener("input", () => {
+      if (emailInput.classList.contains("error")) validateField(emailInput);
+    });
+  }
+
+  if (nameInput) {
+    nameInput.addEventListener("blur", () => {
+      if (nameInput.classList.contains("error")) validateField(nameInput);
+    });
+    nameInput.addEventListener("input", () => {
+      if (nameInput.classList.contains("error")) validateField(nameInput);
+    });
+  }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const isEmail = validateField(emailInput);
+    if (!isEmail) return;
+
+    const honeypot = form.querySelector('input[name="_gotcha"]');
+    if (honeypot && honeypot.value) return;
+
+    const submitBtn = form.querySelector(".btn-newsletter");
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i> Suscribiendo...';
+    }
+
+    try {
+      const formData = new FormData(form);
+      const response = await fetch(form.action, {
+        method: "POST",
+        body: formData,
+        headers: { Accept: "application/json" },
+      });
+
+      if (response.ok) {
+        localStorage.setItem(NEWSLETTER_STORAGE_KEY, "true");
+        form.hidden = true;
+        const successEl = document.getElementById("newsletter-success");
+        if (successEl) successEl.hidden = false;
+        trackEvent("newsletter_subscribed");
+      } else {
+        throw new Error("Form submission failed");
+      }
+    } catch (err) {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fa-solid fa-envelope-open-text" aria-hidden="true"></i> Suscribirme y obtener mi cupon';
+      }
+      const errorEl = emailInput?.parentElement?.querySelector(".field-error");
+      if (errorEl) errorEl.textContent = "Error al enviar. Intenta de nuevo.";
+    }
+  });
+
+  const copyBtn = document.getElementById("newsletter-copy-btn");
+  if (copyBtn) {
+    copyBtn.addEventListener("click", () => {
+      navigator.clipboard.writeText("PURITY10").then(() => {
+        const feedback = document.getElementById("newsletter-copy-feedback");
+        if (feedback) {
+          feedback.hidden = false;
+          setTimeout(() => { feedback.hidden = true; }, 2000);
+        }
+      }).catch(() => {
+        const ta = document.createElement("textarea");
+        ta.value = "PURITY10";
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+        const feedback = document.getElementById("newsletter-copy-feedback");
+        if (feedback) {
+          feedback.hidden = false;
+          setTimeout(() => { feedback.hidden = true; }, 2000);
+        }
+      });
+    });
+  }
+
+  const closeBtn = document.getElementById("newsletter-close-btn");
+  if (closeBtn) {
+    closeBtn.addEventListener("click", () => {
+      const successEl = document.getElementById("newsletter-success");
+      if (successEl) successEl.hidden = true;
+      const section = document.getElementById("newsletter");
+      if (section) section.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initNewsletter);
+} else {
+  initNewsletter();
 }
