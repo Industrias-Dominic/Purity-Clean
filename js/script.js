@@ -174,6 +174,12 @@ function initBookingForm() {
   const timeInput = bookingForm.querySelector("#booking-time");
   const addressInput = bookingForm.querySelector("#booking-address");
 
+  const params = new URLSearchParams(window.location.search);
+  const preselectedService = params.get("service");
+  if (preselectedService && serviceInput) {
+    serviceInput.value = preselectedService;
+  }
+
   const today = new Date();
   today.setDate(today.getDate() + 1);
   const minDate = today.toISOString().split("T")[0];
@@ -548,10 +554,31 @@ function initReferidos() {
   });
 }
 
+function initBookingPreselect() {
+  const bookingLinks = document.querySelectorAll("a[href='#reservas']");
+  bookingLinks.forEach((link) => {
+    link.addEventListener("click", () => {
+      const card = link.closest(".searchable-item");
+      const serviceValue = card?.dataset.bookingService;
+      if (!serviceValue) return;
+      const params = new URLSearchParams();
+      params.set("service", serviceValue);
+      const newUrl = `${window.location.pathname}#reservas?${params.toString()}`;
+      history.replaceState(null, "", newUrl);
+    });
+  });
+}
+
 if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", initReferidos);
+  document.addEventListener("DOMContentLoaded", () => {
+    initReferidos();
+    initBookingForm();
+    initBookingPreselect();
+  });
 } else {
   initReferidos();
+  initBookingForm();
+  initBookingPreselect();
 }
 
 function initComparisonSliders() {
