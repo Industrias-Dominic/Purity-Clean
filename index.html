@@ -104,9 +104,11 @@
   }
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Raleway:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWix+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkR4j8CGx3zU6Q8U9AqR2mYf0i+XK9f6w8EA==" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin="anonymous">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Raleway:wght@600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Raleway:wght@600;700;800&display=swap"></noscript>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWix+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkR4j8CGx3zU6Q8U9AqR2mYf0i+XK9f6w8EA==" crossorigin="anonymous" referrerpolicy="no-referrer" media="print" onload="this.media='all'">
   <link rel="sitemap" type="application/xml" title="Sitemap XML" href="https://purityclean.com/sitemap.xml">
   <link rel="canonical" href="https://purityclean.com/">
   <link rel="stylesheet" href="css/style.css">
@@ -132,6 +134,7 @@
       <ul class="menu" id="main-menu">
         <li><a href="#inicio">Inicio</a></li>
         <li><a href="#servicios">Servicios</a></li>
+        <li><a href="#pricing">Tarifas</a></li>
         <li><a href="#productos">Productos</a></li>
         <li><a href="#contacto">Contactanos</a></li>
       </ul>
@@ -201,6 +204,197 @@
       </div>
     </section>
 
+    <section id="pricing" class="section section-pricing" aria-labelledby="pricing-heading">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow" data-reveal-item>Tarifas</p>
+          <h2 id="pricing-heading" data-reveal-item>Precios transparentes por servicio</h2>
+          <p class="pricing-intro" data-reveal-item>rangos adaptados al tamano y necesidad de cada espacio. todos los precios incluyen materiales y mano de obra especializada.</p>
+        </div>
+
+        <div class="pricing-grid" role="list">
+
+          <article class="pricing-card pricing-card--homes" data-reveal data-reveal-delay="50" aria-labelledby="pricing-homes-title">
+            <div class="pricing-card-header">
+              <div class="pricing-icon" aria-hidden="true">
+                <i class="fa-solid fa-home"></i>
+              </div>
+              <h3 id="pricing-homes-title">Hogares y PYMEs</h3>
+              <p class="pricing-tagline">Limpieza profunda, resultados visibles</p>
+            </div>
+            <ul class="pricing-features" aria-label="Servicios y rangos de precio para hogares y PYMEs">
+              <li class="pricing-feature">
+                <span class="feature-name">Limpieza profunda de sofás</span>
+                <span class="feature-range">
+                  <span class="price-range">
+                    <span class="price-low">$80.000</span>
+                    <span class="price-sep"> — </span>
+                    <span class="price-high">$180.000</span>
+                  </span>
+                  <span class="price-note">por unidad</span>
+                </span>
+              </li>
+              <li class="pricing-feature">
+                <span class="feature-name">Sanitización de colchones</span>
+                <span class="feature-range">
+                  <span class="price-range">
+                    <span class="price-low">$60.000</span>
+                    <span class="price-sep"> — </span>
+                    <span class="price-high">$120.000</span>
+                  </span>
+                  <span class="price-note">por unidad</span>
+                </span>
+              </li>
+              <li class="pricing-feature">
+                <span class="feature-name">Kit Eco para muebles</span>
+                <span class="feature-range">
+                  <span class="price-range">
+                    <span class="price-low">$45.000</span>
+                    <span class="price-sep"> — </span>
+                    <span class="price-high">$75.000</span>
+                  </span>
+                  <span class="price-note">por kit</span>
+                </span>
+              </li>
+              <li class="pricing-feature">
+                <span class="feature-name">Desinfectante antibacterial</span>
+                <span class="feature-range">
+                  <span class="price-range">
+                    <span class="price-low">$25.000</span>
+                    <span class="price-sep"> — </span>
+                    <span class="price-high">$55.000</span>
+                  </span>
+                  <span class="price-note">por unidad</span>
+                </span>
+              </li>
+            </ul>
+            <a class="btn pricing-btn" href="#contacto">
+              <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
+              Agendar servicio
+            </a>
+          </article>
+
+          <article class="pricing-card pricing-card--enterprise" data-reveal data-reveal-delay="150" aria-labelledby="pricing-enterprise-title">
+            <div class="pricing-card-header">
+              <div class="pricing-icon" aria-hidden="true">
+                <i class="fa-solid fa-building"></i>
+              </div>
+              <h3 id="pricing-enterprise-title">Empresas y Organizaciones</h3>
+              <p class="pricing-tagline">Planes a medida para operaciones de escala</p>
+            </div>
+            <ul class="pricing-features" aria-label="Servicios y rangos de precio para empresas">
+              <li class="pricing-feature">
+                <span class="feature-name">Mantenimiento de alfombras corporativas</span>
+                <span class="feature-range">
+                  <span class="price-range">
+                    <span class="price-low">$200.000</span>
+                    <span class="price-sep"> — </span>
+                    <span class="price-high">$450.000</span>
+                  </span>
+                  <span class="price-note">por área m²</span>
+                </span>
+              </li>
+              <li class="pricing-feature">
+                <span class="feature-name">Limpieza técnica de sillas ergonómicas</span>
+                <span class="feature-range">
+                  <span class="price-range">
+                    <span class="price-low">$30.000</span>
+                    <span class="price-sep"> — </span>
+                    <span class="price-high">$55.000</span>
+                  </span>
+                  <span class="price-note">por unidad</span>
+                </span>
+              </li>
+              <li class="pricing-feature">
+                <span class="feature-name">Línea institucional de higienización</span>
+                <span class="feature-range">
+                  <span class="price-range">
+                    <span class="price-low">$150.000</span>
+                    <span class="price-sep"> — </span>
+                    <span class="price-high">$380.000</span>
+                  </span>
+                  <span class="price-note">por pack</span>
+                </span>
+              </li>
+              <li class="pricing-feature">
+                <span class="feature-name">Dispensadores inteligentes</span>
+                <span class="feature-range">
+                  <span class="price-range">
+                    <span class="price-low">$280.000</span>
+                    <span class="price-sep"> — </span>
+                    <span class="price-high">$550.000</span>
+                  </span>
+                  <span class="price-note">por unidad</span>
+                </span>
+              </li>
+            </ul>
+            <a class="btn pricing-btn" href="#contacto">
+              <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
+              Solicitar cotización
+            </a>
+          </article>
+
+          <article class="pricing-card pricing-card--plans" data-reveal data-reveal-delay="250" aria-labelledby="pricing-plans-title">
+            <div class="pricing-card-header">
+              <div class="pricing-icon" aria-hidden="true">
+                <i class="fa-solid fa-award"></i>
+              </div>
+              <h3 id="pricing-plans-title">Planes Recurrentes</h3>
+              <p class="pricing-tagline">Descuentos por compromiso prolongado</p>
+            </div>
+            <ul class="pricing-features" aria-label="Planes recurrentes con descuentos">
+              <li class="pricing-feature">
+                <span class="feature-name">Plan Mensual Hogar</span>
+                <span class="feature-range">
+                  <span class="price-range">
+                    <span class="price-high">Desde $250.000</span>
+                  </span>
+                  <span class="price-note">/mes</span>
+                </span>
+              </li>
+              <li class="pricing-feature">
+                <span class="feature-name">Plan Trimestral PYME</span>
+                <span class="feature-range">
+                  <span class="price-range">
+                    <span class="price-high">Desde $600.000</span>
+                  </span>
+                  <span class="price-note">/trimestre</span>
+                </span>
+              </li>
+              <li class="pricing-feature">
+                <span class="feature-name">Plan Corporativo Anual</span>
+                <span class="feature-range">
+                  <span class="price-range">
+                    <span class="price-high">Desde $2.000.000</span>
+                  </span>
+                  <span class="price-note">/año</span>
+                </span>
+              </li>
+              <li class="pricing-feature">
+                <span class="feature-name">Contrato Marco Enterprise</span>
+                <span class="feature-range">
+                  <span class="price-range">
+                    <span class="price-high">Desde $5.000.000</span>
+                  </span>
+                  <span class="price-note">/año</span>
+                </span>
+              </li>
+            </ul>
+            <a class="btn pricing-btn btn-accent" href="#contacto">
+              <i class="fa-solid fa-file-contract" aria-hidden="true"></i>
+              Configurar mi plan
+            </a>
+          </article>
+
+        </div>
+
+        <p class="pricing-disclaimer" data-reveal>
+          <i class="fa-solid fa-info-circle" aria-hidden="true"></i>
+          Los rangos de precio son referenciales y varían según dimensiones, estado del mueble y ubicación. Solicita tu evaluación gratuita para un presupuesto exacto.
+        </p>
+      </div>
+    </section>
+
     <section id="productos" class="section section-alt">
       <div class="container">
         <div class="section-head" data-reveal>
@@ -254,6 +448,103 @@
           <p>"Cumplen protocolos estrictos y ofrecen seguimiento constante. Excelente servicio corporativo."</p>
           <cite>- Coordinacion de Operaciones, Grupo Altura</cite>
         </blockquote>
+      </div>
+    </section>
+
+    <section id="referidos" class="section section-referidos">
+      <div class="container">
+        <div class="referidos-header" data-reveal>
+          <p class="eyebrow" data-reveal-item>Programa de referidos</p>
+          <h2 data-reveal-item>Recomienda y ambos ganan</h2>
+          <p class="referidos-lead" data-reveal-item>Genera tu codigo unico y compartelo con quien quieras. Ellas reciben un descuento, tu ganas beneficios.</p>
+        </div>
+
+        <div class="referidos-steps" data-reveal data-reveal-delay="100">
+          <div class="step-card" data-reveal-item>
+            <div class="step-icon" aria-hidden="true">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <span class="step-num" aria-hidden="true">1</span>
+            <h3>Ingresa tu nombre</h3>
+            <p>Escribe tu nombre para generar tu cupon personal.</p>
+          </div>
+          <div class="step-card" data-reveal-item data-reveal-delay="80">
+            <div class="step-icon" aria-hidden="true">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+            </div>
+            <span class="step-num" aria-hidden="true">2</span>
+            <h3>Genera tu codigo</h3>
+            <p>Recibe un codigo unico como <code>ANA15X2Y</code>.</p>
+          </div>
+          <div class="step-card" data-reveal-item data-reveal-delay="160">
+            <div class="step-icon" aria-hidden="true">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <span class="step-num" aria-hidden="true">3</span>
+            <h3>Compartelo por WhatsApp</h3>
+            <p>Envialo a tus amigas con un mensaje pre-llenado.</p>
+          </div>
+        </div>
+
+        <div class="referidos-form-wrap" data-reveal data-reveal-delay="200">
+          <div id="referidos-form-container" class="referidos-form-container">
+            <form id="referidos-form" class="referidos-form" novalidate aria-label="Formulario de registro para programa de referidos">
+              <div class="referidos-input-row">
+                <div class="form-group">
+                  <label for="referido-nombre">Tu nombre <span aria-hidden="true">*</span></label>
+                  <input type="text" id="referido-nombre" name="nombre" autocomplete="name" required aria-required="true" placeholder="Ej: Ana" maxlength="30" pattern="[a-zA-Z\s]+" spellcheck="false">
+                  <span id="referido-nombre-error" class="field-error" role="alert" aria-live="polite"></span>
+                </div>
+                <button type="submit" class="btn btn-referido">
+                  <i class="fa-solid fa-ticket" aria-hidden="true"></i>
+                  Generar mi cupon
+                </button>
+              </div>
+              <p class="referidos-hint">Minimo 2 caracteres, solo letras y espacios.</p>
+            </form>
+          </div>
+
+          <div id="referidos-result" class="referidos-result" hidden>
+            <div class="coupon-card" aria-live="polite">
+              <div class="coupon-badge" aria-hidden="true">TU CUPON</div>
+              <p id="coupon-code" class="coupon-code" aria-label="Codigo de descuento"></p>
+              <p class="coupon-desc">15% de descuento en tu primera limpieza</p>
+              <button id="copy-coupon-btn" class="btn btn-copy" type="button" aria-label="Copiar codigo al portapapeles">
+                <i class="fa-solid fa-copy" aria-hidden="true"></i>
+                Copiar codigo
+              </button>
+              <div id="copy-feedback" class="copy-feedback" role="status" aria-live="polite" hidden>
+                <i class="fa-solid fa-check" aria-hidden="true"></i> Copiado
+              </div>
+            </div>
+            <button id="share-whatsapp-btn" class="btn btn-whatsapp-share" type="button">
+              <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+              Compartir por WhatsApp
+            </button>
+          </div>
+
+          <div id="referidos-existing" class="referidos-existing" hidden>
+            <p class="existing-label" aria-live="polite">
+              <i class="fa-solid fa-bookmark" aria-hidden="true"></i>
+              Ya tienes un cupon generado
+            </p>
+            <div class="coupon-card coupon-card-sm" aria-live="polite">
+              <p id="existing-coupon-code" class="coupon-code coupon-code-sm" aria-label="Tu codigo de descuento existente"></p>
+              <button id="copy-existing-btn" class="btn btn-copy btn-copy-sm" type="button" aria-label="Copiar codigo al portapapeles">
+                <i class="fa-solid fa-copy" aria-hidden="true"></i>
+              </button>
+            </div>
+            <button id="share-existing-btn" class="btn btn-whatsapp-share" type="button">
+              <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+              Compartir por WhatsApp
+            </button>
+          </div>
+        </div>
+
+        <p class="referidos-legal" aria-live="polite">
+          <i class="fa-solid fa-info-circle" aria-hidden="true"></i>
+          El descuento se valida al agendar el servicio. Un cupon por nuevo cliente.
+        </p>
       </div>
     </section>
 
