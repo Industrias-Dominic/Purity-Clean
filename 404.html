@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>404 - Página no encontrada | Purity &amp; Clean</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Raleway:wght@600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Raleway:wght@600;700;800&display=swap"></noscript>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .error-page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem 1rem;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(22, 163, 74, 0.12), transparent 40%),
+        radial-gradient(circle at 90% 5%, rgba(11, 113, 137, 0.12), transparent 45%),
+        var(--color-bg);
+    }
+
+    .error-mistake {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+
+    .error-mistake .big-4 {
+      font-family: "Raleway", sans-serif;
+      font-size: clamp(6rem, 20vw, 12rem);
+      font-weight: 800;
+      color: var(--color-primary);
+      line-height: 1;
+      opacity: 0.15;
+      text-shadow:
+        4px 4px 0 var(--color-border),
+        -2px -2px 0 var(--color-accent);
+    }
+
+    .error-mistake .spot {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: clamp(80px, 18vw, 140px);
+      height: clamp(80px, 18vw, 140px);
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--color-primary), #14a9ca);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .error-mistake .spot svg {
+      width: 50%;
+      height: 50%;
+      color: white;
+    }
+
+    .error-content h1 {
+      font-size: clamp(1.5rem, 5vw, 2.2rem);
+      margin: 0 0 0.8rem;
+      color: var(--color-text);
+    }
+
+    .error-content p {
+      color: var(--color-muted);
+      font-size: 1rem;
+      max-width: 400px;
+      margin: 0 auto 1.8rem;
+    }
+
+    .error-content .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      border: 0;
+      border-radius: 999px;
+      padding: 0.75rem 1.6rem;
+      font-weight: 700;
+      color: #fff;
+      background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary));
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .error-content .btn:hover,
+    .error-content .btn:focus-visible {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(11, 113, 137, 0.3);
+    }
+
+    [data-theme="dark"] .error-page {
+      background:
+        radial-gradient(circle at 15% 20%, rgba(22, 163, 74, 0.08), transparent 40%),
+        radial-gradient(circle at 90% 5%, rgba(20, 169, 202, 0.08), transparent 45%),
+        var(--color-bg);
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(-50%, -50%) translateY(0); }
+      50% { transform: translate(-50%, -50%) translateY(-10px); }
+    }
+
+    .error-mistake .spot {
+      animation: float 3s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body>
+  <main class="error-page" role="main">
+    <div class="error-mistake" aria-hidden="true">
+      <span class="big-4">404</span>
+      <div class="spot">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="error-content">
+      <h1>Esta página se limpió y no volvió</h1>
+      <p>Lo sentimos, el enlace que seguiste ya no existe o fue movido. Volvamos a un lugar conocido.</p>
+      <a class="btn" href="/">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        Volver al inicio
+      </a>
+    </div>
+  </main>
+</body>
+</html>
