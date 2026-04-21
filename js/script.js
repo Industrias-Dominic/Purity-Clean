@@ -113,6 +113,34 @@ window.addEventListener("scroll", () => {
   }
 }, { passive: true });
 
+const counterObserver = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const target = parseInt(el.dataset.counter, 10);
+        const hasDecimal = el.dataset.decimal === "8";
+        let current = 0;
+        const increment = target / 40;
+        const timer = setInterval(() => {
+          current += increment;
+          if (current >= target) {
+            current = target;
+            clearInterval(timer);
+          }
+          el.textContent = hasDecimal ? current.toFixed(1) : Math.floor(current);
+        }, 40);
+        counterObserver.unobserve(el);
+      }
+    });
+  },
+  { threshold: 0.5 }
+);
+
+document.querySelectorAll("[data-counter]").forEach((el) => {
+  counterObserver.observe(el);
+});
+
 const revealObserver = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {

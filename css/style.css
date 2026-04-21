@@ -1527,9 +1527,221 @@ a {
     margin: 0;
   }
 
-  @media (min-width: 760px) {
-    .contact-grid {
-      grid-template-columns: 1fr 1.2fr;
+.section-trust {
+  padding: 3rem 0;
+  background:
+    radial-gradient(circle at 10% 50%, rgba(22, 163, 74, 0.07), transparent 40%),
+    radial-gradient(circle at 90% 30%, rgba(11, 113, 137, 0.07), transparent 40%),
+    var(--color-bg);
+}
+
+.trust-grid {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.trust-badge {
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.3rem;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+  box-shadow: var(--shadow-soft);
+}
+
+.trust-badge::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-primary), #14a9ca);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.trust-badge:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 40px rgba(11, 113, 137, 0.15);
+  border-color: rgba(11, 113, 137, 0.25);
+}
+
+.trust-badge:hover::after {
+  opacity: 1;
+}
+
+.trust-badge--accent {
+  background: linear-gradient(145deg, var(--color-surface), rgba(22, 163, 74, 0.06));
+}
+
+.trust-badge--accent::after {
+  background: linear-gradient(90deg, #16a34a, #22c55e);
+}
+
+.trust-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-primary), #14a9ca);
+  color: #fff;
+  display: grid;
+  place-content: center;
+  margin-bottom: 0.6rem;
+  box-shadow: 0 6px 20px rgba(11, 113, 137, 0.25);
+}
+
+.trust-badge--accent .trust-icon {
+  background: linear-gradient(135deg, #16a34a, #22c55e);
+  box-shadow: 0 6px 20px rgba(22, 163, 74, 0.25);
+}
+
+.trust-metric {
+  font-family: "Raleway", sans-serif;
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.trust-badge--accent .trust-metric {
+  color: var(--color-accent);
+}
+
+.trust-unit {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-muted);
+  margin-bottom: 0.4rem;
+}
+
+.trust-badge h3 {
+  margin: 0;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--color-text);
+  line-height: 1.4;
+}
+
+.trust-badges-strip {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+
+.badge-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.badge-item:hover {
+  background: var(--color-surface-soft);
+  transform: translateX(4px);
+}
+
+.badge-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(11, 113, 137, 0.12), rgba(20, 169, 202, 0.12));
+  color: var(--color-primary);
+  display: grid;
+  place-content: center;
+  flex-shrink: 0;
+}
+
+.badge-item span {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text);
+  text-align: left;
+}
+
+@media (min-width: 600px) {
+  .trust-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .trust-badges-strip {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .trust-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+[data-theme="dark"] .section-trust {
+  background:
+    radial-gradient(circle at 10% 50%, rgba(34, 197, 94, 0.06), transparent 40%),
+    radial-gradient(circle at 90% 30%, rgba(20, 169, 202, 0.06), transparent 40%),
+    var(--color-bg);
+}
+
+[data-theme="dark"] .trust-badge {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+}
+
+[data-theme="dark"] .trust-badge--accent {
+  background: linear-gradient(145deg, var(--color-surface), rgba(34, 197, 94, 0.08));
+}
+
+[data-theme="dark"] .badge-item {
+  background: var(--color-surface-soft);
+}
+
+[data-theme="dark"] .badge-item:hover {
+  background: rgba(20, 169, 202, 0.08);
+}
+
+[data-theme="dark"] .trust-icon {
+  background: linear-gradient(135deg, rgba(20, 169, 202, 0.3), rgba(20, 169, 202, 0.2));
+}
+
+@media (max-width: 600px) {
+  .trust-metric {
+    font-size: 2.4rem;
+  }
+
+  .trust-badge {
+    padding: 1.25rem 1rem;
+  }
+
+  .trust-badges-strip {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .badge-item span {
+    font-size: 0.78rem;
+  }
+}
+
+@media (min-width: 760px) {
+  .contact-grid {
+    grid-template-columns: 1fr 1.2fr;
       align-items: start;
     }
 
