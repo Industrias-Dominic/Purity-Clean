@@ -159,6 +159,125 @@ document.querySelectorAll("[data-reveal]").forEach((el) => {
   revealObserver.observe(el);
 });
 
+const bookingForm = document.querySelector("#booking-form");
+const bookingSuccess = document.querySelector("#booking-success");
+const bookingResetBtn = document.querySelector("#booking-reset-btn");
+
+function initBookingForm() {
+  if (!bookingForm) return;
+
+  const nameInput = bookingForm.querySelector("#booking-name");
+  const emailInput = bookingForm.querySelector("#booking-email");
+  const phoneInput = bookingForm.querySelector("#booking-phone");
+  const serviceInput = bookingForm.querySelector("#booking-service");
+  const dateInput = bookingForm.querySelector("#booking-date");
+  const timeInput = bookingForm.querySelector("#booking-time");
+  const addressInput = bookingForm.querySelector("#booking-address");
+
+  const today = new Date();
+  today.setDate(today.getDate() + 1);
+  const minDate = today.toISOString().split("T")[0];
+  if (dateInput) dateInput.setAttribute("min", minDate);
+
+  const fieldMap = [nameInput, emailInput, phoneInput, serviceInput, dateInput, timeInput, addressInput];
+
+  fieldMap.forEach((input) => {
+    if (!input) return;
+    input.addEventListener("blur", () => validateBookingField(input));
+    input.addEventListener("input", () => {
+      if (input.classList.contains("error")) validateBookingField(input);
+    });
+  });
+
+  bookingForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const fields = [nameInput, emailInput, phoneInput, serviceInput, dateInput, timeInput, addressInput];
+    let allValid = true;
+    fields.forEach((input) => {
+      if (input && !validateBookingField(input)) allValid = false;
+    });
+    if (!allValid) return;
+
+    const submitBtn = bookingForm.querySelector(".btn-submit");
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i> Enviando...';
+    }
+
+    const formData = new FormData(bookingForm);
+    fetch(bookingForm.action, {
+      method: "POST",
+      body: formData,
+      headers: {
+        Accept: "application/json",
+      },
+    })
+      .then(() => {
+        bookingForm.hidden = true;
+        if (bookingSuccess) bookingSuccess.hidden = false;
+        trackEvent("booking_submitted", {
+          props: {
+            service: serviceInput?.value || "",
+            date: dateInput?.value || "",
+            time: timeInput?.value || "",
+          },
+        });
+      })
+      .catch(() => {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<i class="fa-solid fa-calendar-check" aria-hidden="true"></i> Confirmar Reserva';
+        }
+      });
+  });
+
+  if (bookingResetBtn) {
+    bookingResetBtn.addEventListener("click", () => {
+      bookingForm.reset();
+      bookingForm.hidden = false;
+      if (bookingSuccess) bookingSuccess.hidden = true;
+      const submitBtn = bookingForm.querySelector(".btn-submit");
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fa-solid fa-calendar-check" aria-hidden="true"></i> Confirmar Reserva';
+      }
+    });
+  }
+}
+
+function validateBookingField(input) {
+  const value = input.value.trim();
+  const errorEl = input.parentElement.querySelector(".field-error");
+  if (input.required && !value) {
+    input.classList.add("error");
+    if (errorEl) errorEl.textContent = "Este campo es obligatorio.";
+    return false;
+  }
+  if (input.type === "email" && value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+    input.classList.add("error");
+    if (errorEl) errorEl.textContent = "Ingresa un correo electrónico válido.";
+    return false;
+  }
+  if (input.type === "tel" && value && !/^[\+]?[\d\s\-().]{7,15}$/.test(value.replace(/\s/g, ""))) {
+    input.classList.add("error");
+    if (errorEl) errorEl.textContent = "Ingresa un número de teléfono válido.";
+    return false;
+  }
+  if (input.type === "date" && value) {
+    const selected = new Date(value);
+    const today2 = new Date();
+    today2.setHours(0, 0, 0, 0);
+    if (selected < today2) {
+      input.classList.add("error");
+      if (errorEl) errorEl.textContent = "La fecha debe ser hoy o posterior.";
+      return false;
+    }
+  }
+  input.classList.remove("error");
+  if (errorEl) errorEl.textContent = "";
+  return true;
+}
+
 const leadForm = document.querySelector("#lead-form");
 const formSuccess = document.querySelector("#form-success");
 
@@ -430,7 +549,11 @@ function initReferidos() {
 }
 
 if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", initReferidos);
+  document.addEventListener("DOMContentLoaded", () => {
+    initReferidos();
+    initBookingForm();
+  });
 } else {
   initReferidos();
+  initBookingForm();
 }

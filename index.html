@@ -210,6 +210,7 @@
         <li><a href="#productos">Productos</a></li>
         <li><a href="blog/index.html">Blog</a></li>
         <li><a href="#faq">FAQ</a></li>
+        <li><a href="#reservas">Reservas</a></li>
         <li><a href="#contacto">Contactanos</a></li>
       </ul>
     </nav>
@@ -796,6 +797,128 @@
           <i class="fa-solid fa-info-circle" aria-hidden="true"></i>
           El descuento se valida al agendar el servicio. Un cupon por nuevo cliente.
         </p>
+      </div>
+    </section>
+
+    <section id="reservas" class="section section-booking">
+      <div class="container">
+        <div class="booking-layout">
+          <div class="booking-info" data-reveal>
+            <p class="eyebrow" data-reveal-item>Reservas online</p>
+            <h2 data-reveal-item>Agenda tu servicio en minutos</h2>
+            <p data-reveal-item>Selecciona el servicio, fecha y hora que prefieras. Te confirmaremos la cita en breve.</p>
+            <ul class="booking-steps" aria-label="Pasos para reservar">
+              <li data-reveal-item data-reveal-delay="50">
+                <span class="step-icon-sm" aria-hidden="true"><i class="fa-solid fa-hand-pointer"></i></span>
+                <span>Elige el servicio que necesitas</span>
+              </li>
+              <li data-reveal-item data-reveal-delay="100">
+                <span class="step-icon-sm" aria-hidden="true"><i class="fa-solid fa-calendar-day"></i></span>
+                <span>Picks una fecha disponible</span>
+              </li>
+              <li data-reveal-item data-reveal-delay="150">
+                <span class="step-icon-sm" aria-hidden="true"><i class="fa-solid fa-clock"></i></span>
+                <span>Selecciona un horario de atenci&#243;n</span>
+              </li>
+              <li data-reveal-item data-reveal-delay="200">
+                <span class="step-icon-sm" aria-hidden="true"><i class="fa-solid fa-paper-plane-top"></i></span>
+                <span>Env&#237;a la solicitud y te confirmamos</span>
+              </li>
+            </ul>
+            <div class="booking-note" data-reveal data-reveal-delay="250">
+              <i class="fa-solid fa-info-circle" aria-hidden="true"></i>
+              <p>El tiempo estimado del servicio se confirma al evaluar el espacio. Recibir&#225;s un mensaje de confirmaci&#243;n en las pr&#243;ximas 2 horas.</p>
+            </div>
+          </div>
+
+          <div class="booking-form-wrapper" data-reveal data-reveal-delay="100">
+            <form id="booking-form" class="booking-form" action="https://formspree.io/f/xpwzjdnbw" method="POST" novalidate aria-label="Formulario de reservas online">
+              <h3>Reservar cita</h3>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="booking-name">Nombre completo <span aria-hidden="true">*</span></label>
+                  <input type="text" id="booking-name" name="name" autocomplete="name" required aria-required="true" placeholder="Tu nombre completo" maxlength="60">
+                  <span class="field-error" role="alert" aria-live="polite"></span>
+                </div>
+                <div class="form-group">
+                  <label for="booking-phone">Tel&#233;fono <span aria-hidden="true">*</span></label>
+                  <input type="tel" id="booking-phone" name="phone" autocomplete="tel" required aria-required="true" placeholder="+57 300 000 0000">
+                  <span class="field-error" role="alert" aria-live="polite"></span>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="booking-email">Correo electr&#243;nico <span aria-hidden="true">*</span></label>
+                <input type="email" id="booking-email" name="email" autocomplete="email" required aria-required="true" placeholder="correo@ejemplo.com">
+                <span class="field-error" role="alert" aria-live="polite"></span>
+              </div>
+
+              <div class="form-group">
+                <label for="booking-service">Servicio <span aria-hidden="true">*</span></label>
+                <select id="booking-service" name="service" required aria-required="true">
+                  <option value="">Selecciona un servicio</option>
+                  <optgroup label="Hogares y PYMEs">
+                    <option value="limpieza-sofas">Limpieza profunda de sof&#225;s</option>
+                    <option value="sanitizacion-colchones">Sanitizaci&#243;n de colchones</option>
+                  </optgroup>
+                  <optgroup label="Empresas y Organizaciones">
+                    <option value="mantenimiento-alfombras">Mantenimiento de alfombras corporativas</option>
+                    <option value="limpieza-sillas">Limpieza t&#233;cnica de sillas ergon&#243;micas</option>
+                  </optgroup>
+                </select>
+                <span class="field-error" role="alert" aria-live="polite"></span>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="booking-date">Fecha preferida <span aria-hidden="true">*</span></label>
+                  <input type="date" id="booking-date" name="date" required aria-required="true">
+                  <span class="field-error" role="alert" aria-live="polite"></span>
+                </div>
+                <div class="form-group">
+                  <label for="booking-time">Horario preferido <span aria-hidden="true">*</span></label>
+                  <select id="booking-time" name="time" required aria-required="true">
+                    <option value="">Selecciona un horario</option>
+                    <option value="08:00">08:00 — 10:00</option>
+                    <option value="10:00">10:00 — 12:00</option>
+                    <option value="12:00">12:00 — 14:00</option>
+                    <option value="14:00">14:00 — 16:00</option>
+                    <option value="16:00">16:00 — 18:00</option>
+                  </select>
+                  <span class="field-error" role="alert" aria-live="polite"></span>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="booking-address">Direcci&#243;n del espacio <span aria-hidden="true">*</span></label>
+                <input type="text" id="booking-address" name="address" required aria-required="true" placeholder="Ej: Cra 15 #45-67, Bogot&#225;">
+                <span class="field-error" role="alert" aria-live="polite"></span>
+              </div>
+
+              <div class="form-group">
+                <label for="booking-message">Notas adicionales</label>
+                <textarea id="booking-message" name="message" rows="3" placeholder="Cuentanos detalles sobre el espacio o requisitos especiales..."></textarea>
+              </div>
+
+              <input type="hidden" name="_subject" value="Nueva reserva Purity &amp; Clean">
+              <input type="hidden" name="_format" value="plain">
+              <input type="hidden" name="_next" value="https://purityclean.com/#reservas">
+
+              <button type="submit" class="btn btn-primary btn-submit">
+                <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
+                Confirmar Reserva
+              </button>
+              <p class="form-note"><i class="fa-solid fa-lock" aria-hidden="true"></i> Tus datos est&#225;n protegidos y nunca se comparten con terceros.</p>
+            </form>
+            <div id="booking-success" class="form-success" role="status" aria-live="polite" hidden>
+              <div class="success-icon" aria-hidden="true"><i class="fa-solid fa-circle-check"></i></div>
+              <h4>Reserva recibida</h4>
+              <p>Gracias por tu confianza. Un asesor se comunicar&#225; contigo en las pr&#243;ximas 2 horas para confirmar la disponibilidad.</p>
+              <button id="booking-reset-btn" class="btn btn-referido" type="button">Agendar otra cita</button>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
