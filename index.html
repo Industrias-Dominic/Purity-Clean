@@ -996,7 +996,7 @@
               </li>
               <li data-reveal-item data-reveal-delay="100">
                 <span class="step-icon-sm" aria-hidden="true"><i class="fa-solid fa-calendar-day"></i></span>
-                <span>Picks una fecha disponible</span>
+                <span>Elige una fecha disponible</span>
               </li>
               <li data-reveal-item data-reveal-delay="150">
                 <span class="step-icon-sm" aria-hidden="true"><i class="fa-solid fa-clock"></i></span>
@@ -1014,7 +1014,12 @@
           </div>
 
           <div class="booking-form-wrapper" data-reveal data-reveal-delay="100">
-            <form id="booking-form" class="booking-form" action="https://formspree.io/f/xpwzjdnbw" method="POST" novalidate aria-label="Formulario de reservas online">
+            <!-- TODO (board): Reemplazar REPLACE_ME_BOOKING con el ID real del formulario Formspree de reservas.
+                 Crear un formulario en formspree.io con:
+                 - Campos esperados: name, phone, email, service, date, time, address, notes
+                 - Auto-responder con acuse de recibo y plazo de confirmacion (<2h)
+            -->
+            <form id="booking-form" class="booking-form" action="https://formspree.io/f/REPLACE_ME_BOOKING" method="POST" novalidate aria-label="Formulario de reservas online">
               <h3>Reservar cita</h3>
 
               <div class="form-row">
