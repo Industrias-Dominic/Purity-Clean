@@ -51,8 +51,27 @@ function updateSearchResults(query) {
   searchStatus.textContent = `Se encontraron ${visibleCount} resultado(s) para "${query.trim()}".`;
 }
 
+function trackEvent(eventName, props) {
+  if (typeof plausible !== "undefined") {
+    plausible(eventName, props);
+  }
+}
+
 if (searchInput) {
   searchInput.addEventListener("input", (event) => {
     updateSearchResults(event.target.value);
   });
 }
+
+document.querySelectorAll(".btn-primary[data-track-cta], .btn[href='#contacto']").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const cta = btn.dataset.trackCta || btn.textContent.trim();
+    trackEvent("CTA_Click", { props: { cta, location: btn.dataset.trackCta || btn.closest("section")?.id || "unknown" } });
+  });
+});
+
+document.querySelectorAll(".searchable-item").forEach((item) => {
+  item.querySelector("a.btn")?.addEventListener("click", () => {
+    trackEvent("Service_Product_Click", { props: { item: item.dataset.name } });
+  });
+});

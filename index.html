@@ -10,6 +10,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Raleway:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWix+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkR4j8CGx3zU6Q8U9AqR2mYf0i+XK9f6w8EA==" crossorigin="anonymous" referrerpolicy="no-referrer">
   <link rel="stylesheet" href="css/style.css">
+  <script defer data-domain="purityclean.com" src="https://plausible.io/js/script.js"></script>
+  <script>
+    window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }
+  </script>
 </head>
 <body>
   <header class="site-header" id="inicio">
@@ -35,7 +39,7 @@
         <p class="eyebrow">Ambientes limpios, espacios saludables</p>
         <h1>Soluciones de limpieza para hogares, PYMEs y grandes organizaciones</h1>
         <p>En Purity &amp; Clean cuidamos tus muebles, oficinas y espacios de trabajo con procesos seguros, productos especializados y atencion personalizada.</p>
-        <a class="btn btn-primary" href="#contacto">Pedir Cita</a>
+        <a class="btn btn-primary" href="#contacto" data-track-cta="hero">Pedir Cita</a>
       </div>
       <div class="hero-panel" aria-hidden="true">
         <h2>Busqueda rapida</h2>
@@ -152,22 +156,113 @@
 
     <section id="contacto" class="section section-contact">
       <div class="container contact-grid">
-        <div>
+        <div class="contact-info">
           <p class="eyebrow">Contactanos</p>
           <h2>Agenda tu visita o solicita asesoria</h2>
           <p>Estamos listos para ayudarte a mantener tus espacios limpios y saludables.</p>
-        </div>
-        <div class="contact-card">
-          <h3>Canales de contacto</h3>
-          <ul>
-            <li><i class="fa-solid fa-phone" aria-hidden="true"></i> +57 300 123 4567</li>
-            <li><i class="fa-solid fa-phone" aria-hidden="true"></i> +57 320 987 6543</li>
-            <li><i class="fa-solid fa-envelope" aria-hidden="true"></i> contacto@purityclean.com</li>
-            <li><i class="fa-solid fa-envelope" aria-hidden="true"></i> ventas@purityclean.com</li>
+          <ul class="contact-channels" aria-label="Canales de contacto">
+            <li>
+              <span class="channel-icon" aria-hidden="true"><i class="fa-solid fa-phone"></i></span>
+              <div>
+                <strong>Llamanos</strong>
+                <a href="tel:+573001234567">+57 300 123 4567</a>
+                <a href="tel:+573209876543">+57 320 987 6543</a>
+              </div>
+            </li>
+            <li>
+              <span class="channel-icon" aria-hidden="true"><i class="fa-solid fa-envelope"></i></span>
+              <div>
+                <strong>Escribenos</strong>
+                <a href="mailto:contacto@purityclean.com">contacto@purityclean.com</a>
+                <a href="mailto:ventas@purityclean.com">ventas@purityclean.com</a>
+              </div>
+            </li>
+            <li>
+              <span class="channel-icon" aria-hidden="true"><i class="fa-solid fa-location-dot"></i></span>
+              <div>
+                <strong>Visítanos</strong>
+                <span>Bogota, Colombia</span>
+              </div>
+            </li>
           </ul>
+        </div>
+
+        <div class="lead-form-wrapper">
+          <form id="lead-form" class="lead-form" novalidate aria-label="Formulario de contacto">
+            <h3>Solicitar asesoria gratuita</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="lead-name">Nombre completo <span aria-hidden="true">*</span></label>
+                <input type="text" id="lead-name" name="name" autocomplete="name" required aria-required="true" placeholder="Tu nombre">
+                <span class="field-error" role="alert" aria-live="polite"></span>
+              </div>
+              <div class="form-group">
+                <label for="lead-email">Correo electronico <span aria-hidden="true">*</span></label>
+                <input type="email" id="lead-email" name="email" autocomplete="email" required aria-required="true" placeholder="correo@ejemplo.com">
+                <span class="field-error" role="alert" aria-live="polite"></span>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="lead-phone">Telefono <span aria-hidden="true">*</span></label>
+                <input type="tel" id="lead-phone" name="phone" autocomplete="tel" required aria-required="true" placeholder="+57 300 000 0000">
+                <span class="field-error" role="alert" aria-live="polite"></span>
+              </div>
+              <div class="form-group">
+                <label for="lead-type">Tipo de cliente <span aria-hidden="true">*</span></label>
+                <select id="lead-type" name="client_type" required aria-required="true">
+                  <option value="">Selecciona una opcion</option>
+                  <option value="hogar">Hogar</option>
+                  <option value="pyme">PYME</option>
+                  <option value="empresa">Empresa / Corporativo</option>
+                </select>
+                <span class="field-error" role="alert" aria-live="polite"></span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="lead-service">Servicio de interes</label>
+              <select id="lead-service" name="service">
+                <option value="">Selecciona un servicio (opcional)</option>
+                <optgroup label="Hogares y PYMEs">
+                  <option value="limpieza-sofas">Limpieza profunda de sofases</option>
+                  <option value="sanitizacion-colchones">Sanitizacion de colchones</option>
+                </optgroup>
+                <optgroup label="Empresas y Organizaciones">
+                  <option value="mantenimiento-alfombras">Mantenimiento de alfombras corporativas</option>
+                  <option value="limpieza-sillas">Limpieza tecnica de sillas ergonomicas</option>
+                </optgroup>
+                <optgroup label="Productos">
+                  <option value="kit-eco">Kit Eco para muebles</option>
+                  <option value="desinfectante">Desinfectante antibacterial premium</option>
+                  <option value="linea-institucional">Linea institucional de higienizacion</option>
+                  <option value="dispensadores">Dispensadores inteligentes</option>
+                </optgroup>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="lead-message">Mensaje</label>
+              <textarea id="lead-message" name="message" rows="4" placeholder="Cuentanos como podemos ayudarte..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-submit">
+              <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
+              Enviar Solicitud
+            </button>
+            <p class="form-note"><i class="fa-solid fa-lock" aria-hidden="true"></i> Tus datos estan protegidos y nunca se comparten con terceros.</p>
+          </form>
+          <div id="form-success" class="form-success" role="status" aria-live="polite" hidden>
+            <div class="success-icon" aria-hidden="true"><i class="fa-solid fa-circle-check"></i></div>
+            <h4>Solicitud recibida</h4>
+            <p>Gracias por contactarnos. Un asesor se comunicara contigo en las proximas 24 horas.</p>
+          </div>
         </div>
       </div>
     </section>
+
+  <a href="https://wa.me/573001234567?text=Hola%2C%20estoy%20interesado%20en%20los%20servicios%20de%20Purity%20%26%20Clean" class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp">
+    <span class="whatsapp-ripple" aria-hidden="true"></span>
+    <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+    <span class="whatsapp-tooltip">Habla con nosotros</span>
+  </a>
   </main>
 
   <footer class="site-footer">
