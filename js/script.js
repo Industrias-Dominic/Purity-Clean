@@ -554,6 +554,45 @@ if (document.readyState === "loading") {
   initReferidos();
 }
 
+function initComparisonSliders() {
+  const sliders = document.querySelectorAll(".comparison-slider");
+  sliders.forEach((slider) => {
+    const range = slider.querySelector(".comparison-range");
+    const beforeWrap = slider.querySelector(".comparison-before-wrap");
+    if (!range || !beforeWrap) return;
+    function updateSlider() {
+      const val = range.value;
+      beforeWrap.style.width = val + "%";
+    }
+    range.addEventListener("input", updateSlider);
+    range.addEventListener("change", updateSlider);
+    let isDragging = false;
+    range.addEventListener("mousedown", () => { isDragging = true; });
+    document.addEventListener("mouseup", () => { isDragging = false; });
+    slider.addEventListener("mousemove", (e) => {
+      if (!isDragging) return;
+      const rect = slider.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const pct = Math.max(0, Math.min(100, (x / rect.width) * 100));
+      range.value = pct;
+      updateSlider();
+    });
+    slider.addEventListener("touchmove", (e) => {
+      const rect = slider.getBoundingClientRect();
+      const x = e.touches[0].clientX - rect.left;
+      const pct = Math.max(0, Math.min(100, (x / rect.width) * 100));
+      range.value = pct;
+      updateSlider();
+    });
+  });
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initComparisonSliders);
+} else {
+  initComparisonSliders();
+}
+
 const NEWSLETTER_STORAGE_KEY = "purity_newsletter_subscribed";
 
 function initNewsletter() {
