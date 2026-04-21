@@ -223,3 +223,173 @@ document.querySelectorAll(".searchable-item").forEach((item) => {
     trackEvent("Service_Product_Click", { props: { item: item.dataset.name } });
   });
 });
+
+const STORAGE_KEY_COUPON = "purity_referral_coupon";
+
+function generateCouponCode(nombre) {
+  const timestamp = Date.now().toString(36).toUpperCase();
+  const randomSufix = Math.floor(Math.random() * 900 + 100).toString();
+  const clean = nombre.trim().toUpperCase().replace(/\s+/g, "").slice(0, 8);
+  return clean + "15" + randomSufix;
+}
+
+function buildWhatsAppUrl(couponCode, nombre) {
+  const numero = "573001234567";
+  const texto = encodeURIComponent(
+    `¡Hola! Soy ${nombre} y te recomiendo Purity & Clean. Usa mi código \`${couponCode}\` y obtén 15% de descuento en tu primera limpieza. https://purityclean.com/#contacto`
+  );
+  return `https://wa.me/${numero}?text=${texto}`;
+}
+
+function showReferidosResult(couponCode) {
+  const formContainer = document.getElementById("referidos-form-container");
+  const resultEl = document.getElementById("referidos-result");
+  const existingEl = document.getElementById("referidos-existing");
+
+  if (formContainer) formContainer.hidden = true;
+  if (existingEl) existingEl.hidden = true;
+  if (resultEl) {
+    resultEl.hidden = false;
+    const codeEl = document.getElementById("coupon-code");
+    if (codeEl) codeEl.textContent = couponCode;
+    const card = resultEl.querySelector(".coupon-card");
+    if (card) {
+      card.classList.remove("coupon-animated");
+      void card.offsetWidth;
+      card.classList.add("coupon-animated");
+    }
+  }
+
+  const shareBtn = document.getElementById("share-whatsapp-btn");
+  if (shareBtn) {
+    shareBtn.addEventListener("click", () => {
+      const nombre = document.getElementById("referido-nombre")?.value.trim() || "";
+      window.open(buildWhatsAppUrl(couponCode, nombre), "_blank", "noopener,noreferrer");
+      trackEvent("referral_shared_whatsapp");
+    });
+  }
+}
+
+function showExistingCoupon(couponData) {
+  const formContainer = document.getElementById("referidos-form-container");
+  const resultEl = document.getElementById("referidos-result");
+  const existingEl = document.getElementById("referidos-existing");
+
+  if (formContainer) formContainer.hidden = true;
+  if (resultEl) resultEl.hidden = true;
+  if (existingEl) {
+    existingEl.hidden = false;
+    const codeEl = document.getElementById("existing-coupon-code");
+    if (codeEl) codeEl.textContent = couponData.code;
+  }
+
+  const shareBtn = document.getElementById("share-existing-btn");
+  if (shareBtn) {
+    shareBtn.addEventListener("click", () => {
+      window.open(buildWhatsAppUrl(couponData.code, couponData.nombre), "_blank", "noopener,noreferrer");
+      trackEvent("referral_shared_whatsapp");
+    });
+  }
+}
+
+function validateReferidoNombre(input) {
+  const value = input.value.trim();
+  const errorEl = document.getElementById("referido-nombre-error");
+  if (!value) {
+    input.classList.add("error");
+    if (errorEl) errorEl.textContent = "Ingresa tu nombre.";
+    return false;
+  }
+  if (value.length < 2) {
+    input.classList.add("error");
+    if (errorEl) errorEl.textContent = "El nombre debe tener al menos 2 caracteres.";
+    return false;
+  }
+  if (value.length > 30) {
+    input.classList.add("error");
+    if (errorEl) errorEl.textContent = "El nombre no puede superar 30 caracteres.";
+    return false;
+  }
+  if (!/^[a-zA-Z\s]+$/.test(value)) {
+    input.classList.add("error");
+    if (errorEl) errorEl.textContent = "Solo se permiten letras y espacios.";
+    return false;
+  }
+  input.classList.remove("error");
+  if (errorEl) errorEl.textContent = "";
+  return true;
+}
+
+function initReferidos() {
+  const stored = localStorage.getItem(STORAGE_KEY_COUPON);
+  if (stored) {
+    try {
+      const data = JSON.parse(stored);
+      if (data.code && data.nombre) {
+        showExistingCoupon(data);
+        return;
+      }
+    } catch (_) {}
+  }
+
+  const form = document.getElementById("referidos-form");
+  const nombreInput = document.getElementById("referido-nombre");
+
+  if (nombreInput) {
+    nombreInput.addEventListener("input", () => {
+      if (nombreInput.classList.contains("error")) validateReferidoNombre(nombreInput);
+    });
+    nombreInput.addEventListener("blur", () => validateReferidoNombre(nombreInput));
+  }
+
+  if (form) {
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (!validateReferidoNombre(nombreInput)) return;
+
+      const nombre = nombreInput.value.trim();
+      const code = generateCouponCode(nombre);
+      const couponData = { code, nombre };
+      localStorage.setItem(STORAGE_KEY_COUPON, JSON.stringify(couponData));
+
+      showReferidosResult(code);
+      trackEvent("referral_code_generated");
+    });
+  }
+
+  document.querySelectorAll("#copy-coupon-btn, #copy-existing-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const container = btn.closest(".coupon-card");
+      const codeEl = container?.querySelector(".coupon-code");
+      if (!codeEl) return;
+      const code = codeEl.textContent || "";
+      navigator.clipboard.writeText(code).then(() => {
+        const feedback = container.querySelector(".copy-feedback");
+        if (feedback) {
+          feedback.hidden = false;
+          setTimeout(() => { feedback.hidden = true; }, 2000);
+        }
+      }).catch(() => {
+        const ta = document.createElement("textarea");
+        ta.value = code;
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+        const feedback = container.querySelector(".copy-feedback");
+        if (feedback) {
+          feedback.hidden = false;
+          setTimeout(() => { feedback.hidden = true; }, 2000);
+        }
+      });
+    });
+  });
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initReferidos);
+} else {
+  initReferidos();
+}
