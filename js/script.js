@@ -218,6 +218,19 @@ document.querySelectorAll(".btn-primary[data-track-cta], .btn[href='#contacto']"
   });
 });
 
+document.querySelectorAll(".pricing-btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const card = btn.closest(".pricing-card");
+    const segment = card?.classList.contains("pricing-card--plans")
+      ? "plans"
+      : card?.classList.contains("pricing-card--enterprise")
+      ? "enterprise"
+      : "homes";
+    const cta = btn.textContent.trim();
+    trackEvent("pricing_cta_click", { props: { cta, segment } });
+  });
+});
+
 document.querySelectorAll(".searchable-item").forEach((item) => {
   item.querySelector("a.btn")?.addEventListener("click", () => {
     trackEvent("Service_Product_Click", { props: { item: item.dataset.name } });
