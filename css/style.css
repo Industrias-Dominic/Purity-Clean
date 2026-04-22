@@ -266,6 +266,38 @@ a {
   gap: 1rem;
 }
 
+.zonas-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.zona-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--color-primary);
+  transition: background 0.2s, border-color 0.2s, transform 0.15s;
+}
+
+.zona-link:hover {
+  background: var(--color-surface-soft);
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+}
+
+.zona-link i {
+  color: var(--color-accent);
+}
+
 .card {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
