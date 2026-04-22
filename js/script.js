@@ -595,65 +595,68 @@ if (document.readyState === "loading") {
 
 function initComparisonSliders() {
   const sliders = document.querySelectorAll(".comparison-slider");
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function updateSlider(slider, range, beforeWrap, val, animate) {
+    val = Math.max(0, Math.min(100, val));
+    if (animate && !prefersReducedMotion) {
+      beforeWrap.style.transition = "width 0.4s cubic-bezier(0.4, 0, 0.2, 1)";
+    } else {
+      beforeWrap.style.transition = "none";
+    }
+    beforeWrap.style.width = val + "%";
+    range.value = val;
+    range.setAttribute("aria-valuenow", Math.round(val));
+    range.setAttribute("aria-valuetext", Math.round(val) + "% antes");
+    const handle = slider.querySelector(".comparison-handle");
+    if (handle) handle.style.left = val + "%";
+  }
+
   sliders.forEach((slider) => {
     const range = slider.querySelector(".comparison-range");
     const beforeWrap = slider.querySelector(".comparison-before-wrap");
     if (!range || !beforeWrap) return;
 
-    function updateSlider(val, animate) {
-      val = Math.max(0, Math.min(100, val));
-      if (animate) {
-        beforeWrap.style.transition = "width 0.4s cubic-bezier(0.4, 0, 0.2, 1)";
-        range.style.transition = "width 0.4s cubic-bezier(0.4, 0, 0.2, 1)";
-      } else {
-        beforeWrap.style.transition = "none";
-        range.style.transition = "none";
-      }
-      beforeWrap.style.width = val + "%";
-      range.value = val;
-      range.setAttribute("aria-valuenow", Math.round(val));
-      range.setAttribute("aria-valuetext", Math.round(val) + "% antes");
-      const handle = slider.querySelector(".comparison-handle");
-      if (handle) handle.style.left = val + "%";
-    }
-
-    function onSliderInput(e) {
-      const val = parseFloat(range.value);
-      updateSlider(val, false);
-    }
-
-    range.addEventListener("input", onSliderInput);
-
     let isDragging = false;
-    range.addEventListener("mousedown", () => { isDragging = true; });
-    document.addEventListener("mouseup", () => { isDragging = false; });
-    slider.addEventListener("mousemove", (e) => {
+
+    function onPointerDown(e) {
+      if (e.pointerType === "touch") {
+        isDragging = true;
+        slider.setPointerCapture(e.pointerId);
+      } else {
+        isDragging = true;
+      }
+    }
+
+    function onPointerMove(e) {
       if (!isDragging) return;
       const rect = slider.getBoundingClientRect();
       const x = e.clientX - rect.left;
-      updateSlider((x / rect.width) * 100, false);
-    });
+      updateSlider(slider, range, beforeWrap, (x / rect.width) * 100, false);
+    }
 
-    slider.addEventListener("touchstart", (e) => {
-      isDragging = true;
-    }, { passive: true });
-    slider.addEventListener("touchend", () => { isDragging = false; }, { passive: true });
-    slider.addEventListener("touchmove", (e) => {
-      if (!isDragging) return;
-      const rect = slider.getBoundingClientRect();
-      const x = e.touches[0].clientX - rect.left;
-      updateSlider((x / rect.width) * 100, false);
-    }, { passive: true });
+    function onPointerUp() {
+      isDragging = false;
+    }
+
+    slider.addEventListener("pointerdown", onPointerDown);
+    slider.addEventListener("pointermove", onPointerMove);
+    slider.addEventListener("pointerup", onPointerUp);
+    slider.addEventListener("pointercancel", onPointerUp);
 
     range.addEventListener("keydown", (e) => {
       const step = e.shiftKey ? 10 : 1;
       if (e.key === "ArrowLeft") {
         e.preventDefault();
-        updateSlider(parseFloat(range.value) - step, true);
+        updateSlider(slider, range, beforeWrap, parseFloat(range.value) - step, true);
       } else if (e.key === "ArrowRight") {
         e.preventDefault();
-        updateSlider(parseFloat(range.value) + step, true);
+        updateSlider(slider, range, beforeWrap, parseFloat(range.value) + step, true);
       }
+    });
+
+    range.addEventListener("input", () => {
+      updateSlider(slider, range, beforeWrap, parseFloat(range.value), false);
     });
 
     const autoplayBtn = document.createElement("button");
@@ -665,8 +668,10 @@ function initComparisonSliders() {
 
     let autoplayInterval = null;
     let autoplayDir = 1;
+    let autoplayStartedByObserver = false;
 
     function startAutoplay() {
+      if (prefersReducedMotion) return;
       autoplayBtn.innerHTML = '<i class="fa-solid fa-pause" aria-hidden="true"></i>';
       autoplayBtn.setAttribute("aria-label", "Pausar comparación automática");
       autoplayInterval = setInterval(() => {
@@ -674,7 +679,7 @@ function initComparisonSliders() {
         val += autoplayDir * 0.5;
         if (val >= 100) { val = 100; autoplayDir = -1; }
         if (val <= 0) { val = 0; autoplayDir = 1; }
-        updateSlider(val, true);
+        updateSlider(slider, range, beforeWrap, val, true);
       }, 30);
     }
 
@@ -685,17 +690,37 @@ function initComparisonSliders() {
       autoplayBtn.setAttribute("aria-label", "Reproducir comparación automática");
     }
 
+    function stopAutoplayAndBlock() {
+      stopAutoplay();
+      autoplayStartedByObserver = false;
+    }
+
     autoplayBtn.addEventListener("click", () => {
       if (autoplayInterval) {
-        stopAutoplay();
+        stopAutoplayAndBlock();
       } else {
         startAutoplay();
       }
     });
 
     range.addEventListener("focus", () => { stopAutoplay(); });
+    range.addEventListener("pointerdown", () => { stopAutoplayAndBlock(); });
 
-    updateSlider(50, false);
+    if (!prefersReducedMotion) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !autoplayStartedByObserver) {
+            autoplayStartedByObserver = true;
+            startAutoplay();
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.5 });
+
+      observer.observe(slider);
+    }
+
+    updateSlider(slider, range, beforeWrap, 50, false);
   });
 }
 

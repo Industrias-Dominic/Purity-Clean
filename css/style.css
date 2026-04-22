@@ -2307,6 +2307,28 @@ a {
   pointer-events: none;
 }
 
+[data-theme="dark"] .comparison-slider {
+  background: var(--color-bg);
+}
+
+[data-theme="dark"] .comparison-handle::before {
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.6);
+}
+
+[data-theme="dark"] .comparison-label {
+  background: rgba(6, 21, 32, 0.82);
+}
+
+[data-theme="dark"] .comparison-autoplay {
+  border-color: rgba(255, 255, 255, 0.6);
+  background: rgba(6, 21, 32, 0.7);
+}
+
+[data-theme="dark"] .comparison-autoplay:hover {
+  background: rgba(20, 169, 202, 0.85);
+}
+
 .comparison-handle::before {
   content: "";
   position: absolute;
