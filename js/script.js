@@ -159,10 +159,6 @@ document.querySelectorAll("[data-reveal]").forEach((el) => {
   revealObserver.observe(el);
 });
 
-const bookingForm = document.querySelector("#booking-form");
-const bookingSuccess = document.querySelector("#booking-success");
-const bookingResetBtn = document.querySelector("#booking-reset-btn");
-
 function initBookingForm() {
   if (!bookingForm) return;
 
@@ -173,6 +169,11 @@ function initBookingForm() {
   const dateInput = bookingForm.querySelector("#booking-date");
   const timeInput = bookingForm.querySelector("#booking-time");
   const addressInput = bookingForm.querySelector("#booking-address");
+  const geoBtn = bookingForm.querySelector("#booking-geo-btn");
+  const geoStatus = bookingForm.querySelector("#geo-status");
+  const prevBtn = bookingForm.querySelector("#booking-prev-btn");
+  const nextBtn = bookingForm.querySelector("#booking-next-btn");
+  const submitBtn = bookingForm.querySelector("#booking-submit-btn");
 
   const params = new URLSearchParams(window.location.search);
   const preselectedService = params.get("service");
@@ -185,6 +186,96 @@ function initBookingForm() {
   const minDate = today.toISOString().split("T")[0];
   if (dateInput) dateInput.setAttribute("min", minDate);
 
+  let currentStep = 1;
+  const totalSteps = 3;
+
+  function updateStepper(step) {
+    const steps = bookingForm.closest(".booking-form-wrapper").querySelectorAll(".stepper-step");
+    const connectors = bookingForm.closest(".booking-form-wrapper").querySelectorAll(".stepper-connector");
+
+    steps.forEach((s, i) => {
+      const stepNum = i + 1;
+      s.classList.remove("active", "completed");
+      if (stepNum === step) {
+        s.classList.add("active");
+        s.setAttribute("aria-current", "step");
+      } else if (stepNum < step) {
+        s.classList.add("completed");
+        s.removeAttribute("aria-current");
+      } else {
+        s.removeAttribute("aria-current");
+      }
+    });
+
+    connectors.forEach((c, i) => {
+      c.classList.toggle("filled", i < step - 1);
+    });
+  }
+
+  function showStepFields(step) {
+    bookingForm.querySelectorAll(".booking-fields").forEach((group) => {
+      group.hidden = true;
+    });
+    const target = bookingForm.querySelector(`[data-step-group="${step}"]`);
+    if (target) target.hidden = false;
+  }
+
+  function validateStep(step) {
+    let valid = true;
+    const fields = {
+      1: [nameInput, phoneInput, emailInput],
+      2: [serviceInput, dateInput, timeInput],
+      3: [addressInput]
+    };
+    const stepFields = fields[step] || [];
+    stepFields.forEach((input) => {
+      if (!input) return;
+      if (!validateBookingField(input)) valid = false;
+    });
+    return valid;
+  }
+
+  function updateNavButtons() {
+    if (!prevBtn || !nextBtn || !submitBtn) return;
+    prevBtn.hidden = currentStep === 1;
+    if (currentStep === totalSteps) {
+      nextBtn.hidden = true;
+      submitBtn.hidden = false;
+    } else {
+      nextBtn.hidden = false;
+      submitBtn.hidden = true;
+    }
+  }
+
+  updateStepper(currentStep);
+  showStepFields(currentStep);
+  updateNavButtons();
+
+  if (nextBtn) {
+    nextBtn.addEventListener("click", () => {
+      if (!validateStep(currentStep)) return;
+      if (currentStep < totalSteps) {
+        currentStep++;
+        updateStepper(currentStep);
+        showStepFields(currentStep);
+        updateNavButtons();
+        const firstInput = bookingForm.querySelector(`[data-step-group="${currentStep}"] input, [data-step-group="${currentStep}"] select`);
+        if (firstInput) firstInput.focus();
+      }
+    });
+  }
+
+  if (prevBtn) {
+    prevBtn.addEventListener("click", () => {
+      if (currentStep > 1) {
+        currentStep--;
+        updateStepper(currentStep);
+        showStepFields(currentStep);
+        updateNavButtons();
+      }
+    });
+  }
+
   const fieldMap = [nameInput, emailInput, phoneInput, serviceInput, dateInput, timeInput, addressInput];
 
   fieldMap.forEach((input) => {
@@ -195,16 +286,36 @@ function initBookingForm() {
     });
   });
 
+  function triggerConfetti() {
+    const canvas = bookingForm.parentElement.querySelector(".success-canvas");
+    if (!canvas) return;
+    const colors = ["#16a34a", "#22c55e", "#0b7189", "#14a9ca", "#f59e0b", "#ef4444", "#8b5cf6"];
+    for (let i = 0; i < 50; i++) {
+      const piece = document.createElement("div");
+      piece.className = "confetti-piece";
+      piece.style.left = Math.random() * 100 + "%";
+      piece.style.top = Math.random() * 30 + "%";
+      piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+      piece.style.animationDelay = Math.random() * 0.5 + "s";
+      piece.style.animationDuration = 1 + Math.random() * 0.8 + "s";
+      canvas.appendChild(piece);
+      setTimeout(() => piece.remove(), 2000);
+    }
+  }
+
+  function showSuccessAnimation() {
+    const successEl = document.querySelector("#booking-success");
+    if (!successEl) return;
+    successEl.hidden = false;
+    successEl.classList.add("animate");
+    triggerConfetti();
+    successEl.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
   bookingForm.addEventListener("submit", (event) => {
     event.preventDefault();
-    const fields = [nameInput, emailInput, phoneInput, serviceInput, dateInput, timeInput, addressInput];
-    let allValid = true;
-    fields.forEach((input) => {
-      if (input && !validateBookingField(input)) allValid = false;
-    });
-    if (!allValid) return;
+    if (!validateStep(currentStep)) return;
 
-    const submitBtn = bookingForm.querySelector(".btn-submit");
     if (submitBtn) {
       submitBtn.disabled = true;
       submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i> Enviando...';
@@ -220,7 +331,8 @@ function initBookingForm() {
     })
       .then(() => {
         bookingForm.hidden = true;
-        if (bookingSuccess) bookingSuccess.hidden = false;
+        document.querySelector(".booking-stepper")?.remove();
+        showSuccessAnimation();
         trackEvent("booking_submitted", {
           props: {
             service: serviceInput?.value || "",
@@ -237,16 +349,79 @@ function initBookingForm() {
       });
   });
 
+  if (geoBtn && addressInput && geoStatus) {
+    geoBtn.addEventListener("click", () => {
+      if (!navigator.geolocation) {
+        geoStatus.textContent = "Geolocalización no disponible en este navegador.";
+        geoStatus.className = "geo-status error";
+        return;
+      }
+      geoBtn.classList.add("loading");
+      geoBtn.querySelector("i").className = "fa-solid fa-circle-notch fa-spin";
+      geoStatus.textContent = "Obteniendo ubicación...";
+      geoStatus.className = "geo-status";
+
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          geoBtn.classList.remove("loading");
+          geoBtn.querySelector("i").className = "fa-solid fa-location-crosshairs";
+          const lat = pos.coords.latitude.toFixed(6);
+          const lon = pos.coords.longitude.toFixed(6);
+          addressInput.value = `${lat}, ${lon}`;
+          geoStatus.textContent = "Ubicación obtaineda. Confirma que la dirección es correcta.";
+          geoStatus.className = "geo-status success";
+          setTimeout(() => { geoStatus.textContent = ""; }, 4000);
+          trackEvent("booking_geo_used");
+        },
+        (err) => {
+          geoBtn.classList.remove("loading");
+          geoBtn.querySelector("i").className = "fa-solid fa-location-crosshairs";
+          let msg = "No se pudo obtener la ubicación.";
+          if (err.code === 1) msg = "Permiso de ubicación denegado.";
+          else if (err.code === 2) msg = "Ubicación no disponible.";
+          else if (err.code === 3) msg = "Tiempo de espera agotado.";
+          geoStatus.textContent = msg;
+          geoStatus.className = "geo-status error";
+          setTimeout(() => { geoStatus.textContent = ""; }, 5000);
+        },
+        { enableHighAccuracy: true, timeout: 10000 }
+      );
+    });
+  }
+
   if (bookingResetBtn) {
     bookingResetBtn.addEventListener("click", () => {
       bookingForm.reset();
       bookingForm.hidden = false;
-      if (bookingSuccess) bookingSuccess.hidden = true;
-      const submitBtn = bookingForm.querySelector(".btn-submit");
-      if (submitBtn) {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = '<i class="fa-solid fa-calendar-check" aria-hidden="true"></i> Confirmar Reserva';
+      const successEl = document.querySelector("#booking-success");
+      if (successEl) {
+        successEl.hidden = true;
+        successEl.classList.remove("animate");
       }
+      currentStep = 1;
+      updateStepper(currentStep);
+      showStepFields(currentStep);
+      updateNavButtons();
+      const stepperHtml = `<div class="booking-stepper" role="list" aria-label="Progreso de la reserva">
+        <div class="stepper-step" data-step="1" role="listitem" aria-current="step" aria-label="Paso 1: Tus datos">
+          <div class="stepper-indicator"><span class="stepper-num">1</span><span class="stepper-check" aria-hidden="true"><i class="fa-solid fa-check"></i></span></div>
+          <span class="stepper-label">Tus datos</span>
+        </div>
+        <div class="stepper-connector" aria-hidden="true"></div>
+        <div class="stepper-step" data-step="2" role="listitem" aria-label="Paso 2: Servicio">
+          <div class="stepper-indicator"><span class="stepper-num">2</span><span class="stepper-check" aria-hidden="true"><i class="fa-solid fa-check"></i></span></div>
+          <span class="stepper-label">Servicio</span>
+        </div>
+        <div class="stepper-connector" aria-hidden="true"></div>
+        <div class="stepper-step" data-step="3" role="listitem" aria-label="Paso 3: Dirección">
+          <div class="stepper-indicator"><span class="stepper-num">3</span><span class="stepper-check" aria-hidden="true"><i class="fa-solid fa-check"></i></span></div>
+          <span class="stepper-label">Dirección</span>
+        </div>
+      </div>`;
+      const wrapper = bookingForm.closest(".booking-form-wrapper");
+      const existing = wrapper.querySelector(".booking-stepper");
+      if (existing) existing.remove();
+      bookingForm.insertAdjacentHTML("beforebegin", stepperHtml);
     });
   }
 }
