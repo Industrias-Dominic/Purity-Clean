@@ -388,6 +388,18 @@ document.querySelectorAll(".searchable-item").forEach((item) => {
   item.querySelector("a.btn")?.addEventListener("click", () => {
     trackEvent("Service_Product_Click", { props: { item: item.dataset.name } });
   });
+
+  item.addEventListener("click", (e) => {
+    const rect = item.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    item.style.setProperty("--ripple-x", x + "%");
+    item.style.setProperty("--ripple-y", y + "%");
+    item.classList.remove("rippling");
+    void item.offsetWidth;
+    item.classList.add("rippling");
+    setTimeout(() => item.classList.remove("rippling"), 600);
+  });
 });
 
 const STORAGE_KEY_COUPON = "purity_referral_coupon";
@@ -587,12 +599,31 @@ function initComparisonSliders() {
     const range = slider.querySelector(".comparison-range");
     const beforeWrap = slider.querySelector(".comparison-before-wrap");
     if (!range || !beforeWrap) return;
-    function updateSlider() {
-      const val = range.value;
+
+    function updateSlider(val, animate) {
+      val = Math.max(0, Math.min(100, val));
+      if (animate) {
+        beforeWrap.style.transition = "width 0.4s cubic-bezier(0.4, 0, 0.2, 1)";
+        range.style.transition = "width 0.4s cubic-bezier(0.4, 0, 0.2, 1)";
+      } else {
+        beforeWrap.style.transition = "none";
+        range.style.transition = "none";
+      }
       beforeWrap.style.width = val + "%";
+      range.value = val;
+      range.setAttribute("aria-valuenow", Math.round(val));
+      range.setAttribute("aria-valuetext", Math.round(val) + "% antes");
+      const handle = slider.querySelector(".comparison-handle");
+      if (handle) handle.style.left = val + "%";
     }
-    range.addEventListener("input", updateSlider);
-    range.addEventListener("change", updateSlider);
+
+    function onSliderInput(e) {
+      const val = parseFloat(range.value);
+      updateSlider(val, false);
+    }
+
+    range.addEventListener("input", onSliderInput);
+
     let isDragging = false;
     range.addEventListener("mousedown", () => { isDragging = true; });
     document.addEventListener("mouseup", () => { isDragging = false; });
@@ -600,17 +631,71 @@ function initComparisonSliders() {
       if (!isDragging) return;
       const rect = slider.getBoundingClientRect();
       const x = e.clientX - rect.left;
-      const pct = Math.max(0, Math.min(100, (x / rect.width) * 100));
-      range.value = pct;
-      updateSlider();
+      updateSlider((x / rect.width) * 100, false);
     });
+
+    slider.addEventListener("touchstart", (e) => {
+      isDragging = true;
+    }, { passive: true });
+    slider.addEventListener("touchend", () => { isDragging = false; }, { passive: true });
     slider.addEventListener("touchmove", (e) => {
+      if (!isDragging) return;
       const rect = slider.getBoundingClientRect();
       const x = e.touches[0].clientX - rect.left;
-      const pct = Math.max(0, Math.min(100, (x / rect.width) * 100));
-      range.value = pct;
-      updateSlider();
+      updateSlider((x / rect.width) * 100, false);
+    }, { passive: true });
+
+    range.addEventListener("keydown", (e) => {
+      const step = e.shiftKey ? 10 : 1;
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        updateSlider(parseFloat(range.value) - step, true);
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        updateSlider(parseFloat(range.value) + step, true);
+      }
     });
+
+    const autoplayBtn = document.createElement("button");
+    autoplayBtn.className = "comparison-autoplay";
+    autoplayBtn.type = "button";
+    autoplayBtn.setAttribute("aria-label", "Reproducir comparación automática");
+    autoplayBtn.innerHTML = '<i class="fa-solid fa-play" aria-hidden="true"></i>';
+    slider.appendChild(autoplayBtn);
+
+    let autoplayInterval = null;
+    let autoplayDir = 1;
+
+    function startAutoplay() {
+      autoplayBtn.innerHTML = '<i class="fa-solid fa-pause" aria-hidden="true"></i>';
+      autoplayBtn.setAttribute("aria-label", "Pausar comparación automática");
+      autoplayInterval = setInterval(() => {
+        let val = parseFloat(range.value);
+        val += autoplayDir * 0.5;
+        if (val >= 100) { val = 100; autoplayDir = -1; }
+        if (val <= 0) { val = 0; autoplayDir = 1; }
+        updateSlider(val, true);
+      }, 30);
+    }
+
+    function stopAutoplay() {
+      clearInterval(autoplayInterval);
+      autoplayInterval = null;
+      autoplayBtn.innerHTML = '<i class="fa-solid fa-play" aria-hidden="true"></i>';
+      autoplayBtn.setAttribute("aria-label", "Reproducir comparación automática");
+    }
+
+    autoplayBtn.addEventListener("click", () => {
+      if (autoplayInterval) {
+        stopAutoplay();
+      } else {
+        startAutoplay();
+      }
+    });
+
+    range.addEventListener("focus", () => { stopAutoplay(); });
+
+    updateSlider(50, false);
   });
 }
 
