@@ -283,76 +283,40 @@ a {
   background: var(--color-surface);
 }
 
-.bogota-map {
-  display: block;
+#coverage-map {
+  height: 420px;
   width: 100%;
-  height: auto;
-  max-height: 520px;
+  z-index: 1;
 }
 
-.map-bg {
-  transition: fill 0.3s ease;
+.leaflet-popup .zone-popup {
+  font-family: "Manrope", sans-serif;
 }
 
-.map-zone {
-  cursor: pointer;
+.zone-popup .popup-zone-name {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 6px;
+}
+
+.zone-popup .popup-zone-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-accent);
   text-decoration: none;
 }
 
-.map-zone .zone-path {
-  fill: rgba(11, 113, 137, 0.08);
-  stroke: rgba(11, 113, 137, 0.35);
-  stroke-width: 2;
-  transition: fill 0.3s ease, stroke 0.3s ease, filter 0.3s ease, transform 0.2s ease;
-  transform-origin: center;
+.zone-popup .popup-zone-link:hover {
+  text-decoration: underline;
 }
 
-.map-zone:hover .zone-path,
-.map-zone:focus-visible .zone-path {
-  fill: rgba(22, 163, 74, 0.2);
-  stroke: var(--color-accent);
-  stroke-width: 2.5;
-  filter: url(#zoneShadow);
-}
-
-.map-zone:focus-visible .zone-path {
-  stroke: var(--color-primary);
-  stroke-width: 3;
-  stroke-dasharray: 6, 4;
-  animation: zone-dash 0.6s linear infinite;
-}
-
-@keyframes zone-dash {
-  to { stroke-dashoffset: -20; }
-}
-
-.map-zone .zone-marker circle {
-  fill: var(--color-border);
-  stroke: var(--color-surface);
-  stroke-width: 2;
-  transition: fill 0.3s ease, r 0.3s ease, filter 0.3s ease;
-}
-
-.map-zone:hover .zone-marker circle,
-.map-zone:focus-visible .zone-marker circle {
-  fill: var(--color-accent);
-  r: 9;
-  filter: drop-shadow(0 0 6px rgba(22, 163, 74, 0.6));
-}
-
-.map-zone .zone-label {
-  font-family: "Manrope", sans-serif;
-  font-size: 11px;
-  font-weight: 700;
-  fill: var(--color-muted);
-  pointer-events: none;
-  transition: fill 0.3s ease, font-size 0.2s ease;
-}
-
-.map-zone:hover .zone-label,
-.map-zone:focus-visible .zone-label {
-  fill: var(--color-text);
-  font-size: 12px;
+[data-theme="dark"] #coverage-map {
+  filter: brightness(0.85) contrast(1.1) saturate(0.9);
 }
 
 .map-tooltip {
@@ -533,13 +497,8 @@ a {
     border-radius: var(--radius-md);
   }
 
-  .map-zone-label {
-    font-size: 9px;
-  }
-
-  .map-zone-card {
-    padding: 0.7rem 0.9rem;
-    font-size: 0.85rem;
+  #coverage-map {
+    height: 300px;
   }
 
   .map-legend {
@@ -552,13 +511,6 @@ a {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .map-zone .zone-path,
-  .map-zone:hover .zone-path,
-  .map-zone:focus-visible .zone-path {
-    transition: none;
-    animation: none;
-  }
-
   .map-zone-card,
   .map-zone-card:hover,
   .map-zone-card:focus-visible {
