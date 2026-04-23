@@ -39,7 +39,7 @@
   </url>
   <url>
     <loc>https://purityclean.com/blog/</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -58,6 +58,24 @@
   <url>
     <loc>https://purityclean.com/blog/articulos/5-tips-mantenimiento-alfombras.html</loc>
     <lastmod>2026-04-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://purityclean.com/blog/articulos/guia-limpiar-cocina.html</loc>
+    <lastmod>2026-04-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://purityclean.com/blog/articulos/rutina-limpieza-semanal.html</loc>
+    <lastmod>2026-04-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://purityclean.com/blog/articulos/limpiar-ventanas-sin-marcas.html</loc>
+    <lastmod>2026-04-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -109,5 +127,26 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="es" href="https://purityclean.com/zonas/usme/"/>
+  </url>
+  <url>
+    <loc>https://purityclean.com/zonas/usaquen/</loc>
+    <lastmod>2026-04-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://purityclean.com/zonas/usaquen/"/>
+  </url>
+  <url>
+    <loc>https://purityclean.com/zonas/teusaquillo/</loc>
+    <lastmod>2026-04-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://purityclean.com/zonas/teusaquillo/"/>
+  </url>
+  <url>
+    <loc>https://purityclean.com/zonas/barrios-unidos/</loc>
+    <lastmod>2026-04-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://purityclean.com/zonas/barrios-unidos/"/>
   </url>
 </urlset>
