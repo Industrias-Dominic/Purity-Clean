@@ -243,6 +243,21 @@
     ]
   }
   </script>
+  <!-- TODO (board): Reemplazar VIDEO_ID con el ID real del video del cliente cuando esté disponible.
+       Agregar también: uploadDate real, contentUrl si es un video propio, embedUrl definitivo.
+  -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    "name": "Limpieza profunda de sofá — Proceso completo | Purity & Clean",
+    "description": "Video demostrativo del proceso de limpieza profunda de sofás: aspirado, aplicación de producto especializado, extracción y secado. Profesionalismo, dedicación y resultados reales.",
+    "thumbnailUrl": "https://img.youtube.com/vi/vTDo5qmyfVM/maxresdefault.jpg",
+    "uploadDate": "2025-01-01",
+    "contentUrl": "https://www.youtube.com/watch?v=vTDo5qmyfVM",
+    "embedUrl": "https://www.youtube-nocookie.com/embed/vTDo5qmyfVM"
+  }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin="anonymous">
@@ -296,8 +311,12 @@
         <div class="search-wrap">
           <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
           <input id="search-input" type="search" placeholder="Buscar servicios o productos...">
+          </div>
+          <p class="video-cta" data-reveal data-reveal-delay="150">
+            <i class="fa-solid fa-sparkles" aria-hidden="true"></i>
+            ¿Listo para experimentar la diferencia? <a href="#reservas">Reserva tu limpieza hoy</a> y transforma tus espacios.
+          </p>
         </div>
-        <p id="search-status" class="search-status">Muestra todos los servicios y productos disponibles.</p>
       </div>
     </section>
   </header>
