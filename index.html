@@ -246,41 +246,232 @@
       </article>
     </section>
 
-    <section class="section container" aria-labelledby="zonas-heading">
-      <div class="section-head">
-        <p class="eyebrow">Cobertura</p>
-        <h2 id="zonas-heading">Atendemos toda Bogotá</h2>
-        <p>Selecciona tu localidad para ver informacion de servicios y precios en tu zona.</p>
+    <section class="section section-map" aria-labelledby="zonas-heading">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">Cobertura</p>
+          <h2 id="zonas-heading">Atendemos toda Bogotá</h2>
+          <p>Explora las zonas que cubre Purity &amp; Clean. Selecciona tu localidad para ver información de servicios y precios en tu área.</p>
+        </div>
+
+        <div class="map-container" role="region" aria-label="Mapa interactivo de zonas de cobertura">
+          <div class="map-tooltip" id="map-tooltip" hidden aria-hidden="true">
+            <span class="map-tooltip-name"></span>
+            <span class="map-tooltip-hint">Clic para ver zona</span>
+          </div>
+
+          <svg class="bogota-map" viewBox="0 0 800 600" aria-labelledby="map-title map-desc" role="img">
+            <title id="map-title">Mapa de zonas de cobertura de Purity &amp; Clean en Bogotá</title>
+            <desc id="map-desc">Mapa interactivo que muestra las localidades de Chapinero, Suba, Engativá, Kennedy, Bosa, Fontibón y Usme en Bogotá. Haz clic en una zona para ver más información.</desc>
+
+            <defs>
+              <linearGradient id="mapGradientBg" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#e9f8f4" />
+                <stop offset="100%" stop-color="#f3fbff" />
+              </linearGradient>
+              <filter id="mapGlow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="3" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+              <filter id="zoneShadow" x="-10%" y="-10%" width="120%" height="120%">
+                <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0b7189" flood-opacity="0.25" />
+              </filter>
+            </defs>
+
+            <rect class="map-bg" x="0" y="0" width="800" height="600" rx="20" fill="url(#mapGradientBg)" />
+
+            <g class="map-grid" aria-hidden="true">
+              <line x1="0" y1="150" x2="800" y2="150" stroke="#c9dfeb" stroke-width="0.5" stroke-dasharray="4,4" opacity="0.4" />
+              <line x1="0" y1="300" x2="800" y2="300" stroke="#c9dfeb" stroke-width="0.5" stroke-dasharray="4,4" opacity="0.4" />
+              <line x1="0" y1="450" x2="800" y2="450" stroke="#c9dfeb" stroke-width="0.5" stroke-dasharray="4,4" opacity="0.4" />
+              <line x1="200" y1="0" x2="200" y2="600" stroke="#c9dfeb" stroke-width="0.5" stroke-dasharray="4,4" opacity="0.4" />
+              <line x1="400" y1="0" x2="400" y2="600" stroke="#c9dfeb" stroke-width="0.5" stroke-dasharray="4,4" opacity="0.4" />
+              <line x1="600" y1="0" x2="600" y2="600" stroke="#c9dfeb" stroke-width="0.5" stroke-dasharray="4,4" opacity="0.4" />
+            </g>
+
+            <g class="map-label-norte" aria-hidden="true">
+              <text x="400" y="30" text-anchor="middle" font-family="Manrope, sans-serif" font-size="11" font-weight="700" fill="#4f6c79" letter-spacing="0.15em">NORTE</text>
+            </g>
+            <g class="map-label-sur" aria-hidden="true">
+              <text x="400" y="585" text-anchor="middle" font-family="Manrope, sans-serif" font-size="11" font-weight="700" fill="#4f6c79" letter-spacing="0.15em">SUR</text>
+            </g>
+            <g class="map-label-centro" aria-hidden="true">
+              <text x="400" y="310" text-anchor="middle" font-family="Raleway, sans-serif" font-size="14" font-weight="800" fill="#0b7189" opacity="0.25" letter-spacing="0.1em">BOGOTÁ</text>
+            </g>
+
+            <a href="zonas/chapinero/" class="map-zone" data-zone="chapinero" tabindex="0" aria-label="Chapinero - Ver información de servicios">
+              <path class="zone-path" d="M 440 120 L 520 100 L 580 140 L 600 200 L 560 260 L 500 280 L 440 260 L 400 200 L 420 150 Z" />
+              <g class="zone-marker">
+                <circle cx="490" cy="180" r="6" />
+              </g>
+              <text class="zone-label" x="490" y="195" text-anchor="middle">Chapinero</text>
+            </a>
+
+            <a href="zonas/suba/" class="map-zone" data-zone="suba" tabindex="0" aria-label="Suba - Ver información de servicios">
+              <path class="zone-path" d="M 120 80 L 240 60 L 340 90 L 380 150 L 360 220 L 280 250 L 180 240 L 100 180 L 90 120 Z" />
+              <g class="zone-marker">
+                <circle cx="220" cy="150" r="6" />
+              </g>
+              <text class="zone-label" x="220" y="165" text-anchor="middle">Suba</text>
+            </a>
+
+            <a href="zonas/engativa/" class="map-zone" data-zone="engativa" tabindex="0" aria-label="Engativá - Ver información de servicios">
+              <path class="zone-path" d="M 100 260 L 200 250 L 280 270 L 320 330 L 280 400 L 180 420 L 80 380 L 60 310 Z" />
+              <g class="zone-marker">
+                <circle cx="190" cy="330" r="6" />
+              </g>
+              <text class="zone-label" x="190" y="345" text-anchor="middle">Engativá</text>
+            </a>
+
+            <a href="zonas/fontibon/" class="map-zone" data-zone="fontibon" tabindex="0" aria-label="Fontibón - Ver información de servicios">
+              <path class="zone-path" d="M 60 420 L 160 400 L 240 430 L 260 500 L 200 560 L 100 550 L 40 490 Z" />
+              <g class="zone-marker">
+                <circle cx="150" cy="470" r="6" />
+              </g>
+              <text class="zone-label" x="150" y="485" text-anchor="middle">Fontibón</text>
+            </a>
+
+            <a href="zonas/kennedy/" class="map-zone" data-zone="kennedy" tabindex="0" aria-label="Kennedy - Ver información de servicios">
+              <path class="zone-path" d="M 280 420 L 380 400 L 460 440 L 480 520 L 420 570 L 320 580 L 260 530 L 250 460 Z" />
+              <g class="zone-marker">
+                <circle cx="370" cy="490" r="6" />
+              </g>
+              <text class="zone-label" x="370" y="505" text-anchor="middle">Kennedy</text>
+            </a>
+
+            <a href="zonas/bosa/" class="map-zone" data-zone="bosa" tabindex="0" aria-label="Bosa - Ver información de servicios">
+              <path class="zone-path" d="M 500 440 L 600 420 L 700 460 L 740 540 L 700 590 L 580 580 L 500 520 L 480 470 Z" />
+              <g class="zone-marker">
+                <circle cx="610" cy="500" r="6" />
+              </g>
+              <text class="zone-label" x="610" y="515" text-anchor="middle">Bosa</text>
+            </a>
+
+            <a href="zonas/usme/" class="map-zone" data-zone="usme" tabindex="0" aria-label="Usme - Ver información de servicios">
+              <path class="zone-path" d="M 540 280 L 620 260 L 700 300 L 740 380 L 700 460 L 620 440 L 560 360 L 520 300 Z" />
+              <g class="zone-marker">
+                <circle cx="630" cy="360" r="6" />
+              </g>
+              <text class="zone-label" x="630" y="375" text-anchor="middle">Usme</text>
+            </a>
+
+            <g class="map-compass" aria-hidden="true">
+              <circle cx="720" cy="80" r="28" fill="rgba(255,255,255,0.9)" stroke="#c9dfeb" stroke-width="1.5" />
+              <path d="M 720 58 L 728 78 L 720 72 L 712 78 Z" fill="#0b7189" />
+              <text x="720" y="100" text-anchor="middle" font-family="Manrope" font-size="9" font-weight="700" fill="#4f6c79">N</text>
+            </g>
+          </svg>
+        </div>
+
+        <div class="map-legend" role="list" aria-label="Leyenda del mapa">
+          <div class="map-legend-item" role="listitem">
+            <span class="map-legend-dot" aria-hidden="true"></span>
+            <span>Zona con cobertura</span>
+          </div>
+          <div class="map-legend-item" role="listitem">
+            <span class="map-legend-line" aria-hidden="true"></span>
+            <span>Click para ver detalles</span>
+          </div>
+        </div>
+
+        <div class="map-zone-list" aria-label="Lista de zonas">
+          <a href="zonas/chapinero/" class="map-zone-card" data-zone="chapinero">
+            <span class="map-zone-icon" aria-hidden="true"><i class="fa-solid fa-location-dot"></i></span>
+            <span class="map-zone-name">Chapinero</span>
+            <span class="map-zone-arrow" aria-hidden="true"><i class="fa-solid fa-arrow-right"></i></span>
+          </a>
+          <a href="zonas/suba/" class="map-zone-card" data-zone="suba">
+            <span class="map-zone-icon" aria-hidden="true"><i class="fa-solid fa-location-dot"></i></span>
+            <span class="map-zone-name">Suba</span>
+            <span class="map-zone-arrow" aria-hidden="true"><i class="fa-solid fa-arrow-right"></i></span>
+          </a>
+          <a href="zonas/engativa/" class="map-zone-card" data-zone="engativa">
+            <span class="map-zone-icon" aria-hidden="true"><i class="fa-solid fa-location-dot"></i></span>
+            <span class="map-zone-name">Engativá</span>
+            <span class="map-zone-arrow" aria-hidden="true"><i class="fa-solid fa-arrow-right"></i></span>
+          </a>
+          <a href="zonas/kennedy/" class="map-zone-card" data-zone="kennedy">
+            <span class="map-zone-icon" aria-hidden="true"><i class="fa-solid fa-location-dot"></i></span>
+            <span class="map-zone-name">Kennedy</span>
+            <span class="map-zone-arrow" aria-hidden="true"><i class="fa-solid fa-arrow-right"></i></span>
+          </a>
+          <a href="zonas/bosa/" class="map-zone-card" data-zone="bosa">
+            <span class="map-zone-icon" aria-hidden="true"><i class="fa-solid fa-location-dot"></i></span>
+            <span class="map-zone-name">Bosa</span>
+            <span class="map-zone-arrow" aria-hidden="true"><i class="fa-solid fa-arrow-right"></i></span>
+          </a>
+          <a href="zonas/fontibon/" class="map-zone-card" data-zone="fontibon">
+            <span class="map-zone-icon" aria-hidden="true"><i class="fa-solid fa-location-dot"></i></span>
+            <span class="map-zone-name">Fontibón</span>
+            <span class="map-zone-arrow" aria-hidden="true"><i class="fa-solid fa-arrow-right"></i></span>
+          </a>
+          <a href="zonas/usme/" class="map-zone-card" data-zone="usme">
+            <span class="map-zone-icon" aria-hidden="true"><i class="fa-solid fa-location-dot"></i></span>
+            <span class="map-zone-name">Usme</span>
+            <span class="map-zone-arrow" aria-hidden="true"><i class="fa-solid fa-arrow-right"></i></span>
+          </a>
+        </div>
       </div>
-      <div class="zonas-grid" role="list">
-        <a href="zonas/chapinero/" class="zona-link" role="listitem">
-          <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
-          <span>Chapinero</span>
-        </a>
-        <a href="zonas/suba/" class="zona-link" role="listitem">
-          <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
-          <span>Suba</span>
-        </a>
-        <a href="zonas/engativa/" class="zona-link" role="listitem">
-          <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
-          <span>Engativá</span>
-        </a>
-        <a href="zonas/kennedy/" class="zona-link" role="listitem">
-          <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
-          <span>Kennedy</span>
-        </a>
-        <a href="zonas/bosa/" class="zona-link" role="listitem">
-          <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
-          <span>Bosa</span>
-        </a>
-        <a href="zonas/fontibon/" class="zona-link" role="listitem">
-          <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
-          <span>Fontibón</span>
-        </a>
-        <a href="zonas/usme/" class="zona-link" role="listitem">
-          <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
-          <span>Usme</span>
-        </a>
+    </section>
+
+    <section class="section section-estadisticas" aria-labelledby="estadisticas-heading">
+      <div class="container">
+        <div class="estadisticas-header" data-reveal>
+          <p class="eyebrow" data-reveal-item>Rendimiento operativo</p>
+          <h2 id="estadisticas-heading" data-reveal-item>Lo que nuestros numeros respaldan</h2>
+          <p class="estadisticas-intro" data-reveal-item>Resultados reales de nuestra operacion en Bogota durante los ultimos 12 meses.</p>
+        </div>
+        <div class="stats-grid" role="list">
+          <article class="stats-card" data-reveal data-reveal-delay="50" aria-labelledby="stat-services" style="--card-accent: linear-gradient(90deg, #0b7189, #14a9ca); --card-accent-bg: linear-gradient(135deg, #0b7189, #14a9ca);">
+            <div class="stats-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            </div>
+            <span class="stats-card-metric" aria-hidden="true" data-counter="1247">0</span>
+            <span class="stats-card-unit">+</span>
+            <p class="stats-card-label" id="stat-services">Servicios completados</p>
+            <p class="stats-card-detail">Solo en <strong>2024</strong>, entre hogares y empresas.</p>
+            <div class="stats-card-bar" aria-hidden="true"><div class="stats-card-bar-fill" style="--bar-width: 92%;"></div></div>
+          </article>
+          <article class="stats-card" data-reveal data-reveal-delay="100" aria-labelledby="stat-response" style="--card-accent: linear-gradient(90deg, #16a34a, #22c55e); --card-accent-bg: linear-gradient(135deg, #16a34a, #22c55e);">
+            <div class="stats-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <span class="stats-card-metric" aria-hidden="true" data-counter="98">0</span>
+            <span class="stats-card-unit">%</span>
+            <p class="stats-card-label" id="stat-response">Respondidos en menos de 2 horas</p>
+            <p class="stats-card-detail">Tiempo promedio real: <strong>47 minutos</strong>.</p>
+            <div class="stats-card-bar" aria-hidden="true"><div class="stats-card-bar-fill" style="--bar-width: 98%;"></div></div>
+          </article>
+          <article class="stats-card stats-card--accent" data-reveal data-reveal-delay="150" aria-labelledby="stat-rating" style="--card-accent: linear-gradient(90deg, #16a34a, #22c55e); --card-accent-bg: linear-gradient(135deg, #16a34a, #22c55e);">
+            <div class="stats-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <span class="stats-card-metric" aria-hidden="true" data-counter="4" data-decimal="8">0</span>
+            <span class="stats-card-unit">/ 5</span>
+            <p class="stats-card-label" id="stat-rating">Indice de satisfaccion</p>
+            <p class="stats-card-detail">Basado en <strong>127 reseñas</strong> verificadas.</p>
+            <span class="stats-card-trend stats-card-trend--up" aria-label="Tendencia al alza">
+              <i class="fa-solid fa-arrow-trend-up" aria-hidden="true"></i> +0.2 vs 2023
+            </span>
+            <div class="stats-card-bar" aria-hidden="true"><div class="stats-card-bar-fill" style="--bar-width: 96%;"></div></div>
+          </article>
+          <article class="stats-card" data-reveal data-reveal-delay="200" aria-labelledby="stat-zones" style="--card-accent: linear-gradient(90deg, #0b7189, #14a9ca); --card-accent-bg: linear-gradient(135deg, #0b7189, #14a9ca);">
+            <div class="stats-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <span class="stats-card-metric" aria-hidden="true" data-counter="7">0</span>
+            <span class="stats-card-unit">zonas</span>
+            <p class="stats-card-label" id="stat-zones">Cobertura en Bogota</p>
+            <p class="stats-card-detail">Chapinero, Suba, Engativa, Kennedy, Bosa, Fontibon y Usme.</p>
+            <span class="stats-card-trend stats-card-trend--stable" aria-label="Cobertura estable">
+              <i class="fa-solid fa-equals" aria-hidden="true"></i> 100% Bogota
+            </span>
+            <div class="stats-card-bar" aria-hidden="true"><div class="stats-card-bar-fill" style="--bar-width: 100%;"></div></div>
+          </article>
+        </div>
       </div>
     </section>
 
@@ -508,6 +699,97 @@
       </div>
     </section>
 
+    <section id="cotizador" class="section section-cotizador" aria-labelledby="cotizador-heading">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow" data-reveal-item>Cotizador instantáneo</p>
+          <h2 id="cotizador-heading" data-reveal-item>Calcula el precio de tu servicio</h2>
+          <p class="cotizador-intro" data-reveal-item>Selecciona el tipo de servicio y la cantidad de unidades para ver una estimación al instante.</p>
+        </div>
+        <div class="cotizador-wrap" data-reveal data-reveal-delay="100">
+          <div class="cotizador-panel" role="region" aria-label="Configuración del cotizador">
+            <div class="cotizador-service-selector" role="group" aria-labelledby="cotizador-service-label">
+              <p class="cotizador-label" id="cotizador-service-label">Tipo de servicio</p>
+              <div class="cotizador-options" role="radiogroup" aria-label="Selecciona un servicio">
+                <label class="cotizador-option" data-service="sofas">
+                  <input type="radio" name="cotizador-service" value="sofas" class="sr-only" aria-label="Limpieza profunda de sofás">
+                  <span class="cotizador-option-card" aria-hidden="true">
+                    <span class="cotizador-option-icon"><i class="fa-solid fa-couch"></i></span>
+                    <span class="cotizador-option-name">Sofás</span>
+                    <span class="cotizador-option-range">$80.000 — $180.000</span>
+                  </span>
+                </label>
+                <label class="cotizador-option" data-service="colchones">
+                  <input type="radio" name="cotizador-service" value="colchones" class="sr-only" aria-label="Sanitización de colchones">
+                  <span class="cotizador-option-card" aria-hidden="true">
+                    <span class="cotizador-option-icon"><i class="fa-solid fa-bed"></i></span>
+                    <span class="cotizador-option-name">Colchones</span>
+                    <span class="cotizador-option-range">$60.000 — $120.000</span>
+                  </span>
+                </label>
+                <label class="cotizador-option" data-service="alfombras">
+                  <input type="radio" name="cotizador-service" value="alfombras" class="sr-only" aria-label="Mantenimiento de alfombras">
+                  <span class="cotizador-option-card" aria-hidden="true">
+                    <span class="cotizador-option-icon"><i class="fa-solid fa-rug"></i></span>
+                    <span class="cotizador-option-name">Alfombras</span>
+                    <span class="cotizador-option-range">$200.000 — $450.000</span>
+                  </span>
+                </label>
+                <label class="cotizador-option" data-service="sillas">
+                  <input type="radio" name="cotizador-service" value="sillas" class="sr-only" aria-label="Limpieza técnica de sillas ergonómicas">
+                  <span class="cotizador-option-card" aria-hidden="true">
+                    <span class="cotizador-option-icon"><i class="fa-solid fa-chair"></i></span>
+                    <span class="cotizador-option-name">Sillas</span>
+                    <span class="cotizador-option-range">$30.000 — $55.000</span>
+                  </span>
+                </label>
+              </div>
+            </div>
+
+            <div class="cotizador-quantity" role="group" aria-labelledby="cotizador-qty-label">
+              <p class="cotizador-label" id="cotizador-qty-label">Cantidad de unidades</p>
+              <div class="cotizador-stepper" role="group" aria-label="Control de cantidad">
+                <button type="button" class="cotizador-stepper-btn" id="cotizador-decrease" aria-label="Disminuir cantidad" disabled>
+                  <i class="fa-solid fa-minus" aria-hidden="true"></i>
+                </button>
+                <output class="cotizador-stepper-value" id="cotizador-qty-output" aria-live="polite" aria-atomic="true" aria-label="Cantidad seleccionada">1</output>
+                <button type="button" class="cotizador-stepper-btn" id="cotizador-increase" aria-label="Aumentar cantidad">
+                  <i class="fa-solid fa-plus" aria-hidden="true"></i>
+                </button>
+              </div>
+              <input type="range" class="cotizador-range" id="cotizador-range" min="1" max="20" value="1" aria-label="Cantidad de unidades por rango">
+            </div>
+          </div>
+
+          <div class="cotizador-result" aria-live="polite" aria-atomic="true">
+            <div class="cotizador-price-display" id="cotizador-price-display" aria-label="Precio estimado">
+              <span class="cotizador-price-label">Rango estimado</span>
+              <div class="cotizador-price-row">
+                <span class="cotizador-price-low" id="cotizador-price-low">$80.000</span>
+                <span class="cotizador-price-sep" aria-hidden="true"> — </span>
+                <span class="cotizador-price-high" id="cotizador-price-high">$180.000</span>
+              </div>
+              <p class="cotizador-price-note">por unidad</p>
+            </div>
+
+            <div class="cotizador-total" id="cotizador-total" aria-label="Total estimado">
+              <span class="cotizador-total-label">Total estimado</span>
+              <span class="cotizador-total-value" id="cotizador-total-value">$80.000 — $180.000</span>
+            </div>
+
+            <a href="#reservas" class="btn btn-primary cotizador-cta" id="cotizador-cta" aria-label="Ir a reservas con servicio preseleccionado">
+              <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
+              Agendar este servicio
+            </a>
+            <p class="cotizador-disclaimer">
+              <i class="fa-solid fa-info-circle" aria-hidden="true"></i>
+              Precio referencial. La cotización final se confirma al evaluar el espacio.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section id="productos" class="section section-alt">
       <div class="container">
         <div class="section-head" data-reveal>
@@ -564,6 +846,87 @@
       </div>
     </section>
 
+    <section id="google-reviews" class="section section-google-reviews" aria-labelledby="reviews-heading">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow" data-reveal-item>Reseñas verificadas</p>
+          <h2 id="reviews-heading" data-reveal-item>Lo que dicen nuestros clientes en Google</h2>
+          <p class="reviews-subhead" data-reveal-item>4.8 de 5 estrellas basado en 127 reseñas verificadas</p>
+        </div>
+        <div class="google-reviews-grid" data-reveal data-reveal-delay="50">
+          <article class="google-review-card" data-reveal-item>
+            <div class="review-header">
+              <div class="review-avatar" aria-hidden="true">CM</div>
+              <div class="review-meta">
+                <strong class="review-name">Carlos Martínez</strong>
+                <div class="review-stars" aria-label="5 estrellas de 5">
+                  <i class="fa-solid fa-star" aria-hidden="true"></i>
+                  <i class="fa-solid fa-star" aria-hidden="true"></i>
+                  <i class="fa-solid fa-star" aria-hidden="true"></i>
+                  <i class="fa-solid fa-star" aria-hidden="true"></i>
+                  <i class="fa-solid fa-star" aria-hidden="true"></i>
+                </div>
+                <time class="review-time" datetime="2024-03">hace 2 meses</time>
+              </div>
+              <span class="google-review-badge" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                Google
+              </span>
+            </div>
+            <p class="review-text">"Excelente servicio. Llegaron a tiempo, fueron muy profesionales y dejaron mis sofás como nuevos. El resultado superó mis expectativas. Totalmente recomendados."</p>
+          </article>
+          <article class="google-review-card" data-reveal-item data-reveal-delay="80">
+            <div class="review-header">
+              <div class="review-avatar" aria-hidden="true">AP</div>
+              <div class="review-meta">
+                <strong class="review-name">Andrea Pérez</strong>
+                <div class="review-stars" aria-label="5 estrellas de 5">
+                  <i class="fa-solid fa-star" aria-hidden="true"></i>
+                  <i class="fa-solid fa-star" aria-hidden="true"></i>
+                  <i class="fa-solid fa-star" aria-hidden="true"></i>
+                  <i class="fa-solid fa-star" aria-hidden="true"></i>
+                  <i class="fa-solid fa-star" aria-hidden="true"></i>
+                </div>
+                <time class="review-time" datetime="2024-02">hace 3 meses</time>
+              </div>
+              <span class="google-review-badge" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                Google
+              </span>
+            </div>
+            <p class="review-text">"Contraté el plan mensual para mi oficina y el cambio ha sido brutal. El ambiente de trabajo mejoró mucho. El equipo es confiable y siempre cumple con lo pactado."</p>
+          </article>
+          <article class="google-review-card" data-reveal-item data-reveal-delay="120">
+            <div class="review-header">
+              <div class="review-avatar" aria-hidden="true">JR</div>
+              <div class="review-meta">
+                <strong class="review-name">Jorge Rodríguez</strong>
+                <div class="review-stars" aria-label="5 estrellas de 5">
+                  <i class="fa-solid fa-star" aria-hidden="true"></i>
+                  <i class="fa-solid fa-star" aria-hidden="true"></i>
+                  <i class="fa-solid fa-star" aria-hidden="true"></i>
+                  <i class="fa-solid fa-star" aria-hidden="true"></i>
+                  <i class="fa-solid fa-star-half-stroke" aria-hidden="true"></i>
+                </div>
+                <time class="review-time" datetime="2024-01">hace 4 meses</time>
+              </div>
+              <span class="google-review-badge" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                Google
+              </span>
+            </div>
+            <p class="review-text">"La sanitización de colchones fue increíble. Teníamos problemas de alergias y desde el servicio no hemos vuelto a tener quejas. Productos seguros y trabajo detallado."</p>
+          </article>
+        </div>
+        <div class="reviews-cta" data-reveal data-reveal-delay="150">
+          <a href="https://g.page/purityclean/review" target="_blank" rel="noopener noreferrer" class="btn btn-outline-google" aria-label="Ver todas las reseñas en Google">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+            Ver todas las reseñas en Google
+          </a>
+        </div>
+      </div>
+    </section>
+
     <section id="resultados" class="section container" aria-labelledby="resultados-heading">
       <div class="section-head" data-reveal>
         <p class="eyebrow" data-reveal-item>Resultados</p>
@@ -571,7 +934,7 @@
       </div>
       <div class="comparison-gallery" data-reveal data-reveal-delay="50">
         <article class="comparison-card" aria-label="Resultado de limpieza de sofá">
-<div class="comparison-slider" role="img" aria-label="Comparación de antes y después de limpieza de sofá">
+          <div class="comparison-slider" role="img" aria-label="Comparación de antes y después de limpieza de sofá">
             <img class="comparison-after" src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&q=80" alt="Sofá después de la limpieza" loading="lazy" decoding="async" fetchpriority="high" width="800" height="533">
             <div class="comparison-before-wrap" aria-hidden="true">
               <img class="comparison-before" src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&q=80&sat=-100&con=-10" alt="Sofá antes de la limpieza" loading="lazy" decoding="async" width="800" height="533">
@@ -584,14 +947,6 @@
             <span class="comparison-label comparison-label-before" aria-hidden="true">Antes</span>
             <span class="comparison-label comparison-label-after" aria-hidden="true">Después</span>
           </div>
-            <input type="range" class="comparison-range" min="0" max="100" value="50" aria-label="Control de comparación antes/después">
-            <div class="comparison-handle" aria-hidden="true">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-            </div>
-            <span class="comparison-label comparison-label-before" aria-hidden="true">Antes</span>
-            <span class="comparison-label comparison-label-after" aria-hidden="true">Después</span>
-          </div>
           <div class="comparison-info">
             <h3>Limpieza profunda de sofá</h3>
             <p>Recuperación de tapiz en hogar de la Zona Rosa</p>
@@ -599,7 +954,7 @@
         </article>
         <article class="comparison-card" aria-label="Resultado de sanitización de colchón">
           <div class="comparison-slider" aria-label="Comparación de antes y después de sanitización de colchón">
-<img class="comparison-after" src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=800&q=80" alt="Colchón después de la sanitización" loading="lazy" decoding="async" width="800" height="533">
+            <img class="comparison-after" src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=800&q=80" alt="Colchón después de la sanitización" loading="lazy" decoding="async" width="800" height="533">
             <div class="comparison-before-wrap">
               <img class="comparison-before" src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=800&q=80&sat=-100&con=-10" alt="Colchón antes de la sanitización" loading="lazy" decoding="async" width="800" height="533">
             </div>
@@ -618,7 +973,7 @@
         </article>
         <article class="comparison-card" aria-label="Resultado de mantenimiento de alfombra">
           <div class="comparison-slider" aria-label="Comparación de antes y después de mantenimiento de alfombra">
-<img class="comparison-after" src="https://images.unsplash.com/photo-1522758971460-1d21eed7dc2d?w=800&q=80" alt="Alfombra después del mantenimiento" loading="lazy" decoding="async" width="800" height="533">
+            <img class="comparison-after" src="https://images.unsplash.com/photo-1522758971460-1d21eed7dc2d?w=800&q=80" alt="Alfombra después del mantenimiento" loading="lazy" decoding="async" width="800" height="533">
             <div class="comparison-before-wrap">
               <img class="comparison-before" src="https://images.unsplash.com/photo-1522758971460-1d21eed7dc2d?w=800&q=80&sat=-100&con=-10" alt="Alfombra antes del mantenimiento" loading="lazy" decoding="async" width="800" height="533">
             </div>
@@ -637,7 +992,7 @@
         </article>
         <article class="comparison-card" aria-label="Resultado de limpieza de sillas ergonómicas">
           <div class="comparison-slider" aria-label="Comparación de antes y después de limpieza de sillas ergonómicas">
-<img class="comparison-after" src="https://images.unsplash.com/photo-1580480055273-228ff5388ef8?w=800&q=80" alt="Sillas ergonómicas después de la limpieza" loading="lazy" decoding="async" width="800" height="533">
+            <img class="comparison-after" src="https://images.unsplash.com/photo-1580480055273-228ff5388ef8?w=800&q=80" alt="Sillas ergonómicas después de la limpieza" loading="lazy" decoding="async" width="800" height="533">
             <div class="comparison-before-wrap">
               <img class="comparison-before" src="https://images.unsplash.com/photo-1580480055273-228ff5388ef8?w=800&q=80&sat=-100&con=-10" alt="Sillas ergonómicas antes de la limpieza" loading="lazy" decoding="async" width="800" height="533">
             </div>
@@ -695,11 +1050,71 @@
       </div>
     </section>
 
+    <section id="video" class="section section-video" aria-labelledby="video-heading">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow" data-reveal-item>Video demostrativo</p>
+          <h2 id="video-heading" data-reveal-item>Observa nuestro proceso en acción</h2>
+          <p class="video-intro" data-reveal-item>Descubre cómo transformamos espacios con nuestros servicios especializados de limpieza profesional.</p>
+        </div>
+        <div class="video-showcase" data-reveal data-reveal-delay="100">
+          <div class="video-card" aria-label="Video demostrativo de Purity &amp; Clean">
+            <div class="video-thumb-wrap">
+              <img
+                class="video-thumb"
+                src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=1280&q=80"
+                alt="Equipo profesional de Purity &amp; Clean realizando limpieza de sofá"
+                loading="lazy"
+                decoding="async"
+                width="1280"
+                height="720"
+              >
+              <div class="video-thumb-overlay" aria-hidden="true"></div>
+              <button class="video-play-btn" type="button" aria-label="Reproducir video demostrativo" id="video-play-btn">
+                <span class="video-play-icon" aria-hidden="true">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <polygon points="5 3 19 12 5 21 5 3"/>
+                  </svg>
+                </span>
+              </button>
+              <span class="video-duration" aria-hidden="true">1:45</span>
+            </div>
+            <div class="video-meta">
+              <h3 class="video-title">Limpieza profunda de sofá — Proceso completo</h3>
+              <p class="video-desc">En este video te mostramos cada paso de nuestro proceso de limpieza profunda: aspirado, aplicación de producto especializado, extracción y secado. Un trabajo que deja tus muebles como nuevos.</p>
+              <div class="video-stats" aria-label="Estadísticas del video">
+                <span class="video-stat">
+                  <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                  <span>2.4k vistas</span>
+                </span>
+                <span class="video-stat">
+                  <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                  <span>1:45 min</span>
+                </span>
+                <span class="video-stat">
+                  <i class="fa-solid fa-star" aria-hidden="true"></i>
+                  <span>4.9 rating</span>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="video-embed-wrap" id="video-embed-wrap" hidden aria-live="polite">
+            <div class="video-embed-container">
+              <button class="video-close-btn" type="button" aria-label="Cerrar video" id="video-close-btn">
+                <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+              </button>
+              <div class="video-embed" id="video-embed"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section id="por-que" class="section section-trust" aria-labelledby="trust-heading">
       <div class="container">
         <div class="section-head" data-reveal>
           <p class="eyebrow" data-reveal-item>Por qué elegirnos</p>
-          <h2 id="trust-heading" data-reveal-item>Números que respaldan nuestra trayectoria</h2>
+          <h2 id="trust-heading" data-reveal-item>Tu espacio en manos expertas</h2>
         </div>
         <div class="trust-grid" role="list">
           <article class="trust-badge" data-reveal data-reveal-delay="50" aria-labelledby="trust-experience">
@@ -711,7 +1126,7 @@
             </div>
             <span class="trust-metric" aria-hidden="true" data-counter="8">0</span>
             <span class="trust-unit">años</span>
-            <h3 id="trust-experience">de experiencia en limpieza profesional</h3>
+            <h3 id="trust-experience">de trayectoria verificable</h3>
           </article>
           <article class="trust-badge" data-reveal data-reveal-delay="100" aria-labelledby="trust-clients">
             <div class="trust-icon" aria-hidden="true">
@@ -724,7 +1139,7 @@
             </div>
             <span class="trust-metric" aria-hidden="true" data-counter="850">0</span>
             <span class="trust-unit">+</span>
-            <h3 id="trust-clients">clientes satisfechos en Bogotá</h3>
+            <h3 id="trust-clients">clientes en Bogota</h3>
           </article>
           <article class="trust-badge trust-badge--accent" data-reveal data-reveal-delay="150" aria-labelledby="trust-rating">
             <div class="trust-icon" aria-hidden="true">
@@ -734,7 +1149,7 @@
             </div>
             <span class="trust-metric" aria-hidden="true" data-counter="4" data-decimal="8">0</span>
             <span class="trust-unit">/ 5</span>
-            <h3 id="trust-rating">calificación promedio en reseñas</h3>
+            <h3 id="trust-rating">calificacion en reseñas</h3>
           </article>
           <article class="trust-badge" data-reveal data-reveal-delay="200" aria-labelledby="trust-response">
             <div class="trust-icon" aria-hidden="true">
@@ -745,30 +1160,101 @@
             </div>
             <span class="trust-metric" aria-hidden="true" data-counter="98">0</span>
             <span class="trust-unit">%</span>
-            <h3 id="trust-response">de solicitudes respondidas en menos de 2 horas</h3>
+            <h3 id="trust-response">respuesta en menos de 2h</h3>
           </article>
         </div>
-        <div class="trust-badges-strip" data-reveal data-reveal-delay="250" aria-label="Sellos y certificaciones de confianza">
+        <div class="guarantee-badge" data-reveal data-reveal-delay="200" role="article" aria-labelledby="guarantee-title">
+          <div class="guarantee-shield" aria-hidden="true">
+            <svg viewBox="0 0 80 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M40 2L8 14V38C8 60.8 22.4 81.6 40 86C57.6 81.6 72 60.8 72 38V14L40 2Z" fill="url(#shield-gradient)" stroke="#eab308" stroke-width="3"/>
+              <path d="M40 10L16 20V38C16 56.8 27.2 73.6 40 77.2C52.8 73.6 64 56.8 64 38V20L40 10Z" fill="#fef9c3"/>
+              <path d="M32 44L37 50L48 38" stroke="#16a34a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+              <defs>
+                <linearGradient id="shield-gradient" x1="40" y1="2" x2="40" y2="86" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#fde047"/>
+                  <stop offset="1" stop-color="#eab308"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <div class="guarantee-number" aria-hidden="true">
+            200<span class="guarantee-percent">%</span>
+          </div>
+          <div class="guarantee-text">
+            <h3 id="guarantee-title" class="guarantee-title">Garantía de Satisfacción Total</h3>
+            <p class="guarantee-subtitle">Si no estás satisfecho, devolvemos tu dinero</p>
+          </div>
+          <p class="guarantee-detail">Comprometidos con resultados impecables. Si el servicio no cumple tus expectativas, te devolvemos el 100% de tu pago. Sin preguntas, sin complicaciones.</p>
+          <div class="guarantee-check">
+            <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+            <span>Servicio garantizado</span>
+          </div>
+        </div>
+        <div class="trust-badges-strip" data-reveal data-reveal-delay="250" aria-label="Sellos, certificaciones y garantias de confianza">
           <div class="badge-item" aria-hidden="true">
             <div class="badge-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
               </svg>
             </div>
-            <span>Productos certificados</span>
+            <span>Protocolos de higiene certificados</span>
           </div>
           <div class="badge-item" aria-hidden="true">
             <div class="badge-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                <path d="M9 12l2 2 4-4"/>
+              </svg>
+            </div>
+            <span>Garantia escrita del servicio</span>
+          </div>
+          <div class="badge-item" aria-hidden="true">
+            <div class="badge-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="8" r="7"/>
+                <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>
+              </svg>
+            </div>
+            <span>Productos eco-friendly seguros</span>
+          </div>
+          <div class="badge-item" aria-hidden="true">
+            <div class="badge-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+            </div>
+            <span>Datos protegidos y privados</span>
+          </div>
+          <div class="badge-item" aria-hidden="true">
+            <div class="badge-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+              </svg>
+            </div>
+            <span>Soporte星期一 a viernes</span>
+          </div>
+          <div class="badge-item" aria-hidden="true">
+            <div class="badge-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
                 <polyline points="9 22 9 12 15 12 15 22"/>
               </svg>
             </div>
-            <span>Cobertura en toda Bogotá</span>
+            <span>Cobertura en toda Bogota</span>
           </div>
           <div class="badge-item" aria-hidden="true">
             <div class="badge-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 11 12 14 22 4"/>
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+              </svg>
+            </div>
+            <span>Mas de 1200 servicios</span>
+          </div>
+          <div class="badge-item" aria-hidden="true">
+            <div class="badge-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
                 <polyline points="14 2 14 8 20 8"/>
                 <line x1="16" y1="13" x2="8" y2="13"/>
@@ -776,16 +1262,7 @@
                 <polyline points="10 9 9 9 8 9"/>
               </svg>
             </div>
-            <span>Garantía escrita</span>
-          </div>
-          <div class="badge-item" aria-hidden="true">
-            <div class="badge-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="8" r="7"/>
-                <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>
-              </svg>
-            </div>
-            <span>Ecológicos y seguros</span>
+            <span>Contratos corporativos</span>
           </div>
         </div>
       </div>

@@ -130,6 +130,15 @@ const counterObserver = new IntersectionObserver(
           }
           el.textContent = hasDecimal ? current.toFixed(1) : Math.floor(current);
         }, 40);
+
+        const card = el.closest(".stats-card");
+        if (card) {
+          const bar = card.querySelector(".stats-card-bar-fill");
+          if (bar) {
+            setTimeout(() => bar.classList.add("animated"), 200);
+          }
+        }
+
         counterObserver.unobserve(el);
       }
     });
@@ -1022,4 +1031,181 @@ if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", initNewsletter);
 } else {
   initNewsletter();
+}
+
+function initMapInteractive() {
+  const mapContainer = document.querySelector(".map-container");
+  const tooltip = document.getElementById("map-tooltip");
+  const tooltipName = tooltip?.querySelector(".map-tooltip-name");
+  const tooltipHint = tooltip?.querySelector(".map-tooltip-hint");
+  const mapZones = document.querySelectorAll(".map-zone");
+  const mapZoneCards = document.querySelectorAll(".map-zone-card");
+
+  function showTooltip(zoneName, x, y) {
+    if (!tooltip || !tooltipName) return;
+    tooltipName.textContent = zoneName;
+    tooltip.hidden = false;
+    tooltip.style.left = x + "px";
+    tooltip.style.top = y + "px";
+  }
+
+  function hideTooltip() {
+    if (!tooltip) return;
+    tooltip.hidden = true;
+  }
+
+  mapZones.forEach((zone) => {
+    zone.addEventListener("mouseenter", (e) => {
+      const zoneName = zone.querySelector(".zone-label")?.textContent || zone.dataset.zone;
+      const rect = mapContainer.getBoundingClientRect();
+      const zoneRect = zone.getBoundingClientRect();
+      const x = zoneRect.left + zoneRect.width / 2 - rect.left;
+      const y = zoneRect.top - rect.top - 10;
+      showTooltip(zoneName, x, y);
+    });
+
+    zone.addEventListener("mouseleave", () => {
+      hideTooltip();
+    });
+
+    zone.addEventListener("focus", (e) => {
+      const zoneName = zone.querySelector(".zone-label")?.textContent || zone.dataset.zone;
+      const rect = mapContainer.getBoundingClientRect();
+      const zoneRect = zone.getBoundingClientRect();
+      const x = zoneRect.left + zoneRect.width / 2 - rect.left;
+      const y = zoneRect.top - rect.top - 10;
+      showTooltip(zoneName, x, y);
+    });
+
+    zone.addEventListener("blur", () => {
+      hideTooltip();
+    });
+  });
+
+  mapZoneCards.forEach((card) => {
+    const zoneName = card.querySelector(".map-zone-name")?.textContent || card.dataset.zone;
+    const zoneSvg = document.querySelector(`.map-zone[data-zone="${card.dataset.zone}"]`);
+
+    card.addEventListener("mouseenter", () => {
+      if (zoneSvg) {
+        zoneSvg.querySelector(".zone-path").style.fill = "rgba(22, 163, 74, 0.2)";
+        zoneSvg.querySelector(".zone-path").style.stroke = "var(--color-accent)";
+        zoneSvg.querySelector(".zone-path").style.filter = "url(#zoneShadow)";
+        const circle = zoneSvg.querySelector(".zone-marker circle");
+        if (circle) {
+          circle.style.fill = "var(--color-accent)";
+          circle.style.r = "9";
+          circle.style.filter = "drop-shadow(0 0 6px rgba(22, 163, 74, 0.6))";
+        }
+        const label = zoneSvg.querySelector(".zone-label");
+        if (label) {
+          label.style.fill = "var(--color-text)";
+          label.style.fontSize = "12px";
+        }
+      }
+    });
+
+    card.addEventListener("mouseleave", () => {
+      if (zoneSvg) {
+        zoneSvg.querySelector(".zone-path").style.fill = "";
+        zoneSvg.querySelector(".zone-path").style.stroke = "";
+        zoneSvg.querySelector(".zone-path").style.filter = "";
+        const circle = zoneSvg.querySelector(".zone-marker circle");
+        if (circle) {
+          circle.style.fill = "";
+          circle.style.r = "";
+          circle.style.filter = "";
+        }
+        const label = zoneSvg.querySelector(".zone-label");
+        if (label) {
+          label.style.fill = "";
+          label.style.fontSize = "";
+        }
+      }
+    });
+  });
+
+  const zoneNames = {
+    chapinero: "Chapinero",
+    suba: "Suba",
+    engativa: "Engativá",
+    kennedy: "Kennedy",
+    bosa: "Bosa",
+    fontibon: "Fontibón",
+    usme: "Usme"
+  };
+
+  mapZones.forEach((zone) => {
+    zone.addEventListener("click", (e) => {
+      const zoneName = zone.dataset.zone;
+      const displayName = zoneNames[zoneName] || zoneName;
+      trackEvent("map_zone_click", { props: { zone: displayName } });
+    });
+  });
+
+  mapZoneCards.forEach((card) => {
+    card.addEventListener("click", () => {
+      const zoneName = card.dataset.zone;
+      const displayName = zoneNames[zoneName] || zoneName;
+      trackEvent("map_zone_list_click", { props: { zone: displayName } });
+    });
+  });
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initMapInteractive);
+} else {
+  initMapInteractive();
+}
+
+function initVideoPlayer() {
+  const playBtn = document.getElementById("video-play-btn");
+  const closeBtn = document.getElementById("video-close-btn");
+  const embedWrap = document.getElementById("video-embed-wrap");
+  const embedContainer = document.getElementById("video-embed");
+
+  if (!playBtn || !embedWrap || !embedContainer) return;
+
+  const VIDEO_ID = "dQw4w9WgXcQ";
+  const PLAYER_URL = `https://www.youtube.com/embed/${VIDEO_ID}?autoplay=1&rel=0&modestbranding=1`;
+
+  function openVideo() {
+    embedContainer.innerHTML = `<iframe
+      src="${PLAYER_URL}"
+      title="Video demostrativo Purity and Clean"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+    ></iframe>`;
+    embedWrap.hidden = false;
+    document.body.style.overflow = "hidden";
+    trackEvent("video_play_click");
+    setTimeout(() => closeBtn?.focus(), 100);
+  }
+
+  function closeVideo() {
+    embedWrap.hidden = true;
+    embedContainer.innerHTML = "";
+    document.body.style.overflow = "";
+    playBtn.focus();
+  }
+
+  playBtn.addEventListener("click", openVideo);
+
+  if (closeBtn) {
+    closeBtn.addEventListener("click", closeVideo);
+  }
+
+  embedWrap.addEventListener("click", (e) => {
+    if (e.target === embedWrap) closeVideo();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (!embedWrap.hidden && e.key === "Escape") closeVideo();
+  });
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initVideoPlayer);
+} else {
+  initVideoPlayer();
 }
