@@ -1274,8 +1274,8 @@ function initVideoPlayer() {
 
   if (!playBtn || !embedWrap || !embedContainer) return;
 
-  const VIDEO_ID = "dQw4w9WgXcQ";
-  const PLAYER_URL = `https://www.youtube.com/embed/${VIDEO_ID}?autoplay=1&rel=0&modestbranding=1`;
+  const VIDEO_ID = "vTDo5qmyfVM";
+  const PLAYER_URL = `https://www.youtube-nocookie.com/embed/${VIDEO_ID}?autoplay=1&rel=0&modestbranding=1&cc_load_policy=1`;
 
   function openVideo() {
     embedContainer.innerHTML = `<iframe
