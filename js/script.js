@@ -1033,6 +1033,114 @@ if (document.readyState === "loading") {
   initNewsletter();
 }
 
+const PRICES = {
+  sofos: { low: 80000, high: 180000 },
+  colchones: { low: 60000, high: 120000 },
+  alfombras: { low: 200000, high: 450000 },
+  sillas: { low: 30000, high: 55000 },
+};
+
+const SERVICE_MAP = {
+  sofos: "limpieza-sofas",
+  colchones: "sanitizacion-colchones",
+  alfombras: "mantenimiento-alfombras",
+  sillas: "limpieza-sillas",
+};
+
+function formatPrice(value) {
+  return "$" + value.toLocaleString("es-CO");
+}
+
+function initCotizador() {
+  const serviceInputs = document.querySelectorAll('input[name="cotizador-service"]');
+  const decreaseBtn = document.getElementById("cotizador-decrease");
+  const increaseBtn = document.getElementById("cotizador-increase");
+  const rangeInput = document.getElementById("cotizador-range");
+  const qtyOutput = document.getElementById("cotizador-qty-output");
+  const priceLow = document.getElementById("cotizador-price-low");
+  const priceHigh = document.getElementById("cotizador-price-high");
+  const totalValue = document.getElementById("cotizador-total-value");
+  const priceDisplay = document.getElementById("cotizador-price-display");
+  const totalEl = document.getElementById("cotizador-total");
+  const ctaLink = document.getElementById("cotizador-cta");
+
+  if (!serviceInputs.length || !decreaseBtn || !rangeInput) return;
+
+  let state = { service: "sofos", quantity: 1 };
+
+  function updateDisplay(animate) {
+    const prices = PRICES[state.service] || PRICES.sofos;
+    const low = prices.low * state.quantity;
+    const high = prices.high * state.quantity;
+
+    if (animate) {
+      if (priceDisplay) {
+        priceDisplay.classList.remove("updated");
+        void priceDisplay.offsetWidth;
+        priceDisplay.classList.add("updated");
+      }
+      if (totalEl) {
+        totalEl.classList.remove("updated");
+        void totalEl.offsetWidth;
+        totalEl.classList.add("updated");
+      }
+    }
+
+    if (priceLow) priceLow.textContent = formatPrice(low);
+    if (priceHigh) priceHigh.textContent = formatPrice(high);
+    if (totalValue) totalValue.textContent = formatPrice(low) + " — " + formatPrice(high);
+  }
+
+  serviceInputs.forEach((input) => {
+    input.addEventListener("change", () => {
+      state.service = input.value;
+      updateDisplay(true);
+    });
+  });
+
+  function setQuantity(val) {
+    state.quantity = Math.max(1, Math.min(20, val));
+    if (qtyOutput) qtyOutput.textContent = state.quantity;
+    if (rangeInput) rangeInput.value = state.quantity;
+    if (decreaseBtn) decreaseBtn.disabled = state.quantity <= 1;
+    if (increaseBtn) increaseBtn.disabled = state.quantity >= 20;
+    updateDisplay(true);
+  }
+
+  if (decreaseBtn) {
+    decreaseBtn.addEventListener("click", () => setQuantity(state.quantity - 1));
+  }
+
+  if (increaseBtn) {
+    increaseBtn.addEventListener("click", () => setQuantity(state.quantity + 1));
+  }
+
+  if (rangeInput) {
+    rangeInput.addEventListener("input", () => setQuantity(parseInt(rangeInput.value, 10)));
+  }
+
+  if (ctaLink) {
+    ctaLink.addEventListener("click", () => {
+      const serviceKey = state.service;
+      const mappedService = SERVICE_MAP[serviceKey];
+      if (mappedService) {
+        const params = new URLSearchParams();
+        params.set("service", mappedService);
+        const newUrl = `${window.location.pathname}#reservas?${params.toString()}`;
+        history.replaceState(null, "", newUrl);
+      }
+    });
+  }
+
+  updateDisplay(false);
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initCotizador);
+} else {
+  initCotizador();
+}
+
 function initMapInteractive() {
   const mapContainer = document.querySelector(".map-container");
   const tooltip = document.getElementById("map-tooltip");
