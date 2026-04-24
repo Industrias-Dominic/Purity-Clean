@@ -2317,6 +2317,14 @@ a {
   color: #fb923c;
 }
 
+[data-theme="dark"] .pricing-feature--highlight {
+  background: rgba(20, 169, 202, 0.12);
+}
+
+[data-theme="dark"] .combo-tag {
+  background: linear-gradient(135deg, #14a9ca, #22d3ee);
+}
+
 .section-booking {
   background:
     radial-gradient(circle at 10% 90%, rgba(22, 163, 74, 0.1), transparent 35%),
