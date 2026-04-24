@@ -13,7 +13,8 @@ const PRECACHE_URLS = [
   '/manifest.json',
   '/offline.html',
   '/icons/icon-192.svg',
-  '/icons/icon-512.svg'
+  '/icons/icon-512.svg',
+  '/icons/icon-512-maskable.svg'
 ];
 
 const OFFLINE_PAGE = '/offline.html';
