@@ -297,6 +297,7 @@
   </script>
 </head>
 <body>
+  <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
   <header class="site-header" id="inicio">
     <nav class="nav container" aria-label="Principal">
       <a class="brand" href="#inicio" aria-label="Ir al inicio de Purity & Clean">
@@ -344,7 +345,7 @@
     </section>
   </header>
 
-  <main>
+  <main id="main-content">
     <section class="business-lines container" aria-label="Lineas de negocio">
       <article class="line-card">
         <h2>Soluciones para Hogares y PYMEs</h2>
@@ -1824,15 +1825,12 @@
                     <span class="field-error" role="alert" aria-live="polite"></span>
                   </div>
                   <div class="form-group">
-                    <label for="booking-time">Horario preferido <span aria-hidden="true">*</span></label>
-                    <select id="booking-time" name="time" required aria-required="true">
-                      <option value="">Selecciona un horario</option>
-                      <option value="08:00">08:00 — 10:00</option>
-                      <option value="10:00">10:00 — 12:00</option>
-                      <option value="12:00">12:00 — 14:00</option>
-                      <option value="14:00">14:00 — 16:00</option>
-                      <option value="16:00">16:00 — 18:00</option>
-                    </select>
+                    <label id="booking-time-label">Horario preferido <span aria-hidden="true">*</span></label>
+                    <input type="hidden" id="booking-time" name="time" required aria-required="true" value="">
+                    <div class="slot-picker" role="group" aria-labelledby="booking-time-label" aria-describedby="slot-picker-hint">
+                      <p id="slot-picker-hint" class="slot-picker-hint">Selecciona una fecha para ver los horarios disponibles.</p>
+                      <div class="slot-grid" id="slot-grid"></div>
+                    </div>
                     <span class="field-error" role="alert" aria-live="polite"></span>
                   </div>
                 </div>
@@ -2055,7 +2053,6 @@
 (function(){var s=document.createElement("script");s.src="js/config.js";s.async=false;document.head.appendChild(s)})();
   </script>
   <script defer src="js/script.js"></script>
-  <script defer src="js/reviews-data.js"></script>
   <div id="cookie-banner" class="cookie-banner" role="dialog" aria-modal="false" aria-labelledby="cookie-banner-title" hidden>
     <div class="cookie-banner-inner">
       <div class="cookie-banner-icon" aria-hidden="true">
