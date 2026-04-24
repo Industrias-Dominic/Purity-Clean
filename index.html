@@ -1436,17 +1436,20 @@
         <div class="video-showcase" data-reveal data-reveal-delay="100">
           <div class="video-card" aria-label="Video demostrativo de Purity &amp; Clean">
             <div class="video-thumb-wrap">
-              <img
-                class="video-thumb"
-                src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=1280&q=80"
-                srcset="https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=640&q=80 640w, https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=1280&q=80 1280w, https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=1920&q=80 1920w"
-                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 90vw, 800px"
-                alt="Equipo profesional de Purity &amp; Clean realizando limpieza de sofá"
-                loading="lazy"
-                decoding="async"
-                width="1280"
-                height="720"
-              >
+              <picture>
+                <source type="image/webp" srcset="https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=640&q=80&fm=webp 640w, https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=1280&q=80&fm=webp 1280w, https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=1920&q=80&fm=webp 1920w" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 90vw, 800px">
+                <img
+                  class="video-thumb"
+                  src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=1280&q=80"
+                  srcset="https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=640&q=80 640w, https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=1280&q=80 1280w, https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=1920&q=80 1920w"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 90vw, 800px"
+                  alt="Equipo profesional de Purity &amp; Clean realizando limpieza de sofá"
+                  loading="lazy"
+                  decoding="async"
+                  width="1280"
+                  height="720"
+                >
+              </picture>
               <div class="video-thumb-overlay" aria-hidden="true"></div>
               <button class="video-play-btn" type="button" aria-label="Reproducir video demostrativo" id="video-play-btn">
                 <span class="video-play-icon" aria-hidden="true">
