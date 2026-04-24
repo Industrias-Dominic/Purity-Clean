@@ -2246,6 +2246,28 @@ a {
   font-weight: 600;
 }
 
+.combo-tag {
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #fff;
+  background: linear-gradient(135deg, #0b7189, #14a9ca);
+  padding: 0.2rem 0.45rem;
+  border-radius: 4px;
+}
+
+.pricing-feature--highlight {
+  background: rgba(11, 113, 137, 0.06);
+  border-radius: 8px;
+  padding: 0.85rem;
+  margin-top: 0.25rem;
+}
+
+.pricing-feature--highlight:last-child {
+  padding-bottom: 0.85rem;
+}
+
 .savings-amount {
   color: #f97316;
   font-weight: 800;
