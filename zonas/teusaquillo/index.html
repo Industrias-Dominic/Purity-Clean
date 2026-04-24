@@ -290,6 +290,63 @@
       </div>
     </section>
 
+    <section class="zona-cotizacion section" aria-labelledby="zona-cotizacion-heading">
+      <div class="container">
+        <div class="zona-cotizacion-inner">
+          <div class="zona-cotizacion-copy" data-reveal>
+            <p class="eyebrow" data-reveal-item>Solicita tu cotizacion</p>
+            <h2 id="zona-cotizacion-heading" data-reveal-item>Solicita cotizacion en Teusaquillo</h2>
+            <p data-reveal-item>Completa el formulario y te confirmamos tu cita en menos de 2 horas. Sin compromiso.</p>
+            <ul data-reveal-item data-reveal-delay="50">
+              <li><i class="fa-solid fa-check" aria-hidden="true"></i> Respuesta en menos de 2 horas</li>
+              <li><i class="fa-solid fa-check" aria-hidden="true"></i> Presupuesto sin compromiso</li>
+              <li><i class="fa-solid fa-check" aria-hidden="true"></i> Atencion directa con el equipo</li>
+            </ul>
+          </div>
+          <div data-reveal-item data-reveal-delay="100">
+            <form class="zona-quote-form" action="https://formspree.io/f/REPLACE_ME_ZONA" method="POST" novalidate aria-label="Formulario de cotizacion rapida en Teusaquillo">
+              <h3>Solicita cotizacion en Teusaquillo</h3>
+              <input type="hidden" name="zona" value="Teusaquillo">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="zona-name">Nombre completo <span aria-hidden="true">*</span></label>
+                  <input type="text" id="zona-name" name="name" autocomplete="name" required aria-required="true" placeholder="Tu nombre">
+                  <span class="field-error" role="alert" aria-live="polite"></span>
+                </div>
+                <div class="form-group">
+                  <label for="zona-phone">Telefono o WhatsApp <span aria-hidden="true">*</span></label>
+                  <input type="tel" id="zona-phone" name="phone" autocomplete="tel" required aria-required="true" placeholder="+57 300 000 0000">
+                  <span class="field-error" role="alert" aria-live="polite"></span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="zona-service">Servicio de interes <span aria-hidden="true">*</span></label>
+                <select id="zona-service" name="service" required aria-required="true">
+                  <option value="">Selecciona un servicio</option>
+                  <option value="limpieza-sofas">Limpieza de sofas</option>
+                  <option value="sanitizacion-colchones">Sanitizacion de colchones</option>
+                  <option value="mantenimiento-alfombras">Mantenimiento de alfombras</option>
+                  <option value="limpieza-sillas">Limpieza de sillas</option>
+                  <option value="otro">Otro</option>
+                </select>
+                <span class="field-error" role="alert" aria-live="polite"></span>
+              </div>
+              <button type="submit" class="btn btn-primary btn-submit">
+                <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
+                Enviar Solicitud
+              </button>
+              <p class="form-note"><i class="fa-solid fa-lock" aria-hidden="true"></i> Tus datos estan protegidos.</p>
+            </form>
+            <div class="zona-form-success" role="status" aria-live="polite" hidden>
+              <div class="success-icon" aria-hidden="true"><i class="fa-solid fa-circle-check"></i></div>
+              <h4>Solicitud recibida</h4>
+              <p>Gracias por contactarnos. Un asesor se comunicara contigo en menos de 2 horas.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="zona-faq section container" aria-labelledby="zona-faq-heading">
       <div class="section-head" data-reveal>
         <p class="eyebrow" data-reveal-item>Preguntas frecuentes</p>
