@@ -1566,4 +1566,40 @@ if (document.readyState === "loading") {
       handleConsent(false);
     });
   }
+
+  var zonaQuoteForm = document.querySelector(".zona-quote-form");
+  if (zonaQuoteForm) {
+    var zonaNameInput = zonaQuoteForm.querySelector("[name='zona']");
+    var zonaPhoneInput = zonaQuoteForm.querySelector("#zona-phone");
+    var zonaNameInputField = zonaQuoteForm.querySelector("#zona-name");
+    var zonaServiceInput = zonaQuoteForm.querySelector("#zona-service");
+
+    [zonaNameInputField, zonaPhoneInput, zonaServiceInput].forEach(function(input) {
+      if (!input) return;
+      input.addEventListener("blur", function() { validateField(input); });
+      input.addEventListener("input", function() {
+        if (input.classList.contains("error")) validateField(input);
+      });
+    });
+
+    zonaQuoteForm.addEventListener("submit", function(event) {
+      event.preventDefault();
+      var isName = validateField(zonaNameInputField);
+      var isPhone = validateField(zonaPhoneInput);
+      var isService = validateField(zonaServiceInput);
+      if (!isName || !isPhone || !isService) return;
+
+      var submitBtn = zonaQuoteForm.querySelector(".btn-submit");
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i> Enviando...';
+      }
+
+      setTimeout(function() {
+        zonaQuoteForm.hidden = true;
+        var successEl = document.querySelector(".zona-form-success");
+        if (successEl) successEl.hidden = false;
+      }, 1200);
+    });
+  }
 })();
