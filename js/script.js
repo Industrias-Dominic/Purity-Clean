@@ -631,7 +631,7 @@ function buildWhatsAppUrl(couponCode, nombre) {
 function getWhatsAppUrl(zonaKey) {
   const base = WHATSAPP_CONFIG.numero;
   const mensaje = WHATSAPP_CONFIG.zonas[zonaKey] || WHATSAPP_CONFIG.mensajePorDefecto;
-  return `https://wa.me/${base}?text=${mensaje};
+  return `https://wa.me/${base}?text=${mensaje}`;
 }
 
 function showReferidosResult(couponCode) {
