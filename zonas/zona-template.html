@@ -1,40 +1,40 @@
 <!doctype html>
-<html lang="es" data-zona="barrios-unidos">
+<html lang="es" data-zona="{{ZONA_KEY}}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Servicios profesionales de limpieza en Barrios Unidos, Bogotá. Limpieza de sofás, sanitización de colchones, mantenimiento de alfombras y más. Atención personalizada en tu zona.">
-  <meta name="keywords" content="limpieza Barrios Unidos, servicios de limpieza Barrios Unidos Bogotá, limpieza de sofás Barrios Unidos Bogotá, sanitización colchones Barrios Unidos, mantenimiento alfombras Barrios Unidos, Bogotá">
+  <meta name="description" content="{{META_DESCRIPTION}}">
+  <meta name="keywords" content="{{META_KEYWORDS}}">
   <meta name="robots" content="index, follow">
-  <link rel="alternate" hreflang="es" href="https://purityclean.com/zonas/barrios-unidos/">
-  <link rel="alternate" hreflang="es-co" href="https://purityclean.com/zonas/barrios-unidos/">
+  <link rel="alternate" hreflang="es" href="{{ZONA_URL}}">
+  <link rel="alternate" hreflang="es-co" href="{{ZONA_URL}}">
 
-  <title>Servicios de Limpieza en Barrios Unidos, Bogotá | Purity & Clean</title>
+  <title>{{PAGE_TITLE}}</title>
 
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://purityclean.com/zonas/barrios-unidos/">
-  <meta property="og:title" content="Servicios de Limpieza en Barrios Unidos, Bogotá | Purity & Clean">
-  <meta property="og:description" content="Profesionales de limpieza en Barrios Unidos. Sofás, colchones, alfombras y más. Atención en toda la zona de Barrios Unidos.">
-  <meta property="og:site_name" content="Purity & Clean">
+  <meta property="og:url" content="{{ZONA_URL}}">
+  <meta property="og:title" content="{{PAGE_TITLE}}">
+  <meta property="og:description" content="{{OG_DESCRIPTION}}">
+  <meta property="og:site_name" content="Purity &amp; Clean">
   <meta property="og:locale" content="es_CO">
   <meta property="og:image" content="https://purityclean.com/images/og-image.jpg">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Servicios de Limpieza en Barrios Unidos, Bogotá | Purity & Clean">
-  <meta name="twitter:description" content="Profesionales de limpieza en Barrios Unidos. Sofás, colchones, alfombras y más.">
+  <meta name="twitter:title" content="{{PAGE_TITLE}}">
+  <meta name="twitter:description" content="{{TWITTER_DESCRIPTION}}">
 
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    "name": "Purity & Clean - Barrios Unidos",
-    "description": "Servicios profesionales de limpieza en Barrios Unidos, Bogotá. Limpieza de sofás, sanitización de colchones, mantenimiento de alfombras y productos de limpieza.",
-    "url": "https://purityclean.com/zonas/barrios-unidos/",
+    "name": "Purity & Clean - {{ZONA_NOMBRE}}",
+    "description": "{{SCHEMA_DESCRIPTION}}",
+    "url": "{{ZONA_URL}}",
     "telephone": "+57-300-123-4567",
     "email": "contacto@purityclean.com",
     "areaServed": {
       "@type": "Place",
-      "name": "Barrios Unidos",
+      "name": "{{ZONA_NOMBRE}}",
       "containedInPlace": {
         "@type": "AdministrativeArea",
         "name": "Bogotá",
@@ -43,15 +43,15 @@
     },
     "geo": {
       "@type": "GeoCoordinates",
-      "latitude": "4.6800",
-      "longitude": "-74.0750"
+      "latitude": "{{GEO_LAT}}",
+      "longitude": "{{GEO_LON}}"
     },
     "address": {
       "@type": "PostalAddress",
       "addressCountry": "CO",
       "addressRegion": "Cundinamarca",
       "addressLocality": "Bogotá",
-      "addressNeighborhood": "Barrios Unidos"
+      "addressNeighborhood": "{{ZONA_NOMBRE}}"
     },
     "openingHoursSpecification": [
       {
@@ -63,38 +63,38 @@
     ],
     "hasOfferCatalog": {
       "@type": "OfferCatalog",
-      "name": "Servicios de limpieza en Barrios Unidos",
+      "name": "Servicios de limpieza en {{ZONA_NOMBRE}}",
       "itemListElement": [
         {
           "@type": "Offer",
           "itemOffered": {
             "@type": "Service",
-            "name": "Limpieza profunda de sofás en Barrios Unidos",
-            "description": "Servicio profesional de limpieza de sofás en Barrios Unidos y alrededores."
+            "name": "Limpieza profunda de sofás en {{ZONA_NOMBRE}}",
+            "description": "Servicio profesional de limpieza de sofás en {{ZONA_NOMBRE}} y alrededores."
           }
         },
         {
           "@type": "Offer",
           "itemOffered": {
             "@type": "Service",
-            "name": "Sanitización de colchones en Barrios Unidos",
-            "description": "Desinfección profunda de colchones en Barrios Unidos."
+            "name": "Sanitización de colchones en {{ZONA_NOMBRE}}",
+            "description": "Desinfección profunda de colchones en {{ZONA_NOMBRE}}."
           }
         },
         {
           "@type": "Offer",
           "itemOffered": {
             "@type": "Service",
-            "name": "Mantenimiento de alfombras en Barrios Unidos",
-            "description": "Programa de mantenimiento de alfombras para hogares y empresas en Barrios Unidos."
+            "name": "Mantenimiento de alfombras en {{ZONA_NOMBRE}}",
+            "description": "Programa de mantenimiento de alfombras para hogares y empresas en {{ZONA_NOMBRE}}."
           }
         }
       ]
     },
     "aggregateRating": {
       "@type": "AggregateRating",
-      "ratingValue": "4.8",
-      "reviewCount": "76"
+      "ratingValue": "{{STATS_RATING}}",
+      "reviewCount": "{{STATS_CLIENTES}}"
     },
     "sameAs": [
       "https://facebook.com/purityclean",
@@ -110,7 +110,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Raleway:wght@600;700;800&display=swap">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWix+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkR4j8CGx3zU6Q8U9AqR2mYf0i+XK9f6w8EA==" crossorigin="anonymous" referrerpolicy="no-referrer">
   <link rel="stylesheet" href="../../css/style.css">
-  <link rel="canonical" href="https://purityclean.com/zonas/barrios-unidos/">
+  <link rel="canonical" href="{{ZONA_URL}}">
   <link rel="sitemap" type="application/xml" title="Sitemap XML" href="https://purityclean.com/sitemap.xml">
   <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
 </head>
@@ -142,14 +142,14 @@
     <section class="zona-hero container">
       <div class="zona-badge" aria-label="Zona de cobertura">
         <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
-        <span>Cobertura en Barrios Unidos</span>
+        <span>Cobertura en {{ZONA_NOMBRE}}</span>
       </div>
-      <h1>Servicios de Limpieza Profesional en <span class="zona-highlight">Barrios Unidos</span></h1>
-      <p class="zona-subtitle">Atencion personalizada para hogares y empresas en toda la zona de Bogotá. Professionaux cerca de ti, con atencion directa y precios transparentes.</p>
+      <h1>Servicios de Limpieza Profesional en <span class="zona-highlight">{{ZONA_NOMBRE}}</span></h1>
+      <p class="zona-subtitle">Atencion personalizada para hogares y empresas en toda la zona de {{ZONA_NOMBRE}}. Professionaux cerca de ti, con atencion directa y precios transparentes.</p>
       <div class="zona-cta-row">
         <a href="../../index.html#reservas" class="btn btn-primary">
           <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
-          Agendar en Barrios Unidos
+          Agendar en {{ZONA_NOMBRE}}
         </a>
         <a href="tel:+573001234567" class="btn btn-secondary">
           <i class="fa-solid fa-phone" aria-hidden="true"></i>
@@ -160,7 +160,7 @@
 
     <section class="zona-services container" aria-labelledby="zona-services-heading">
       <div class="section-head">
-        <p class="eyebrow">Servicios en Barrios Unidos</p>
+        <p class="eyebrow">Servicios en {{ZONA_NOMBRE}}</p>
         <h2 id="zona-services-heading">Lo que hacemos por ti en tu zona</h2>
       </div>
       <div class="zona-cards-grid">
@@ -218,20 +218,20 @@
     <section class="zona-trust section" aria-labelledby="zona-trust-heading">
       <div class="container">
         <div class="section-head" data-reveal>
-          <p class="eyebrow" data-reveal-item>Por qué elegirnos en Barrios Unidos</p>
+          <p class="eyebrow" data-reveal-item>Por qué elegirnos en {{ZONA_NOMBRE}}</p>
           <h2 id="zona-trust-heading" data-reveal-item>Tu vecindario confia en nosotros</h2>
         </div>
         <div class="zona-trust-grid" data-reveal data-reveal-delay="50">
           <div class="zona-trust-item">
-            <span class="zona-trust-metric" aria-hidden="true">76</span>
-            <span class="zona-trust-label">clientes atendidos en Barrios Unidos</span>
+            <span class="zona-trust-metric" aria-hidden="true">{{STATS_CLIENTES}}</span>
+            <span class="zona-trust-label">clientes atendidos en {{ZONA_NOMBRE}}</span>
           </div>
           <div class="zona-trust-item">
-            <span class="zona-trust-metric" aria-hidden="true">4.8</span>
+            <span class="zona-trust-metric" aria-hidden="true">{{STATS_RATING}}</span>
             <span class="zona-trust-label">calificacion promedio en la zona</span>
           </div>
           <div class="zona-trust-item">
-            <span class="zona-trust-metric" aria-hidden="true">97%</span>
+            <span class="zona-trust-metric" aria-hidden="true">{{STATS_RESPONSE_RATE}}%</span>
             <span class="zona-trust-label">de solicitudes respondidas en menos de 2 horas</span>
           </div>
           <div class="zona-trust-item">
@@ -245,7 +245,7 @@
     <section class="zona-why section container" aria-labelledby="zona-why-heading">
       <div class="section-head" data-reveal>
         <p class="eyebrow" data-reveal-item>Ventajas locales</p>
-        <h2 id="zona-why-heading" data-reveal-item>Atendinos cerca de Barrios Unidos</h2>
+        <h2 id="zona-why-heading" data-reveal-item>Atendinos cerca de {{ZONA_NOMBRE}}</h2>
       </div>
       <div class="zona-why-grid" data-reveal data-reveal-delay="50">
         <div class="zona-why-item" data-reveal-item>
@@ -253,14 +253,14 @@
             <i class="fa-solid fa-route"></i>
           </div>
           <h3>Tiempo de llegada rapido</h3>
-          <p>Nuestras rutas de servicio estan optimizadas para Barrios Unidos y alrededores. Llegamos el mismo dia o dia siguiente.</p>
+          <p>Nuestras rutas de servicio estan optimizadas para {{ZONA_NOMBRE}} y alrededores. Llegamos el mismo dia o dia siguiente.</p>
         </div>
         <div class="zona-why-item" data-reveal-item data-reveal-delay="80">
           <div class="zona-why-icon" aria-hidden="true">
             <i class="fa-solid fa-tags"></i>
           </div>
           <h3>Precios adaptados a tu zona</h3>
-          <p>Rangos de precio justos y transparentes. Sin costos ocultos ni recargos por distancia en Bogotá.</p>
+          <p>Rangos de precio justos y transparentes. Sin costos ocultos ni recargos por distancia en {{ZONA_NOMBRE}}.</p>
         </div>
         <div class="zona-why-item" data-reveal-item data-reveal-delay="160">
           <div class="zona-why-icon" aria-hidden="true">
@@ -281,11 +281,11 @@
 
     <section class="zona-cta-banner section" aria-label="Llamada a la accion">
       <div class="container zona-cta-inner" data-reveal>
-        <h2>Listo para agendar tu servicio en Barrios Unidos?</h2>
+        <h2>Listo para agendar tu servicio en {{ZONA_NOMBRE}}?</h2>
         <p>Completa el formulario en minutos y te confirmamos la cita en menos de 2 horas.</p>
         <a href="../../index.html#reservas" class="btn btn-primary btn-lg">
           <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
-          Reservar en Barrios Unidos
+          Reservar en {{ZONA_NOMBRE}}
         </a>
         <p class="zona-cta-note">O llamanos al <a href="tel:+573001234567">+57 300 123 4567</a> / <a href="https://wa.me/573001234567" target="_blank" rel="noopener">WhatsApp</a></p>
       </div>
@@ -296,7 +296,7 @@
         <div class="zona-cotizacion-inner">
           <div class="zona-cotizacion-copy" data-reveal>
             <p class="eyebrow" data-reveal-item>Solicita tu cotizacion</p>
-            <h2 id="zona-cotizacion-heading" data-reveal-item>Solicita cotizacion en Barrios Unidos</h2>
+            <h2 id="zona-cotizacion-heading" data-reveal-item>Solicita cotizacion en {{ZONA_NOMBRE}}</h2>
             <p data-reveal-item>Completa el formulario y te confirmamos tu cita en menos de 2 horas. Sin compromiso.</p>
             <ul data-reveal-item data-reveal-delay="50">
               <li><i class="fa-solid fa-check" aria-hidden="true"></i> Respuesta en menos de 2 horas</li>
@@ -305,9 +305,9 @@
             </ul>
           </div>
           <div data-reveal-item data-reveal-delay="100">
-            <form class="zona-quote-form" action="https://formspree.io/f/xnepyzll" method="POST" novalidate aria-label="Formulario de cotizacion rapida en Barrios Unidos">
-              <h3>Solicita cotizacion en Barrios Unidos</h3>
-              <input type="hidden" name="zona" value="Barrios Unidos">
+            <form class="zona-quote-form" action="https://formspree.io/f/xnepyzll" method="POST" novalidate aria-label="Formulario de cotizacion rapida en {{ZONA_NOMBRE}}">
+              <h3>Solicita cotizacion en {{ZONA_NOMBRE}}</h3>
+              <input type="hidden" name="zona" value="{{ZONA_NOMBRE}}">
               <div class="form-row">
                 <div class="form-group">
                   <label for="zona-name">Nombre completo <span aria-hidden="true">*</span></label>
@@ -351,43 +351,43 @@
     <section class="zona-faq section container" aria-labelledby="zona-faq-heading">
       <div class="section-head" data-reveal>
         <p class="eyebrow" data-reveal-item>Preguntas frecuentes</p>
-        <h2 id="zona-faq-heading" data-reveal-item>Preguntas sobre servicios en Barrios Unidos</h2>
+        <h2 id="zona-faq-heading" data-reveal-item>Preguntas sobre servicios en {{ZONA_NOMBRE}}</h2>
       </div>
       <div class="faq-list" data-reveal data-reveal-delay="50">
         <details class="faq-item">
           <summary class="faq-question">
-            <span>¿Cubren toda la zona de Barrios Unidos?</span>
+            <span>{{FAQ_Q1}}</span>
             <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
           </summary>
           <div class="faq-answer">
-            <p>Sí, llegamos a todos los barrios de Barrios Unidos y areas cercanas en Bogotá. Nuestro equipo tiene cobertura en toda la zona.</p>
+            <p>{{FAQ_A1}}</p>
           </div>
         </details>
         <details class="faq-item">
           <summary class="faq-question">
-            <span>¿Cuánto tardan en llegar a Barrios Unidos?</span>
+            <span>{{FAQ_Q2}}</span>
             <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
           </summary>
           <div class="faq-answer">
-            <p>Para solicitudes antes de las 12pm, podemos agenda el mismo dia. De lo contrario, el dia siguiente. Siempre te confirmamos el horario exacto.</p>
+            <p>{{FAQ_A2}}</p>
           </div>
         </details>
         <details class="faq-item">
           <summary class="faq-question">
-            <span>¿Qué métodos de pago aceptan en la zona?</span>
+            <span>{{FAQ_Q3}}</span>
             <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
           </summary>
           <div class="faq-answer">
-            <p>Aceptamos transferencia, efectivo y pagos con tarjeta. Para empresas y corporaciones también ofrecemos Factura Electrónica y pago a 30 días.</p>
+            <p>{{FAQ_A3}}</p>
           </div>
         </details>
         <details class="faq-item">
           <summary class="faq-question">
-            <span>¿Hacen servicio los fines de semana en Barrios Unidos?</span>
+            <span>{{FAQ_Q4}}</span>
             <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
           </summary>
           <div class="faq-answer">
-            <p>Sí, tenemos disponibilidad sábado y domingo en Barrios Unidos. Consulta horarios disponibles al momento de agendar.</p>
+            <p>{{FAQ_A4}}</p>
           </div>
         </details>
       </div>
@@ -396,7 +396,7 @@
 
   <footer class="site-footer">
     <div class="container footer-wrap">
-      <p>Purity &amp; Clean - Servicios de limpieza profesional en Barrios Unidos y toda Bogotá.</p>
+      <p>Purity &amp; Clean - Servicios de limpieza profesional en {{ZONA_NOMBRE}} y toda Bogotá.</p>
       <div class="social-links" aria-label="Redes sociales">
         <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i></a>
         <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
@@ -413,7 +413,7 @@
     </div>
   </footer>
 
-  <a href="#" class="whatsapp-float" data-whatsapp-zone="barrios-unidos" target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp">
+  <a href="#" class="whatsapp-float" data-whatsapp-zone="{{WAPP_ZONE}}" target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp">
     <span class="whatsapp-ripple" aria-hidden="true"></span>
     <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
     <span class="whatsapp-tooltip">Habla con nosotros</span>
@@ -422,7 +422,7 @@
   <script>
 (function(){var s=document.createElement("script");s.src="../../js/config.js";s.async=false;document.head.appendChild(s)})();
 </script>
-  <script defer src="../../js/zonas-data.js"></script>
+  <script src="../../js/zonas-data.js"></script>
   <script defer src="../../js/zonas-render.js"></script>
   <script defer src="../../js/script.js"></script>
 </body>
