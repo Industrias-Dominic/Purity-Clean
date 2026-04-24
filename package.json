@@ -1,0 +1,32 @@
+{
+  "name": "purity-clean-tests",
+  "version": "1.0.0",
+  "description": "Tests automatizados E2E con Playwright para Purity & Clean",
+  "private": true,
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "test:report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.42.0"
+  },
+  "main": "playwright.config.js",
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Industrias-Dominic/Purity-Clean.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Industrias-Dominic/Purity-Clean/issues"
+  },
+  "homepage": "https://github.com/Industrias-Dominic/Purity-Clean#readme"
+}

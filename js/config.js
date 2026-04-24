@@ -21,3 +21,9 @@ const WHATSAPP_CONFIG = {
     "usme": "Hola%2C%20estoy%20interesado%20en%20servicios%20de%20limpieza%20en%20Usme"
   }
 };
+
+const FORMSPREE_CONFIG = {
+  booking: "xwpkjvvw",
+  newsletter: "xbzykezv",
+  zona: "xnepyzll"
+};

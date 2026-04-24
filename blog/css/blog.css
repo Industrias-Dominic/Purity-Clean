@@ -2,6 +2,28 @@
   padding-bottom: 4rem;
 }
 
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  background: var(--color-primary);
+  color: #fff;
+  padding: 0.6rem 1rem;
+  border-radius: 0 0 14px 14px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-decoration: none;
+  z-index: 9999;
+  transition: top 0.2s ease;
+  box-shadow: 0 4px 16px rgba(11, 113, 137, 0.35);
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: 3px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+}
+
 .blog-hero {
   position: relative;
   padding: 3rem 0 2.5rem;

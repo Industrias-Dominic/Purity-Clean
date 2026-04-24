@@ -175,8 +175,12 @@ document.querySelectorAll("[data-reveal]").forEach((el) => {
 });
 
 function initBookingForm() {
+  const bookingForm = document.querySelector("#booking-form");
   if (!bookingForm) return;
   trackEvent("booking_form_viewed");
+
+  const slotGrid = bookingForm.querySelector("#slot-grid");
+  const slotHint = bookingForm.querySelector("#slot-picker-hint");
 
   const nameInput = bookingForm.querySelector("#booking-name");
   const emailInput = bookingForm.querySelector("#booking-email");
@@ -201,6 +205,92 @@ function initBookingForm() {
   today.setDate(today.getDate() + 1);
   const minDate = today.toISOString().split("T")[0];
   if (dateInput) dateInput.setAttribute("min", minDate);
+
+  const WEEKDAY_SLOTS = [
+    { value: "08:00", label: "8:00", period: "am" },
+    { value: "10:00", label: "10:00", period: "am" },
+    { value: "12:00", label: "12:00", period: "md" },
+    { value: "14:00", label: "2:00", period: "pm" },
+    { value: "16:00", label: "4:00", period: "pm" },
+  ];
+
+  const SATURDAY_SLOTS = [
+    { value: "08:00", label: "8:00", period: "am" },
+    { value: "10:00", label: "10:00", period: "am" },
+    { value: "12:00", label: "12:00", period: "md" },
+  ];
+
+  function simulateUnavailableSlots(dateStr) {
+    const unavailable = new Set();
+    const seed = dateStr.split("-").join("");
+    const dayDigit = parseInt(seed.slice(-2), 10);
+    if (dayDigit % 7 === 0) unavailable.add("10:00");
+    if (dayDigit % 5 === 0) unavailable.add("14:00");
+    if (dayDigit % 3 === 0) unavailable.add("08:00");
+    if (dayDigit % 3 === 0) unavailable.add("16:00");
+    return unavailable;
+  }
+
+  function buildSlotGrid(slots, unavailable, selectedValue) {
+    slotGrid.innerHTML = "";
+    slots.forEach((slot) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "slot-btn";
+      btn.dataset.value = slot.value;
+      btn.setAttribute("aria-pressed", String(slot.value === selectedValue));
+      if (unavailable.has(slot.value)) {
+        btn.classList.add("unavailable");
+        btn.setAttribute("aria-disabled", "true");
+        btn.setAttribute("aria-label", `${slot.label} ${slot.period} — no disponible`);
+        btn.innerHTML = `<span class="slot-time">${slot.label}</span><span class="slot-period">${slot.period}</span><span class="slot-badge">Ocupado</span>`;
+      } else {
+        btn.setAttribute("aria-label", `${slot.label} ${slot.period}`);
+        btn.innerHTML = `<span class="slot-time">${slot.label}</span><span class="slot-period">${slot.period}</span>`;
+        btn.addEventListener("click", () => {
+          const prev = slotGrid.querySelector(".slot-btn.selected");
+          if (prev) {
+            prev.classList.remove("selected");
+            prev.setAttribute("aria-pressed", "false");
+          }
+          btn.classList.add("selected");
+          btn.setAttribute("aria-pressed", "true");
+          timeInput.value = slot.value;
+          const fieldError = timeInput.parentElement.querySelector(".field-error");
+          if (fieldError) fieldError.textContent = "";
+          timeInput.classList.remove("error");
+        });
+      }
+      slotGrid.appendChild(btn);
+    });
+  }
+
+  function updateSlotPicker(dateStr) {
+    if (!dateStr) {
+      slotGrid.innerHTML = "";
+      if (slotHint) slotHint.textContent = "Selecciona una fecha para ver los horarios disponibles.";
+      timeInput.value = "";
+      return;
+    }
+    const date = new Date(dateStr + "T00:00:00");
+    const dayOfWeek = date.getDay();
+    const isSaturday = dayOfWeek === 6;
+    const slots = isSaturday ? SATURDAY_SLOTS : WEEKDAY_SLOTS;
+    const unavailable = simulateUnavailableSlots(dateStr);
+    const selected = timeInput.value;
+    if (slotHint) {
+      slotHint.textContent = isSaturday
+        ? "Sábados: solo hasta las 13:00. Horarios disponibles:"
+        : "Lunes a viernes. Horarios disponibles:";
+    }
+    buildSlotGrid(slots, unavailable, selected);
+  }
+
+  if (dateInput) {
+    dateInput.addEventListener("change", () => {
+      updateSlotPicker(dateInput.value);
+    });
+  }
 
   let currentStep = 1;
   const totalSteps = 3;
@@ -339,7 +429,7 @@ function initBookingForm() {
 
     const formData = new FormData(bookingForm);
 
-    if (bookingForm.action.includes("REPLACE_ME")) {
+    if (bookingForm.action.includes("REPLACE_ME") || !window.FORMSPREE_CONFIG?.booking) {
       const name = formData.get("name") || "";
       const service = formData.get("service") || "";
       const date = formData.get("date") || "";
@@ -356,7 +446,9 @@ function initBookingForm() {
       return;
     }
 
-    fetch(bookingForm.action, {
+    const bookingAction = `https://formspree.io/f/${window.FORMSPREE_CONFIG.booking}`;
+
+    fetch(bookingAction, {
       method: "POST",
       body: formData,
       headers: {
@@ -428,6 +520,7 @@ function initBookingForm() {
     bookingResetBtn.addEventListener("click", () => {
       bookingForm.reset();
       bookingForm.hidden = false;
+      updateSlotPicker("");
       const successEl = document.querySelector("#booking-success");
       if (successEl) {
         successEl.hidden = true;
@@ -467,6 +560,12 @@ function validateBookingField(input) {
   if (input.required && !value) {
     input.classList.add("error");
     if (errorEl) errorEl.textContent = "Este campo es obligatorio.";
+    return false;
+  }
+  if (input.type === "hidden" && input.id === "booking-time" && !value) {
+    const slotError = input.parentElement.querySelector(".field-error");
+    if (slotError) slotError.textContent = "Selecciona un horario disponible.";
+    input.classList.add("error");
     return false;
   }
   if (input.type === "email" && value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
@@ -1006,7 +1105,7 @@ function initNewsletter() {
       submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i> Suscribiendo...';
     }
 
-    if (form.action.includes("REPLACE_ME")) {
+    if (form.action.includes("REPLACE_ME") || !window.FORMSPREE_CONFIG?.newsletter) {
       localStorage.setItem(NEWSLETTER_STORAGE_KEY, "true");
       form.hidden = true;
       const successEl = document.getElementById("newsletter-success");
@@ -1015,9 +1114,11 @@ function initNewsletter() {
       return;
     }
 
+    const newsletterAction = `https://formspree.io/f/${window.FORMSPREE_CONFIG.newsletter}`;
+
     try {
       const formData = new FormData(form);
-      const response = await fetch(form.action, {
+      const response = await fetch(newsletterAction, {
         method: "POST",
         body: formData,
         headers: { Accept: "application/json" },
@@ -1482,11 +1583,36 @@ if (document.readyState === "loading") {
         submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i> Enviando...';
       }
 
-      setTimeout(function() {
+      if (!window.FORMSPREE_CONFIG?.zona) {
+        setTimeout(function() {
+          zonaQuoteForm.hidden = true;
+          var successEl = document.querySelector(".zona-form-success");
+          if (successEl) successEl.hidden = false;
+        }, 1200);
+        return;
+      }
+
+      var formData = new FormData(zonaQuoteForm);
+      var zonaAction = `https://formspree.io/f/${window.FORMSPREE_CONFIG.zona}`;
+
+      fetch(zonaAction, {
+        method: "POST",
+        body: formData,
+        headers: { Accept: "application/json" }
+      }).then(function(response) {
+        if (!response.ok) throw new Error("Form submission failed");
         zonaQuoteForm.hidden = true;
         var successEl = document.querySelector(".zona-form-success");
         if (successEl) successEl.hidden = false;
-      }, 1200);
+        trackEvent("zona_quote_submitted", { props: { zona: zonaNameInput?.value || "" } });
+      }).catch(function() {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane" aria-hidden="true"></i> Enviar Solicitud';
+        }
+        var errorEl = zonaPhoneInput?.parentElement?.querySelector(".field-error");
+        if (errorEl) errorEl.textContent = "Error al enviar. Intenta de nuevo.";
+      });
     });
   }
 })();
