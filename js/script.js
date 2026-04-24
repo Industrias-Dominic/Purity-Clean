@@ -1300,11 +1300,123 @@ function initNewsletter() {
   }
 }
 
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", initNewsletter);
-} else {
-  initNewsletter();
+function initPwaInstallPrompt() {
+  const banner = document.getElementById("pwa-install-banner");
+  const acceptBtn = document.getElementById("pwa-install-accept");
+  const declineBtn = document.getElementById("pwa-install-decline");
+  if (!banner || !acceptBtn || !declineBtn) return;
+
+  const STORAGE_KEY = "purity_pwa_install_dismissed";
+  if (localStorage.getItem(STORAGE_KEY)) return;
+
+  let deferredPrompt = null;
+
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    setTimeout(() => {
+      banner.hidden = false;
+      banner.classList.add("revealed");
+      trackEvent("pwa_install_banner_shown");
+    }, 3000);
+  });
+
+  acceptBtn.addEventListener("click", () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then((choice) => {
+      if (choice.outcome === "accepted") {
+        trackEvent("pwa_install_accepted");
+      } else {
+        trackEvent("pwa_install_declined");
+      }
+      deferredPrompt = null;
+      banner.hidden = true;
+    });
+  });
+
+  declineBtn.addEventListener("click", () => {
+    localStorage.setItem(STORAGE_KEY, "true");
+    banner.hidden = true;
+    trackEvent("pwa_install_dismissed");
+  });
 }
+
+function initPushNotifications() {
+  if (!("PushManager" in window) || !("serviceWorker" in navigator)) return;
+
+  const pushBanner = document.getElementById("push-notification-banner");
+  const pushAcceptBtn = document.getElementById("push-notification-accept");
+  const pushDeclineBtn = document.getElementById("push-notification-decline");
+  if (!pushBanner || !pushAcceptBtn || !pushDeclineBtn) return;
+
+  const STORAGE_KEY_PUSH = "purity_push_notification_dismissed";
+  const STORAGE_KEY_PUSH_ENABLED = "purity_push_enabled";
+  if (localStorage.getItem(STORAGE_KEY_PUSH_ENABLED) === "true") return;
+
+  navigator.serviceWorker.ready.then((registration) => {
+    registration.pushManager.getSubscription().then((subscription) => {
+      if (subscription || localStorage.getItem(STORAGE_KEY_PUSH)) return;
+      setTimeout(() => {
+        pushBanner.hidden = false;
+        pushBanner.classList.add("revealed");
+        trackEvent("push_notification_banner_shown");
+      }, 5000);
+    });
+  });
+
+  function subscribeUser() {
+    navigator.serviceWorker.ready.then((registration) => {
+      const VAPID_PUBLIC_KEY = "BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjYgSn1c50d_1v2YBYGYZUNm6wBTRa6LmBMNI";
+
+      const applicationServerKey = urlBase64ToUint8Array(VAPID_PUBLIC_KEY);
+      registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: applicationServerKey
+      }).then((subscription) => {
+        localStorage.setItem(STORAGE_KEY_PUSH_ENABLED, "true");
+        pushBanner.hidden = true;
+        trackEvent("push_notification_accepted");
+      }).catch((err) => {
+        trackEvent("push_notification_error", { props: { error: String(err) } });
+      });
+    });
+  }
+
+  pushAcceptBtn.addEventListener("click", () => {
+    subscribeUser();
+  });
+
+  pushDeclineBtn.addEventListener("click", () => {
+    localStorage.setItem(STORAGE_KEY_PUSH, "true");
+    pushBanner.hidden = true;
+    trackEvent("push_notification_dismissed");
+  });
+}
+
+function urlBase64ToUint8Array(base64String) {
+  const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+  const rawData = window.atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initPwaInstallPrompt);
+} else {
+  initPwaInstallPrompt();
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initPushNotifications);
+} else {
+  initPushNotifications();
+}
+
 
 const PRICES = {
   sofos: { low: 80000, high: 180000 },

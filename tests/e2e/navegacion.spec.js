@@ -1,15 +1,15 @@
-import { test, expect } from '@playwright/test';
+const { test, expect } = require('@playwright/test');
 
-test.describe('Navegación principal', () => {
+test.describe('Navegacion principal', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
   });
 
-  test('debe cargar la página principal sin errores', async ({ page }) => {
+  test('debe cargar la pagina principal sin errores', async ({ page }) => {
     await expect(page).toHaveTitle(/Purity & Clean/);
   });
 
-  test('debe mostrar el header con navegación', async ({ page }) => {
+  test('debe mostrar el header con navegacion', async ({ page }) => {
     const header = page.locator('header.site-header');
     await expect(header).toBeVisible();
 
@@ -17,7 +17,7 @@ test.describe('Navegación principal', () => {
     await expect(menu).toBeVisible();
   });
 
-  test('debe mostrar todos los links de navegación', async ({ page }) => {
+  test('debe mostrar todos los links de navegacion', async ({ page }) => {
     const navLinks = page.locator('#main-menu li a');
     const count = await navLinks.count();
     expect(count).toBeGreaterThan(0);
@@ -46,7 +46,7 @@ test.describe('Navegación principal', () => {
     await expect(ctaButton).toContainText('Pedir Cita');
   });
 
-  test('debe navegar a la sección de servicios al hacer click en menú', async ({ page }) => {
+  test('debe navegar a la seccion de servicios al hacer click en menu', async ({ page }) => {
     await page.click('#main-menu a[href="#servicios"]');
     await expect(page.locator('#servicios')).toBeInViewport();
   });
@@ -57,7 +57,7 @@ test.describe('Navegación principal', () => {
     await expect(themeToggle).toHaveAttribute('aria-label', 'Alternar modo oscuro');
   });
 
-  test('debe tener menú móvil', async ({ page }) => {
+  test('debe tener menu movil', async ({ page }) => {
     const menuToggle = page.locator('.menu-toggle');
     await expect(menuToggle).toBeVisible();
 
@@ -67,7 +67,7 @@ test.describe('Navegación principal', () => {
 });
 
 test.describe('Secciones principales', () => {
-  test('debe mostrar sección de бизнес-линий', async ({ page }) => {
+  test('debe mostrar seccion de lineas de negocio', async ({ page }) => {
     await page.goto('/');
     const businessLines = page.locator('.business-lines');
     await expect(businessLines).toBeVisible();
@@ -92,7 +92,7 @@ test.describe('Secciones principales', () => {
     expect(count).toBeGreaterThan(0);
   });
 
-  test('debe mostrar estadísticas', async ({ page }) => {
+  test('debe mostrar estadisticas', async ({ page }) => {
     await page.goto('/');
     const statsSection = page.locator('.section-estadisticas');
     await expect(statsSection).toBeVisible();
@@ -113,7 +113,7 @@ test.describe('Secciones principales', () => {
     await expect(cards).toHaveCount(4);
   });
 
-  test('debe mostrar sección de precios', async ({ page }) => {
+  test('debe mostrar seccion de precios', async ({ page }) => {
     await page.goto('/');
     await page.locator('#pricing').scrollIntoViewIfNeeded();
 
@@ -149,7 +149,7 @@ test.describe('Secciones principales', () => {
     expect(count).toBeGreaterThan(0);
   });
 
-  test('debe tener footer con información de contacto', async ({ page }) => {
+  test('debe tener footer con informacion de contacto', async ({ page }) => {
     await page.goto('/');
     const footer = page.locator('footer');
     await expect(footer).toBeVisible();
