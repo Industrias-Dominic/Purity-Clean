@@ -628,9 +628,21 @@ function buildWhatsAppUrl(couponCode, nombre) {
   return `https://wa.me/${numero}?text=${texto}`;
 }
 
+function getSaludoPorHora() {
+  const hora = new Date().getHours();
+  if (hora >= 5 && hora < 12) return WHATSAPP_CONFIG.saludoPorHora.manana;
+  if (hora >= 12 && hora < 18) return WHATSAPP_CONFIG.saludoPorHora.tarde;
+  return WHATSAPP_CONFIG.saludoPorHora.noche;
+}
+
 function getWhatsAppUrl(zonaKey) {
   const base = WHATSAPP_CONFIG.numero;
-  const mensaje = WHATSAPP_CONFIG.zonas[zonaKey] || WHATSAPP_CONFIG.mensajePorDefecto;
+  var mensaje;
+  if (zonaKey === "home") {
+    mensaje = getSaludoPorHora();
+  } else {
+    mensaje = WHATSAPP_CONFIG.zonas[zonaKey] || WHATSAPP_CONFIG.mensajePorDefecto;
+  }
   return `https://wa.me/${base}?text=${mensaje}`;
 }
 
