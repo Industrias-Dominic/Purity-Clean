@@ -100,7 +100,7 @@
       return item;
     });
 
-    tocList.append.apply(tocList, tocItems);
+    tocList.append(...tocItems);
 
     var prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
