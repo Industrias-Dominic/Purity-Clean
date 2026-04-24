@@ -1980,6 +1980,9 @@
   <script>
 (function(){var t=document.querySelector(".theme-toggle"),m=document.querySelector(".menu-toggle"),M=document.querySelector(".menu");function e(d){document.documentElement.setAttribute("data-theme",d?"dark":"light");t&&t.setAttribute("aria-pressed",String(d));localStorage.setItem("theme",d?"dark":"light");var i=t?t.querySelector("i"):null;i&&(i.className=d?"fa-solid fa-sun":"fa-solid fa-moon")}var st=localStorage.getItem("theme");st?e(st==="dark"):e(window.matchMedia("(prefers-color-scheme: dark)").matches);t&&t.addEventListener("click",function(){e(document.documentElement.getAttribute("data-theme")!=="dark")});m&&M&&m.addEventListener("click",function(){m.setAttribute("aria-expanded",m.getAttribute("aria-expanded")!=="true");M.classList.toggle("open")})})();
   </script>
+  <script>
+(function(){var s=document.createElement("script");s.src="js/config.js";s.async=false;document.head.appendChild(s)})();
+  </script>
   <script defer src="js/script.js"></script>
   <script defer src="js/reviews-data.js"></script>
 </body>
