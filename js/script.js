@@ -1,3 +1,9 @@
+(function() {
+  var script = document.createElement("script");
+  script.src = "config.js";
+  script.defer = true;
+  document.head.appendChild(script);
+})();
 const menuToggle = document.querySelector(".menu-toggle");
 const menu = document.querySelector(".menu");
 const searchInput = document.querySelector("#search-input");
@@ -331,6 +337,23 @@ function initBookingForm() {
     }
 
     const formData = new FormData(bookingForm);
+
+    if (bookingForm.action.includes("REPLACE_ME")) {
+      const name = formData.get("name") || "";
+      const service = formData.get("service") || "";
+      const date = formData.get("date") || "";
+      const time = formData.get("time") || "";
+      const msg = encodeURIComponent(
+        `Hola, me gustaría agendar un servicio.\nNombre: ${name}\nServicio: ${service}\nFecha: ${date} ${time}`
+      );
+      window.open(`https://wa.me/573001234567?text=${msg}`, "_blank");
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fa-solid fa-calendar-check" aria-hidden="true"></i> Confirmar Reserva';
+      }
+      return;
+    }
+
     fetch(bookingForm.action, {
       method: "POST",
       body: formData,
@@ -338,7 +361,8 @@ function initBookingForm() {
         Accept: "application/json",
       },
     })
-      .then(() => {
+      .then((response) => {
+        if (!response.ok) throw new Error("Form submission failed");
         bookingForm.hidden = true;
         document.querySelector(".booking-stepper")?.remove();
         showSuccessAnimation();
@@ -596,11 +620,17 @@ function generateCouponCode(nombre) {
 }
 
 function buildWhatsAppUrl(couponCode, nombre) {
-  const numero = "573001234567";
+  const numero = WHATSAPP_CONFIG.numero;
   const texto = encodeURIComponent(
     `¡Hola! Soy ${nombre} y te recomiendo Purity & Clean. Usa mi código \`${couponCode}\` y obtén 15% de descuento en tu primera limpieza. https://purityclean.com/#contacto`
   );
   return `https://wa.me/${numero}?text=${texto}`;
+}
+
+function getWhatsAppUrl(zonaKey) {
+  const base = WHATSAPP_CONFIG.numero;
+  const mensaje = WHATSAPP_CONFIG.zonas[zonaKey] || WHATSAPP_CONFIG.mensajePorDefecto;
+  return `https://wa.me/${base}?text=${mensaje};
 }
 
 function showReferidosResult(couponCode) {
@@ -960,6 +990,15 @@ function initNewsletter() {
     if (submitBtn) {
       submitBtn.disabled = true;
       submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i> Suscribiendo...';
+    }
+
+    if (form.action.includes("REPLACE_ME")) {
+      localStorage.setItem(NEWSLETTER_STORAGE_KEY, "true");
+      form.hidden = true;
+      const successEl = document.getElementById("newsletter-success");
+      if (successEl) successEl.hidden = false;
+      trackEvent("newsletter_subscribed");
+      return;
     }
 
     try {
