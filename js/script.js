@@ -1172,6 +1172,17 @@ function initCotizador() {
     });
   }
 
+  var cotizadorWhatsAppBtn = document.getElementById("cotizador-whatsapp-btn");
+  if (cotizadorWhatsAppBtn) {
+    cotizadorWhatsAppBtn.addEventListener("click", function(e) {
+      e.preventDefault();
+      var serviceLabels = { sofos: "Limpieza de sofás", colchones: "Sanitización de colchones", alfombras: "Mantenimiento de alfombras", sillas: "Limpieza de sillas ergonómicas" };
+      var serviceName = serviceLabels[state.service] || state.service;
+      var msg = WHATSAPP_CONFIG.cotizadorMensaje + "Servicio%3A%20" + encodeURIComponent(serviceName) + "%0ACantidad%3A%20" + state.quantity + "%0APrecio%20estimado%3A%20" + totalValue.textContent;
+      window.open("https://wa.me/" + WHATSAPP_CONFIG.numero + "?text=" + msg, "_blank");
+    });
+  }
+
   updateDisplay(false);
 }
 

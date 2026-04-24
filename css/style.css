@@ -2175,6 +2175,126 @@ a {
   border-bottom-color: rgba(26, 61, 85, 0.6);
 }
 
+.pricing-card--combo {
+  background: linear-gradient(145deg, var(--color-surface), rgba(249, 115, 22, 0.08));
+  border-color: rgba(249, 115, 22, 0.25);
+  position: relative;
+}
+
+.pricing-card--combo::before {
+  background: linear-gradient(90deg, #f97316, #fb923c);
+}
+
+.pricing-card--combo:hover {
+  border-color: rgba(249, 115, 22, 0.4);
+}
+
+.savings-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: linear-gradient(135deg, #f97316, #ea580c);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.35rem 0.65rem;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.35);
+  animation: pulse-badge 2.5s ease-in-out infinite;
+}
+
+.savings-badge i {
+  font-size: 0.8rem;
+}
+
+@keyframes pulse-badge {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.pricing-icon--combo {
+  background: linear-gradient(135deg, #f97316, #fb923c) !important;
+  box-shadow: 0 6px 20px rgba(249, 115, 22, 0.25) !important;
+}
+
+.pricing-feature--combo {
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-bottom: 1rem;
+}
+
+.combo-service {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.combo-name {
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: var(--color-text);
+}
+
+.combo-savings {
+  font-size: 0.78rem;
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+.savings-amount {
+  color: #f97316;
+  font-weight: 800;
+}
+
+.price-discount {
+  text-decoration: line-through;
+  color: var(--color-muted);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.pricing-btn--combo {
+  background: linear-gradient(135deg, #f97316, #ea580c);
+}
+
+.pricing-btn--combo:hover,
+.pricing-btn--combo:focus-visible {
+  background: linear-gradient(135deg, #ea580c, #c2410c);
+}
+
+@media (min-width: 760px) {
+  .pricing-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .pricing-card--combo {
+    grid-column: span 2;
+  }
+}
+
+@media (min-width: 1024px) {
+  .pricing-card--combo {
+    grid-column: span 1;
+  }
+}
+
+[data-theme="dark"] .pricing-card--combo {
+  background: linear-gradient(145deg, var(--color-surface), rgba(249, 115, 22, 0.1));
+}
+
+[data-theme="dark"] .savings-badge {
+  background: linear-gradient(135deg, #fb923c, #f97316);
+}
+
+[data-theme="dark"] .savings-amount {
+  color: #fb923c;
+}
+
 .section-booking {
   background:
     radial-gradient(circle at 10% 90%, rgba(22, 163, 74, 0.1), transparent 35%),
