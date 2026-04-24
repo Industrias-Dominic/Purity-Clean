@@ -155,3 +155,43 @@ self.addEventListener('message', (event) => {
     self.skipWaiting();
   }
 });
+
+self.addEventListener('push', (event) => {
+  if (!event.data) return;
+
+  let data;
+  try {
+    data = event.data.json();
+  } catch (e) {
+    data = { title: 'Purity & Clean', body: event.data.text(), icon: '/icons/icon-192.svg' };
+  }
+
+  const options = {
+    body: data.body || '',
+    icon: data.icon || '/icons/icon-192.svg',
+    badge: '/icons/icon-192.svg',
+    tag: data.tag || 'purity-notification',
+    data: data.url || '/',
+    actions: data.actions || [],
+    requireInteraction: data.requireInteraction || false
+  };
+
+  event.waitUntil(
+    self.registration.showNotification(data.title || 'Purity & Clean', options)
+  );
+});
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const urlToOpen = event.notification.data || '/';
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+      for (const client of clientList) {
+        if (client.url === urlToOpen && 'focus' in client) {
+          return client.focus();
+        }
+      }
+      return clients.openWindow(urlToOpen);
+    })
+  );
+});
