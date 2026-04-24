@@ -1,7 +1,7 @@
 (function() {
   var script = document.createElement("script");
   script.src = "config.js";
-  script.defer = true;
+  script.async = false;
   document.head.appendChild(script);
 })();
 const menuToggle = document.querySelector(".menu-toggle");
@@ -346,7 +346,8 @@ function initBookingForm() {
       const msg = encodeURIComponent(
         `Hola, me gustaría agendar un servicio.\nNombre: ${name}\nServicio: ${service}\nFecha: ${date} ${time}`
       );
-      window.open(`https://wa.me/573001234567?text=${msg}`, "_blank");
+      const base = WHATSAPP_CONFIG.numero;
+      window.open(`https://wa.me/${base}?text=${msg}`, "_blank");
       if (submitBtn) {
         submitBtn.disabled = false;
         submitBtn.innerHTML = '<i class="fa-solid fa-calendar-check" aria-hidden="true"></i> Confirmar Reserva';
@@ -1356,3 +1357,13 @@ if (document.readyState === "loading") {
 } else {
   initVideoPlayer();
 }
+
+(function initWhatsAppFloat() {
+  var floats = document.querySelectorAll(".whatsapp-float[data-whatsapp-zone]");
+  floats.forEach(function(link) {
+    var zone = link.getAttribute("data-whatsapp-zone");
+    if (zone && typeof getWhatsAppUrl === "function") {
+      link.href = getWhatsAppUrl(zone);
+    }
+  });
+})();

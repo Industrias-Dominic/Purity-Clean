@@ -1,0 +1,60 @@
+{
+  "name": "Purity & Clean - Soluciones de limpieza",
+  "short_name": "Purity & Clean",
+  "description": "Servicios y productos profesionales de limpieza para hogares, PYMEs y empresas en Bogotá.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0b7189",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "es-CO",
+  "dir": "ltr",
+  "categories": ["business", "services"],
+  "icons": [
+    {
+      "src": "icons/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Reservar servicio",
+      "short_name": "Reservar",
+      "description": "Agenda tu limpieza profunda de sofás, sanitización de colchones y más.",
+      "url": "/#reservas",
+      "icons": [{ "src": "favicon.svg", "sizes": "any" }]
+    },
+    {
+      "name": "Nuestros servicios",
+      "short_name": "Servicios",
+      "description": "Explora todos los servicios de limpieza disponibles.",
+      "url": "/#servicios",
+      "icons": [{ "src": "favicon.svg", "sizes": "any" }]
+    },
+    {
+      "name": "Contactar por WhatsApp",
+      "short_name": "WhatsApp",
+      "description": "Escríbenos directamente por WhatsApp.",
+      "url": "https://wa.me/573001234567",
+      "icons": [{ "src": "favicon.svg", "sizes": "any" }]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
+}
