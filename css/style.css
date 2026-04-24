@@ -3529,12 +3529,28 @@ a {
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow-soft);
-  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease, border-color 0.35s ease;
 }
 
 .comparison-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 20px 50px rgba(11, 113, 137, 0.18);
+  transform: translateY(-8px) scale(1.015);
+  box-shadow: 0 24px 60px rgba(11, 113, 137, 0.22), 0 0 0 1px rgba(11, 113, 137, 0.15);
+  border-color: rgba(11, 113, 137, 0.35);
+}
+
+.comparison-card:hover .comparison-slider {
+  filter: brightness(1.04);
+  box-shadow: inset 0 0 0 2px rgba(11, 113, 137, 0.2);
+}
+
+.comparison-card:hover .comparison-handle::before {
+  background: var(--color-primary);
+  box-shadow: 0 0 20px rgba(11, 113, 137, 0.6);
+}
+
+.comparison-card:hover .comparison-handle svg {
+  color: var(--color-primary);
+  filter: drop-shadow(0 1px 6px rgba(11, 113, 137, 0.5));
 }
 
 .comparison-slider {
