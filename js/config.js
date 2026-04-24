@@ -1,6 +1,7 @@
 const WHATSAPP_CONFIG = {
   numero: "573001234567",
   mensajePorDefecto: "Hola%2C%20estoy%20interesado%20en%20los%20servicios%20de%20Purity%20%26%20Clean",
+  cotizadorMensaje: "Hola%2C%20quiero%20agendar%20el%20servicio%20de%20limpieza.%20Detalles%20del%20cotizador%3A%0A",
   zonas: {
     "home": "Hola%2C%20estoy%20interesado%20en%20los%20servicios%20de%20Purity%20%26%20Clean",
     "barrios-unidos": "Hola%2C%20estoy%20interesado%20en%20servicios%20de%20limpieza%20en%20Barrios%20Unidos",
