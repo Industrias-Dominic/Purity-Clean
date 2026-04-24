@@ -83,6 +83,28 @@ a {
   padding: 1rem 0 2.5rem;
 }
 
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  background: var(--color-primary);
+  color: #fff;
+  padding: 0.6rem 1rem;
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-decoration: none;
+  z-index: 9999;
+  transition: top 0.2s ease;
+  box-shadow: 0 4px 16px rgba(11, 113, 137, 0.35);
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: 3px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+}
+
 .nav {
   display: flex;
   align-items: center;
@@ -4983,186 +5005,6 @@ a {
     width: 100%;
     text-align: center;
     margin-left: 0;
-  }
-}
-
-/* Social Proof Toast */
-.social-proof-toast {
-  position: fixed;
-  bottom: 24px;
-  left: 24px;
-  z-index: 950;
-  background: var(--color-surface);
-  border: 1.5px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: 1rem 1.2rem;
-  box-shadow: 0 8px 30px rgba(11, 113, 137, 0.18), 0 2px 8px rgba(0,0,0,0.08);
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  max-width: 320px;
-  width: calc(100vw - 48px);
-  overflow: hidden;
-  transform: translateY(0);
-  transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.social-proof-toast[hidden] {
-  opacity: 0;
-  transform: translateY(16px);
-  pointer-events: none;
-}
-
-.social-proof-toast::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 4px;
-  height: 100%;
-  background: linear-gradient(180deg, var(--color-accent), #22c55e);
-  border-radius: var(--radius-lg) 0 0 var(--radius-lg);
-}
-
-.toast-avatar {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--color-primary), #14a9ca);
-  color: #fff;
-  display: grid;
-  place-content: center;
-  font-size: 0.8rem;
-  font-weight: 800;
-  flex-shrink: 0;
-  box-shadow: 0 3px 10px rgba(11, 113, 137, 0.25);
-}
-
-.toast-body {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-}
-
-.toast-line1 {
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: var(--color-text);
-  line-height: 1.3;
-}
-
-.toast-line2 {
-  font-size: 0.75rem;
-  color: var(--color-muted);
-  font-weight: 500;
-}
-
-.toast-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  background: rgba(22, 163, 74, 0.12);
-  color: var(--color-accent);
-  font-size: 0.68rem;
-  font-weight: 700;
-  padding: 0.2rem 0.5rem;
-  border-radius: 999px;
-  margin-top: 0.2rem;
-  width: fit-content;
-}
-
-.toast-badge i {
-  font-size: 0.6rem;
-}
-
-.toast-close {
-  background: none;
-  border: none;
-  color: var(--color-muted);
-  cursor: pointer;
-  padding: 0.2rem;
-  border-radius: 6px;
-  display: grid;
-  place-content: center;
-  flex-shrink: 0;
-  transition: background 0.2s ease, color 0.2s ease;
-  align-self: flex-start;
-}
-
-.toast-close:hover,
-.toast-close:focus-visible {
-  background: var(--color-border);
-  color: var(--color-text);
-  outline: none;
-}
-
-@keyframes toast-in {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes toast-out {
-  from {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  to {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-}
-
-.social-proof-toast.entering {
-  animation: toast-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-
-.social-proof-toast.leaving {
-  animation: toast-out 0.35s cubic-bezier(0.4, 0, 1, 1) forwards;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .cookie-banner {
-    transition: none;
-  }
-
-  .social-proof-toast {
-    transition: none;
-  }
-
-  .social-proof-toast.entering,
-  .social-proof-toast.leaving {
-    animation: none;
-  }
-
-  .social-proof-toast[hidden] {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-}
-
-@media (max-width: 600px) {
-  .social-proof-toast {
-    bottom: 16px;
-    left: 16px;
-    max-width: calc(100vw - 32px);
-    padding: 0.85rem 1rem;
-  }
-
-  .toast-avatar {
-    width: 36px;
-    height: 36px;
-    font-size: 0.72rem;
-  }
-
-  .toast-line1 {
-    font-size: 0.78rem;
   }
 }
 
