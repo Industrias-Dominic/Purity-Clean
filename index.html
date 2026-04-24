@@ -778,6 +778,68 @@
       </div>
     </section>
 
+    <section id="confianza" class="section section-confianza" aria-labelledby="confianza-heading">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow" data-reveal-item>Tu confianza, nuestra prioridad</p>
+          <h2 id="confianza-heading" data-reveal-item>5 razones para confiar en Purity &amp; Clean</h2>
+          <p class="confianza-intro" data-reveal-item>Reducimos las objeciones antes de que aparezcan. Cada badge es una promesa que cumplimos en cada servicio.</p>
+        </div>
+        <div class="confianza-grid" role="list">
+          <article class="confianza-badge" data-reveal data-reveal-delay="50" aria-labelledby="confianza-seguros">
+            <div class="confianza-icon" aria-hidden="true">
+              <i class="fa-solid fa-seedling"></i>
+            </div>
+            <h3 id="confianza-seguros">Productos seguros</h3>
+            <p>Seguros para niños y mascotas. Fórmulas ecológicas que cuidan tu hogar y a quienes más quieres.</p>
+            <div class="confianza-check" aria-hidden="true">
+              <i class="fa-solid fa-circle-check"></i>
+            </div>
+          </article>
+          <article class="confianza-badge" data-reveal data-reveal-delay="100" aria-labelledby="confianza-certificados">
+            <div class="confianza-icon" aria-hidden="true">
+              <i class="fa-solid fa-user-check"></i>
+            </div>
+            <h3 id="confianza-certificados">Técnicos certificados</h3>
+            <p>Personal formado y con experiencia comprobada. Cada técnico pasa inspecciones periódicas de calidad.</p>
+            <div class="confianza-check" aria-hidden="true">
+              <i class="fa-solid fa-circle-check"></i>
+            </div>
+          </article>
+          <article class="confianza-badge" data-reveal data-reveal-delay="150" aria-labelledby="confianza-respaldados">
+            <div class="confianza-icon" aria-hidden="true">
+              <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <h3 id="confianza-respaldados">Respaldados contra daños</h3>
+            <p>Cubrimos cualquier incidente durante el servicio. Tu tranquilidad está protegida desde el primer minuto.</p>
+            <div class="confianza-check" aria-hidden="true">
+              <i class="fa-solid fa-circle-check"></i>
+            </div>
+          </article>
+          <article class="confianza-badge confianza-badge--accent" data-reveal data-reveal-delay="200" aria-labelledby="confianza-experiencia">
+            <div class="confianza-icon" aria-hidden="true">
+              <i class="fa-solid fa-award"></i>
+            </div>
+            <h3 id="confianza-experiencia">+5 años de experiencia</h3>
+            <p>Desde 2019 atendiendo hogares en Bogotá. Miles de espacios transformados con resultados consistentes.</p>
+            <div class="confianza-check" aria-hidden="true">
+              <i class="fa-solid fa-circle-check"></i>
+            </div>
+          </article>
+          <article class="confianza-badge" data-reveal data-reveal-delay="250" aria-labelledby="confianza-hogares">
+            <div class="confianza-icon" aria-hidden="true">
+              <i class="fa-solid fa-house-chimney"></i>
+            </div>
+            <h3 id="confianza-hogares">+500 hogares atendidos</h3>
+            <p>Clientes satisfechos en toda la ciudad. La mayoría de nuestras citas vienen de recomendaciones.</p>
+            <div class="confianza-check" aria-hidden="true">
+              <i class="fa-solid fa-circle-check"></i>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
     <section id="cotizador" class="section section-cotizador" aria-labelledby="cotizador-heading">
       <div class="container">
         <div class="section-head" data-reveal>
@@ -1584,7 +1646,7 @@
           </ul>
         </div>
         <div class="newsletter-form-wrap" data-reveal data-reveal-delay="100">
-          <form id="newsletter-form" class="newsletter-form" action="https://formspree.io/f/REPLACE_ME_NEWSLETTER" method="POST" novalidate aria-label="Formulario de suscripcion al newsletter">
+          <form id="newsletter-form" class="newsletter-form" action="https://formspree.io/f/xbzykezv" method="POST" novalidate aria-label="Formulario de suscripcion al newsletter">
             <div class="newsletter-inputs">
               <div class="form-group">
                 <label for="newsletter-name">Nombre (opcional)</label>
@@ -1777,7 +1839,7 @@
                 <span class="stepper-label">Dirección</span>
               </div>
             </div>
-            <form id="booking-form" class="booking-form" action="https://formspree.io/f/REPLACE_ME_BOOKING" method="POST" novalidate aria-label="Formulario de reservas online">
+            <form id="booking-form" class="booking-form" action="https://formspree.io/f/xwpkjvvw" method="POST" novalidate aria-label="Formulario de reservas online">
               <h3>Reservar cita</h3>
 
               <div class="booking-fields" data-step-group="1">
@@ -2053,6 +2115,32 @@
 (function(){var s=document.createElement("script");s.src="js/config.js";s.async=false;document.head.appendChild(s)})();
   </script>
   <script defer src="js/script.js"></script>
+  <button class="chatbot-fab" id="chatbot-fab" type="button" aria-label="Abrir asistente FAQ" aria-expanded="false" aria-controls="chatbot-panel">
+    <i class="fa-solid fa-comments" aria-hidden="true"></i>
+    <span class="fab-badge" aria-hidden="true">FAQ</span>
+  </button>
+
+  <div class="chatbot-panel" id="chatbot-panel" role="dialog" aria-modal="false" aria-labelledby="chatbot-title" hidden>
+    <div class="chatbot-header">
+      <div class="chatbot-header-icon" aria-hidden="true">
+        <i class="fa-solid fa-headset"></i>
+      </div>
+      <div class="chatbot-header-text">
+        <strong id="chatbot-title">Asistente Purity & Clean</strong>
+        <span>Respondemos tus preguntas</span>
+      </div>
+      <button class="chatbot-close" id="chatbot-close" type="button" aria-label="Cerrar asistente">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class="chatbot-body" id="chatbot-body" role="log" aria-live="polite">
+      <p class="chatbot-intro">Selecciona una pregunta para ver la respuesta. Si no encuentras lo que buscas, puedes escribirnos directamente por WhatsApp.</p>
+    </div>
+    <div class="chatbot-footer">
+      <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>info@purityclean.com
+    </div>
+  </div>
+
   <div id="cookie-banner" class="cookie-banner" role="dialog" aria-modal="false" aria-labelledby="cookie-banner-title" hidden>
     <div class="cookie-banner-inner">
       <div class="cookie-banner-icon" aria-hidden="true">
