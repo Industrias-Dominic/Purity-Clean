@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://purityclean.com/sitemap.xml
+
+User-agent: Googlebot
+User-agent: Bingbot
+User-agent: Slurp
+Crawl-delay: 1
+
+User-agent: AhrefsBot
+User-agent: SemrushBot
+Disallow: /
