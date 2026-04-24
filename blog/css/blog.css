@@ -678,6 +678,120 @@
   }
 }
 
+/* ===== Sección de servicios relacionados al final del artículo ===== */
+
+.article-services {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.article-services h2 {
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
+  margin: 0 0 0.5rem;
+  color: var(--color-text);
+}
+
+.article-services > p {
+  color: var(--color-muted);
+  margin: 0 0 1.5rem;
+  font-size: 0.95rem;
+}
+
+.article-services-grid {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.article-service-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.2rem;
+  background: var(--color-bg);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.article-service-card:hover {
+  border-color: var(--color-primary);
+  transform: translateX(4px);
+  box-shadow: var(--shadow-soft);
+}
+
+.article-service-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--color-primary), #14a9ca);
+  color: #fff;
+  display: grid;
+  place-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.article-service-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.article-service-content h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 0 0 0.2rem;
+  color: var(--color-text);
+}
+
+.article-service-content p {
+  font-size: 0.82rem;
+  color: var(--color-muted);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.article-service-arrow {
+  color: var(--color-primary);
+  font-size: 0.9rem;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.article-service-card:hover .article-service-arrow {
+  transform: translateX(3px);
+}
+
+.article-services-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .article-services-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .article-service-card:last-child {
+    grid-column: span 2;
+  }
+}
+
+@media (min-width: 900px) {
+  .article-services-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .article-service-card:last-child {
+    grid-column: span 1;
+  }
+}
+
 /* ===== Tabla de contenidos ===== */
 
 .toc-wrapper {
