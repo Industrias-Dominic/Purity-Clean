@@ -176,6 +176,7 @@ document.querySelectorAll("[data-reveal]").forEach((el) => {
 
 function initBookingForm() {
   if (!bookingForm) return;
+  trackEvent("booking_form_viewed");
 
   const nameInput = bookingForm.querySelector("#booking-name");
   const emailInput = bookingForm.querySelector("#booking-email");
@@ -1050,6 +1051,7 @@ function initNewsletter() {
           feedback.hidden = false;
           setTimeout(() => { feedback.hidden = true; }, 2000);
         }
+        trackEvent("newsletter_coupon_copy");
       }).catch(() => {
         const ta = document.createElement("textarea");
         ta.value = "PURITY10";
@@ -1064,6 +1066,7 @@ function initNewsletter() {
           feedback.hidden = false;
           setTimeout(() => { feedback.hidden = true; }, 2000);
         }
+        trackEvent("newsletter_coupon_copy");
       });
     });
   }
@@ -1147,6 +1150,7 @@ function initCotizador() {
     input.addEventListener("change", () => {
       state.service = input.value;
       updateDisplay(true);
+      trackEvent("cotizador_service_changed", { props: { service: input.value } });
     });
   });
 
@@ -1157,6 +1161,7 @@ function initCotizador() {
     if (decreaseBtn) decreaseBtn.disabled = state.quantity <= 1;
     if (increaseBtn) increaseBtn.disabled = state.quantity >= 20;
     updateDisplay(true);
+    trackEvent("cotizador_quantity_changed", { props: { quantity: state.quantity } });
   }
 
   if (decreaseBtn) {
@@ -1192,6 +1197,7 @@ function initCotizador() {
       var serviceName = serviceLabels[state.service] || state.service;
       var msg = WHATSAPP_CONFIG.cotizadorMensaje + "Servicio%3A%20" + encodeURIComponent(serviceName) + "%0ACantidad%3A%20" + state.quantity + "%0APrecio%20estimado%3A%20" + totalValue.textContent;
       window.open("https://wa.me/" + WHATSAPP_CONFIG.numero + "?text=" + msg, "_blank");
+      trackEvent("cotizador_whatsapp_click", { props: { service: state.service, quantity: state.quantity } });
     });
   }
 
@@ -1310,7 +1316,7 @@ function initMapInteractive() {
     zone.addEventListener("click", (e) => {
       const zoneName = zone.dataset.zone;
       const displayName = zoneNames[zoneName] || zoneName;
-      trackEvent("map_zone_click", { props: { zone: displayName } });
+      trackEvent("map_zone_click", { props: { zone: displayName, source: "map_svg" } });
     });
   });
 
@@ -1318,7 +1324,7 @@ function initMapInteractive() {
     card.addEventListener("click", () => {
       const zoneName = card.dataset.zone;
       const displayName = zoneNames[zoneName] || zoneName;
-      trackEvent("map_zone_list_click", { props: { zone: displayName } });
+      trackEvent("map_zone_click", { props: { zone: displayName, source: "zone_card" } });
     });
   });
 }
@@ -1358,6 +1364,7 @@ function initVideoPlayer() {
     embedContainer.innerHTML = "";
     document.body.style.overflow = "";
     playBtn.focus();
+    trackEvent("video_close");
   }
 
   playBtn.addEventListener("click", openVideo);
