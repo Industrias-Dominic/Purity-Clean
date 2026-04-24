@@ -78,7 +78,26 @@ Subir `index.html`, `css/style.css`, `js/script.js`, `robots.txt` y `sitemap.xml
 
 No aplica. El proyecto no tiene backend ni API.
 
-Si en el futuro se conecta un formulario a un backend (p. ej. Netlify Forms, Formspree, AWS Lambda), documentar las variables aqui:
+## Formularios Formspree
+
+El proyecto utiliza Formspree para gestionar formularios sin backend. Los IDs de formulario se configuran en `js/config.js`:
+
+```javascript
+const FORMSPREE_CONFIG = {
+  booking: "xwpkjvvw",     // Formulario de reservas online
+  newsletter: "xbzykezv",  // Formulario de suscripcion al newsletter
+  zona: "xnepyzll"         // Formularios de cotizacion por zona
+};
+```
+
+Los formularios en el HTML ya tienen los endpoints de Formspree configurados:
+- `index.html#reservas`: `https://formspree.io/f/xwpkjvvw`
+- `index.html#newsletter`: `https://formspree.io/f/xbzykezv`
+- `zonas/*/index.html`: `https://formspree.io/f/xnepyzll`
+
+El archivo `js/script.js` usa los IDs de `FORMSPREE_CONFIG` para construir las URLs de envío en tiempo de ejecución. Si `FORMSPREE_CONFIG` no está definido o falta un ID, el formulario cae a comportamiento simulado (sin envío real).
+
+Si en el futuro se conecta un formulario a un backend (p. ej. Netlify Forms, AWS Lambda), documentar las variables aqui:
 
 | Variable | Descripcion | Ejemplo |
 |----------|-------------|---------|
@@ -92,7 +111,7 @@ Campo en el hero que filtra dinámicamente tarjetas de servicios y productos por
 
 ### Formulario de contacto
 
-Validación en cliente (nombre, email, teléfono, tipo de cliente). Envío simulado con retardo de 1.2s y mensaje de éxito. Para producción, reemplazar por integración real (Netlify Forms, Formspree, etc.).
+Validación en cliente (nombre, email, teléfono, tipo de cliente). Envío a Formspree para procesamiento real. Si el endpoint no está disponible, cae a simulación con mensaje de éxito.
 
 ### Tema oscuro
 
@@ -143,9 +162,9 @@ Editar las variables CSS en `:root` de `css/style.css`. Los colores oscuros se d
 
 ### El formulario no envía nada
 
-El comportamiento actual es simulado (solo UI). Para habilitar envío real:
-- **Netlify Forms**: agregar `data-netlify="true"` al `<form>`.
-- **Formspree**: cambiar `action` a `https://formspree.io/f/{FORMSPREE_ID}`.
+Los formularios están configurados con Formspree (IDs en `js/config.js`). Si el envío falla, el código cae a simulación y muestra éxito tras 1.2s. Verificar en la consola del navegador si hay errores de red hacia `formspree.io`.
+
+Para cambiar el ID de un formulario, editar `FORMSPREE_CONFIG` en `js/config.js`.
 
 ### La búsqueda no filtra correctamente
 

@@ -840,6 +840,18 @@ function initReferidos() {
   const form = document.getElementById("referidos-form");
   const nombreInput = document.getElementById("referido-nombre");
 
+  let referralFormViewed = false;
+  const referralFormObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting && !referralFormViewed) {
+        referralFormViewed = true;
+        trackEvent("referral_form_viewed");
+        referralFormObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  referralFormObserver.observe(form);
+
   if (nombreInput) {
     nombreInput.addEventListener("input", () => {
       if (nombreInput.classList.contains("error")) validateReferidoNombre(nombreInput);
@@ -908,16 +920,109 @@ function initBookingPreselect() {
   });
 }
 
+function initChatbot() {
+  const fab = document.getElementById("chatbot-fab");
+  const panel = document.getElementById("chatbot-panel");
+  const closeBtn = document.getElementById("chatbot-close");
+  const body = document.getElementById("chatbot-body");
+
+  if (!fab || !panel || !closeBtn || !body) return;
+
+  function openPanel() {
+    panel.hidden = false;
+    fab.setAttribute("aria-expanded", "true");
+    fab.setAttribute("aria-label", "Cerrar asistente FAQ");
+    fab.querySelector("i").className = "fa-solid fa-xmark";
+    requestAnimationFrame(() => panel.classList.add("open"));
+    fab.querySelector(".fab-badge")?.remove();
+    trackEvent("chatbot_opened");
+  }
+
+  function closePanel() {
+    panel.classList.remove("open");
+    fab.setAttribute("aria-expanded", "false");
+    fab.setAttribute("aria-label", "Abrir asistente FAQ");
+    fab.querySelector("i").className = "fa-solid fa-comments";
+    setTimeout(() => { panel.hidden = true; }, 300);
+  }
+
+  fab.addEventListener("click", () => {
+    const isOpen = panel.classList.contains("open");
+    isOpen ? closePanel() : openPanel();
+  });
+
+  closeBtn.addEventListener("click", closePanel);
+
+  panel.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closePanel();
+  });
+
+  const faq = typeof CHATBOT_FAQ !== "undefined" ? CHATBOT_FAQ : [];
+
+  faq.forEach((item) => {
+    const btn = document.createElement("button");
+    btn.className = "chatbot-question-btn";
+    btn.setAttribute("type", "button");
+    btn.setAttribute("data-faq-id", item.id);
+    btn.setAttribute("aria-label", item.question);
+    btn.innerHTML = `<i class="fa-solid fa-chevron-right" aria-hidden="true"></i><span>${item.question}</span>`;
+    body.appendChild(btn);
+
+    btn.addEventListener("click", () => {
+      const isSelected = btn.classList.contains("selected");
+
+      body.querySelectorAll(".chatbot-question-btn").forEach((b) => b.classList.remove("selected"));
+      body.querySelectorAll(".chatbot-answer, .chatbot-cta").forEach((el) => el.remove());
+
+      if (!isSelected) {
+        btn.classList.add("selected");
+
+        const answer = document.createElement("div");
+        answer.className = "chatbot-answer";
+        answer.setAttribute("role", "status");
+        answer.innerHTML = `<p>${item.answer}</p>`;
+        body.appendChild(answer);
+
+        const cta = document.createElement("a");
+        cta.className = "chatbot-cta";
+        cta.setAttribute("href", `https://wa.me/${WHATSAPP_CONFIG.numero}?text=${item.whatsappPrompt}`);
+        cta.setAttribute("target", "_blank");
+        cta.setAttribute("rel", "noopener noreferrer");
+        cta.setAttribute("role", "button");
+        cta.innerHTML = `<i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Escribir por WhatsApp`;
+        body.appendChild(cta);
+
+        body.scrollTop = body.scrollHeight;
+        trackEvent("chatbot_faq_selected", { props: { question: item.question } });
+      }
+    });
+  });
+
+  const existingCta = body.querySelector(".chatbot-cta-all");
+  if (!existingCta) {
+    const allCta = document.createElement("a");
+    allCta.className = "chatbot-cta chatbot-cta-all";
+    allCta.setAttribute("href", `https://wa.me/${WHATSAPP_CONFIG.numero}?text=${WHATSAPP_CONFIG.mensajePorDefecto}`);
+    allCta.setAttribute("target", "_blank");
+    allCta.setAttribute("rel", "noopener noreferrer");
+    allCta.setAttribute("role", "button");
+    allCta.innerHTML = `<i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Hacer otra pregunta`;
+    body.appendChild(allCta);
+
+    allCta.addEventListener("click", () => {
+      trackEvent("chatbot_whatsapp_fallback");
+    });
+  }
+}
+
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", () => {
-    initReferidos();
-    initBookingForm();
-    initBookingPreselect();
+    initCookieBanner();
+    initChatbot();
   });
 } else {
-  initReferidos();
-  initBookingForm();
-  initBookingPreselect();
+  initCookieBanner();
+  initChatbot();
 }
 
 function initComparisonSliders() {
@@ -1070,6 +1175,18 @@ function initNewsletter() {
 
   const form = document.getElementById("newsletter-form");
   if (!form) return;
+
+  let newsletterFormViewed = false;
+  const newsletterFormObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting && !newsletterFormViewed) {
+        newsletterFormViewed = true;
+        trackEvent("newsletter_form_viewed");
+        newsletterFormObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  newsletterFormObserver.observe(form);
 
   const emailInput = form.querySelector("#newsletter-email");
   const nameInput = form.querySelector("#newsletter-name");
