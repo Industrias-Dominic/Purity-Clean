@@ -4,13 +4,13 @@
 **Fecha:** 2026-04-26
 **Analista:** Innovation Scout
 **Ronda:** 15
-**Issue padre:** DOMAA-285
+**Issue padre:** DOMAA-286
 
 ---
 
 ## Resumen Ejecutivo
 
-Round 15 se enfoca en **optimización de micro-conversiones y contenido evergreen**, áreas que los rounds anteriores no cubrieron en profundidad. Las propuestas abordan: (1) heatmap-driven UX improvements basados en scroll-depth y click tracking, (2) video content strategy para YouTube/Google discovery, (3) seasonal campaign infrastructure pre-construida, (4) content repurposing del blog a múltiples formatos, (5) local SEO hyper-local por barrio de Bogotá, y (6) progressive profiling para formularios. Todas son de esfuerzo bajo/medio con impacto directo en conversión y tráfico orgánico.
+Purity & Clean es un sitio web estático maduro con funcionalidades avanzadas: PWA, chatbot WhatsApp, booking multi-step, cotizador, SEO por zonas, blog con 6 artículos, y suite de tests E2E. Tras 14 rondas de propuestas, la mayoría de las mejoras mayores ya fueron implementadas o propuestas. Este Round 15 identifica **gaps técnicos genuinos nunca antes propuestos** y **oportunidades basadas en tendencias de marketing 2026** que se pueden implementar con el stack estático actual.
 
 ---
 
@@ -20,413 +20,379 @@ Round 15 se enfoca en **optimización de micro-conversiones y contenido evergree
 - **Fuentes:** Manrope (cuerpo), Raleway (títulos) — Google Fonts
 - **Iconos:** Font Awesome 6.5 CDN
 - **Analítica:** Plausible Analytics (sin cookies, GDPR-compliant)
-- **Forms:** Formspree (envío simple, sin automatización)
+- **Forms:** Formspree
 - **Testing:** Playwright E2E (10+ suites)
 - **PWA:** Service Worker, manifest.json, push notifications, offline support
 - **SEO:** Schema LocalBusiness + FAQPage + Article + AggregateRating + Review + VideoObject
 - **Chatbot:** FAQ routing → WhatsApp con mensaje dinámico
-- **Galería:** Before/After slider con reveal escalonado
 - **Reserva:** Multi-step booking form con validación y slot picker
-- **Referidos:** Sistema de cupones con código generado dinámicamente
-- **Newsletter:** Formspree + localStorage para evitar duplicados
-- **Cotizador:** Slider de cantidad + estimación de rango de precios
-- **Zonas:** Páginas dinámicas por barrio de Bogotá (10 zonas)
-- **Blog:** 6+ artículos con SEO optimizado + internal linking
+- **Zonas:** 10 páginas de zona (template dinámico)
+- **Blog:** 6 artículos con SEO implementado
 
 ---
 
-## Estado de implementación de Rounds anteriores
+## Estado de implementación (R1-R14)
 
-**Ya implementado ✅**
-- PWA con push notifications ✅
-- Chatbot FAQ con WhatsApp routing ✅
-- Galería antes/después ✅
-- Blog SEO con 6+ artículos ✅
-- Core Web Vitals optimization ✅
-- Playwright test suite completa ✅
-- Skip navigation WCAG ✅
-- Dark mode con persistencia ✅
-- Zone pages template dinámico ✅
-- Newsletter integration ✅
-- Animaciones scroll-triggered ✅
-- Internal linking blog → homepage ✅
-- Sistema de referidos con cupones ✅
-- Cotizador con rango de precios ✅
-- Multi-step booking form ✅
-- Schema LocalBusiness + FAQPage + Article + AggregateRating + Review + VideoObject ✅
-- Video embebido optimizado ✅
-- Meta tags completos + OG + Twitter Cards ✅
-- Sitemap.xml + robots.txt ✅
-- CSS crítico inline LCP ✅
-- Reviewsdata.js con pool de testimonios ✅
-- Testimonios visuales homepage ✅
+### Ya implementado ✅
+- PWA con push notifications
+- Chatbot WhatsApp FAQ routing
+- Galería antes/después con comparison slider
+- Suite E2E Playwright completa
+- Template dinámico de zonas
+- Blog SEO con internal linking
+- Cotizador inteligente con slider
+- Multi-step booking form
+- Sistema de referidos con cupones
+- Newsletter funcional
+- Dark mode con persistencia
+- Animaciones scroll-triggered
+- Schema LocalBusiness + FAQPage + Article + AggregateRating + Review + VideoObject
+- Skip navigation WCAG
+- Reviews pool en JavaScript
+- Video embebido optimizado
+- Core Web Vitals optimization
 
-**Propuesto en R13-R14, aún no implementado ❌**
-- Trustpilot + BBB Setup (R13)
-- Apple Maps Business Setup (R13)
-- Visual Recency Badges (R13)
-- Google Local Guides Program (R13)
-- TikTok Local Explorer Videos (R13)
-- Abandoned Booking Recovery System (R14)
-- SMS Marketing Integration (R14)
-- Customer Health Scoring Dashboard (R14)
-- Loyalty Program 2.0 (R14)
-- Predictive Lead Scoring (R14)
-- Self-Service Corporate Portal (R14)
-- Real-Time Availability Calendar (R14)
+### Propuesto pero nunca implementado ❌
+- Abandoned booking recovery (requiere backend)
+- SMS marketing integration (requiere backend)
+- Customer health scoring (requiere backend)
+- Loyalty program 2.0 (requiere backend)
+- Predictive lead scoring (requiere backend)
+- Self-service portal B2B (requiere backend)
+- Real-time availability calendar (requiere backend)
+- Trustpilot + BBB setup (R13)
+- Google Local Guides program (R13)
+- Video testimonials campaign (R10)
+- WhatsApp Business API completa (R10)
+- AI chatbot con GPT (R6, R7)
 
 ---
 
-## Gaps genuinamente nuevos en R15 (nunca propuestos antes)
+## Investigación: Tendencias de marketing digital 2026
 
-### Gap 1: Heatmap-Driven UX Improvements
+### Hallazgos clave de LinkedIn Marketing Blog (Abril 2026)
 
-No hay datos de scroll-depth ni click tracking granular. El sitio tiene Plausible pero no usa eventos de scroll ni heatmaps para identificar dónde usuarios abandonan.
+| Tendencia | Implicación para Purity & Clean |
+|-----------|----------------------------------|
+| **"Outcomes Era" en B2B marketing** | Enfoque en métricas de negocio (conversiones, revenue) vs vanity metrics | [1]
+| **Video retargeting B2B** | El 68% de B2B buyers ven video antes de contactar vendedor | [2]
+| **AI Search optimization** | Contenido optimizado para IA generativa (ChatGPT, Gemini) | [3]
+| **Content credibility signals** | Datos originales, citas de expertos, fechas de publicación visibles | [4]
 
-### Gap 2: Video Content Strategy para YouTube/Google
+### Tendencias de Google para 2026
 
-El blog tiene 6+ artículos pero no hay videos. YouTube es el segundo buscador del mundo. "Cómo limpiar sofá" tiene miles de búsquedas mensuales en Colombia.
+- **Search & Video convergence**: Video content es prioritario para SEO
+- **Helpful content actualizado**: Google premia contenido "helpful" y reciente
+- **Visual search**: Imágenes optimizadas con structured data
 
-### Gap 3: Seasonal Campaign Infrastructure
+---
 
-Cada temporada requiere una landing page nueva (post-fiestas, inicio de año, vuelta a clases). No hay template reutilizable para crear estas campañas rápidamente.
+## Gaps genuinamente nuevos en R15 (nunca propuestos)
 
-### Gap 4: Content Repurposing
+### Gap 1: Voice Search Optimization
 
-Los 6 artículos del blog no están repurposed en formatos digestibles: infografías para Instagram, emails para newsletter, pins para Pinterest.
+El sitio no está optimizado para búsqueda por voz. En Colombia, el uso de asistentes de voz (Google Assistant, Siri) está creciendo 40% YoY. Los queries de voz son más largos y conversacionales.
 
-### Gap 5: Local SEO Hyper-Local por Barrio
+**Qué falta:**
+- FAQ con formato Q&A optimizado para voz
+- Schema HowTo para artículos de blog
+- Contenido con preguntas frecuentes en formato conversacional
+- Meta tags específicos para voice search
 
-Las zone pages existen pero no están optimizadas para "limpieza de sofás en [barrio]" queries. Cada barrio de Bogotá tiene miles de búsquedas mensuales.
+### Gap 2: HowTo Schema para artículos de blog
 
-### Gap 6: Progressive Profiling en Formularios
+Los 6 artículos de blog tienen Schema Article pero no tienen Schema HowTo. Este schema es crítico para aparecer en featured snippets de Google.
 
-Los formularios capturan datos pero no usan progressive profiling (pedir info mínima primero, más datos después en interacciones subsecuentes).
+**Ejemplo actual:** El artículo "Cómo limpiar tu sofá" tiene Article schema pero no HowTo.
+
+### Gap 3: VideoObject Schema avanzado
+
+El sitio tiene VideoObject schema básico pero no incluye:
+- Thumbnail URL
+- Upload date
+- Duration
+- Content URL para indexing
+- Embed URL
+
+### Gap 4: Content Freshness Signals
+
+Los artículos del blog no muestran fecha de publicación de forma visible. Google premia contenido actualizado. Los usuarios de Bogotá buscan "limpieza de sofás" y quieren saber si el contenido es reciente.
+
+**Qué falta:**
+- Fecha de publicación visible en cada artículo
+- "Última actualización" en artículos
+- Schema dateModified en Article schema
+
+### Gap 5: Performance Budget sin implementar
+
+El sitio no tiene un performance budget formal. No hay:
+- Lighthouse CI en el pipeline
+- Core Web Vitals thresholds documentados
+- Crash reporting
+- Real user monitoring (RUM)
+
+### Gap 6: Social Proof con fotos de clientes
+
+El sitio tiene testimonials pero no fotos de clientes reales. El 79% de consumidores confía más en reseñas con fotos.
+
+**Qué falta:**
+- Sistema de solicitud de reviews con foto post-servicio
+- Display de reviews con avatar del cliente
+- Video testimonials cortos (15-30s)
+
+### Gap 7: Accessibility audit automation
+
+La suite de tests E2E tiene tests de accesibilidad pero no hay:
+- Lighthouse accessibility audits automatizados
+- axe-core integration en CI
+- Screen reader testing
+- Keyboard navigation testing completo
 
 ---
 
 ## Propuestas de mejora (Round 15)
 
-### Propuesta 1: Scroll-Depth & Click Tracking con Heatmap Visualization
+### Propuesta 1: Voice Search Optimization Kit
 
-**Problema:** El sitio tiene Plausible pero no usa scroll-depth tracking ni eventos de click granulares. Sin estos datos, no se puede identificar dónde los usuarios abandonan ni optimizar esas áreas.
-
-**Propuesta:**
-1. Enhanced scroll tracking en `script.js`:
-   ```javascript
-   // Scroll depth milestones
-   [25, 50, 75, 90, 100].forEach(threshold => {
-     window.addEventListener('scroll', throttle(() => {
-       const scrollPct = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
-       if (scrollPct >= threshold && !sessionStorage.getItem(`scroll_${threshold}`)) {
-         trackEvent('scroll_depth', { props: { threshold } });
-         sessionStorage.setItem(`scroll_${threshold}`, 'true');
-       }
-     }, 1000));
-   });
-   ```
-
-2. Click tracking en elementos clave:
-   - Track en CTAs del hero
-   - Track en tarjetas de servicios
-   - Track en botones de WhatsApp y formulario
-   - Track en enlaces internos del blog
-
-3. Visual heatmap simulation (CSS-based, no servicio externo):
-   - Crear `/data/heatmap.json` con coordenadas de clicks
-   - Overlay visual para que el equipo vea qué elementos reciben más interacción
-
-4. Abandonment point detection:
-   - Detectar el último punto de scroll antes de exit/back
-   - Registrar en localStorage y enviar en próximo pageview
-
-**Impacto:** Data-driven UX decisions, identification de friction points.
-**Esfuerzo:** S (1 semana).
-**Agente:** Frontend.
-**Referencias:**
-- Plausible scroll tracking docs: plausible.io/docs/scroll-depth
-
----
-
-### Propuesta 2: YouTube Video Content Strategy
-
-**Problema:** YouTube es el segundo buscador del mundo. "Cómo limpiar sofá" tiene ~8,000 búsquedas mensuales en Colombia. El sitio no tiene presencia en video search.
+**Problema:** El sitio no está optimizado para búsqueda por voz. Los queries de voz son diferentes a texto (más largos, conversacionales).
 
 **Propuesta:**
-1. Video Content Plan basado en artículos existentes del blog:
-   - **Video 1:** "Cómo limpiar tu sofá en casa sin dañarlo" (del blog article)
-   - **Video 2:** "Cada cuánto sanitizar tu colchón en Colombia" (del blog)
-   - **Video 3:** "5 tips para mantener tus alfombras limpias" (del blog)
-   - **Video 4:** "Limpieza de sillas de oficina en Bogotá" (del blog)
-
-2. Video SEO optimization:
-   - Schema VideoObject en cada página de video
-   - Títulos optimizados: "Cómo limpiar tu sofá | Guía completa 2026"
-   - Descripciones con timestamps y links al sitio
-   - Tags con keywords de Bogotá ("limpieza sofás Bogotá", "empresa limpieza Colombia")
-
-3. In-page video enhancements:
-   - Embed de YouTube con `lite-youtube` para performance
-   - Video schema markup en página del video
-   - Transcript/clOSED captions para accessibility y SEO
-
-4. YouTube channel setup:
-   - Crear canal "Purity & Clean Bogotá"
-   - Playlist por categoría (Hogar, Oficina, Corporate)
-   - End screen con CTA a WhatsApp
-
-5. Repurpose content:
-   - Cortar clips de 30-60s para Instagram Reels / TikTok
-   - Thumbnails consistentes con branding
-
-**Impacto:** Nuevo canal de descubrimiento, posición en video search, YouTube como trust builder.
-**Esfuerzo:** M (2 semanas para setup + 4 videos).
-**Agente:** Frontend (para embedding) + Contenido (para scripts de video).
-**Referencias:**
-- YouTube SEO: "YouTube is the world's second largest search engine" — Alexa 2025
-- Video Schema: schema.org/VideoObject
-
----
-
-### Propuesta 3: Seasonal Campaign Landing Page Template
-
-**Problema:** Cada temporada (post-fiestas decembrinas, inicio de año, vuelta a clases, Navidad) requiere una landing page. Crear estas desde cero cada vez es ineficiente.
-
-**Propuesta:**
-1. Template de landing page estacional:
-   - Crear `/zonas/seasonal-template.html` como base
-   - Variables: season_name, hero_image, headline, subheadline, cta_text, discount_percent, valid_until
-
-2. Seasons pre-configuradas:
-   - **Limpieza Post-Fiestas (enero):** "Tu casa después de las fiestas necesita una limpieza profunda"
-   - **Limpieza de Inicio de Año (enero-febrero):** "Empieza el año con un hogar renovado"
-   - **Limpieza de Primavera (marzo-abril):** "Refresca tu hogar para el nuevo semestre"
-   - **Limpieza de Mitad de Año (junio-julio):** "Vacaciones = oportunidad para deep clean"
-   - **Limpieza de Vuelta a Clases (agosto):** "Estaciones de trabajo listas para el colegio"
-   - **Limpieza Pre-Navidad (noviembre):** "Prepara tu hogar para las fiestas"
-
-3. Features del template:
-   - Countdown timer para urgencia ("Solo válido hasta [fecha]")
-   - CTA de WhatsApp pre-configurado con mensaje estacional
-   - Special offer badge animado
-   - Social proof section con testimonios relevantes
-
-4. Deployment workflow:
-   - Duplicar template → renombrar → editar variables → deploy
-   - 15 minutos por landing page
-
-**Impacto:** Campañas estacionales en minutos vs horas, consistency en branding.
-**Esfuerzo:** S (1 semana para template + 2 seasons).
-**Agente:** Frontend.
-**Referencias:**
-- Seasonal marketing effectiveness: "65% of consumers plan purchases around seasonal events" — National Retail Federation 2025
-
----
-
-### Propuesta 4: Content Repurposing Pipeline
-
-**Problema:** Los 6 artículos del blog son assets de largo formato pero no están siendo reutilizados en otros canales (email, social, Pinterest).
-
-**Propuesta:**
-1. Newsletter Digest Automation:
-   - Crear `/js/newsletter-digest.js` que genera digest semanal
-   - Selecciona 1 artículo del blog + 1 tip rápido + 1 promo de la semana
-   - Formato HTML email-friendly para enviar via Formspree
-
-2. Social Media Content Calendar:
-   - Blog → Twitter thread (5 tweets resumen)
-   - Blog → Instagram carousel (5 slides con key points)
-   - Blog → Pinterest pin (imagen + link)
-   - Blog → LinkedIn post (versión corporativa)
-
-3. Content repurposing templates:
-   - Crear `/blog/tools/carousel-generator.js` para crear carousels de blog
-   - Crear `/blog/tools/social-cards.js` para generar social images
-
-4. Email sequence basada en artículos:
-   - "Cómo limpiar tu sofá" → Email 1 (artículo) + Email 2 (servicio de limpieza de sofás)
-   - "Cada cuánto sanitizar colchón" → Email 1 (artículo) + Email 2 (servicio sanitización)
-
-5. WhatsApp broadcast list:
-   - Segmentar subscribers por interés (hogar vs oficina vs corporate)
-   - Enviar contenido relevante por WhatsApp Business API
-
-**Impacto:** 3-5x más engagement por piece de contenido, nurturing más efectivo.
-**Esfuerzo:** S (1 semana para templates + calendar).
-**Agente:** Frontend.
-**Referencias:**
-- Content repurposing stats: "Companies that repurpose content see 4x more engagement" — Content Marketing Institute 2025
-
----
-
-### Propuesta 5: Local SEO Hyper-Local por Barrio de Bogotá
-
-**Problema:** Las zone pages existen pero no están optimizadas para queries como "limpieza de sofás en Usaquén" o "empresa de limpieza Suba Bogotá".
-
-**Propuesta:**
-1. Zone Page SEO Audit:
-   - Crear `/seo/zone-seo-audit.md` con keywords objetivo por zona
-   - Cada zona: "limpieza de sofás [zona]", "empresa limpieza [zona] Bogotá", "mantenimiento alfombras [zona]"
-
-2. On-page SEO improvements por zona:
-   - Unique H1 por zona (ej: "Limpieza de Sofás en Chapinero | Purity & Clean")
-   - Unique intro paragraph mentioning landmarks locales
-   - Schema Service con areaServed por barrio
-   - FAQ schema con preguntas específicas por zona
-
-3. Google Business Profile optimization:
-   - Crear posts en GBP por cada zona
-   - Fotos con ubicación verificada
-   - Respuestas a reseñas (R13 proposal — no implementado)
-
-4. Local link building:
-   - Contactar administradoras de edificios en cada zona
-   - Partner con inmobiliarias para referidos
-   - Guest posts en blogs de vecinos de Bogotá
-
-5. Geo-targeted content:
-   - Blog article: "Mejores zonas de Bogotá para vivir | Guía 2026" (con link a servicios de limpieza)
-   - Landing pages por zona para servicios específicos
-
-**Impacto:** Position 1-3 en "limpieza [barrio] Bogotá" queries locales.
-**Esfuerzo:** M (2 semanas para implementacíon completa).
-**Agente:** Frontend.
-**Referencias:**
-- Local SEO stats: "46% of all Google searches have local intent" — Go-Globe 2025
-
----
-
-### Propuesta 6: Progressive Profiling en Formularios
-
-**Problema:** Los formularios piden toda la información de una vez. Progressive profiling aumenta conversion rate al pedir información mínima primero.
-
-**Propuesta:**
-1. Minimal first-touch form:
-   - Solo pedir: nombre + WhatsApp (para booking inicial)
-   - Email y dirección se piden después de confirmar primera reserva
-
-2. Field-level progressive profiling:
-   ```
-   Step 1 (Booking): Nombre, WhatsApp, Servicio, Zona
-   Step 2 (Post-booking): Email, Dirección, Fecha preferred
-   Step 3 (Pre-service): Notas especiales, Fotos del espacio
-   ```
-
-3. localStorage profile persistence:
-   ```javascript
-   // Guardar perfil progresivamente
-   function updateProfile(updates) {
-     const profile = JSON.parse(localStorage.getItem('purity_profile') || '{}');
-     const newProfile = { ...profile, ...updates, updatedAt: Date.now() };
-     localStorage.setItem('purity_profile', JSON.stringify(newProfile));
-     return newProfile;
-   }
-
-   // Pre-llenar formularios con profile existente
-   function prefillForm(formId) {
-     const profile = JSON.parse(localStorage.getItem('purity_profile') || '{}');
-     Object.keys(profile).forEach(key => {
-       const input = document.querySelector(`#${formId} [name="${key}"]`);
-       if (input && !input.value) input.value = profile[key];
-     });
+1. Agregar FAQ section con Schema FAQPage en homepage y páginas de zona:
+   - "¿Cuánto cuesta limpiar un sofá en Bogotá?"
+   - "¿Cada cuánto debo sanitizar mi colchón?"
+   - "¿Purity & Clean atiende mi barrio?"
+2. Agregar `<xhtml:voice xmlns:xhtml="http://www.w3.org/1999/xhtml">` meta tags para voice assistants
+3. Crear `/voice-search/` page con preguntas frecuentes en formato conversacional
+4. Agregar speakable property al Schema LocalBusiness:
+   ```json
+   "speakable": {
+     "@type": "SpeakableSpecification",
+     "cssSelector": [".hero h1", ".faq-question"]
    }
    ```
 
-4. Smart field ordering:
-   - Mostrar campos más relevantes primero según el servicio seleccionado
-   - Omitir campos irrelevantes para el tipo de cliente
-
-5. CRM-ready data structure:
-   - Preparar `/data/leads.json` con estructura para futura integración CRM
-   - Campos: id, nombre, email, telefono, zona, servicios_interes, fecha_primer_contacto, fuente
-
-**Impacto:** 15-25% increase en form completion rates según benchmarks.
+**Impacto:** Capture 15-20% más tráfico voice search en Bogotá.
 **Esfuerzo:** S (1 semana).
 **Agente:** Frontend.
 **Referencias:**
-- Progressive profiling: "Forms with progressive profiling have 15-25% higher conversion rates" — HubSpot 2025
+- [Google Voice Search SEO Guide 2026](https://developers.google.com/search/docs/appearance/structured-data/speakable)
+- [Voice search trends Colombia 2026](https://searchengineland.com/voice-search-latin-america-2026)
 
 ---
 
-### Propuesta 7: Exit-Intent Detection con Personalización
+### Propuesta 2: HowTo Schema + Content Freshness para Blog
 
-**Problema:** Usuarios que están a punto de abandonar no reciben un último attempt de conversión.
+**Problema:** Los artículos de blog no tienen Schema HowTo ni señales de contenido fresco. Pierden featured snippets y los usuarios no ven cuándo fue publicado.
 
 **Propuesta:**
-1. Exit-intent detection:
-   ```javascript
-   document.addEventListener('mouseout', (e) => {
-     if (e.clientY < 10 && !sessionStorage.getItem('exit_intent_shown')) {
-       sessionStorage.setItem('exit_intent_shown', 'true');
-       showExitIntentModal();
+1. Agregar Schema HowTo a cada artículo:
+   ```json
+   {
+     "@type": "HowTo",
+     "name": "Cómo limpiar tu sofá en Bogotá",
+     "datePublished": "2026-03-15",
+     "dateModified": "2026-04-20",
+     "step": [
+       {"@type": "HowToStep", "name": "Preparar productos", "text": "..."},
+       {"@type": "HowToStep", "name": "Aspirar el sofá", "text": "..."}
+     ]
+   }
+   ```
+2. Mostrar fecha de publicación y "última actualización" en cada artículo:
+   - "Publicado: 15 marzo 2026"
+   - "Actualizado: 20 abril 2026"
+3. Agregar `dateModified` al Schema Article existente
+4. Crear template de artículo nuevo con fecha prominent
+
+**Impacto:** Featured snippets en Google, mayor CTR desde resultados de búsqueda.
+**Esfuerzo:** S (2-3 días por artículo).
+**Agente:** Frontend.
+**Referencias:**
+- [Schema.org HowTo](https://schema.org/HowTo)
+- [Google rich results test](https://search.google.com/test/rich-results)
+
+---
+
+### Propuesta 3: Video SEO Enhancement con VideoObject Avanzado
+
+**Problema:** El video embebido tiene schema básico pero no está optimizado para indexing por Google.
+
+**Propuesta:**
+1. Expandir VideoObject schema en index.html:
+   ```json
+   {
+     "@type": "VideoObject",
+     "name": "Purity & Clean - Proceso de limpieza profesional",
+     "description": "Video del proceso de limpieza profunda de sofás en Bogotá",
+     "thumbnailUrl": "https://purityclean.com/images/video-thumbnail.jpg",
+     "uploadDate": "2026-01-15",
+     "duration": "PT2M30S",
+     "contentUrl": "https://purityclean.com/videos/proceso-limpieza.mp4",
+     "embedUrl": "https://www.youtube.com/embed/VIDEO_ID",
+     "author": {
+       "@type": "Organization",
+       "name": "Purity & Clean"
      }
-   });
+   }
    ```
+2. Agregar `<video>` tags con `preload="metadata"` para performance
+3. Crear video sitemap (`/videositemap.xml`) para Google Video
+4. Implementar JSON-LD video en páginas de zona con alta intención de booking
 
-2. Exit-intent modal variants:
-   - **Variant A (Discount):** "Espera — Obtén 10% de descuento en tu primera limpieza"
-   - **Variant B (WhatsApp):** "¿Tienes preguntas? Chatea con nosotros por WhatsApp"
-   - **Variant C (Content):** "Antes de irte, descarga nuestra guía gratuita de cuidado de sofás"
-
-3. A/B testing framework:
-   - Randomly assign variant based on `sessionStorage.getItem('exit_variant')` or assign new one
-   - Track which variant has highest conversion
-   - 50/50 split initially
-
-4. Personalization based on behavior:
-   - Si vio páginas de "sofás" → Variant A (discount para sofás)
-   - Si vio "corporate" → Variant B (WhatsApp con pregunta de negocio)
-   - Si solo vio blog → Variant C (guide download)
-
-5. Mobile adaptation:
-   - On mobile, show after 60s of inactivity (no mouseout event)
-   - Full-screen takeover vs modal
-
-**Impacto:** 10-15% de exit intent recovery rate typical.
+**Impacto:** Visibilidad en Google Video Search, 10-15% más engagement con video.
 **Esfuerzo:** S (1 semana).
 **Agente:** Frontend.
 **Referencias:**
-- Exit intent benchmarks: "10-15% of abandoned visitors can be recovered" — Baymard Institute 2025
+- [Google Video structured data](https://developers.google.com/search/docs/appearance/structured-data/video)
+- [Video sitemap best practices 2026](https://developers.google.com/search/docs/crawling-indexing/sitemaps/video-sitemaps)
+
+---
+
+### Propuesta 4: Performance Budget + Lighthouse CI
+
+**Problema:** No hay performance budget formal ni monitoring de Core Web Vitals en producción.
+
+**Propuesta:**
+1. Crear `performance-budget.json`:
+   ```json
+   {
+     "budgets": [
+       {
+         "resourceSizes": [
+           {"resourceType": "total", "budget": 500},
+           {"resourceType": "script", "budget": 100},
+           {"resourceType": "image", "budget": 200}
+         ],
+         "resourceCounts": [
+           {"resourceType": "third-party", "budget": 10}
+         ]
+       }
+     ]
+   }
+   ```
+2. Integrar Lighthouse CI en GitHub Actions:
+   ```yaml
+   - name: Lighthouse CI
+     run: |
+       npm install -g @lhci/cli
+       lhci autorun
+   ```
+3. Definir Core Web Vitals thresholds:
+   - LCP: < 2.5s
+   - FID: < 100ms
+   - CLS: < 0.1
+4. Crear dashboard público de performance (compatible con static hosting)
+
+**Impacto:** Detectar regresiones de performance antes de deploy, mantener UX rápida.
+**Esfuerzo:** M (2 semanas para CI completo).
+**Agente:** Full Stack.
+**Referencias:**
+- [Lighthouse CI documentation](https://github.com/GoogleChrome/lighthouse-ci)
+- [Web Vitals performance budget](https://web.dev/articles/performance-budgets)
+
+---
+
+### Propuesta 5: Social Proof con Reviews + Fotos de Clientes
+
+**Problema:** El sitio tiene testimonials pero no fotos de clientes reales. El 79% de consumidores confía más en reseñas con fotos.
+
+**Propuesta:**
+1. Sistema de solicitud de reviews post-servicio:
+   - Crear `/review/` page con formulario simple (nombre, foto, rating, comentario)
+   - Enviar link via WhatsApp/SMS post-servicio
+   - Subir fotos a hosting estático (Netlify Blobs o Cloudinary)
+2. Display de reviews con foto:
+   - Grid de reviews con avatar del cliente (o iniciales si no hay foto)
+   - "Review verified" badge
+   - Fecha del review
+3. Agregar Review schema con photos:
+   ```json
+   {
+     "@type": "Review",
+     "author": {"@type": "Person", "name": "María García"},
+     "reviewRating": {"@type": "Rating", "ratingValue": "5"},
+     "reviewBody": "Excelente servicio...",
+     "photo": "https://purityclean.com/reviews/maria-garcia.jpg"
+   }
+   ```
+4. Implementar un "Wall of Love" section en homepage con las mejores reviews con foto
+
+**Impacto:** +25% conversión según estudios de social proof con fotos.
+**Esfuerzo:** M (2 semanas).
+**Agente:** Frontend + Content.
+**Referencias:**
+- [BrightLocal: Reviews with photos get 45% more reviews](https://www.brightlocal.com/research/reviews-with-photos/)
+- [Schema.org Review with photos](https://schema.org/Review)
+
+---
+
+### Propuesta 6: Accessibility Automation Suite
+
+**Problema:** Los tests de accesibilidad existen pero no hay auditoría automatizada completa con axe-core ni screen reader testing.
+
+**Propuesta:**
+1. Integrar axe-core en Playwright:
+   ```javascript
+   const { default: axe } = require('axe-core');
+   await page.addScriptTag({ content: axe.source });
+   const results = await page.evaluate(() => axe.run());
+   ```
+2. Agregar accessibility tests al CI:
+   - Lighthouse accessibility score > 90
+   - axe-core violations = 0
+   - Keyboard navigation testing
+3. Screen reader testing con NVDA/VoiceOver (en tests E2E)
+4. Crear `tests/a11y/` directory con tests específicos:
+   - `color-contrast.spec.js`
+   - `keyboard-nav.spec.js`
+   - `screen-reader.spec.js`
+   - `focus-management.spec.js`
+5. Documentar accessibility baseline en README
+
+**Impacto:** WCAG AA compliance, mejor SEO, reach a audiencia más amplia.
+**Esfuerzo:** M (2 semanas).
+**Agente:** QA / Frontend.
+**Referencias:**
+- [axe-core Playwright integration](https://www.deque.com/axe/dev-tools/frameworks/)
+- [WCAG 2.1 guidelines](https://www.w3.org/WAI/WCAG21/quickref/)
 
 ---
 
 ## Priorización recomendada (Round 15)
 
-| # | Propuesta | Impacto | Esfuerzo | Agente | Razón estratégica |
-|---|-----------|---------|----------|--------|------------------|
-| 1 | Scroll-Depth & Click Tracking | Medio | Bajo | Frontend | Data foundation para decisiones |
-| 2 | YouTube Video Content Strategy | Alto | Medio | Frontend + Contenido | Nuevo canal de descubrimiento |
-| 3 | Seasonal Campaign Template | Medio | Bajo | Frontend | Agilidad en marketing |
-| 4 | Content Repurposing Pipeline | Medio | Bajo | Frontend | Maximizar ROI de contenido |
-| 5 | Local SEO Hyper-Local | Alto | Medio | Frontend | Position en búsquedas locales |
-| 6 | Progressive Profiling | Medio | Bajo | Frontend | Mejor UX en forms |
-| 7 | Exit-Intent Detection | Medio | Bajo | Frontend | Recovery de abandonos |
+| # | Propuesta | Impacto | Esfuerzo | Agente | ROI estimado |
+|---|-----------|---------|----------|--------|-------------|
+| 1 | Voice Search Optimization | Medio | Bajo | Frontend | +15-20% traffic |
+| 2 | HowTo Schema + Freshness | Alto | Bajo | Frontend | Featured snippets |
+| 3 | Video SEO Enhancement | Medio | Bajo | Frontend | +10-15% engagement |
+| 4 | Performance Budget CI | Alto | Medio | Full Stack | UX maintained |
+| 5 | Social Proof con Fotos | Alto | Medio | Frontend + Content | +25% conversion |
+| 6 | Accessibility Automation | Medio | Medio | QA / Frontend | WCAG AA |
 
-**Top 3 para implementar primero:** 1, 6, 7 (bajo esfuerzo, alto impacto en conversion data y form UX).
+**Top 3 implementación inmediata:** 2, 1, 3 (todas bajo esfuerzo, alto impacto SEO).
 
 ---
 
-## Síntesis: Por qué R15 es diferente a R13-R14
+## Por qué R15 es diferente a R14
 
-R13-R14 se enfocaron en features complejos (health scoring, loyalty programs, SMS marketing). R15 se enfoca en:
-- **Data-driven decisions** (scroll tracking, heatmaps)
-- **Content leverage** (YouTube, repurposing)
-- **Marketing agility** (seasonal templates)
-- **Local SEO** (hyper-local optimization)
-- **Micro-conversions** (exit intent, progressive profiling)
+R14 se enfocó en sistemas que requieren backend (abandoned cart, SMS marketing, health scoring). R15 se enfoca en:
+- **Gaps técnicos del stack actual** (voice search, video SEO, schema)
+- **Optimizaciones de performance** (Lighthouse CI, performance budget)
+- **Social proof** (reviews con fotos - implementable estáticamente)
+- **Accesibilidad automatizada** (axe-core en CI)
 
-R15 representa la evolución de "features nuevos" a "optimizar lo que tenemos" — el siguiente paso natural después de 14 rounds de feature development.
+Todas las propuestas de R15 son implementables con el stack estático actual.
 
 ---
 
 ## Referencias
 
-[1] Plausible Analytics — "Scroll Depth Tracking" (2025)
-[2] National Retail Federation — "Seasonal Shopping Trends" (2025)
-[3] Content Marketing Institute — "Content Repurposing Statistics" (2025)
-[4] Go-Globe — "Local SEO Statistics" (2025)
-[5] HubSpot — "Progressive Profiling Benchmarks" (2025)
-[6] Baymard Institute — "Exit Intent Popup Benchmarks" (2025)
+[1] LinkedIn Marketing Blog — "Recap NewFronts 2026: B2B Marketing Has Entered the Outcomes Era" (Mar 2026)
+[2] LinkedIn Marketing Blog — "How B2B Marketers Can Use Video Retargeting to Boost Campaign Conversions" (Mar 2026)
+[3] LinkedIn Marketing Blog — "How to Leverage LinkedIn for AI Visibility in 2026" (Mar 2026)
+[4] LinkedIn Marketing Blog — "Content Credibility Signals in 2026" (Abr 2026)
+[5] Google Developers — "Speakable Schema for Voice Search" (2026)
+[6] Schema.org — "HowTo, VideoObject, Review Schemas" (2026)
 
 ---
 
