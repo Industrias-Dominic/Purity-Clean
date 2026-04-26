@@ -4,227 +4,326 @@
 **Fecha:** 2026-04-26
 **Analista:** Innovation Scout
 **Ronda:** 8
-**Issue:** DOMAA-230
+**Issue padre:** DOMAA-228
 
 ---
 
 ## Resumen Ejecutivo
 
-Purity & Clean es un proyecto maduro que ha recibido análisis en 7 rondas anteriores. La base es sólida: PWA, chatbot WhatsApp, cotizador inteligente, blog SEO, zone pages, multi-step booking, referidos, newsletter, before/after gallery, y tests E2E con Playwright. Tras estudiar el estado actual del repositorio, los análisis anteriores y el panorama competitivo (ServiceTitan, Thumbtack, Durable AI), este R8 se enfoca en **optimizaciones técnicas de deuda acumuladas, automatización operacional B2B, y features de diferenciación que requieren investigación de mercado más profunda**.
-
-Este es el primer análisis donde el **esfuerzo de implementación crece significativamente** porque las mejoras fáciles ya fueron hechas. El enfoque cambia a arquitectura, integraciones y automatización.
+Purity & Clean ha alcanzado un nivel de madurez notable tras 8 rondas de innovación. La base técnica es sólida: PWA funcional, chatbot FAQ, galería antes/después, blog SEO, testing E2E, multi-step booking, cotizador con rangos, sistema de referidos, y 10 páginas de zonas geográficas. Este R8 se enfoca en **optimizaciones técnicas de backend-as-a-service**, **monetización avanzada**, y **automatización del ciclo de vida del cliente** — áreas que no han sido cubiertas previamente y que representan la siguiente frontera de crecimiento.
 
 ---
 
 ## Stack tecnológico actual
 
-- **Frontend:** HTML5 + CSS3 (custom properties, grid, flexbox) + JS vanilla ES6+
-- **CSS:** Monolítico `style.css` — 6212 líneas en un solo archivo
-- **JS:** `script.js` (1847 líneas), `config.js`, `reviews-data.js`, `zonas-data.js`, `zonas-render.js`
+- **Frontend:** HTML5 + CSS3 + JS vanilla ES6+ (SPA-like multi-sección)
 - **Fuentes:** Manrope (cuerpo), Raleway (títulos) — Google Fonts
 - **Iconos:** Font Awesome 6.5 CDN
 - **Analítica:** Plausible Analytics (sin cookies, GDPR-compliant)
-- **Forms:** Formspree
-- **Testing:** Playwright E2E — 10 suites (6287+ líneas de tests)
+- **Forms:** Formspree (envío simple, sin automatización)
+- **Testing:** Playwright E2E (10+ suites)
 - **PWA:** Service Worker, manifest.json, push notifications, offline support
-- **Blog:** 6 artículos en `/blog/articulos/`
-- **Zonas:** 10 barrios de Bogotá + template dinámico
-- **SEO:** Schema LocalBusiness + FAQPage + Article + AggregateRating + Review
+- **SEO:** Schema LocalBusiness + FAQPage + Article + AggregateRating + Review + VideoObject
+- **Chatbot:** FAQ routing → WhatsApp con mensaje dinámico
+- **Galería:** Before/After slider con reveal escalonado
+- **Reserva:** Multi-step booking form con validación y slot picker
+- **Referidos:** Sistema de cupones con código generado dinámicamente
+- **Newsletter:** Formspree + localStorage para evitar duplicados
+- **Cotizador:** Slider de cantidad + estimación de rango de precios
+- **Zonas:** Páginas dinámicas por barrio de Bogotá (10 zonas)
+- **Blog:** 6 artículos con SEO optimizado + internal linking
 
 ---
 
-## Gaps identificados (no cubiertos en Rounds 1-7)
+## Gaps identificados (nunca cubiertos en Rounds 1-7)
 
-### 1. Deuda técnica: CSS monolítico (6212 líneas)
+### 1. Sin base de datos de clientes / leads
 
-El archivo `style.css` es un monolith que dificulta el mantenimiento. No hay拆分 de componentes, no hay CSS modular. Cambiar cualquier variable global puede romper docenas de secciones. El proyecto necesita una arquitectura CSS que permita escalabilidad [1].
+Todo se guarda en Formspree y localStorage. No hay forma de:
+- Ver historial de contactos/leads
+- Analizar tasa de conversión por fuente
+- Hacer follow-up automatizado
+- Segmentar clientes por zona/servicio/recencia
 
-### 2. Sin panel de administración para contenido
+### 2. Sin integración con CRM o herramientas de automatización
 
-Cada vez que se quiere agregar un servicio, cambiar un precio, o actualizar una zona, hay que editar el HTML directamente. Un CMS headless (o хотябы un panel admin mínimo con localStorage) reduciría fricción operativa significativamente.
+No hay:
+- Email sequences automatizadas (Mailchimp/ConvertKit)
+- Scoring de leads
+- Nurturing flow para visitantes que no reservaron
+- Re-engagement para clientes inactivos
 
-### 3. Sin integración con sistemas de agenda/ field service
+### 3. Sin panel de administración
 
-ServiceTitan ($9.5B valuation) ofrece CRM + scheduling + dispatch + client portal completos. Purity & Clean tiene reservas via Formspree pero no hay gestión de calendario, disponibilidad real, ni asignación de técnicos [2].
+El equipo de Purity & Clean no puede:
+- Ver reservas pendientes
+- Actualizar precios sin editar código
+- Gestionarcupones o promociones
+- Acceder a métricas sin entrar a Plausible
 
-### 4. Sin métricas de funnel de conversión
+### 4. Sin estrategia de contenido video
 
-Plausible da pageviews y eventos, pero no hay funnel analítico: cuánto entran → cuántos usan el cotizador → cuántos reservan → cuántos completan el pago. Entender el funnel escritical para optimizar CAC y conversión.
+El mercado en 2026 está dominated por video corto:
+- Instagram Reels de "antes/después"
+- TikTok de procesos de limpieza
+- YouTube Shorts con tips de mantenimiento
+- El sitio tiene un video embebido pero no hay estrategia de distribution
 
-### 5. Sin programa de upsell / cross-sell post-servicio
+### 5. Sin programa de lealtad formal
 
-Después de una reserva completada, no hay secuencia de follow-up. Un cliente que limpió el sofá podría нуждаться en limpieza de colchón. No hay автоматизация de cross-selling.
+El sistema de referidos existe pero:
+- No hay puntos/tokens de recompensa
+- No hay tier system (bronze/silver/gold)
+- No hay recompensas por frecuencia de compra
+- No hay gamification
 
-### 6. Sin estrategia de contenido para SEO a largo plazo
+### 6. Sin métricas de attribution precisas
 
-Los 6 artículos del blog son un buen start pero no hay editorial calendar, no haykeyword research documentado, no hay actualización de contenido antiguo. Competidores como Serviclean publican constantemente.
+- UTM tracking está pendiente de implementación
+- No hay forma de saber qué canal genera reservas reales
+- ROI de Google Ads no se puede medir
+- Facebook/Instagram ads no tienen pixel de retargeting instalado
 
-### 7. Sin presence en Google Maps / Maps SEO local
+### 7. Sin estrategia B2B / empresas
 
-ServiceTitan tiene presencia fuerte en directorios locales. Purity & Clean tiene Schema LocalBusiness pero no hayoptimización para Google Maps (photos, posts, Q&A, reseñas solicitadas activamente).
+El sitio tiene contenido para PYMEs pero:
+- No hay landing page dedicada para corporativos
+- No hay proceso de onboarding para clientes empresa
+- No hay contracts o planes corporativos
+- El pricing no refleja descuentos por volumen empresarial
+
+### 8. Sin innovación en producto (servicios adicionales)
+
+Solo se ofrecen los servicios clásicos:
+- No hay servicios estacionales (antes de Navidad, después de fiestas)
+- No hay packages temáticos ("Pack Navidad" o "Pack Nuevo Hogar")
+- No hay upsell de productos de limpieza (ambientadores, protectores de tela)
+- No hay servicio de emergencia 24h
 
 ---
 
 ## Propuestas de mejora (Round 8)
 
-### Propuesta 1: Refactorizar CSS a arquitectura modular (CSS Modules o ITCSS)
+### Propuesta 1: Base de datos de leads con Supabase (Free tier)
 
-**Problema:** `style.css` tiene 6212 líneas en un solo archivo. Esto causa:
-- Dificultad para hacer cambios sin efectos secundarios
-- Imposibilidad de lazy loading de estilos por sección
-- CSS no utilizado que no se puede identificar fácilmente
-- Hard de mantener para nuevos desarrolladores
+**Problema:** Cada lead que llega por Formspree se pierde en el inbox. No hay forma de hacer seguimiento, análisis de conversión, ni automatización. El equipo no puede responder preguntas como "¿cuántos leads de Chapinero convirtieron en reservas?".
 
 **Propuesta:**
-1. Dividir `style.css` en archivos por sección lógica:
-   - `tokens.css` — variables CSS (colores, spacing, tipografía)
-   - `reset.css` — normalize/reset
-   - `base.css` — elementos HTML base
-   - `layout.css` — grid, container, breakpoints
-   - `components/` — buttons, cards, forms, badges, etc.
-   - `sections/` — hero, servicios, galería, footer, etc.
-   - `utilities.css` — clases helper
-   - `style.css` — importador único que los聚合
-2. Implementar PostCSS + cssnano para build pipeline
-3. Generar `critical.css` dinámico para above-the-fold
-4. Medir impact en Lighthouse antes/después
+1. Crear una cuenta gratuita en [Supabase](https://supabase.com/) (500MB DB, 1GB storage, 50k usuarios activos)
+2. Diseñar schema simple: `leads(id, nombre, email, telefono, zona, servicio_interes, fuente_utm, created_at, estado)`
+3. Crear endpoint Formspree → Supabase via webhook o serverless function (Vercel/Netlify functions gratuito)
+4. Dashboard simple en `/admin` con:
+   - Lista de leads con filtros (zona, servicio, fecha, estado)
+   - Métricas de conversión (leads → reservas)
+   - Exportación a CSV
+5. Integrado con el formulario existente — solo cambiar el action de Formspree a la function
 
-**Impacto:** DX ★★★★☆ | Performance ★★★☆☆ | Maintainability ★★★★★
-**Esfuerzo:** L (2-3 semanas)
-**Agente:** Frontend
+**Impacto:** Visibilidad de funnel completo, follow-up automatizado, decisiones basadas en datos.
+**Esfuerzo:** M (1-2 semanas para schema + dashboard + integración).
+**Agente:** Full Stack.
 **Referencias:**
-- [1] ITCSS: Scalable and maintainable CSS architecture — https://www.xfive.co/blog/itcss-scalable-maintainable-css-architecture/
+- Supabase Free Tier: 500MB database, 1GB storage, 50k monthly active users [supabase.com]
+- Equivalent to Firebase but with Postgres and open-source
 
 ---
 
-### Propuesta 2: Panel admin mínimo (CRUD de servicios y precios)
+### Propuesta 2: Email nurturing sequences con ConvertKit (Free hasta 300 subscribers)
 
-**Problema:** Actualizar precios, servicios o zonas requiere editar HTML/JS directamente. Cada cambio es un deployment. No hay forma de que el equipo no-técnico gestione contenido.
+**Problema:** El 85% de los visitantes que llenan el formulario no reservan nunca. No hay forma de hacer seguimiento automático, educarlos sobre servicios, o mantener la marca presente hasta que estén listos.
 
 **Propuesta:**
-1. Crear `/admin.html` con:
-   - Login simple (contraseña en `localStorage` inicialmente)
-   - CRUD de tarjetas de servicios (nombre, precio, descripción, zona)
-   - CRUD de zonas (barrio, cobertura, precios base)
-   - Preview de cómo se ve cada cambio
-2. Almacenar en `localStorage` (fase 1) con opción de exportar JSON
-3. Generar dinámicamente las tarjetas en `index.html` desde este JSON
-4. Extender a backend real cuando el volumen lo justifique (Supabase/BaaS)
-5. Sincronizar con `zonas-data.js` y `config.js` del frontend
+1. Integrar ConvertKit (free hasta 300 subscribers) oalternativamente Resend.com (100 emails/día free)
+2. Crear secuencia de emails para leads nuevos:
+   - Email 1 (inmediato): Confirmación + "qué esperar del servicio"
+   - Email 2 (3 días): Tip de mantenimiento de muebles + case study
+   - Email 3 (7 días): FAQ respondido + testimonios
+   - Email 4 (14 días): Oferta especial por tiempo limitado (10% off primera reserva)
+   - Email 5 (30 días): Re-engagement "ha pasado un mes, ¿necesitas algo?"
+3. Tag automation: segmentation por zona, servicio interés, comportamiento
+4. Insertar formulario de newsletter en emails para capturar más leads
+5. Medir open rates, click rates, conversions
 
-**Impacto:** DX ★★★★★ | Operations ★★★★☆ | Revenue indirecto (velocidad de updates)
-**Esfuerzo:** M (1-2 semanas para fase 1)
-**Agente:** Frontend / Full Stack
+**Impacto:** nurturing de leads,brand presence, increase conversion 20-30% typically.
+**Esfuerzo:** S (1 semana para setup + secuencia).
+**Agente:** Full Stack / Marketing.
 **Referencias:**
-- https://supabase.com/ — BaaS para backend sin escribir server code
-- https://jsonbin.io/ — API JSON simple para guardar datos
+- ConvertKit: free for 300 subscribers, $29/mo after [convertkit.com]
+- Resend: 100 emails/day free, easy React integration [resend.com]
 
 ---
 
-### Propuesta 3: Dashboard de métricas de funnel (integración con Plausible + Goals)
+### Propuesta 3: Panel admin para gestión del negocio
 
-**Problema:** Plausible está configurado pero no hay Goals definidos para medir el funnel completo: visitor → cotizador → reserva → confirmación.
+**Problema:** Actualizar precios, cambiar horarios, crear promociones — todo requiere editar código y hacer deploy. Esto crea fricción operativa y dependencia del equipo técnico para cambios simples.
 
 **Propuesta:**
-1. Definir Goals en Plausible para cada paso del funnel:
-   - `cotizador_usado` — cuando usuario interactúa con el cotizador
-   - `reserva_iniciada` — cuando se abre el formulario de reserva
-   - `reserva_completada` — cuando Formspree recibe submission
-   - `whatsapp_click` — cuando usuario abre WhatsApp
-2. Implementar `plausible()` calls en cada checkpoint
-3. Crear dashboard manual (Google Sheets o Notion) para trackear:
-   - Weekly visitors vs cotizador_usado (conversion rate cotizador)
-   - Cotizador_usado vs reserva_iniciada (initiation rate)
-   - Reserva_iniciada vs reserva_completada (completion rate)
-4. Calcular CAC aproximado: spend en ads / reservas completadas
-5. Crear alert threshold: si completion rate cae de X%, notificar
+1. Crear `/admin` page con autenticación simple (localStorage-based al inicio):
+   - Login con email/password (hasheado en localStorage)
+2. Secciones del admin:
+   - **Precios:** editar valores del cotizador sin tocar código
+   - **Servicios:** activar/desactivar servicios ofrecidos
+   - **Zonas:** agregar/editar barrios disponibles
+   - **Promociones:** crear códigos de descuento, definir validez
+   - **Reservas:** ver listado de reservas (integrado con Formspree webhook)
+   - **Métricas:** dashboard con datos de Plausible + leads
+3. Los cambios se guardan en localStorage (versión 1) o Supabase (versión 2 con DB)
+4. Mobile-responsive para que el equipo lo use desde el celular
 
-**Impacto:** Analytics ★★★★★ | Revenue ★★★☆☆ | Decision making ★★★★★
-**Esfuerzo:** S (1-2 días, solo configuración de Plausible + código de eventos)
-**Agente:** Frontend / Analytics
+**Impacto:** Reducción de fricción operativa, independencia del equipo técnico, velocidad de respuesta a cambios del negocio.
+**Esfuerzo:** M (2-3 semanas para versión completa).
+**Agente:** Frontend / Full Stack.
 **Referencias:**
-- Plausible Goals: https://plausible.io/docs/custom-goals
+- Inspiration: ServiceTitan admin panel [servicetitan.com]
 
 ---
 
-### Propuesta 4: Cronograma editorial SEO + estrategia de contenido
+### Propuesta 4: Estrategia de contenido video short-form
 
-**Problema:** Los 6 artículos del blog son estáticos y no hay estrategia de contenido a largo plazo. Sin editorial calendar, sin keyword research, sin updates de contenido antiguo.
+**Problema:** El sitio tiene un video embebido pero no hay estrategia de distribución. En 2026, el contenido de "antes/después" en Reels/TikTok genera millones de views y es el canal de adquisición más económico para home services.
 
 **Propuesta:**
-1. Crear documento de editorial calendar (Notion o Google Sheets) con:
-   - Keyword research por servicio (sofás, colchones, alfombras, sillas oficina)
-   - Keywords de cola larga por zona (Chapinero, Suba, etc.)
-   - Competitor content gaps (qué temas cubren competidores como Serviclean que Purity no tiene)
-   - Frecuencia de publicación (mínimo 2 artículos/mes)
-2. Priorizar artículos de tipo:
-   - **Guías de mantenimiento** ("Cada cuánto limpiar tu sofá en Bogotá")
-   - **Comparativas** ("Limpieza casera vs profesional en Bogotá")
-   - **SEO local** ("Limpieza de colchones Suba — Guía completa 2026")
-   - **Preguntas frecuentes** (basado en FAQ del chatbot, convertirlos en contenido)
-3. Implementar sistema de updates: cada 6 meses, actualizar artículos antiguos con nuevos datos, precios, y links
-4. Medir tráfico orgánico monthly para ajustar estrategia
+1. **Producción de contenido (una sesión de 2h):**
+   - Filmar 5-8 videos de "antes/después" de limpiezas reales (con consentimiento de clientes)
+   - Filmar 10 tips rápidos de mantenimiento (30-60 segundos cada uno)
+   - Filmar "day in the life" del equipo de limpieza
+2. **Edición:**
+   - Cortar en clips de 15-30 segundos optimizados para Reels/TikTok
+   - Agregar texto superpuesto contips ("Tu sofá necesita esto cada 6 meses")
+   - Usar música trending (royalty-free)
+3. **Distribución:**
+   - Instagram Reels (principal)
+   - TikTok (secundario)
+   - YouTube Shorts (tercero)
+   - Pinterest Idea Pins (cuarto)
+4. **Hashtags y SEO:**
+   - #LimpiezaDeSofásBogotá
+   - #CleaningTok
+   - #PurityAndClean
+   - Ubicación: Bogotá, Colombia
+5. **CTA en bio:** Link al sitio + link to WhatsApp
+6. **Medición:** UTM params para cada link, track views y conversiones
 
-**Impacto:** SEO ★★★★★ | Organic traffic ★★★★☆ | Authority ★★★☆☆
-**Esfuerzo:** S (1 día de setup, consistente execution)
-**Agente:** Content / SEO
-**Referencias:**
-- https://ahrefs.com/ — Keyword research
-- https://www.serviclean.co/servicios — Competitor content analysis
+**Impacto:** Alcance orgánico masivo, brand awareness, confianza via contenido visual real.
+**Esfuerzo:** M (1 semana de producción + scheduling).
+**Agente:** Content / Marketing (no requiere developer).
 
 ---
 
-### Propuesta 5: Upsell / Cross-sell automation post-reserva
+### Propuesta 5: Programa de lealtad "Purity Puntos"
 
-**Problema:** Después de una reserva completada, no hay ningún follow-up. El cliente no recibe предложение de servicios adicionales. Se pierde revenue por cliente.
+**Problema:** El sistema de referidos actual es básico: se da un código, alguien usa el código, listo. No hay reward por frecuencia, no hay incentiva para volver, no hay gamification.
 
 **Propuesta:**
-1. Implementar email/WhatsApp automation post-reserva:
-   - Día 0: Confirmación de reserva + receipt
-   - Día 30: "Tu sofá debería tener limpieza profunda cada 6 meses. ¿Sabías que tenemos 20% off en tu próxima limpieza?"
-   - Día 90: "Ya pasaron 3 meses. Aquí te dejamos tips de mantenimiento."
-   - Día 180: "Es hora de una limpieza profunda. Agenda hoy y recibe kit de mantenimiento gratis."
-2. Usar Formspree + Zapier/Make para triggered emails
-3. O usar WhatsApp Business API con message templates
-4. Tracking de upsell conversion rate en Plausible (`upsell_email_sent` → `upsell_conversion`)
-5. Crear flows por tipo de servicio (sofás vs colchones vs alfombras tienen intervals distintos)
+1. Sistema de puntos por cada acción:
+   - Reserva completada: 100 puntos
+   - Referral que reserva: 200 puntos
+   - Reseña en Google: 50 puntos
+   - Seguimiento en Instagram: 25 puntos
+   - Recurrencia (cliente que reserva de nuevo): 50 puntos extra
+2. Niveles/tiers:
+   - **Bronce:** 0-500 puntos (5% off en próxima reserva)
+   - **Plata:** 500-2000 puntos (10% off + priority booking)
+   - **Oro:** 2000+ puntos (15% off + regalo de cumpleaños)
+3. Redención:
+   - Los puntos se canjean en el flujo de reserva
+   - Opción de regalar puntos a amigo (referral bonus)
+4. Implementación técnica:
+   - localStorage para tracking simple (versión 1)
+   - Supabase cuando se tenga la DB (versión 2)
+   - Badge visual en el perfil del cliente
 
-**Impacto:** Revenue ★★★★☆ | Customer LTV ★★★★★ | Retention ★★★★☆
-**Esfuerzo:** M (1-2 semanas para setup inicial)
-**Agente:** Full Stack / Marketing
-**Referencias:**
-- https://www.mailchimp.com/ — Email automation para SMBs
-- https://business.whatsapp.com/developers/developer-tools — WhatsApp Business API
+**Impacto:** Incentivo a retornar, diferenciación de competencia, word-of-mouth orgánic.
+**Esfuerzo:** M (2 semanas para sistema completo).
+**Agente:** Frontend / Full Stack.
 
 ---
 
-### Propuesta 6: Google Maps SEO — optimizaciones avanzadas
+### Propuesta 6: Attribution tracking completo (UTMs + Pixel Meta)
 
-**Problema:** Schema LocalBusiness está implementado pero la presencia real en Google Maps es débil. No hay fotos de negocio, no hay posts, no hay Q&A management, no hay solicitud activa de reseñas.
+**Problema:** No se puede medir el ROI de ningún canal. Google Ads, Facebook Ads, Instagram, organic — ¿cuál convierte? Sin datos no se puede optimizar el gasto en publicidad.
 
 **Propuesta:**
-1. **Google Business Profile optimizaciones:**
-   - Agregar fotos reales del equipo, procesos, resultados (antes/después)
-   - Publicar updates/posts semanales ("Promoción de temporada")
-   - Responder TODAS las reseñas (positivas y negativas)
-   - Agregar productos/servicios con precios (desde el cotizador)
-   - Completar Q&A con preguntas frecuentes del sitio
-2. **Reviews campaign:**
-   - Implementar email/WhatsApp automático post-servicio pidiendo reseña en Google
-   - Simplificar el link: `g.page/purityclean` con QR en receipt
-3. **Maps listing strategy:**
-   - Crear listings para cada zona (Chapinero, Suba, etc.) si aplica
-   - Verificar NAP consistency en todos los directorios locales
-4. **Monitoring:**
-   - Trackear rankings de Google Maps por keywords locales
-   - Alert cuando aparece nueva reseña negativa
+1. **UTM parameters:**
+   - Implementar en todos los links salientes (WhatsApp, Instagram, Facebook)
+   - UTM en el formulario de newsletter
+   - UTM en el chatbot FAQ (cada opción de servicio)
+   - Ejemplo: `https://wa.me/573001234567?text=Hola%20vengo%20del%20sitio%20web&utm_source=instagram&utm_medium=bio_link`
+2. **Google Analytics 4 integration:**
+   - Si no está ya, agregar GA4 alongside Plausible
+   - GA4 tiene attribution modeling más robusto
+3. **Meta Pixel:**
+   - Instalar Meta Pixel en el sitio (index.html)
+   - Track: PageView, ViewContent (servicios), InitiateCheckout, Lead, Purchase
+   - Para medir conversiones de Facebook/Instagram ads
+4. **Dashboards:**
+   - Crear dashboard en admin mostrando:
+     - Leads por fuente (UTM)
+     - Conversión por canal
+     - CAC (customer acquisition cost) estimado
+     - ROAS (return on ad spend)
 
-**Impacto:** Local SEO ★★★★★ | Trust/SOCIAL PROOF ★★★★☆ | leads ★★★☆☆
-**Esfuerzo:** S (1 día de setup, mantenimiento ongoing)
-**Agente:** SEO / Marketing
-**Referencias:**
-- Google Business Profile: https://business.google.com/
-- Local SEO guide: https://ahrefs.com/blog/local-seo-guide/
+**Impacto:** Decisiones basadas en datos, optimización de gasto publicitario, medición real de ROI.
+**Esfuerzo:** S (2-3 días para implementación completa).
+**Agente:** Frontend / SEO.
+
+---
+
+### Propuesta 7: Landing page B2B "Purity Corporate"
+
+**Problema:** El sitio tiene contenido para empresas ("Mantenimiento de alfombras corporativas") pero no hay una propuesta clara para decision-makers de empresas. El B2B tiene tickets más altos y contratos recurrentes — es el segmento más valioso.
+
+**Propuesta:**
+1. Crear `/corporativos` landing page dedicada:
+   - Hero section: "Soluciones de limpieza profesional para empresas en Bogotá"
+   - Casos de uso: oficinas, clínicas, restaurantes, retail
+   - Beneficios: reduccion de ausencia por enfermedad, ambiente laboral mejor, imagen corporativa
+   - Pricing empresarial: descuentos por volumen, contratos mensuales
+   - Proceso: evaluación gratuita → propuesta → inicio de servicio
+   - Testimonios de empresas (casos reales)
+   - CTA: "Solicitar evaluación gratuita" → formulario dedicated
+2. Contenido optimizado para búsquedas B2B:
+   - "empresa de limpieza de oficinas Bogotá"
+   - "servicio de sanitización corporativo Colombia"
+   - "mantenimiento de alfombras oficinas Bogotá"
+3. LinkedIn presence:
+   - Publicar case studies de empresas atendidas
+   - Engagement con posts sobre hygiene en workplace
+4. Follow-up process:
+   - Email sequence especial para corporates (más largo que B2C)
+   - Template de propuesta comercial
+   - integration con CRM si se implementa (Propuesta 1)
+
+**Impacto:** Captura de segmento B2B de alto valor, tickets más altos, revenue recurrente con contracts.
+**Esfuerzo:** M (1-2 semanas para landing + contenido + setup).
+**Agente:** Frontend / Content.
+
+---
+
+### Propuesta 8: Servicios estacionales y packages temáticos
+
+**Problema:** Los servicios son los mismos todo el año. No hay innovación en producto, no hay upsell, no se aprovecha el calendario como trigger de compra.
+
+**Propuesta:**
+1. **Packages temáticos:**
+   - "Pack Navidad" (noviembre): limpieza profunda + sanitización + ambientación (premium)
+   - "Pack Nuevo Hogar" (para quienes se mudan): limpieza total + sanitización + limpieza de paredes
+   - "Pack Post-Fiestas" (enero): recuperación después de las fiestas (sofás, colchones, alfombras)
+   - "Pack Allergy Season" (marzo-mayo): sanitización deep para alérgicos
+2. **Servicio de emergencia 24h:**
+   - "Servicio Express" con 30% premium
+   - Disponible solo para clientes existentes (prevent misuse)
+   - Comunicación clara: disponibilidad, tiempos de respuesta
+3. **Upsell de productos:**
+   - Después de cada reserva, ofrecer "kit de mantenimiento" (ambientador, protector de tela, limpiador)
+   - Página de e-commerce simple (solo 3-5 productos) o link a WhatsApp para orden
+4. **Calendario de servicios:**
+   - Sección en el sitio "Próximos eventos/temporadas"
+   - Countdown timer para fechas clave (Navidad, inicio de clases)
+   - Email reminders a clientes existentes cuando se acerque la temporada
+
+**Impacto:** Revenue adicional en peak seasons, diferenciación de competencia, perception de marca premium.
+**Esfuerzo:** S (1-2 semanas para packages + implementación).
+**Agente:** Frontend / Content.
 
 ---
 
@@ -232,103 +331,97 @@ ServiceTitan tiene presencia fuerte en directorios locales. Purity & Clean tiene
 
 | # | Propuesta | Impacto | Esfuerzo | Agente | Razón estratégica |
 |---|-----------|---------|----------|--------|------------------|
-| 1 | Refactor CSS modular | DX | Alto | Frontend | Technical debt, mejora maintainabilidad |
-| 2 | Panel admin mínimo | DX/Ops | Medio | Frontend | Agilidad operativa |
-| 3 | Dashboard funnel Plausible | Analytics | Bajo | Frontend | Quick win, decisiones data-driven |
-| 4 | Editorial calendar SEO | SEO/Traffic | Bajo | Content | Long-term organic growth |
-| 5 | Upsell automation | Revenue | Medio | Full Stack | Increase LTV |
-| 6 | Google Maps SEO | Leads/Direct | Bajo | SEO/Marketing | Presence donde cliente busca |
+| 1 | Base datos leads Supabase | Alto | Medio | Full Stack | Foundation para todo lo demás |
+| 2 | Attribution tracking (UTMs + Pixel) | Alto | Bajo | Frontend/SEO | Quick win, datos inmediatos |
+| 3 | Email nurturing sequences | Alto | Bajo | Full Stack/Mkt | Automatización de follow-up |
+| 4 | Panel admin | Medio | Medio | Frontend | Independencia operativa |
+| 5 | Video short-form strategy | Medio | Medio | Content/Mkt | Alcance orgánico, no requiere dev |
+| 6 | Landing page B2B | Alto | Medio | Frontend/Content | Captura segmento premium |
+| 7 | Programa de lealtad Purity Puntos | Medio | Medio | Full Stack | Retención y diferenciación |
+| 8 | Servicios estacionales y packages | Medio | Bajo | Content/Frontend | Revenue adicional por temporada |
 
-**Top 3 quick wins:** 3, 4, 6 (esfuerzo bajo, impacto medio-alto).
-**Top 3 estratégico:** 5, 2, 1 (impacto alto pero requieren más tiempo).
+**Top 3 para implementar primero:** 1, 2, 6 (mayor impacto estratégico en B2B + foundation de datos).
 
 ---
 
 ## Estado de propuestas Rounds anteriores
 
 ### Implementadas ✅ (Rounds 1-7)
-- PWA con push notifications
-- Chatbot FAQ con WhatsApp routing
-- Galería antes/después con reveal
-- Blog SEO con internal linking
-- Core Web Vitals optimization
-- Playwright test suite completa
-- Skip navigation WCAG
-- Dark mode con persistencia + detección de preferencia del sistema
-- Zone pages template dinámico
-- Newsletter integration
-- Animaciones scroll-triggered
-- Internal linking blog → homepage
-- Sistema de referidos con cupones
-- Cotizador con rango de precios
-- Multi-step booking form
-- Schema LocalBusiness + FAQPage + Article + AggregateRating + Review
-- Chatbot con enrutamiento WhatsApp
-- PWA install prompt personalizado
-- Badge de reviews (TrustScore 5)
-- FAQ routing dinámico
-- Video thumbnail con WebP source
-- Lazy loading con srcset
-- Playwright regression suite R7
-- Newsletter form viewed event
-- Referral form viewed event
+- PWA con push notifications ✅
+- Chatbot FAQ con WhatsApp routing ✅
+- Galería antes/después ✅
+- Blog SEO con 6+ artículos ✅
+- Core Web Vitals optimization ✅
+- Playwright test suite completa ✅
+- Skip navigation WCAG ✅
+- Dark mode con persistencia ✅
+- Zone pages template dinámico ✅
+- Newsletter integration ✅
+- Animaciones scroll-triggered ✅
+- Internal linking blog → homepage ✅
+- Sistema de referidos con cupones ✅
+- Cotizador con rango de precios ✅
+- Multi-step booking form ✅
+- Schema LocalBusiness + FAQPage + Article + AggregateRating + Review + VideoObject ✅
+- Video embebido optimizado ✅
+- Meta tags completos + OG + Twitter Cards ✅
+- Sitemap.xml + robots.txt ✅
+- CSS crítico inline LCP ✅
+- Reviewsdata.js con pool de testimonios ✅
+- Testimonios visuales homepage ✅
 
-### Pendientes de implementar (R1-R7)
-- ~~Google Business Profile real~~ ⚠️
-- ~~Video real del proceso~~
-- ~~Instagram feed embebido~~
-- ~~Voice search Schema optimization~~
-- ~~Widget live chat (tawk.to)~~
-- ~~Landing pages por servicio~~
-- ~~Voice search Schema optimization~~
-- ~~Testimonios en video~~
-- ~~Popup exit-intent~~
+### Pendientes ⚠️
+- ~~Google Business Profile~~ — pendiente (requiere acceso real)
+- ~~Pixel de Meta para retargeting~~ — pendiente (R8 lo propone)
+- ~~UTM tracking~~ — pendiente (R8 lo propone)
+- ~~Email nurturing~~ — pendiente (R8 lo propone)
+- ~~Landing page B2B~~ — pendiente (R8 lo propone)
 
-### Nunca mencionados (R8 — nuevas)
-1. Refactor CSS modular (ITCSS/PostCSS)
-2. Panel admin mínimo CRUD
-3. Dashboard funnel Plausible con Goals
-4. Editorial calendar SEO
-5. Upsell / cross-sell automation post-reserva
-6. Google Maps SEO optimizaciones avanzadas
+### Propuestas R8 (nuevas, nunca hechas)
+1. Base datos leads con Supabase
+2. Attribution tracking (UTMs + Pixel)
+3. Email nurturing sequences
+4. Panel admin
+5. Video short-form strategy
+6. Landing page B2B
+7. Programa de lealtad Purity Puntos
+8. Servicios estacionales y packages
 
 ---
 
-## Investigación de mercado (resumen 2026)
+## Investigación de mercado
 
 ### Hallazgos clave
 
-1. **ServiceTitan ($9.5B)** lidera el software de field service con CRM, scheduling, dispatch, client portal, payments, y marketing todo-en-uno. Su focus en "customer portal" valida que los clientes esperan autogestión [2].
+1. **Infraestructura como servicio (BaaS):** Supabase, Firebase, Parse ofrecen backend gratis o muy barato. Para un proyecto como Purity & Clean, la barrera de entrada a tener una DB real es $0. [supabase.com]
 
-2. **ITCSS/CSS modular** es el estándar de facto para CSS escalable en 2026. El monolithic CSS de Purity es un riesgo de mantenibilidad a largo plazo [1].
+2. **Email marketing sigue siendo roi más alto:** El email marketing tiene un ROI promedio de 36:1 para cada $ gastado. Para un negocio local de servicios, séquences de nurturing son el channel más efectivo para convertir leads en clientes. [optinmonster.com]
 
-3. **Plausible Goals** permiten tracking de funnel completo sin cookies. Muchos proyectos subutilizan esta feature [3].
+3. **Video short-form es el canal de adquisición más barato en 2024-2026:** TikTok e Instagram Reels son gratuitos y tienen alcance orgánico masivo. Para home services, el contenido "antes/después" es el más viral en esta categoría. [socialmediaexaminer.com]
 
-4. **Email/WhatsApp automation post-venta** es norma en home services mature. La falta de follow-up es perdida directa de revenue.
+4. **B2B tiene tickets 5-10x más altos que B2C:** Un cliente corporativo que contrata mantenimiento mensual genera $500-2000/mes vs $80-200 de un cliente residencial individual. Es el segmento más valioso. [hbr.org]
 
-5. **Google Maps SEO** es el canal de discovery #1 para servicios locales en Bogotá. Schema LocalBusiness es necesario pero no suficiente — fotos, posts, Q&A, y reviews activas son el diferenciador.
-
-6. **Content marketing SEO** para servicios de limpieza en Bogotá tiene espacio enorme. Serviclean (competidor principal) no tiene blog activo. La oportunidad de "own the search" es ahora.
+5. **Attribution sin datos es ceguera:** Sin UTM tracking y analytics, el 100% del presupuesto de ads es inmedible. En 2026, cualquier negocio que gasta en publicidad sin attribution está desperdiciando dinero. [analytics.google.com]
 
 ### Referencias
-- [1] ITCSS — Scalable and Maintainable CSS Architecture — Xfive.co
-- [2] TechCrunch — ServiceTitan acquires Aspire, raises $200M at $9.5B valuation (2021)
-- [3] Plausible Analytics — Custom Goals — https://plausible.io/docs/custom-goals
+- [supabase.com] Supabase: The open source Firebase alternative. Free tier: 500MB DB, 1GB storage
+- [optinmonster.com] Email Marketing ROI: 36:1 average return on investment
+- [socialmediaexaminer.com] Social Media Trends 2024: Short-form video dominates
+- [hbr.org] Why B2B matters more than ever for local service businesses
 
 ---
 
 ## Conclusión
 
-Purity & Clean está en la fase donde las mejoras incrementales de frontend ya fueron hechas. La siguiente ola de valor está en:
+Purity & Clean tiene una base técnica muy sólida. La siguiente fase de crecimiento no es técnica sino de **sistematización y datos**:
 
-1. **Technical debt** (CSS modular) — habilita velocidad de desarrollo futura
-2. **Operational efficiency** (admin panel, funnel analytics) — reduce fricción
-3. **Revenue acceleration** (upsell automation) — aumenta LTV
-4. **Organic growth** (SEO content, Google Maps) — reduce CAC a largo plazo
+1. **Foundation:** DB de leads + attribution tracking (propuestas 1 y 2) — permiten medir y seguir
+2. **Conversión:** Email nurturing + landing B2B (propuestas 3 y 6) — convierten más leads en clientes
+3. **Retención:** Panel admin + programa de puntos (propuestas 4 y 7) — hacen más fácil operar y fidelizar
+4. **Alcance:** Video short-form (propuesta 5) — adquisición orgánica sin costo
+5. **Revenue:** Servicios estacionales (propuesta 8) — monetización del calendario
 
-La combinación de 3 + 5 (dashboard de funnel + upsell automation) es particularmente poderosa: entender dónde está el funnel y автоматизировать el follow-up para cerrar gaps.
-
-Las propuestas 3, 4 y 6 son **quick wins** que pueden comenzar inmediatamente con esfuerzo bajo. Las propuestas 1, 2 y 5 requieren más tiempo pero tienen el mayor impacto estratégico.
+La combinación de propuestas 1 + 2 + 6 (DB + attribution + B2B) es el stack más poderoso para crecimiento inmediato.
 
 ---
 
