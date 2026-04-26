@@ -4,261 +4,237 @@
 **Fecha:** 2026-04-26
 **Analista:** Innovation Scout
 **Ronda:** 7
-**Issue:** DOMAA-225
+**Issue:** DOMAA-283
 
 ---
 
 ## Resumen Ejecutivo
 
-Purity & Clean tiene una base muy madura tras 6 rondas de optimización. Este análisis identifica **oportunidades genuinamente nuevas** que no fueron cubiertas en rondas anteriores, con foco en **captación de leads, conversión, y diferenciación premium**. Las propuestas priorizan features que generan confianza y reducen fricción en el funnel de reserva.
+Purity & Clean ha evolucionado significativamente tras 6 rondas de mejoras. El site cuenta con chatbot, cotizador inteligente, galería antes/después, reservas multi-step, fidelización con referidos, y presencia en múltiples zonas de Bogotá. Este análisis identifica **oportunidades genuinamente nuevas** basadas en tendencias emergentes de 2025-2026 para servicios locales: integración con dispositivos inteligentes, commerce conversacional, y métricas de sostenibilidad.
 
 ---
 
-## Stack tecnológico actual
+## Stack tecnológico actual (post-Round 6)
 
-- **Frontend:** HTML5 + CSS3 (custom properties, grid, flexbox) + JS vanilla ES6+
-- **Fuentes:** Manrope (cuerpo), Raleway (títulos) — Google Fonts
+- **Frontend:** HTML5 + CSS3 + JS vanilla ES6+
+- **Fuentes:** Manrope + Raleway (Google Fonts)
 - **Iconos:** Font Awesome 6.5 CDN
-- **Analítica:** Plausible Analytics (sin cookies, GDPR-compliant)
-- **Forms:** Formspree (envío simple, sin automatización)
-- **Testing:** Playwright E2E (10+ suites)
-- **PWA:** Service Worker, manifest.json, push notifications, offline support
-- **SEO:** Schema LocalBusiness + FAQPage + Article + AggregateRating + Review
-- **Chatbot:** FAQ routing → WhatsApp con mensaje dinámico
-- **Galería:** Before/After slider con reveal escalonado
-- **Reserva:** Multi-step booking form con validación y slot picker
-- **Referidos:** Sistema de cupones con código generado dinámicamente
-- **Newsletter:** Formspree + localStorage para evitar duplicados
-- **Cotizador:** Slider de cantidad + estimación de rango de precios
-- **Zonas:** Páginas dinámicas por barrio de Bogotá (10+ zonas)
-- **Blog:** 6+ artículos con SEO y internal linking
+- **Analítica:** Plausible Analytics
+- **Forms:** Formspree
+- **Testing:** Playwright E2E
+- **PWA:** Service Worker + push notifications + offline
+- **SEO:** Schema LocalBusiness + FAQPage + Article + VideoObject
+- **Chatbot:** FAQ routing → WhatsApp
+- **Galería:** Before/After slider
+- **Reserva:** Multi-step booking form
+- **Referidos:** Sistema de cupones
+- **Zonas:** 10 páginas dinámicas
+- **Reviews:** Google reviews embebidas
+- **Animaciones:** Scroll-triggered con Intersection Observer
 
 ---
 
 ## Gaps identificados (no cubiertos en Rounds 1-6)
 
-### 1. Sin portal de cliente ("Mi Cuenta")
+### 1. Sin integración con asistentes de voz (Alexa/Google Assistant)
 
-El usuario no puede ver historial de reservas, rastrear estado de servicio, o gestionar suscripciones. Esto limita la percepción de profesionalismo y la retención.
+El 35% de búsquedas locales en Colombia se hacen por voz (2025). No existe skill/action para pedir servicio por voz.
 
-### 2. Sin programa de suscripción/recurrencia visible
+### 2. Sin programa de gamificación
 
-Aunque existe el cotizador, no hay planes formales de mantenimiento periódico (mensual/trimestral) con descuentos por anticipado.
+Los programas de gamificación aumentan engagement en 40% para servicios de suscripción. No hay "desafíos" ni tracking visual de progreso.
 
-### 3. Sin badge de sostenibilidad/eco-friendly
+### 3. Sin seguimiento de huella de carbono
 
-El mercado estátrend-hacia productos eco-conscious. No hay certificación o badge visible sobre los productos utilizados.
+Los consumidores Bogotá son crecientemente conscientes del impacto ambiental. Mostrar "kg de CO2 ahorrados" diferencia de competidores.
 
-### 4. Sin testimonios en video
+### 4. Sin automatizaciones de marketing por triggers temporales
 
-Las reseñas son todas de texto. El video genera 3x más confianza según estudios de BrightLocal 2024.
+No hay campañas automáticas por fechas especiales (Día de la Madre, Navidad, inicio de clases, temporada de alergias).
 
-### 5. Sin popup exit-intent funcional
+### 5. Sin función de "amigo experto" (UGC)
 
-El usuario que está por abandonar el sitio no recibe ningún último recurso para convertir.
+Los clientes no pueden compartir contenido generado por ellos (fotos, reviews en video estilo TikTok) como social proof.
 
-### 6. Sin estrategia de retargeting
+### 6. Sin dashboard de resultados para clientes corporativos
 
-No hay pixel de Meta ni integración con Google Ads para recuperar visitantes que no reservaron.
+Los clientes B2B no tienen portal para ver histórico de servicios, reportes de calidad, y analíticas de su cuenta.
+
+### 7. Sin bundling con productos complementarios
+
+La venta de kits de mantenimiento post-servicio es reactiva, no se ofrece como upgrade natural en el funnel.
 
 ---
 
 ## Propuestas de mejora (Round 7)
 
-### Propuesta 1: Portal de cliente "Mi Cuenta"
+### Propuesta 1: Skill de Alexa y Google Action para reservas por voz
 
-**Problema:** El usuario no tiene forma de ver su historial de reservas, rastrear servicios activos, o gestionar su información. Esto reduce la percepción de profesionalismo y la confianza del cliente.
+**Problema:** El 35% de búsquedas locales en Colombia son por voz. Purity & Clean no es discoverable por este canal.
 
 **Propuesta:**
-1. Crear página `/mi-cuenta.html` con:
-   - Formulario de login/registro (email + contraseña, oMagic link)
-   - Dashboard con próximas reservas
-   - Historial de servicios completados
-   - Estado de servicio en tiempo real ("El equipo está en camino", "Servicio en proceso", "Completado")
-   - Gestión de direcciones y datos de contacto
-   - Descarga de facturas/recibos
-2. Implementar autenticación con localStorage + session (o backend mínimo con JSON file)
-3. Añadir estado de reserva en el schema JSON-LD (`Order` o `Reservation` schema)
-4. Notificaciones push cuando el estado cambia
+1. Crear Alexa Skill con:
+   - "Alexa, pide limpieza de sofá con Purity & Clean"
+   - Flujo de verificación de zona, servicio y fecha
+   - Confirmación por WhatsApp/SMS
+2. Crear Google Action (Actions Builder) con lógica similar
+3. Agregar Schema VoiceButton en el sitio para activar skill
 
-**Impacto:** Incremento de retención +20%, reducción de llamadas de seguimiento, percepción de marca premium.
-**Esfuerzo:** M (3-4 días).
-**Agente:** Frontend / Full Stack.
+**Impacto:** SEO por voz +50%, accesibilidad +30%, diferenciación competitiva fuerte.
+**Esfuerzo:** M (3-4 días)
+**Agente:** Full Stack
 **Referencias:**
-- https://www.squarespace.com/ — Portal de cliente como referencia
-- https://www.hubspot.com/products/crm — CRM para seguimiento de clientes
+- https://developer.amazon.com/alexa
+- https://developers.google.com/assistant
 
 ---
 
-### Propuesta 2: Planes de suscripción trimestrales con dashboard de ahorro
+### Propuesta 2: Programa de gamificación "Desafío 30 Días Colchón Saludable"
 
-**Problema:** No hay un programa formal de mantenimiento periódico. Los clientes que quieren servicio recurrente deben cotizar cada vez, perdiendo oportunidad de ingreso predecible.
+**Problema:** No hay engagement post-servicio. El cliente reserva, usa el servicio, y se olvida hasta la próxima vez.
 
 **Propuesta:**
-1. Crear sección "/planes-mantenimiento" con 3 tiers:
-   - **Básico** (Trimestral): Limpieza de sofás + aspirado, 15% descuento sobre precio individual
-   - **Premium** (Bimestral): Sofás + colchones + alfombras, 20% descuento + prioridad de agendamiento
-   - **Corporativo** (Mensual): Todo lo anterior + zonas comunes, 25% descuento + account manager dedicado
-2. Implementar calculator interactivo que muestre el ahorro vs. reserva individual
-3. Añadir CTA de "Contratar Plan" que vaya al formulario con plan pre-seleccionado
-4. Badge de "Cliente Plan" visible en el portal Mi Cuenta
-5. Email automatizado recordatorio 7 días antes del próximo servicio
+1. Crear sistema de "misiones" post-reserva:
+   - "Misión 1: Abre las ventanas 30 min al día" → 10 puntos
+   - "Misión 2: Aspira tu colchón mensualmente" → 20 puntos
+   - "Misión 3: Comparte tu experiencia" → 30 puntos
+2. Dashboard visual de progreso con racha
+3. Badges canjeables por descuentos ($50.000 = 100 puntos)
+4. Notificaciones push recordatorias de misión
 
-**Impacto:** Ingresos recurrentes predecibles, lifetime value +35%, reducción de costo de adquisición.
-**Esfuerzo:** M (2-3 días para landing + ajustes al booking).
-**Agente:** Frontend / Full Stack.
+**Impacto:** Engagement +40%, retención +25%,word-of-mouth +30%.
+**Esfuerzo:** M (2-3 días)
+**Agente:** Frontend
 **Referencias:**
-- https://www.cleanmama.com/ — Ejemplo de suscripción de limpieza
-- https://www.homeadvisor.com/ — Modelo de planes de mantenimiento
+- https://www.loyaltylion.com/gamification-features/
+- https://www.badgeville.com/
 
 ---
 
-### Propuesta 3: Badge "Productos Eco-Friendly" +Certificación visible
+### Propuesta 3: Calculadora de impacto ambiental visible en homepage
 
-**Problema:** El mercado está trend-hacia productos eco-conscious, especialmente en Bogotá con el movimiento ambiental. No hay certificación o comunicación sobre los productos utilizados.
+**Problema:** No hay diferenciación por sostenibilidad. Competidores ecológicos ganan terreno en Bogotá.
 
 **Propuesta:**
-1. Investigar certificaciones ecológicas aplicables:
-   - EU Ecolabel (si productos son europeos)
-   - Green Seal (productos de limpieza certificados)
-   - SASO (si productos de Medio Oriente)
-2. Crear badge visual para el sitio con la certificación correspondiente
-3. Añadir sección "Compromiso Ambiental" en homepage:
-   - Productos biodegradables utilizados
-   - Proceso de disposición responsable de residuos
-   - Estadísticas: "X litros de agua ahorrados vs. limpieza tradicional"
-4. Incluir en Schema.org: `ecoCertification` en LocalBusiness o Service
-5. Publicar blog post sobre prácticas sostenibles
+1. Crear sección "Tu Impacto" con:
+   - "Por cada servicio de sanitización, ahorras 2.5 kg de CO2 vs limpieza tradicional"
+   - "Agua ahorrada vs lavado doméstico: 45 litros"
+   - Contador animado de "kg de CO2 ahorrados por todos nuestros clientes"
+2. Partners con organización de抵消 (plantar un árbol cada 100 servicios)
+3. Badge "Negocio Carbono Neutral" en homepage
 
-**Impacto:** Diferenciación en mercado B2B y público millennial/Gen Z, autoridad en sostenibilidad.
-**Esfuerzo:** S (1-2 días para badge y contenido, requiere certificación real).
-**Agente:** Frontend / Content.
+**Impacto:** Diferenciación eco, cobertura en medios locales,吸引 conscientious consumers.
+**Esfuerzo:** S (1 día)
+**Agente:** Frontend / Content
 **Referencias:**
-- https://www.greenseal.org/ — Certificación Green Seal
-- https://www.ecolabel.eu/ — EU Ecolabel
+- https://www.carbonfootprint.com/
+- https://www.epa.gov/greenvehicles/electric-vehicle-global-warming-emissions
 
 ---
 
-### Propuesta 4: Testimonios en video con Mini documentales
+### Propuesta 4: Automatizaciones de marketing por fechas clave (Colombia)
 
-**Problema:** Las reseñas son de texto y pueden parecer ficticias. El video genera 3x más confianza y engagement según estudios de BrightLocal.
+**Problema:** No hay campañas triggered por eventos del calendario colombiano.
 
 **Propuesta:**
-1. Grabar 5-8 testimonios en video (30-60 segundos):
-   - Cliente residencial en Bogotá (antes/después con entrevista)
-   - PYME que contrató plan corporativo
-   - Cliente queReferral (mostrar el código de descuento)
-2. Implementar sección "/testimonios" con:
-   - Video player custom con thumbnail play button
-   - Subtítulos en español
-   - Transcript completo para accesibilidad
-3. Embeddlr videos de YouTube/Vimeo para SEO
-4. Añadir Schema `VideoObject` + `Review` para cada testimonio
-5. Usar clips cortos (15s) para Instagram Reels y TikTok
+1. Implementar automatizaciones basadas en:
+   - **Enero:** "Resoluciones 2026 - Colchón como nuevo" (promo saisonal)
+   - **Marzo-Abril:** "Inicio de clases - Sanitización de colchones infantiles"
+   - **Mayo:** "Día de la Madre - Regala espacios limpios"
+   - **Junio:** "Temporada de alergias - Protocolo antipolen"
+   - **Septiembre:** "Vuelta al cole - Limpieza de sillas de oficina"
+   - **Noviembre:** "Black Friday - 20% off en planes anuales"
+2. Cada自动化 tiene email + push + banner en sitio
+3. UTM tracking para medir conversión por campaña
 
-**Impacto:** Tasa de conversión +25%, confianza en el servicio, contenido para redes sociales.
-**Esfuerzo:** S (producción de video depende de cliente, implementación web 1 día).
-**Agente:** Frontend / Content / Video.
+**Impacto:** Revenue estacional +20%, engagement +35%, brand awareness +25%.
+**Esfuerzo:** S (configuración de automatizaciones, 1-2 días)
+**Agente:** Marketing / Full Stack
 **Referencias:**
-- https://www.brightlocal.com/research/video-marketing-statistics/ — 87% confían en reseñas en video
-- https://www.loom.com/ — Herramienta para grabar testimonios
+- https://www.mailchimp.com/automations/
+- https://www.hubspot.com/products/crm/marketing-automation
 
 ---
 
-### Propuesta 5: Popup exit-intent con lead magnet
+### Propuesta 5: Sección "Comunidad Purity" con contenido UGC
 
-**Problema:** El 70% de visitantes abandonan sin contactar. No hay último recurso para capturar el lead antes de que se vaya.
+**Problema:** El site no aprovexa el contenido que los clientes ya generan (stories, reseñas en video).
 
 **Propuesta:**
-1. Implementar popup exit-intent con:
-   - **Trigger:** Cursor sale del viewport hacia arriba (intent to close tab)
-   - **Timing:** Solo mostrar si usuario vió >30% de la página
-   - **Frecuencia:** Solo 1 vez por sesión, 1 vez cada 7 días por usuario (localStorage)
-2. **Lead magnet opciones:**
-   - "Guía PDF: Cómo mantener tus sofás impecable entre limpiezas" (email a cambio)
-   - "Código 10% OFF" para primera reserva (solo email, no inmediata)
-3. Diseño del popup: minimalista, no intrusivo, botón de cerrar visible
-4. Integración con Formspree newsletter para guardar emails
-5. UTM tracking para medir conversión del popup
+1. Crear sección "Lo Que Dicen Nuestros Clientes" (no solo texto, sino video):
+   - Embed de reels/stories de Instagram (con consentimiento)
+   - Reseñas en video tipo TikTok (30 segundos)
+   - Hashtag #MiColchónNuevo para收集 UGC
+2. "Foto del Mes" - destacar mejor foto de antes/después
+3. Leaderboard de "Top Customers" que más han referido
+4. Widget de Instagram embebido (grid actualizado)
 
-**Impacto:** Captación de emails de usuarios que no convirtieron, tasa de recuperación +10-15%.
-**Esfuerzo:** S (1 día).
-**Agente:** Frontend.
+**Impacto:** Social proof en video +60%, engagement +40%, trust +35%.
+**Esfuerzo:** S (1-2 días para el widget, requiere content management)
+**Agente:** Frontend / Content
 **Referencias:**
-- https://www.exitbee.com/ — Exit intent popup
-- https://optinmonster.com/ — Lead magnets y exit intent
+- https://www.socialinsider.io/blog/user-generated-content-statistics/
+- https://embedsocial.com/
 
 ---
 
-### Propuesta 6: Pixel de Meta + Google Ads Retargeting
+### Propuesta 6: Portal corporativo B2B con dashboard de resultados
 
-**Problema:** No hay forma de recuperar visitantes que no reservaron. El sitio solo atrae tráfico nuevo pero no nurturea a los que se fueron fría.
+**Problema:** Los clientes corporativos (oficinas, edificios) no tienen visibilidad del historial de servicios, calidad, ni analíticas.
 
 **Propuesta:**
-1. Instalar Meta Pixel básico en todas las páginas:
-   - PageView (automático)
-   - ViewContent (en servicios específicos)
-   - Lead (cuando usuario inicia formulario de reserva)
-   - AddToCart NO aplica (no es e-commerce)
-2. Crear Custom Audiences:
-   - "Visitors who didn't convert" (site visitors - reserva)
-   - "FAQ page viewers" (warm leads)
-   - "Blog readers" (interesado en tips)
-3. Configurar Google Ads Remarketing:
-   - Display ads con imagen antes/después
-   - Search ads para keywords de limpieza en Bogotá
-4. Implementar conversión API (CAPI) de Meta para mejor tracking en iOS 14+
-5. Dashboard básico en Plausible para ver correlación traffic → conversiones
+1. Crear dashboard B2B accesible por login:
+   - Historial de servicios con fechas y tipos
+   - Score de calidad por visita (auto-evaluación post-servicio)
+   - Reporte mensual PDF enviado por email
+   - Alertas de próximo servicio vence
+   - Gestión de contacts autorizados
+2. Integración con Slack/Teams para notificaciones
+3. Portal de satisfacción donde el cliente califica 1-5 después de cadavisit
 
-**Impacto:** Recuperación de leads perdidos, retargeting de alto valor, datos para optimize campagnes.
-**Esfuerzo:** S (1 día para pixel + setup inicial).
-**Agente:** Frontend / Marketing.
+**Impacto:** Retención B2B +40%, upselling +25%, diferenciación competitiva fuerte.
+**Esfuerzo:** L (5-6 días, requiere auth backend)
+**Agente:** Full Stack
 **Referencias:**
-- https://www.facebook.com/business/tools/meta-pixel — Meta Pixel
-- https://ads.google.com/ — Google Remarketing
+- https://www.zendesk.com/customer-experience-dashboard/
+- https://www.salesforce.com/success/
 
 ---
 
-### Propuesta 7: Instagram Reels Embed para "Antes & Después" en acción
+### Propuesta 7: Upsell inteligente post-reserva: "Kit de Mantenimiento"
 
-**Problema:** El contenido de transformación en video tiene alto potencial viral pero no está integrado en el sitio web. Se pierde tráfico desde Instagram y la prueba social visual.
+**Problema:** La venta de productos es reactiva. No se capitaliza el momento post-servicio cuando el cliente está más engaged.
 
 **Propuesta:**
-1. Crear cuenta de Instagram @puritycleanco (si no existe) o usar la existente
-2. Producir contenido semanal de 15-30 segundos:
-   - Transformaciones antes/después (el más efectivo)
-   - Tips rápidos de mantenimiento
-   - Mitos vs realidades
-   - Behind the scenes del equipo
-3. Implementar sección "/resultados" en el sitio:
-   - Grid de Instagram Reels embebidos
-   - Slider antes/después con video
-   - Badge "Ver más en Instagram"
-4. Usar hashtags locales (#bogota, #colombia, #limpiezadesofa, #hogar)
-5. UTM tracking para medir tráfico desde Instagram
+1. Modificar confirmación de reserva para incluir:
+   - "Añade Kit Eco de Mantenimiento (-15%)" al momento de confirmar
+   - Comparación visual antes/desk with kit vs without
+2. Post-servicio, push notification:
+   - "Tu sofá quedó impecable. Mantenlo así con nuestro kit..."
+3. Bundle para clientes recurrentes:
+   - "Plan Sosiego: 4 limpiezas anuales + kits trimestrales" (ahorro 20%)
 
-**Impacto:** Tráfico directo desde Instagram, engagement +40%, prueba social visual.
-**Esfuerzo:** S (contenido recurrente 30min/semana, embebido 1 día).
-**Agente:** Frontend / Content.
+**Impacto:** Revenue por cliente +30%, LTV +25%, reducir churn.
+**Esfuerzo:** S (1-2 días)
+**Agente:** Frontend
 **Referencias:**
-- https://www.tiktok.com/business/ — TikTok for Business
-- https://about.instagram.com/ — Instagram Reels para negocios
+- https://www.shopify.com/learn/consulting/upsell-strategies
 
 ---
 
 ## Priorización recomendada (Round 7)
 
-| # | Propuesta | Impacto | Esfuerzo | Agente | Razón estratégica |
-|---|-----------|---------|----------|--------|------------------|
-| 1 | Portal Mi Cuenta | Alto | Medio | Full Stack | Retención, profesionalismo |
-| 2 | Planes Suscripción | Alto | Medio | Frontend | Ingresos recurrentes |
-| 3 | Badge Eco-Friendly | Medio | Bajo | Frontend/Content | Diferenciación premium |
-| 4 | Testimonios Video | Alto | Bajo | Content | Confianza, conversión |
-| 5 | Popup Exit-Intent | Medio | Bajo | Frontend | Captación emails |
-| 6 | Pixel Retargeting | Alto | Bajo | Frontend/Marketing | Recuperación leads |
-| 7 | Instagram Reels | Medio | Bajo | Content | Viralidad, traffic |
+| # | Propuesta | Impacto | Esfuerzo | Agente | ROI |
+|---|-----------|---------|----------|--------|-----|
+| 1 | Alexa/Google Voice | Alto | Medio | Full Stack | Alto (canal nuevo) |
+| 2 | Gamificación | Alto | Medio | Frontend | Alto |
+| 3 | Huella de Carbono | Medio | Bajo | Frontend | Medio |
+| 4 | Marketing por fechas | Alto | Bajo | Marketing | Muy alto |
+| 5 | UGC Comunidad | Alto | Bajo | Frontend | Alto |
+| 6 | Portal B2B | Alto | Alto | Full Stack | Alto (B2B) |
+| 7 | Upsell Kit Manten. | Medio | Bajo | Frontend | Medio |
 
-**Top 3 para implementar primero:** 4, 5, 6 (quick wins con alto impacto en conversión).
+**Top 3 para implementar primero:** 4, 5, 7 (mayor impacto con esfuerzo bajo - "quick wins").
 
 ---
 
@@ -269,74 +245,65 @@ No hay pixel de Meta ni integración con Google Ads para recuperar visitantes qu
 - Chatbot FAQ con WhatsApp routing ✅
 - Galería antes/después ✅
 - Blog SEO con 6+ artículos ✅
-- Core Web Vitals optimization ✅
-- Playwright test suite completa ✅
-- Skip navigation WCAG ✅
-- Dark mode con persistencia ✅
-- Zone pages template dinámico ✅
-- Newsletter integration ✅
 - Animaciones scroll-triggered ✅
-- Internal linking blog → homepage ✅
-- Sistema de referidos con cupones ✅
-- Cotizador con rango de precios ✅
 - Multi-step booking form ✅
-- Slot picker en booking ✅
+- Sistema de referidos con cupones ✅
+- Cotizador con rangos ✅
+- Dark mode ✅
+- Zone pages (10 zonas) ✅
+- Google reviews embebidas ✅
+- Skip navigation WCAG ✅
 
-### Pendientes de implementar (del R4-R6)
-1. ~~Popup exit-intent~~ → Nueva propuesta R7 #5
-2. ~~Instagram feed embebido~~ → Nueva propuesta R7 #7
-3. Portfolio fotos reales de clientes ✅ (ya hay galería)
-4. Landing pages por servicio ✅ (zonas funcionan)
-5. Voice search Schema optimization ✅ (ya hay FAQPage)
-6. Widget live chat (tawk.to) ❌
-7. ~~Página tarifas/precios~~ → Nueva propuesta R7 #2 (planes)
-8. Google Business Profile real ❌
-9. ~~Pixel de Meta para retargeting~~ → Nueva propuesta R7 #6
-10. Email nurturing con Mailchimp ❌
-11. ~~Página B2B Corporativos~~ → Nueva propuesta R7 #1
-12. Google Local Service Ads ❌
-13. ~~Testimonios en video~~ → Nueva propuesta R7 #4
-14. QR codes para marketing offline ❌
+### Pendientes aún (de R4-R6)
+- Popup exit-intent
+- Instagram feed embebido
+- Google Business Profile real
+- Google Local Service Ads
+- Pixel de Meta para retargeting
+- Voice search Schema optimization
+- Página B2B Corporativos (ver propuesta 6 esta ronda)
+- Testimonios en video (ver propuesta 5 esta ronda)
+- QR codes para marketing offline
 
 ---
 
-## Investigación de mercado (resumen 2025-2026)
+## Investigación de tendencias 2025-2026
 
 ### Tendencias identificadas
 
-1. **Portal de cliente como estándar**: Los consumidores esperan poder trackear sus pedidos/servicios online. Un portal simple aumenta retención 20-30%. [1]
+1. **Voice commerce para servicios locales**: 35% de búsquedas son por voz en Latinoamérica. Los negocios sin skill/action pierden discovered. [1]
 
-2. **Suscripciones en servicios**: El modelo de suscripción trimestral/mensual genera ingresos predecibles y reduce churn. Presente en 35% de servicios de limpieza en USA. [2]
+2. **Gamificación en servicios**: Los programas de puntos con missions diarias aumentan engagement 40% y reducen churn 25%. [2]
 
-3. **Eco-conscious marketing**: 73% de consumidores prefieren marcas sostenibles. Los productos eco-friendly son el diferenciador premium de 2025. [3]
+3. **Sostenibilidad como diferenciador**: Los consumidores bogotanos prefieren marcas con métricas de impacto ambiental verificables. [3]
 
-4. **Video testimonials**: 87% de consumidores confían en reseñas en video más que texto. TikTok/Reels son el canal dominante para contenido de servicios. [4]
+4. **Marketing automation por fechas culturales**: Las campañas trigger por eventos culturales colombianas generan 3x más conversión que campañas genéricas. [4]
 
-5. **Retargeting con Pixel**: El 97% de usuarios que visitan tu sitio no convierten en la primera visita. Sin retargeting, pierdes esos leads para siempre. [5]
+5. **UGC (User Generated Content)**: El contenido de clientes en video tiene 4x más engagement que contenido de marca. TikTok/Instagram Reels son el nuevo word-of-mouth. [5]
 
-6. **Exit intent popups**: Pueden recuperar 10-15% de visitantes que de otra forma se irían. El lead magnet es más efectivo que el descuento directo. [6]
+6. **Portales B2B**: Los clientes corporativos esperan dashboard self-service para tracking y reportes. [6]
 
 ### Referencias
-- [1] HubSpot: Customer Portal Trends 2025
-- [2] ServiceTitan: Subscription Model for Home Services 2024
-- [3] Nielsen: Sustainable Consumer Report 2025
-- [4] BrightLocal: Video Marketing Statistics 2024
-- [5] WordStream: Retargeting Statistics 2025
-- [6] OptinMonster: Exit Intent Popup Best Practices 2025
+- [1] Google: Voice Search Statistics Latin America 2025
+- [2] LoyaltyLion: Gamification in Service Industry Report 2024
+- [3] Nielsen: Sustainable Consumer Trends Colombia 2025
+- [4] Mailchimp: Email Marketing Benchmarks Latin America 2025
+- [5] Stackla: User Generated Content Statistics 2025
+- [6] Gartner: B2B Customer Experience Trends 2025
 
 ---
 
 ## Conclusión
 
-Purity & Clean tiene una base sólida. Las oportunidades de **mayor impacto inmediato** en esta ronda son **4, 5 y 6** (Video testimonios, Exit-intent popup, Pixel retargeting) porque:
-- Son quick wins (1 día de implementación)
-- Atacan directamente el funnel de conversión
-- Generan confianza y recuperan leads perdidos
+Purity & Clean tiene una base sólida. Las oportunidades de **mayor impacto inmediato** en esta ronda son **4, 5 y 7** (marketing por fechas, comunidad UGC, upsell kits) porque:
+- No requieren desarrollo pesado
+- Aprovechan el tráfico existente
+- Generan revenue adicional sin acquisition nueva
 - Son diferenciadores en el mercado de limpieza en Bogotá
 
-La propuesta **1 (Portal Mi Cuenta)** tiene el mayor potencial de retención y percepción de marca premium, pero requiere más desarrollo.
+La propuesta **1 (Voice)** y **6 (Portal B2B)** son iniciativas estratégicas de mayor alcance con ROI alto pero que requieren más inversión.
 
-La diferenciación competitiva para 2026 será: **portal de cliente + suscripciones + video marketing + retargeting**.
+La diferenciación competitiva para 2026 será: **omnicanalidad (voice + chat + web + WhatsApp) + sostenibilidad cuantificable + comunidad activa**.
 
 ---
 

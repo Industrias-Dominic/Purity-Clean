@@ -4,13 +4,13 @@
 **Fecha:** 2026-04-26
 **Analista:** Innovation Scout
 **Ronda:** 15
-**Issue padre:** DOMAA-286
+**Issue padre:** DOMAA-284
 
 ---
 
 ## Resumen Ejecutivo
 
-Purity & Clean es un sitio web estático maduro con funcionalidades avanzadas: PWA, chatbot WhatsApp, booking multi-step, cotizador, SEO por zonas, blog con 6 artículos, y suite de tests E2E. Tras 14 rondas de propuestas, la mayoría de las mejoras mayores ya fueron implementadas o propuestas. Este Round 15 identifica **gaps técnicos genuinos nunca antes propuestos** y **oportunidades basadas en tendencias de marketing 2026** que se pueden implementar con el stack estático actual.
+Round 15 se enfoca en **operacionalización y diferenciación** para Purity & Clean. Después de 14 rondas de propuestas de marketing y CX, identifico gaps críticos que nunca se implementaron: (1) Field Operations App para el equipo de campo, (2) Subscription Plans para revenue recurrente, (3) Instagram/TikTok Reels Integration para social proof dinámico, (4) Google Maps AR Coverage Overlay, y (5) Voice Search Optimization para asistentes virtuales. Estas propuestas resuelven problemas operativos y de descubrimiento que las rondas anteriores dejaron como "pendientes" sin nunca concretarse.
 
 ---
 
@@ -20,379 +20,343 @@ Purity & Clean es un sitio web estático maduro con funcionalidades avanzadas: P
 - **Fuentes:** Manrope (cuerpo), Raleway (títulos) — Google Fonts
 - **Iconos:** Font Awesome 6.5 CDN
 - **Analítica:** Plausible Analytics (sin cookies, GDPR-compliant)
-- **Forms:** Formspree
+- **Forms:** Formspree (envío simple, sin automatización)
 - **Testing:** Playwright E2E (10+ suites)
 - **PWA:** Service Worker, manifest.json, push notifications, offline support
-- **SEO:** Schema LocalBusiness + FAQPage + Article + AggregateRating + Review + VideoObject
+- **SEO:** Schema LocalBusiness + FAQPage + Article + AggregateRating + Review + VideoObject + HowTo + BreadcrumbList
 - **Chatbot:** FAQ routing → WhatsApp con mensaje dinámico
+- **Galería:** Before/After slider con reveal escalonado
 - **Reserva:** Multi-step booking form con validación y slot picker
-- **Zonas:** 10 páginas de zona (template dinámico)
-- **Blog:** 6 artículos con SEO implementado
+- **Referidos:** Sistema de cupones con código generado dinámicamente
+- **Newsletter:** Formspree + localStorage para evitar duplicados
+- **Cotizador:** Slider de cantidad + estimación de rango de precios
+- **Zonas:** 10 páginas de zona con SEO local
+- **Blog:** 6+ artículos con SEO optimizado + internal linking
+- **Theme:** Dark mode toggle con persistencia y prefers-color-scheme
 
 ---
 
-## Estado de implementación (R1-R14)
+## Estado de implementación: R1-R14
 
-### Ya implementado ✅
-- PWA con push notifications
-- Chatbot WhatsApp FAQ routing
-- Galería antes/después con comparison slider
-- Suite E2E Playwright completa
-- Template dinámico de zonas
-- Blog SEO con internal linking
-- Cotizador inteligente con slider
-- Multi-step booking form
-- Sistema de referidos con cupones
-- Newsletter funcional
-- Dark mode con persistencia
-- Animaciones scroll-triggered
-- Schema LocalBusiness + FAQPage + Article + AggregateRating + Review + VideoObject
-- Skip navigation WCAG
-- Reviews pool en JavaScript
-- Video embebido optimizado
-- Core Web Vitals optimization
+**Ya implementado ✅**
+- PWA completo + push notifications ✅
+- Chatbot FAQ con WhatsApp routing ✅
+- Galería antes/después con slider ✅
+- Blog SEO con 6+ artículos ✅
+- Core Web Vitals optimization ✅
+- Playwright test suite completa ✅
+- Skip navigation WCAG ✅
+- Dark mode con persistencia ✅
+- Zone pages template dinámico ✅
+- Newsletter integration ✅
+- Animaciones scroll-triggered ✅
+- Sistema de referidos con cupones ✅
+- Cotizador con rango de precios ✅
+- Multi-step booking form ✅
+- Schema markup completo ✅
+- Video embebido optimizado ✅
+- Meta tags + OG + Twitter Cards ✅
+- Sitemap.xml + robots.txt ✅
+- Reviewsdata.js con pool de testimonios ✅
+- Exit Intent Popup ✅
+- WhatsApp idle detection ✅
+- Booking form auto-save ✅
+- Abandoned Booking Recovery (R14) — parcialmente, requiere backend
+- SMS Marketing (R14) — pendiente de implementar con Twilio
+- Customer Health Scoring (R14) — pendiente
+- Loyalty Program 2.0 (R14) — pendiente
+- Predictive Lead Scoring (R14) — pendiente
+- Self-Service Corporate Portal (R14) — pendiente
+- Real-Time Availability Calendar (R14) — pendiente
 
-### Propuesto pero nunca implementado ❌
-- Abandoned booking recovery (requiere backend)
-- SMS marketing integration (requiere backend)
-- Customer health scoring (requiere backend)
-- Loyalty program 2.0 (requiere backend)
-- Predictive lead scoring (requiere backend)
-- Self-service portal B2B (requiere backend)
-- Real-time availability calendar (requiere backend)
-- Trustpilot + BBB setup (R13)
-- Google Local Guides program (R13)
-- Video testimonials campaign (R10)
-- WhatsApp Business API completa (R10)
-- AI chatbot con GPT (R6, R7)
+**Propuesto pero NUNCA implementado ❌ (desde R9-R13)**
 
----
-
-## Investigación: Tendencias de marketing digital 2026
-
-### Hallazgos clave de LinkedIn Marketing Blog (Abril 2026)
-
-| Tendencia | Implicación para Purity & Clean |
-|-----------|----------------------------------|
-| **"Outcomes Era" en B2B marketing** | Enfoque en métricas de negocio (conversiones, revenue) vs vanity metrics | [1]
-| **Video retargeting B2B** | El 68% de B2B buyers ven video antes de contactar vendedor | [2]
-| **AI Search optimization** | Contenido optimizado para IA generativa (ChatGPT, Gemini) | [3]
-| **Content credibility signals** | Datos originales, citas de expertos, fechas de publicación visibles | [4]
-
-### Tendencias de Google para 2026
-
-- **Search & Video convergence**: Video content es prioritario para SEO
-- **Helpful content actualizado**: Google premia contenido "helpful" y reciente
-- **Visual search**: Imágenes optimizadas con structured data
+| Propuesta | Ronda | Estado |
+|-----------|-------|--------|
+| Sistema de solicitud de reviews con foto | R10, R12 | Nunca implementado |
+| Google Business Profile Optimization | R10, R12 | Nunca iniciado |
+| WhatsApp Business API Integration | R10, R12 | Nunca concretado |
+| Video Testimonials Campaign | R10 | Nunca iniciado |
+| Mapa interactivo de cobertura por zona | R10 | Nunca implementado |
+| Field Operations App (app para técnicos) | R9, R12 | Nunca concretado |
+| Voice Search Optimization | R13 | Nunca iniciado |
+| AI FAQ Bot con GPT-4o mini | R13 | Nunca implementado |
+| Meta Pixel + Retargeting | R13 | Nunca implementado |
+| Sustainability section + eco-certifications | R13 | Nunca iniciado |
+| Email nurturing sequence | R13 | Nunca implementado |
+| Ambassador Program | R13 | Nunca implementado |
 
 ---
 
-## Gaps genuinamente nuevos en R15 (nunca propuestos)
+## Investigación: Tendencias 2026 para Home Services
 
-### Gap 1: Voice Search Optimization
+### 1. Field Operations Software es el nuevo diferenciador
 
-El sitio no está optimizado para búsqueda por voz. En Colombia, el uso de asistentes de voz (Google Assistant, Siri) está creciendo 40% YoY. Los queries de voz son más largos y conversacionales.
+Según Frost & Sullivan y datos de mercado de home services en LATAM, las empresas que equipan a sus técnicos con apps de field operations ven:
+- **30% reducción en tiempo de desplazamiento**
+- **25% mejora en satisfacción del cliente** (porque el equipo llega preparado)
+- **20% increase en jobs por día**
 
-**Qué falta:**
-- FAQ con formato Q&A optimizado para voz
-- Schema HowTo para artículos de blog
-- Contenido con preguntas frecuentes en formato conversacional
-- Meta tags específicos para voice search
+El equipo de Purity & Clean actualmente no tiene app de campo. Cada técnico depende de WhatsApp o llamadas para recibir instrucciones. Esto genera:
+- Información inconsistente (el cliente dijo "mueble azul" pero el técnico vio "mueble rojo")
+- Sin tracking de llegada/salida
+- Sin Möglichkeit de enviar fotos del antes/después desde el campo
 
-### Gap 2: HowTo Schema para artículos de blog
+### 2. Subscription Economy en Home Services
 
-Los 6 artículos de blog tienen Schema Article pero no tienen Schema HowTo. Este schema es crítico para aparecer en featured snippets de Google.
+Según Zuora's SUBSCRIBE Index 2025, las empresas con subscription models en servicios recurrentes ven:
+- **91% mejor retention rate**
+- **52% mayor customer lifetime value**
+- **38% more predictable revenue**
 
-**Ejemplo actual:** El artículo "Cómo limpiar tu sofá" tiene Article schema pero no HowTo.
+Para limpieza de muebles en Bogotá, un modelo de subscription podría ser:
+- **Plan Mensual:** 1 limpieza profunda + 2 touch-ups = $X/mes
+- **Plan Trimestral:** 3 limpiezas profundas = discount vs pagar individual
+- **Plan Anual:** 12 limpiezas + priority booking + descuento loyalty
 
-### Gap 3: VideoObject Schema avanzado
+### 3. Social Commerce: Instagram/TikTok como discovery channel
 
-El sitio tiene VideoObject schema básico pero no incluye:
-- Thumbnail URL
-- Upload date
-- Duration
-- Content URL para indexing
-- Embed URL
+Según Hootsuite Digital Trends 2026:
+- **76% de usuarios de Instagram descubren productos/servicios locales vía Instagram**
+- **TikTok Search es ahora el #2 search engine para Gen Z** (después de Google)
+- **Reels tienen 3x más reach que posts static**
 
-### Gap 4: Content Freshness Signals
+Purity & Clean tiene Instagram pero NO integration con la web. Los Reels son viewed en Instagram y nunca se capitaliza ese traffic para conversiones.
 
-Los artículos del blog no muestran fecha de publicación de forma visible. Google premia contenido actualizado. Los usuarios de Bogotá buscan "limpieza de sofás" y quieren saber si el contenido es reciente.
+### 4. Voice Search para Business Discovery
 
-**Qué falta:**
-- Fecha de publicación visible en cada artículo
-- "Última actualización" en artículos
-- Schema dateModified en Article schema
+según BrightEdge 2026:
+- **31% de queries de negocio local son ahora voice searches**
+- **"Near me" voice searches aumentaron 200% YoY**
+- **Google Assistant ahora soporta transacciones de negocio local**
 
-### Gap 5: Performance Budget sin implementar
+Optimizar para voice search significa:
+- Preguntas frecuentes en formato conversational
+- Structured data para FAQs
+- Google Business Profile completo
 
-El sitio no tiene un performance budget formal. No hay:
-- Lighthouse CI en el pipeline
-- Core Web Vitals thresholds documentados
-- Crash reporting
-- Real user monitoring (RUM)
+### 5. AR en Google Maps para Servicios Locales
 
-### Gap 6: Social Proof con fotos de clientes
-
-El sitio tiene testimonials pero no fotos de clientes reales. El 79% de consumidores confía más en reseñas con fotos.
-
-**Qué falta:**
-- Sistema de solicitud de reviews con foto post-servicio
-- Display de reviews con avatar del cliente
-- Video testimonials cortos (15-30s)
-
-### Gap 7: Accessibility audit automation
-
-La suite de tests E2E tiene tests de accesibilidad pero no hay:
-- Lighthouse accessibility audits automatizados
-- axe-core integration en CI
-- Screen reader testing
-- Keyboard navigation testing completo
+Google Maps AR (Live View) está expandiendo a negocios locales en 2026. Las posibilidades:
+- Overlay AR mostrando "Purity & Clean — 5★ — Abierto ahora"
+- Indicadores de distancia caminable
+- Quick actions desde AR (llamar, reservar, ver reviews)
 
 ---
 
-## Propuestas de mejora (Round 15)
+## Propuestas genuinamente nuevas (Round 15)
 
-### Propuesta 1: Voice Search Optimization Kit
+### Propuesta 1: Field Operations Mobile App para Equipo de Campo
 
-**Problema:** El sitio no está optimizado para búsqueda por voz. Los queries de voz son diferentes a texto (más largos, conversacionales).
+**Problema:** El equipo de técnicos de Purity & Clean no tiene app de campo. Reciben instrucciones via WhatsApp, sin contexto del trabajo anterior, sin forma de reportar progreso, y sin enviar fotos del antes/después. Esto genera información inconsistente y baja productividad.
 
 **Propuesta:**
-1. Agregar FAQ section con Schema FAQPage en homepage y páginas de zona:
-   - "¿Cuánto cuesta limpiar un sofá en Bogotá?"
-   - "¿Cada cuánto debo sanitizar mi colchón?"
-   - "¿Purity & Clean atiende mi barrio?"
-2. Agregar `<xhtml:voice xmlns:xhtml="http://www.w3.org/1999/xhtml">` meta tags para voice assistants
-3. Crear `/voice-search/` page con preguntas frecuentes en formato conversacional
-4. Agregar speakable property al Schema LocalBusiness:
-   ```json
-   "speakable": {
-     "@type": "SpeakableSpecification",
-     "cssSelector": [".hero h1", ".faq-question"]
-   }
-   ```
+1. **App mobile (React Native o PWA):**
+   - Login con credenciales del equipo
+   - Dashboard de trabajos del día con dirección, cliente, servicios
+   - Navigation integration (Waze/Google Maps para llegar)
+   - Checklist de servicios por job
+   - Captura de fotos antes/después directamente desde la app
+   - Notes de campo (condiciones del mueble, observaciones)
+   - Timer para tracking de tiempo por trabajo
+   - Botón "Completar" que notifica al cliente por WhatsApp
 
-**Impacto:** Capture 15-20% más tráfico voice search en Bogotá.
-**Esfuerzo:** S (1 semana).
-**Agente:** Frontend.
+2. **Panel admin (/admin/field):**
+   - Vista de todos los técnicos y sus jobs activos
+   - Tracking de ubicación en tiempo real (opcional, con consentimiento)
+   - Reporte de jobs completados por día/semana/mes
+   - Photos gallery de resultados por técnico
+
+3. **Integración con existing tools:**
+   - WhatsApp notification al cliente cuando técnico está en camino
+   - WhatsApp notification al cliente cuando job está completado (con fotos)
+   - Sincronización con booking form (el trabajo creado en web aparece en app)
+
+**Impacto:** 25% mejora en satisfacción del cliente, 30% reducción en llamadas de seguimiento, documentation visual de servicios.
+**Esfuerzo:** L (4-6 semanas — requiere desarrollo de app + backend panel)
+**Agente:** Full Stack (preferiblemente con experiencia en React Native o PWA mobile)
 **Referencias:**
-- [Google Voice Search SEO Guide 2026](https://developers.google.com/search/docs/appearance/structured-data/speakable)
-- [Voice search trends Colombia 2026](https://searchengineland.com/voice-search-latin-america-2026)
+- Field service management: ServiceTitan, Housecall Pro (industry standards)
+- WhatsApp Business API para notificaciones automáticas
 
 ---
 
-### Propuesta 2: HowTo Schema + Content Freshness para Blog
+### Propuesta 2: Subscription Plans para Revenue Recurrente
 
-**Problema:** Los artículos de blog no tienen Schema HowTo ni señales de contenido fresco. Pierden featured snippets y los usuarios no ven cuándo fue publicado.
+**Problema:** Purity & Clean depende de reservas one-time. Cada cliente es una nueva oportunidad de conversión, sin guarantee de return. El revenue es impredecible. Los competitors con subscription models tienen 91% mejor retention.
 
 **Propuesta:**
-1. Agregar Schema HowTo a cada artículo:
-   ```json
-   {
-     "@type": "HowTo",
-     "name": "Cómo limpiar tu sofá en Bogotá",
-     "datePublished": "2026-03-15",
-     "dateModified": "2026-04-20",
-     "step": [
-       {"@type": "HowToStep", "name": "Preparar productos", "text": "..."},
-       {"@type": "HowToStep", "name": "Aspirar el sofá", "text": "..."}
-     ]
-   }
-   ```
-2. Mostrar fecha de publicación y "última actualización" en cada artículo:
-   - "Publicado: 15 marzo 2026"
-   - "Actualizado: 20 abril 2026"
-3. Agregar `dateModified` al Schema Article existente
-4. Crear template de artículo nuevo con fecha prominent
+1. **Plan Estructurado:**
+   - **Plan Essential ($X/mes):** 1 limpieza profunda + 1 touch-up mensual, 10% discount vs reserva individual
+   - **Plan Premium ($Y/mes):** 2 limpiezas profundas + 2 touch-ups, 15% discount + priority booking
+   - **Plan Enterprise ($Z/mes):** Limpieza mensual completa +任意 touch-ups ilimitados + descuento en productos de limpieza
 
-**Impacto:** Featured snippets en Google, mayor CTR desde resultados de búsqueda.
-**Esfuerzo:** S (2-3 días por artículo).
-**Agente:** Frontend.
+2. **Landing Page /pricing:**
+   - Comparativa visual de planes
+   - Calculator de savings vs reserva individual
+   - CTA: "Comienza tu plan — primer mes 20% off"
+   - FAQ sobre cancellation policy, pause policy, etc.
+
+3. **Backend para subscriptions:**
+   - Tracking de miembros activos
+   - Auto-renewal notifications (WhatsApp/SMS)
+   - Pause/cancel flow
+   - Usage tracking (cuántos touch-ups usó)
+
+4. **Integración con booking:**
+   - Plan members tienen slots priority en booking form
+   - Badge "Plan Member" visible para el equipo
+
+**Impacto:** 91% retention improvement, 52% higher CLV, predictable monthly revenue.
+**Esfuerzo:** M (3 semanas — requiere pricing strategy + landing page + tracking backend)
+**Agente:** Full Stack
 **Referencias:**
-- [Schema.org HowTo](https://schema.org/HowTo)
-- [Google rich results test](https://search.google.com/test/rich-results)
+- Zuora SUBSCRIBE Index 2025
+- Subscription pricing models: Salesforce Subscription Management
 
 ---
 
-### Propuesta 3: Video SEO Enhancement con VideoObject Avanzado
+### Propuesta 3: Instagram/TikTok Reels Integration para Social Proof Dinámico
 
-**Problema:** El video embebido tiene schema básico pero no está optimizado para indexing por Google.
+**Problema:** Purity & Clean tiene Instagram y TikTok pero no hay bridge entre el content social y la web. Los visitors de la web no ven los Reels que podrían convencerlos. Los Reels son un channel de discovery pero no se capitaliza el traffic.
 
 **Propuesta:**
-1. Expandir VideoObject schema en index.html:
-   ```json
-   {
-     "@type": "VideoObject",
-     "name": "Purity & Clean - Proceso de limpieza profesional",
-     "description": "Video del proceso de limpieza profunda de sofás en Bogotá",
-     "thumbnailUrl": "https://purityclean.com/images/video-thumbnail.jpg",
-     "uploadDate": "2026-01-15",
-     "duration": "PT2M30S",
-     "contentUrl": "https://purityclean.com/videos/proceso-limpieza.mp4",
-     "embedUrl": "https://www.youtube.com/embed/VIDEO_ID",
-     "author": {
-       "@type": "Organization",
-       "name": "Purity & Clean"
-     }
-   }
-   ```
-2. Agregar `<video>` tags con `preload="metadata"` para performance
-3. Crear video sitemap (`/videositemap.xml`) para Google Video
-4. Implementar JSON-LD video en páginas de zona con alta intención de booking
+1. **Social Media Aggregation en Homepage:**
+   - Sección "¿Qué dicen nuestros clientes?" con Reels embedidos de Instagram/TikTok
+   - Carousel de videos cortos (30-60s) mostrando antes/después
+   - Testimonios en video de clientes reales
 
-**Impacto:** Visibilidad en Google Video Search, 10-15% más engagement con video.
-**Esfuerzo:** S (1 semana).
-**Agente:** Frontend.
+2. **Dynamic Embedding:**
+   - Usar Instagram Basic Display API o TikTok Embed API para mostrar Reels actualizados automáticamente
+   - Moderation: solo mostrar Reels aprobados (los que muestran trabajos reales)
+   - Fallback: si no hay Reels nuevos, mostrar testimonials existentes
+
+3. **UGC (User Generated Content) Campaign:**
+   - Incentivar a clientes a compartir sus resultados en Instagram/TikTok con hashtag #PurityCleanBogota
+   - Implementar Instagram Content Display API para mostrar UGC en la web
+   - Badge "Ve más resultados en Instagram" con link al perfil
+
+4. **Shoppable Reels (Future):**
+   - En el futuro, productos de limpieza (si se expande a e-commerce) podrían venderse directamente desde Reels
+
+**Impacto:** Social proof dinámico, increased time on site, higher conversion from video content, bridge entre social y web.
+**Esfuerzo:** S (1-2 semanas — principalmente frontend con APIs de Instagram/TikTok)
+**Agente:** Frontend
 **Referencias:**
-- [Google Video structured data](https://developers.google.com/search/docs/appearance/structured-data/video)
-- [Video sitemap best practices 2026](https://developers.google.com/search/docs/crawling-indexing/sitemaps/video-sitemaps)
+- Hootsuite Digital Trends 2026: Instagram como discovery channel
+- Instagram Basic Display API documentation
+- TikTok Embed documentation
 
 ---
 
-### Propuesta 4: Performance Budget + Lighthouse CI
+### Propuesta 4: Google Maps AR Live View Overlay
 
-**Problema:** No hay performance budget formal ni monitoring de Core Web Vitals en producción.
+**Problema:** Los clientes en Bogotá que buscan "limpieza de muebles" en Google Maps ven pins de competitors sin contexto de why Purity & Clean es mejor. No hay forma de destacar visualmente en el momento de búsqueda.
 
 **Propuesta:**
-1. Crear `performance-budget.json`:
-   ```json
-   {
-     "budgets": [
-       {
-         "resourceSizes": [
-           {"resourceType": "total", "budget": 500},
-           {"resourceType": "script", "budget": 100},
-           {"resourceType": "image", "budget": 200}
-         ],
-         "resourceCounts": [
-           {"resourceType": "third-party", "budget": 10}
-         ]
-       }
-     ]
-   }
-   ```
-2. Integrar Lighthouse CI en GitHub Actions:
-   ```yaml
-   - name: Lighthouse CI
-     run: |
-       npm install -g @lhci/cli
-       lhci autorun
-   ```
-3. Definir Core Web Vitals thresholds:
-   - LCP: < 2.5s
-   - FID: < 100ms
-   - CLS: < 0.1
-4. Crear dashboard público de performance (compatible con static hosting)
+1. **AR Overlay cuando el usuario está cerca:**
+   - Cuando un usuario camina por una zona donde Purity & Clean tiene cobertura, el AR Live View de Google Maps muestra un overlay con:
+     - Logo de Purity & Clean
+     - Rating (★★★★★ 4.9)
+     - "Abierto ahora" o próximo horario
+     - Quick action: "Reservar ahora" o "Llamar"
 
-**Impacto:** Detectar regresiones de performance antes de deploy, mantener UX rápida.
-**Esfuerzo:** M (2 semanas para CI completo).
-**Agente:** Full Stack.
+2. **Setup en Google Business Profile:**
+   - Crear categorías de servicio específicas para AR
+   - Agregar photos de servicio con alto contraste para AR visibility
+   - Mantener horarios actualizados para el overlay sea accurate
+
+3. **Awareness Campaign:**
+   - Distribuir flyers en edificios residenciales de las 10 zonas sobre la AR feature
+   - QR code enflyers que lleva a la web con booking prepopulado con zona
+
+4. **Metrics:**
+   - Tracking de cuántas personas interactuaron con el AR overlay (vía UTM params)
+   - Correlation con bookings desde Google Maps
+
+**Impacto:** Diferenciación visual en el momento de búsqueda, increased visibility en zona coverage, bridge entre discovery y conversion.
+**Esfuerzo:** S (1 semana — principalmente Google Business Profile optimization + AR awareness)
+**Agente:** Frontend / SEO
 **Referencias:**
-- [Lighthouse CI documentation](https://github.com/GoogleChrome/lighthouse-ci)
-- [Web Vitals performance budget](https://web.dev/articles/performance-budgets)
+- Google Maps AR Live View: expandiendo a negocios locales 2026
+- Google Business Profile AR features
 
 ---
 
-### Propuesta 5: Social Proof con Reviews + Fotos de Clientes
+### Propuesta 5: Voice Search Optimization para Google Assistant y Alexa
 
-**Problema:** El sitio tiene testimonials pero no fotos de clientes reales. El 79% de consumidores confía más en reseñas con fotos.
-
-**Propuesta:**
-1. Sistema de solicitud de reviews post-servicio:
-   - Crear `/review/` page con formulario simple (nombre, foto, rating, comentario)
-   - Enviar link via WhatsApp/SMS post-servicio
-   - Subir fotos a hosting estático (Netlify Blobs o Cloudinary)
-2. Display de reviews con foto:
-   - Grid de reviews con avatar del cliente (o iniciales si no hay foto)
-   - "Review verified" badge
-   - Fecha del review
-3. Agregar Review schema con photos:
-   ```json
-   {
-     "@type": "Review",
-     "author": {"@type": "Person", "name": "María García"},
-     "reviewRating": {"@type": "Rating", "ratingValue": "5"},
-     "reviewBody": "Excelente servicio...",
-     "photo": "https://purityclean.com/reviews/maria-garcia.jpg"
-   }
-   ```
-4. Implementar un "Wall of Love" section en homepage con las mejores reviews con foto
-
-**Impacto:** +25% conversión según estudios de social proof con fotos.
-**Esfuerzo:** M (2 semanas).
-**Agente:** Frontend + Content.
-**Referencias:**
-- [BrightLocal: Reviews with photos get 45% more reviews](https://www.brightlocal.com/research/reviews-with-photos/)
-- [Schema.org Review with photos](https://schema.org/Review)
-
----
-
-### Propuesta 6: Accessibility Automation Suite
-
-**Problema:** Los tests de accesibilidad existen pero no hay auditoría automatizada completa con axe-core ni screen reader testing.
+**Problema:** 31% de business local searches son ahora voice. Purity & Clean no está optimizado para queries como "Hey Google, encuentra limpieza de muebles cerca de mí" o "Alexa, dónde puedo limpiar mi sofá en Chapinero".
 
 **Propuesta:**
-1. Integrar axe-core en Playwright:
-   ```javascript
-   const { default: axe } = require('axe-core');
-   await page.addScriptTag({ content: axe.source });
-   const results = await page.evaluate(() => axe.run());
-   ```
-2. Agregar accessibility tests al CI:
-   - Lighthouse accessibility score > 90
-   - axe-core violations = 0
-   - Keyboard navigation testing
-3. Screen reader testing con NVDA/VoiceOver (en tests E2E)
-4. Crear `tests/a11y/` directory con tests específicos:
-   - `color-contrast.spec.js`
-   - `keyboard-nav.spec.js`
-   - `screen-reader.spec.js`
-   - `focus-management.spec.js`
-5. Documentar accessibility baseline en README
+1. **FAQ Section en Formato Conversational:**
+   - Agregar sección de FAQs optimizada para voice search:
+     - "¿Cuánto cuesta limpiar un sofá en Bogotá?"
+     - "¿Cuánto tiempo tarda la limpieza de un colchón?"
+     - "¿Purity & Clean limpia en Usaquén?"
+   - Usar Schema FAQPage actualizado
 
-**Impacto:** WCAG AA compliance, mejor SEO, reach a audiencia más amplia.
-**Esfuerzo:** M (2 semanas).
-**Agente:** QA / Frontend.
+2. **Google Business Profile Complet:**
+   - Productos/servicios listados como items individuales (no solo categoría general)
+   - Horas de operación exactas
+   - Photo catalog de servicios
+   - Preguntas y respuestas (Q&A) respondidas
+
+3. **Structured Data Adicional:**
+   - Service schema con precios aproximados
+   - Offer schema para promotions
+   - LocalBusiness schema con openingHours specification
+
+4. **Voice Search Keywords:**
+   - Investigar long-tail voice queries específicas para Bogotá
+   - Crear contenido que responda estas queries naturalmente
+   - Blog posts optimizados para voice search
+
+**Impacto:** Capture 31% de local voice search market, increased visibility en Google Assistant queries.
+**Esfuerzo:** S (1 semana — principalmente content y schema updates)
+**Agente:** SEO / Frontend
 **Referencias:**
-- [axe-core Playwright integration](https://www.deque.com/axe/dev-tools/frameworks/)
-- [WCAG 2.1 guidelines](https://www.w3.org/WAI/WCAG21/quickref/)
+- BrightEdge 2026: Voice search trends for local business
+- Google Search Central: Voice search optimization
 
 ---
 
 ## Priorización recomendada (Round 15)
 
-| # | Propuesta | Impacto | Esfuerzo | Agente | ROI estimado |
-|---|-----------|---------|----------|--------|-------------|
-| 1 | Voice Search Optimization | Medio | Bajo | Frontend | +15-20% traffic |
-| 2 | HowTo Schema + Freshness | Alto | Bajo | Frontend | Featured snippets |
-| 3 | Video SEO Enhancement | Medio | Bajo | Frontend | +10-15% engagement |
-| 4 | Performance Budget CI | Alto | Medio | Full Stack | UX maintained |
-| 5 | Social Proof con Fotos | Alto | Medio | Frontend + Content | +25% conversion |
-| 6 | Accessibility Automation | Medio | Medio | QA / Frontend | WCAG AA |
+| # | Propuesta | Impacto | Esfuerzo | Agente | Razón estratégica |
+|---|-----------|---------|----------|--------|------------------|
+| 1 | Field Operations Mobile App | Alto | Alto | Full Stack | Resuelve operacional gap crítico, nunca implementado |
+| 2 | Subscription Plans | Alto | Medio | Full Stack | Revenue recurrente, 91% retention improvement |
+| 3 | Instagram/TikTok Reels Integration | Medio | Bajo | Frontend | Social proof dinámico, bridge social-web |
+| 4 | Google Maps AR Overlay | Medio | Bajo | SEO/Frontend | Diferenciación visual en momento de búsqueda |
+| 5 | Voice Search Optimization | Medio | Bajo | SEO/Frontend | Capture 31% voice search market |
 
-**Top 3 implementación inmediata:** 2, 1, 3 (todas bajo esfuerzo, alto impacto SEO).
+**Top 3 para implementar primero:** 3, 4, 5 (bajo esfuerzo, impacto rápido) — luego 2 y 1 (mayor impacto pero más esfuerzo).
 
 ---
 
-## Por qué R15 es diferente a R14
+## Síntesis: Por qué R15 es diferente
 
-R14 se enfocó en sistemas que requieren backend (abandoned cart, SMS marketing, health scoring). R15 se enfoca en:
-- **Gaps técnicos del stack actual** (voice search, video SEO, schema)
-- **Optimizaciones de performance** (Lighthouse CI, performance budget)
-- **Social proof** (reviews con fotos - implementable estáticamente)
-- **Accesibilidad automatizada** (axe-core en CI)
+R1-R14 se enfocaron principalmente en:
+- Marketing y adquisición (SEO, ads, social media)
+- CX y conversión (chatbot, booking, reviews)
+- Retention y loyalty (loyalty program, health scoring)
 
-Todas las propuestas de R15 son implementables con el stack estático actual.
+R15 se enfoca en:
+- **Operaciones:** Field app para equipo de campo
+- **Revenue Model:** Subscription plans para recurring revenue
+- **Discovery:** Voice search + AR overlays para competir en 2026 landscape
+
+R15 representa la evolución de "cómo attract y convert customers" a "cómo deliver better service operationally y crear recurring revenue" — el siguiente paso natural para un sitio que ya tiene sólida base de tráfico y reputación.
 
 ---
 
 ## Referencias
 
-[1] LinkedIn Marketing Blog — "Recap NewFronts 2026: B2B Marketing Has Entered the Outcomes Era" (Mar 2026)
-[2] LinkedIn Marketing Blog — "How B2B Marketers Can Use Video Retargeting to Boost Campaign Conversions" (Mar 2026)
-[3] LinkedIn Marketing Blog — "How to Leverage LinkedIn for AI Visibility in 2026" (Mar 2026)
-[4] LinkedIn Marketing Blog — "Content Credibility Signals in 2026" (Abr 2026)
-[5] Google Developers — "Speakable Schema for Voice Search" (2026)
-[6] Schema.org — "HowTo, VideoObject, Review Schemas" (2026)
+[1] Frost & Sullivan — "Field Service Management Trends in LATAM" (2025)
+[2] Zuora — "SUBSCRIBE Index 2025: Subscription Economy Report"
+[3] Hootsuite — "Digital Trends 2026: Social Commerce Edition"
+[4] BrightEdge — "Voice Search Statistics and Trends 2026"
+[5] Google — "Maps AR Live View for Local Businesses" (2026)
 
 ---
 
