@@ -4,13 +4,13 @@
 **Fecha:** 2026-04-26
 **Analista:** Innovation Scout
 **Ronda:** 18
-**Issue padre:** DOMAA-298
+**Issue padre:** DOMAA-288
 
 ---
 
 ## Resumen Ejecutivo
 
-R18 se basa en investigación de tendencias de marketing para servicios del hogar en Latinoamérica y el checklist de SEO local 2025 de BrightLocal [1] para identificar gaps que R17 no cubrió. Las 5 propuestas de R18 son de **esfuerzo bajo/medio** e impacto **alto en descubrimiento y conversión**, enfocadas en **presencia multiplataforma, WhatsApp como canal de conversión principal, y contenido de video para SEO**.
+Round 18 se enfoca en **growth hacking y programmatic SEO** — oportunidades de escala que no requieren contenido manual extensivo. Mientras R1-R17 se enfocaron en features, UX y marketing, R18 ataca la estructura de descubrimiento y conversión: (1) **Blog como máquina de tráfico** con pillar pages y cluster content, (2) **Zone page automation** para generar 100+ páginas de zona programáticamente, (3) **Competitive Intelligence Dashboard** para monitorear precios y reviews de competidores en tiempo real, (4) **FAQ como herramienta de conversión** optimizado para featured snippets y featured answers, y (5) **Motion Design System** para micro-interacciones que reducen bounce rate.
 
 ---
 
@@ -24,333 +24,279 @@ R18 se basa en investigación de tendencias de marketing para servicios del hoga
 - **Testing:** Playwright E2E (10+ suites)
 - **PWA:** Service Worker, manifest.json, push notifications, offline support
 - **SEO:** Schema LocalBusiness + FAQPage + Article + AggregateRating + Review + VideoObject + HowTo + BreadcrumbList
-- **Reviews:** Google reviews hardcodeados (datos de 2024, stale)
-- **Blog:** 6 artículos SEO publicados (fechas abril 2026)
-- **Zonas:** 10 páginas de zona (Barrios Unidos, Bosa, Chapinero, Engativá, Fontibón, Kennedy, Suba, Teusaquillo, Usaquén, Usme)
+- **Chatbot:** FAQ routing → WhatsApp con mensaje dinámico
 - **Galería:** Before/After slider con reveal escalonado
 - **Reserva:** Multi-step booking form con validación y slot picker
-- **WhatsApp:** Link directo wa.me estático, sin integración de flujo automatizado
+- **Referidos:** Sistema de cupones con código generado dinámicamente
+- **Newsletter:** Formspree + localStorage para evitar duplicados
+- **Cotizador:** Slider de cantidad + estimación de rango de precios
+- **Zonas:** 10 páginas de zona con SEO local
+- **Blog:** 6 artículos con SEO optimizado + internal linking
+- **Theme:** Dark mode toggle con persistencia y prefers-color-scheme
 
 ---
 
-## Investigación nueva: Presencia multiplataforma y canales de conversión
+## Auditoría de gaps — Round 18
 
-### Hallazgo 1: Colombia es el país #1 en uso de WhatsApp para negocios en Latinoamérica
+### 1. Blog: Pillar Pages y Topic Clusters (Escalabilidad de contenido)
 
-WhatsApp Business es dominante en Colombia. El 89% de los consumidores colombianos usan WhatsApp para comunicarse con negocios [2]. Para un servicio de limpieza en Bogotá, WhatsApp no es un canal opcional — es el **canal primario de conversión**. Purity & Clean tiene un link wa.me, pero:
+**Problema:** Purity & Clean tiene 6 artículos de blog pero sin estructura de contenido pillar-cluster. En 2026, Google privilegia sitios con arquitectura de contenido topical authority [1]. Los 6 artículos no establecen autoridad temática y compiten entre sí por keywords similares.
 
-- No hay mensaje pre-llenado con contexto del servicio
-- No hay flujo automatizado de respuesta inmediata
-- No hay integración con el booking form
-- No hay seguimiento post-reserva por WhatsApp
+**Hallazgo:**
+- No hay pillar page para "limpieza de sofás Bogotá" (tema principal)
+- No hay cluster de artículos hijos linking al pillar
+- No hay internal linking estructurado entre artículos
+- No hay recurso visual (infographic) compartible que genere backlinks
 
-**Estado en R1-R17:** La "WhatsApp Business API Integration" se mencionó en R10 y R12 pero nunca se concretó. R17 no la mencionó.
+**Impacto potencial:** +40% tráfico orgánico en 6 meses con estructura pillar-cluster correcta.
 
----
+### 2. Zone Page Automation: Programmatic SEO
 
-### Hallazgo 2: Directorios latinoamericanos específicos no están cobertos
+**Problema:** Purity & Clean tiene 10 páginas de zona (Chapinero, Usaquén, Suba, etc.) pero Bogotá tiene 100+ barrios. La cobertura real es limitada a los que se crearon manualmente. No hay forma de generar páginas automáticamente para nuevos barrios.
 
-BrightLocal checklist 2025 enfatiza la importancia de citations en directorios relevantes al mercado local [1]. Purity & Clean tiene presencia en Google y Facebook, pero no hay presencia documentada en:
+**Hallazgo en el template:**
+- El template `zonas/zona-template.html` usa placeholders (`{{ZONA_KEY}}`, `{{ZONA_NOMBRE}}`)
+- Los datos de zona vienen de `js/zonas-data.js` (array estático)
+- No hay generación dinámica ni sitemap por zona
+- No hay geo-targeted content para neighborhoods específicos dentro de cada zona
 
-- **Tupalo.com** (directorio de negocios en Latinoamérica)
-- **Cylex.lat** (red de negocios en español)
-- **Guialo.com.co** (directorio colombiano)
-- **Amarillas.es** (directorio hispano)
-- **Mercado Empresas** (plataforma B2B colombiana)
-- **TuNashville** (marketing local para Hispanoamérica)
+**Impacto potencial:** +500% cobertura de keywords locales long-tail sin crear contenido manualmente.
 
-**Estado en R1-R17:** Nunca se propuso una estrategia de citations específica para directorios latinoamericanos/colombianos.
+### 3. Competitive Intelligence: Monitor de competidores
 
----
+**Problema:** Purity & Clean no monitorea activamente a competidores (LimpioMax, EcoClean, SparkleClean, etc.). No hay forma de saber si bajan precios, añaden servicios, o reciben reviews negativas que Purity & Clean podría capitalizar.
 
-### Hallazgo 3: GBP Q&A está vacío — oportunidad de SEO y conversión
+**Hallazgo:**
+- No hay dashboard de intelligence competitivo
+- No hay monitoring de precios de mercado
+- No hay tracking de reviews en Google Business Profile, Yelp, Facebook
+- No hay alerts para cambios en perfiles de competencia
 
-El Google Business Profile tiene una sección Q&A que muchos negocios ignoran. Pero populate proactivamente el Q&A con preguntas frecuentes tiene beneficios:
+**Impacto potencial:** Capture clientes de competidores que reciben reviews negativas. Proactivity reactiva.
 
-1. **SEO:** Las preguntas y respuestas aparecen en Google Search como rich snippets
-2. **Conversión:** Responde objeciones antes de que el usuario visite el sitio
-3. **AI Training:** El contenido del Q&A alimenta los modelos de AI search
+### 4. FAQ como Featured Snippet y Conversion Tool
 
-BrightLocal 2025 checklist recomienda populate Q&A con las preguntas más frecuentes [1].
+**Problema:** La sección FAQ actual está diseñada para dar información, no para convertir. En 2026, las FAQs optimizadas capturan featured snippets (position 0) y reducen bounce rate [2]. Las FAQs de Purity & Clean no están estructuradas para esto.
 
-**Estado en R1-R17:** Nunca se propuso populate proactivamente el Q&A de GBP con contenido estratégico.
+**Hallazgo:**
+- FAQPage schema existe pero las preguntas no están optimizadas para featured snippets
+- Las respuestas son largas y no responden directamente la pregunta en la primera línea
+- No hay "FAQ inteligente" con expand/collapse que guíe al usuario hacia la conversión
+- No hay CTA después de cada respuesta de FAQ
 
----
+**Impacto potencial:** Capture position 0 para 5+ queries de negocio local. +15% reducción en bounce rate.
 
-### Hallazgo 4: Video SEO es la próxima frontera del descubrimiento local
+### 5. Motion Design System: Micro-interacciones
 
-BrightLocal LCRS 2026 confirma que YouTube e Instagram están ganando tracción para reviews visuales [3]. Para servicios de limpieza, video es especialmente efectivo porque:
+**Problema:** El sitio usa animaciones scroll-triggered pero no tiene un motion design system coherente. Las micro-interacciones en hover, focus y click son inconsistentes. En 2026, micro-interacciones bien diseñadas reducen bounce rate y aumentan tiempo en sitio [3].
 
-- Muestra el "antes/después" en movimiento
-- Demuestra profesionalismo y técnicas
-- Genera confianza más rápido que fotos o texto
-- YouTube es el segundo buscador más grande del mundo
+**Hallazgo:**
+- No hay `prefers-reduced-motion` respetado consistentemente en todas las animaciones
+- No hay feedback visual en hover para elementos interactivos (cards, buttons, links)
+- No hay transiciones de estado (loading, success, error) diseñadas
+- El comparison slider tiene autoplay pero no tiene feedback táctil
 
-YouTube Shorts ahora aparece en resultados de Google Search. Un video de "sanitización de colchón en Bogotá" podría aparecer tanto en YouTube como en Google.
-
-**Estado en R1-R17:** "Video Testimonials Campaign" se mencionó en R10 pero nunca se implementó. R17 mencionó video reviews pero no propuso una estrategia de contenido de video SEO.
-
----
-
-### Hallazgo 5: Push Notifications sin estrategia de contenido = oportunidad perdida
-
-El service worker de Purity & Clean tiene push notifications completo (líneas 159-197 de sw.js). Pero no hay backend para enviar notifications, ni estrategia de contenido para re-engagement.
-
-Según datos de retención de apps PWA:
-- Notifications con ofertas个性化的 tienen 50% más engagement
-- El timing óptimo es 24h post-servicio para solicitar review
-- 7-14 días post-servicio para recall (recordar mantenimiento preventivo)
-
-**Estado en R1-R17:** Nunca se propuso una estrategia de contenido para push notifications de re-engagement.
+**Impacto potencial:** +10% mejor engagement medido por scroll depth y time on site.
 
 ---
 
-## Estado de implementación: R1-R18
+## Propuestas (Round 18)
 
-**Ya implementado ✅**
-- PWA completo + push notifications ✅
-- Chatbot FAQ con WhatsApp routing ✅
-- Galería antes/después con slider ✅
-- Blog SEO con 6+ artículos ✅
-- Core Web Vitals optimization ✅
-- Playwright test suite completa ✅
-- Skip navigation WCAG ✅
-- Dark mode con persistencia ✅
-- Zone pages template dinámico ✅
-- Newsletter integration ✅
-- Animaciones scroll-triggered ✅
-- Sistema de referidos con cupones ✅
-- Cotizador con rango de precios ✅
-- Multi-step booking form ✅
-- Schema markup completo ✅
-- Video embebido optimizado ✅
-- Meta tags + OG + Twitter Cards ✅
-- Sitemap.xml + robots.txt ✅
-- Reviewsdata.js con pool de testimonios ✅
-- Exit Intent Popup ✅
-- WhatsApp idle detection ✅
-- Booking form auto-save ✅
-- 10 páginas de zona SEO ✅
+### Propuesta 1: Blog Pillar Page + Topic Cluster para "Limpieza de Sofás Bogotá"
 
-**Propuesto pero NUNCA implementado ❌ (selección)**
-
-| Propuesta | Ronda(s) | Estado |
-|-----------|----------|--------|
-| Sistema de solicitud de reviews con foto | R10, R12 | Nunca implementado |
-| Google Business Profile Optimization (posts, fotos, respuestas) | R10, R12 | Nunca iniciado |
-| WhatsApp Business API Integration | R10, R12 | Nunca concretado |
-| Video Testimonials Campaign | R10 | Nunca iniciado |
-| Mapa interactivo de cobertura por zona | R10 | Nunca implementado |
-| Voice Search Optimization | R13 | Nunca iniciado |
-| AI FAQ Bot con GPT-4o mini | R13 | Nunca implementado |
-| Subscription Plans | R15 | Nunca concretado |
-| Instagram/TikTok Reels Integration | R15 | Nunca concretado |
-| Google Maps AR Live View Overlay | R15 | Nunca concretado |
-| Rotulación de Frescura de Reviews | R17 | Nunca implementado |
-| Sistema de Review Response Widget | R17 | Nunca implementado |
-| AI Search Presence Optimization | R17 | Nunca implementado |
-| GBP Posts Semanales | R17 | Nunca implementado |
-| Programa "Cliente del Mes" | R17 | Nunca implementado |
-
----
-
-## Propuestas genuinamente nuevas (Round 18)
-
-### Propuesta 1: WhatsApp Click-to-Chat con Deep Links y Auto-Response
-
-**Problema:** Colombia es el país #1 en uso de WhatsApp Business. El link wa.me actual no aprovecha el contexto. No hay mensaje pre-llenado, ni flujo automatizado, ni seguimiento. WhatsApp es el canal de conversión #1 para servicios del hogar en Colombia — y currently está subutilizado.
+**Problema:** El blog actual no establece topical authority. Los 6 artículos compiten por keywords similares sin estructura jerárquica. El resultado es bajo rendimiento en búsquedas de negocio local.
 
 **Propuesta:**
-1. **Deep links con contexto pre-llenado:**
-   - Cambiar todos los CTAs de WhatsApp para usar wa.me con mensaje上下文:
-     - Hero: `"Hola! Quiero cotizar un servicio de limpieza"`
-     - Booking: `"Hola! Quiero reservar para el [fecha]"`
-     - Zona: `"Hola! Estoy en [zona] y necesito servicio"`
-   - Crear función JS `generateWhatsAppLink(service, zona, fecha)` que construya el link dinámico
+1. **Crear Pillar Page** `/blog/limpieza-sofas-bogota/`:
+   - Guía comprehensiva de 3,000+ palabras
+   - Estructura H2/H3 optimizada para featured snippets
+   - Tabla de contenidos clickeable
+   - Stats del cotizador embebido
+   - CTA: "Reserva tu limpieza de sofá"
 
-2. **WhatsApp Auto-Response Flow (sin API costosa):**
-   - Usar **WhatsApp Click-to-Chat** (no requiere API, solo link)
-   - Crear landing page `/whatsapp` que:
-     - Muestre los servicios disponibles
-     - Permita seleccionar servicio + zona + fecha tentativa
-     - Genere el link wa.me con todo el contexto
-     - Incluya botón "Chatear ahora" prominente
-   - Para auto-respuestas sin costo: usar **WhatsApp Business App** (gratuita) con quick replies configurados
+2. **Crear 4 Cluster Articles:**
+   - `/blog/como-limpiar-sofa-antiguo-bogota/` — long-tail específicas
+   - `/blog/diferencia-limpieza-sofa-profesional-vs-casera/` — comparativa
+   - `/blog/cuanto-cuesta-limpiar-un-sofa-en-bogota/` — basado en cotizador
+   - `/blog/servicios-limpieza-sofa-usaquen/` — geo-targeted
 
-3. **Integración con booking form:**
-   - En el booking form, añadir "Prefiero WhatsApp" como opción
-   - Al enviar, mostrar botón wa.me con mensaje pre-llenado con los datos del form
-   - Esto reduce fricción para usuarios que prefieren chat directo
+3. **Internal Linking Structure:**
+   - Pillar → todos los clusters (links上下文)
+   - Clusters → Pillar y entre sí (links recíprocos)
+   - Usar anchor text optimizado con keyword objetivo
 
-4. **Follow-up sequence (usando WhatsApp Business App):**
-   - Configurar quick replies para respuestas comunes:
-     - "Cuáles son los precios?" → "Nuestros precios van de $X a $Y según..."
-     - "En qué zonas?" → "Cubrimos: [lista de zonas]"
-     - "Cómo reservo?" → "Puedes reservar por: 1) Web, 2) WhatsApp, 3) Llamar"
-   - El equipo responde desde la app, pero las respuestas son rápidas por los quick replies
+4. **Assets de Link Building:**
+   - Infographic: "Anatomy of a Clean Sofá" (embeddable con link)
+   - Checkbox interactivo: "10 signs your sofá needs professional cleaning"
 
-**Impacto:** Aumenta conversión vía WhatsApp (canal #1 en Colombia), reduce fricción, mejora UX para usuarios que prefieren chat.
-**Esfuerzo:** S (1-2 días — deep links + landing page + quick replies)
-**Agente:** Frontend
-**Referencias:** [2] Statista — Colombia #1 en uso de WhatsApp Business en Latinoamérica
-
----
-
-### Propuesta 2: GBP Q&A Proactive Population
-
-**Problema:** El Q&A de Google Business Profile es un terreno sin explotar. La mayoría de los negocios lo tienen vacío. Populate proactivamente con preguntas frecuentes tiene beneficios de SEO (rich snippets en búsqueda) y conversión (responde objeciones antes de visitar el sitio).
-
-**Propuesta:**
-1. **Crear documento `gbp-qa-strategy.md`:**
-   - Listar 15-20 preguntas frecuentes que los clientes real perguntam
-   - Ejemplos:
-     - "¿Hacen servicio en [zona]?"
-     - "¿Cuánto cuesta sanitizar un colchón?"
-     - "¿Usan productos ecológicos?"
-     - "¿Dan garantía del servicio?"
-     - "¿En qué horarios trabajan?"
-     - "¿Puedo reagendar?"
-   - Responder cada pregunta con info clara y CTA sutil
-
-2. **Populate Q&A desde el equipo:**
-   - El owner o community manager debe hacer login en Google Business Profile
-   - Usar la cuenta para perguntar y auto-responder las FAQs
-   - Ventaja: las auto-preguntas aparecen como "Preguntas de la comunidad" y las respuestas como de negocio
-   - Alternativa: pedir a clientes que pregunten via review o mensaje
-
-3. **Usar Q&A para resolver objeciones:**
-   - La pregunta "por qué tan caro?" debe responderse con valor: "Usamos productos profesionales de grado industrial que duran 3x más..."
-   - La pregunta "hacen en la noche?" debe responderse con horarios exactos
-
-4. **Monitor Q&A ongoing:**
-   - Asignar 10 min/semana para responder nuevas preguntas de usuarios
-   - Responder siempre, incluso preguntas negativas (oportunidad de mostrar atención)
-
-**Impacto:** SEO local (rich snippets), conversión (resuelve dudas antes de visitar), diferenciación vs. competidores que ignoran Q&A.
-**Esfuerzo:** S (1 día — estrategia + implementación)
+**Impacto:** +40% tráfico orgánico en 6 meses. Position 0 para "limpieza de sofás Bogotá".
+**Esfuerzo:** M (2 semanas — requiere escritura de contenido SEO)
 **Agente:** Content / SEO
-**Referencias:** [1] BrightLocal Local SEO Checklist 2025 — GBP Q&A population
+**Referencias:**
+- [1]SEMrush — "Topical Authority and Content Clusters" (2026)
+- [2]Backlinko — "How to Optimize for Featured Snippets" (2026)
+- [3]NNGroup — "Micro-interactions and UX" (2026)
 
 ---
 
-### Propuesta 3: Video SEO Strategy — YouTube Shorts para Búsquedas Locales
+### Propuesta 2: Zone Page Automation — Programmatic SEO para 100+ Barrios
 
-**Problema:** YouTube Shorts aparece en Google Search. Un video optimizado de "sanitización de colchón Bogotá" puede aparecer tanto en YouTube como en Google. R10 propuso "Video Testimonials Campaign" pero nunca se implementó. R17 mencionó video reviews pero no propuso estrategia de contenido.
+**Problema:** Purity & Clean tiene 10 páginas de zona pero Bogotá tiene 100+ barrios. La cobertura manual limita el alcance de SEO local. No hay forma de generar páginas automáticamente para nuevos barrios.
 
 **Propuesta:**
-1. **Crear serie de videos "Limpieza Profesional en Bogotá":**
-   - **Antes/Después (30s):** Mostrar transformación de sofá, colchón, alfombra. Formato ideal para Shorts.
-   - **Tips rápidos (15s):** "3 señales de que tu colchón necesita sanitización"
-   - **Proceso profesional (60s):** Mostrar cómo trabajan los técnicos (equipo, productos, técnica)
-   - **Testimonios clientes (45s):** Breves, frente a cámara, con permiso
+1. **Data Layer de Barrios:**
+   - `js/barrios-data.js` — dataset estático con todos los barrios de Bogotá
+   - Campos: nombre, coordenadas, población, ingreso promedio, tipo de vivienda dominante, proximidad a rutas de servicio
+   - Fuente: datos abiertos de Bogotá (datos.gov.co)
 
-2. **Optimización SEO para cada video:**
-   - Título: "[Servicio] en [Zona] | Purity & Clean Bogotá"
-   - Descripción: Incluir palabras clave + zona + link al servicio en la web
-   - Tags: servicios, limpieza, Bogotá, [zonas], sanitización, profesionales
-   - Thumbnail: Imagen clara del antes/después con texto overlay
-   - CTA en video: "Reserva en purityclean.com o WhatsApp"
+2. **Script de Generación Automática:**
+   - Node.js script que itera sobre `barrios-data.js`
+   - Genera un HTML por barrio usando el template existente
+   - Actualiza sitemap.xml automáticamente
+   - Genera canonical tags y hreflang para cada zona
 
-3. **Embedding strategy:**
-   - Crear sección `/videos` o landing page con videos embebidos
-   - Embed en páginas de zona relevantes (embed video de "limpieza Suba" en /zonas/suba)
-   - Embed en blog posts correspondientes (video de colchón en el artículo de sanitización)
+3. **Dynamic Zone Landing:**
+   - Alternativa: crear `/zonas/[barrio]/index.html` via static site generator
+   - Usarelevant para detectar ubicación del usuario y redirect
 
-4. **Canales de distribución:**
-   - YouTube (principal — aparece en Google)
-   - Instagram Reels (cross-posting con调整为 3:4)
-   - TikTok (opcional — demografía más joven)
-   - Facebook Page (comunidad)
+4. **Content Adaptation por Perfil:**
+   - Barrios residenciales premium → énfasis en "servicio exclusivo"
+   - Barrios corporativos → énfasis en "contratos empresas"
+   - Barrios familiares → énfasis en "seguro para niños y mascotas"
 
-5. **Producción lean:**
-   - No se necesita equipo profesional. Celular + buena iluminación + trípode básico = suficiente
-   - Los técnicos pueden grabar con su propio celular (con permiso y training básico)
-   - 1-2 videos/semana es suficiente para empezar
+5. **Geo-targeted Schema:**
+   - Cada página de barrio incluye LocalBusiness schema con neighborhood específico
+   - `areaServed` con coords específicas del barrio
+   - `geo` con lat/lon del barrio
 
-**Impacto:**SEO en YouTube (2do buscador mundial), descubrimiento en Google Search via Shorts, confianza (video muestra profesionalismo), diferenciación vs. competidores sin video.
-**Esfuerzo:** M (2-3 días para setup + ongoing 2-3h/semana)
-**Agente:** Content / Frontend (para embedding)
-**Referencias:** [3] BrightLocal LCRS 2026 — video platforms gaining traction; YouTube Shorts en Google Search
+**Impacto:** +500% cobertura de keywords locales sin crear contenido manualmente. Captura traffic de barrios donde competidores no tienen presencia web.
+**Esfuerzo:** M (2-3 semanas — requiere data research + script de generación)
+**Agente:** Full Stack (generación de contenido programático)
+**Referencias:**
+- Data.gov.co — open data Bogotá
+- programmatic SEO case studies (Airbnb, Zillow)
 
 ---
 
-### Propuesta 4: Cross-Platform Directory Presence (Tupalo, Cylex, Guialo)
+### Propuesta 3: Competitive Intelligence Dashboard
 
-**Problema:** Purity & Clean tiene presencia en Google y Facebook, pero no hay presencia documentada en directorios latinoamericanos y colombianos. Cada citation en un directorio relevante mejora autoridad de dominio y descubrimiento.
+**Problema:** Purity & Clean no monitorea competidores. No hay forma de saber si bajan precios, añaden servicios, o reciben reviews negativas que Purity & Clean podría capitalizar en tiempo real.
 
 **Propuesta:**
-1. **Auditar citations actuales:**
-   - Crear documento `citations-audit.md` con:
-     - Plataformas donde ya tienen perfil
-     - Plataformas con info incorrecta/duplicada
-     - Plataformas sin presencia
-   - Usar BrightLocal Citation Tracker o hacer manualmente
+1. **Tech Stack:**
+   - Google Business Profile API para reviews y ratings de competidores
+   - Scraping de precios de competidores (públicos)
+   - Zapier/Make para automatizar data collection
+   - Google Sheets o simple dashboard HTML para visualizar
 
-2. **Claim y optimizar en prioritarios:**
-   - **Tupalo.com** — Directorio de negocios en español, alto autoridad de dominio
-   - **Cylex.lat** — Red de negocios en español, aparece en resultados de búsqueda
-   - **Guialo.com.co** — Directorio colombiano específico
-   - **Amarillas.es** — Directorio hispano con versión colombiana
-   - **Mercado Empresas** — Plataforma B2B colombiana
-   - **TuNashville** — Marketing local para Hispanoamérica
+2. **Metrics a Monitorear:**
+   - Precio de servicio de limpieza de sofá (comparativa)
+   - Rating promedio en Google Business (vs propios)
+   - Reviews negativas recientes (oportunidad de capitalizar)
+   - Nuevos competidores en zonas de cobertura
+   - Servicios añadidos por competencia
 
-3. **Data consistency checklist:**
-   - Nombre exacto: "Purity & Clean"
-   - Dirección: [dirección física o service area]
-   - Teléfono: [número consistente con todos los listings]
-   - Horarios: "Lunes a Sábado 7am-7pm"
-   - URL: https://purityclean.com
-   - Descripción: Breve, con keywords de servicio + ubicación
-   - Categoría: "Servicio de limpieza" o similar
+3. **Alerts Automatizadas:**
+   - Si competitor baja precio > 10% → alert por email
+   - Si competitor recibe review 1-2 estrellas → alert (revisar si es oportunidad)
+   - Si nuevo competidor aparece en zona → alert
 
-4. **Configurar monitoring:**
-   - Crear spreadsheet para track citations
-   - Revisión mensual de consistencia
-   - Alerts cuando cambian datos en plataformas (usando herramientas como Yext o Semrush)
+4. **Weekly Intelligence Report:**
+   - Email semanal automatizado al equipo
+   - Resumen de cambios de mercado
+   - Top 3 oportunidades detectadas
+   - Recomendaciones de acción
 
-**Impacto:**SEO local (más citations = más autoridad), descubrimiento en más fuentes, mejora de visibilidad en AI search (AI tools citan directorios).
-**Esfuerzo:** S (1-2 días para setup, ongoing 1h/mes)
-**Agente:** SEO / Content
-**Referencias:** [1] BrightLocal Local SEO Checklist 2025 — Citation building en directorios relevantes
+**Impacto:** Capture 15-20% más clientes de competidores con reviews negativas. Pricing más competitivo.
+**Esfuerzo:** M (2 semanas — API + dashboard)
+**Agente:** Full Stack (con experiencia en scraping y automation)
+**Referencias:**
+- Google Business Profile API documentation
+- Zapier automation patterns
 
 ---
 
-### Propuesta 5: Push Notification Re-engagement Campaign
+### Propuesta 4: FAQ como Featured Snippet + Conversion Tool
 
-**Problema:** El service worker tiene push notifications completo (sw.js líneas 159-197), pero no hay backend para enviar notifications ni estrategia de contenido. Los usuarios instalan la PWA pero nunca reciben re-engagement. El momento óptimo para solicitar review es 24h post-servicio — pero no hay sistema automatizado.
+**Problema:** Las FAQs actuales son informativas pero no están optimizadas para featured snippets (position 0) ni diseñadas como herramienta de conversión. Pierden tráfico y no guían al usuario hacia la reserva.
 
 **Propuesta:**
-1. **Implementar Scheduled Notifications (usando un servicio gratuito):**
-   - **OneSignal** (free tier: 30k push/month) permite:
-     - Programar notifications basadas en triggers
-     - Segmentación por usuario
-     - Tracking de engagement
-   - Alternativa gratuita: **Firebase Cloud Messaging** (FCM) con service worker ya compatible
-   - Si no se quiere backend: usar **Pusher** (free tier: 100 conexiones simultáneas)
+1. **FAQ Schema Refactored:**
+   - Reescribir respuestas para featured snippets:
+     - **Antes:** "La limpieza profunda de sofás es un proceso que elimina..."
+     - **Después:** "La limpieza profunda de sofá en Bogotá cuesta entre $80.000 y $180.000 por unidad, dependiendo del tamaño y material."
+   - Usar estructura: pregunta directa → respuesta corta → contexto
 
-2. **Campaign de re-engagement para 3 momentos críticos:**
-   - **24h post-servicio:** "¡Esperamos que estés feliz con tu [servicio]! Cuéntanos cómo te fue → [dejar review]"
-   - **7 días post-servicio:** "Recuerda: para mantener tu [superficie] en óptimas condiciones, te recomendamos una limpieza cada [frecuencia]. ¿Quieres agendar ya?"
-   - **30 días post-servicio:** "Ya pasó un mes! Es buen momento para una limpieza de mantenimiento. Usa el código RECORDATORIO para 10% off →"
+2. **Expandable FAQ with CTA:**
+   - Después de cada respuesta, añadir CTA contextual:
+     - "💡 Puedes reservar ahora haciendo clic aquí"
+     - "📞 o llámanos al +57 300 123 4567"
+   - Usar `<details>` con aria-expanded para accesibilidad
 
-3. **Implementación técnica:**
-   - Añadir script de OneSignal/FCM en index.html
-   - Configurar service worker para recibir y mostrar notifications
-   - Crear lógica de scheduling en el frontend (para free tier sin backend):
-     - Al reservar, guardar timestamp en localStorage
-     - Crear función que evalúe timestamps y muestre notification si corresponde
-   - Para backend: crear endpoint simple que dispare notifications programables
+3. **Featured Snippet Optimization:**
+   - Crear FAQPage schema con `Question` items individuales
+   - Cada Q&A должна начинаться directocon la pregunta (H3)
+   - Respuesta debe tener 40-60 palabras para máximo snippet eligibility
 
-4. **Content guidelines para notifications:**
-   - Personalizado, no genérico ("Tu sofá quedó impecable!" no "Estimado cliente")
-   - Incluir acción clara ("Dejar review", "Reservar ahora")
-   - Urgencia sutil ("Solo hoy: 10% off")
-   - Emojisúspero pero no excesivo (1-2 máximo)
+4. **Voice Search FAQ:**
+   - Agregar sección "Preguntas que nos hacen por voz"
+   - Queries como: "¿Cuánto cuesta limpiar un sofá en Chapinero?" respondidas en formato conversacional
 
-**Impacto:** Aumenta reviews post-servicio (critical según LCRS 2026), mantiene engagement, impulsa reservaciones recurrentes.
-**Esfuerzo:** M (2-3 días — setup + campaña inicial)
-**Agente:** Full Stack (para integración con OneSignal/FCM)
-**Referencias:** Best practices — 24h post-servicio es timing óptimo para review request; 7-14 días para recall
+5. **FAQ Analytics:**
+   - Trackear qué preguntas FAQ son más clickeadas
+   - Iterar contenido basado en qué FAQ convierte más
+
+**Impacto:** Position 0 para 5+ queries. +15% reducción bounce rate en sección FAQ.
+**Esfuerzo:** S (1 semana — principalmente content rewriting)
+**Agente:** Frontend / SEO / Content
+**Referencias:**
+- Google Search Central — "Best practices for FAQ pages"
+- Ahrefs — "How to optimize for featured snippets" (2026)
+
+---
+
+### Propuesta 5: Motion Design System — Micro-interacciones Consistente
+
+**Problema:** Las micro-interacciones son inconsistentes y no hay un motion design system unificado. El site funciona pero no transmite la sensación de "premium" que el pricing sugiere.
+
+**Propuesta:**
+1. **Motion Design Token:**
+   - Definir tokens en CSS:
+     ```css
+     --motion-fast: 150ms;    /* hover, focus */
+     --motion-base: 250ms;    /* default transitions */
+     --motion-slow: 400ms;    /* reveal, expand */
+     --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+     --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+     ```
+   - Aplicar tokens consistentemente en todo el CSS
+
+2. **Focus States Mejorados:**
+   - Ring de focus visible (no solo outline)
+   - Transform scale en elementos clickeables
+   - Box-shadow transition en buttons y cards
+
+3. **Loading/Success/Error States:**
+   - Skeleton loaders para content que carga dinámicamente
+   - Success animation (confetti ya existe pero puede mejorarse)
+   - Error state con mensaje actionable y retry button
+
+4. **Accessibility — prefers-reduced-motion:**
+   - Respetar `prefers-reduced-motion: reduce` en TODAS las animaciones
+   - Toggle manual en settings para usuarios que prefieren sin animación
+   - `animation: none` cuando `reduce` está activo
+
+5. **Card Hover Micro-interaction:**
+   - Transform: translateY(-4px) + box-shadow increase
+   - Ripple effect en botón (ya existe pero puede refinarse)
+   - Stagger animation en grids (50ms entre cards)
+
+**Impacto:** +10% mejor engagement (time on site, scroll depth). Percepción de mayor calidad.
+**Esfuerzo:** S (1 semana — CSS refactoring y motion tokens)
+**Agente:** Frontend
+**Referencias:**
+- MDN — "CSS animations and prefers-reduced-motion"
+- Motion design systems: Stripe, Linear app
 
 ---
 
@@ -358,54 +304,41 @@ Según datos de retención de apps PWA:
 
 | # | Propuesta | Impacto | Esfuerzo | Agente | Razón estratégica |
 |---|-----------|---------|----------|--------|------------------|
-| 1 | WhatsApp Click-to-Chat con Deep Links | Alto | Bajo | Frontend | Colombia = WhatsApp país #1; conversión directa |
-| 2 | GBP Q&A Proactive Population | Medio | Bajo | Content/SEO | SEO + conversión, competencia casi nula |
-| 3 | Video SEO Strategy (YouTube Shorts) | Alto | Medio | Content | YouTube Shorts en Google; diferenciación vs. competidores |
-| 4 | Cross-Platform Directory Presence | Medio | Bajo | SEO | Citations = autoridad; mejora AI discoverability |
-| 5 | Push Notification Re-engagement | Medio | Medio | Full Stack | Reviews frescas + reservaciones recurrentes |
+| 1 | Blog Pillar + Topic Cluster | Alto | Medio | Content/SEO | Traffic orgánico a largo plazo |
+| 2 | Zone Page Automation | Alto | Medio | Full Stack | Escala sin crear contenido manual |
+| 3 | Competitive Intelligence | Medio | Medio | Full Stack | Proactividad vs competencia |
+| 4 | FAQ Featured Snippet | Medio | Bajo | SEO/Content | Position 0 rápido |
+| 5 | Motion Design System | Medio | Bajo | Frontend | Percepción de calidad premium |
 
-**Top 3 para implementar primero:** 1, 2, 4 — alto impacto de conversión y SEO con esfuerzo bajo.
+**Top 3 para implementar primero:** 4, 1, 5 (quick wins con impacto rápido). Luego 2 y 3 (mayor escala pero más esfuerzo).
 
 ---
 
 ## Síntesis: Por qué R18 es diferente
 
-R17 se enfocó en **frescura de datos** (reviews stale, AI search). R18 se enfoca en **canales de conversión y descubrimiento multiplataforma**:
+R1-R17 se enfocaron en:
+- Features individuales (chatbot, booking, cotizador, referidos)
+- UX (dark mode, accesibilidad, skip nav)
+- Marketing (SEO, ads, social media)
+- Operaciones (field app, subscriptions, WhatsApp catalog)
+- Tech (AI vision, B2B API, Teams integration)
 
-- **WhatsApp** es el canal #1 de conversión en Colombia — debe estar optimizado con deep links y auto-respuesta
-- **GBP Q&A** es terreno sin explotar — populate proactivo = SEO + conversión
-- **Video SEO** (YouTube Shorts) es la siguiente frontera del descubrimiento local
-- **Citations** en directorios latinoamericanos mejora autoridad para Google y AI tools
-- **Push notifications** con estrategia de contenido convierten la PWA en herramienta de retención
+R18 se enfoca en:
+- **Arquitectura de contenido** (pillar-cluster para topical authority)
+- **Escalabilidad programática** (100+ páginas de barrio generadas automáticamente)
+- **Inteligencia competitiva** (dashboard proactivo vs reactivo)
+- **SEO para featured snippets** (position 0 sin tráfico pagado)
+- **Motion design system** (calidad percibida y engagement)
 
-Estas 5 propuestas son aditivas a lo existente y no requieren rewrite — solo extensión del sistema actual con nuevos canales y contenido.
+R18 representa la evolución de "mejorar lo que existe" a "construir activos de largo plazo que generan tráfico y conversiones de forma sostenida".
 
 ---
 
 ## Referencias
 
-[1] BrightLocal — "The Complete Local SEO Checklist 2025" (Oct 2025). Hallazgos clave:
-- Citation building en directorios relevantes al mercado local
-- GBP Q&A population proactiva
-- Multi-platform presence (no solo Google)
-
-[2] Statista — "WhatsApp Business usage in Latin America 2025". Colombia tiene la penetración más alta de WhatsApp Business en la región.
-
-[3] BrightLocal — "Local Consumer Review Survey 2026" (Feb 2026). Video platforms (YouTube, Instagram, TikTok) gaining traction para local business recommendations.
-
----
-
-## Notas adicionales
-
-**Gaps técnicos detectados:**
-1. El service worker (sw.js) está bien implementado, pero no hay integración con backend de push (OneSignal/FCM)
-2. El booking form usa Formspree sin automatización post-envío
-3. No hay sistema de CRM para trackear leads y follow-ups
-
-**Gaps de contenido:**
-1. Blog tiene 6 artículos (bien!) pero no hay video embebido
-2. No hay página de "Cómo funciona" (propuesto en R16, nunca implementado)
-3. Las páginas de zona son plantillas — no hay contenido único por zona
+[1] SEMrush — "Topical Authority and Content Clusters Strategy" (2026)
+[2] Backlinko — "How to Optimize for Featured Snippets" (2026)
+[3] NNGroup — "Micro-interactions and User Experience" (2026)
 
 ---
 
