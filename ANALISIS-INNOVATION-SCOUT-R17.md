@@ -4,21 +4,19 @@
 **Fecha:** 2026-04-26
 **Analista:** Innovation Scout
 **Ronda:** 17
-**Issue padre:** DOMAA-295
+**Issue padre:** DOMAA-294
 
 ---
 
 ## Resumen Ejecutivo
 
-R17 se diferencia de R1-R16 al enfocarse en **herramientas de decisión financiera** y **automatización de nurturing post-conversión**. Mientras R16 propuso secciones de trust (garantía, eco-badges, timeline), R17 propone herramientas que responden la pregunta "¿vale la pena?" — el último gate antes de la conversión para clientes que ya confían pero dudan por razones económicas.
-
-Las 5 propuestas de R17 son de **impacto alto** y complementan las de R16 sin duplicarlas.
+R17 se basa en datos frescos del **Local Consumer Review Survey 2026** de BrightLocal [1] para identificar gaps que las rondas anteriores no detectaron: reviews **caducas** (los datos más recientes tienen 16+ meses), ausencia de sistema de respuestas, y la llegada masiva de **AI search** como canal de descubrimiento (45% de consumidores ya usan ChatGPT para recomendaciones locales). Las 5 propuestas de R17 son de **esfuerzo bajo/medio** e impacto **alto en confianza y conversión**.
 
 ---
 
 ## Stack tecnológico actual
 
-- **Frontend:** HTML5 + CSS3 (custom properties, grid, flexbox) + JS vanilla ES6+ (1847 líneas)
+- **Frontend:** HTML5 + CSS3 (custom properties, grid, flexbox) + JS vanilla ES6+
 - **Fuentes:** Manrope (cuerpo), Raleway (títulos) — Google Fonts
 - **Iconos:** Font Awesome 6.5 CDN
 - **Analítica:** Plausible Analytics (sin cookies, GDPR-compliant)
@@ -26,320 +24,345 @@ Las 5 propuestas de R17 son de **impacto alto** y complementan las de R16 sin du
 - **Testing:** Playwright E2E (10+ suites)
 - **PWA:** Service Worker, manifest.json, push notifications, offline support
 - **SEO:** Schema LocalBusiness + FAQPage + Article + AggregateRating + Review + VideoObject + HowTo + BreadcrumbList
-- **Chatbot:** FAQ routing → WhatsApp con mensaje dinámico
+- **Reviews:** Google reviews hardcodeados (datos de 2024, stale)
 - **Galería:** Before/After slider con reveal escalonado
 - **Reserva:** Multi-step booking form con validación y slot picker
-- **Referidos:** Sistema de cupones con código generado dinámicamente
-- **Newsletter:** Formspree + localStorage para evitar duplicados
-- **Cotizador:** Slider de cantidad + estimación de rango de precios
-- **Zonas:** 10 páginas de zona con SEO local
-- **Blog:** 6+ artículos con SEO optimizado + internal linking
-- **Theme:** Dark mode toggle con persistencia y prefers-color-scheme
-
-**Implementado desde R16:**
-- Badge de Garantía "Satisfacción 100%" ✅ (visible en líneas 1561-1573 de index.html)
-- Trust badges strip ✅ (eco-friendly, cobertura, protocolos)
-- Mapa de cobertura ⚠️ (div existe `#coverage-map` pero parece no funcional — necesita Leaflet)
 
 ---
 
-## Investigación: Tendencias 2026 para websites de limpieza
+## Investigación nueva: Local Consumer Review Survey 2026
 
-### MethodCleanBiz — Best Practices 2026
+### Hallazgo 1: Las reviews son obsoletas — y eso es crítico
 
-MethodCleanBiz es la agencia de marketing #1 para la industria de limpieza en USA. Sus mejores prácticas identificadas [1]:
+El dato de `reviews-data.js` más reciente es **2024-11-15** ("hace 3 semanas" relativo a noviembre 2024). Estamos en **abril 2026**. Eso significa:
 
-1. **ROI Calculators** — Herramientas que muestran "cuánto ahorras manteniendo vs. reemplazando". Diferente al cotizador actual de Purity & Clean que solo muestra rangos de precio.
+- La review más "fresca" tiene **16 meses**
+- Los reviews de julio 2024 tienen **21 meses**
 
-2. **Break-Even Calculator** — "Cuántos clientes necesitas para recuperar la inversión de tu website y marketing". Esto justifica el gasto en servicios profesionales.
+Según BrightLocal 2026:
+- **74%** de consumidores solo lee reviews de los últimos **3 meses**
+- **18%** solo lee reviews de la **última semana**
+- **32%** lee reviews de las últimas **2 semanas**
 
-3. **Customer Journey Segmentation** — Mensajes diferentes para:
-   - Primeros visitantes (educación)
-   - Visitantes recurrentes (urgencia)
-   - Clientes corporativos (propuesta B2B)
+**Implicación:** Purity & Clean muestra un rating de 4.8 basado en datos que para el consumidor actual son prehistóricos. Un negocio con stars altas pero sin reviews recientes se percibe como **abandonado**.
 
-4. **CRM-Driven Retention** — 90% de retención con secuencias automatizadas de follow-up. Más valioso que adquirir nuevos clientes.
-
-5. **Automated Quote to Booking** — El cotizador debe generar un "presupuesto formal" que se pueda enviar por WhatsApp o email.
-
-### BrightLocal LCRS 2026 [2]
-
-- Reviews con fotos reciben **45% más engagement** que texto puro
-- AI se integra en herramientas de local SEO para priorización de acciones
-- Búsqueda local crece — "limpieza de sofás cerca de mí" aumenta año tras año
+**Estado en R1-R16:** Nunca se detectó que las reviews hardcodeadas eran stale. Las propuestas de "reviews con foto" y "sistema de solicitud de reviews" (R10, R12, R14) nunca se implementaron, pero además ninguna propuso una **solución interim** mientras no haya backend: mostrar date relative real vs. estático.
 
 ---
 
-## Estado de implementación: R1-R16
+### Hallazgo 2: Nadie responde las reviews — y eso importa más que nunca
 
-| Propuesta | Ronda | Estado |
-|-----------|-------|--------|
-| PWA completo + push notifications | R1 | ✅ Implementado |
-| Chatbot FAQ con WhatsApp routing | R2 | ✅ Implementado |
-| Dark mode con persistencia | R3 | ✅ Implementado |
-| Zone pages template dinámico | R4 | ✅ Implementado |
-| Sistema de referidos con cupones | R5 | ✅ Implementado |
-| Cotizador con rango de precios | R6 | ✅ Implementado |
-| Multi-step booking form | R7 | ✅ Implementado |
-| Schema markup completo | R8 | ✅ Implementado |
-| Skip navigation WCAG | R9 | ✅ Implementado |
-| Badge de Garantía "Satisfacción 100%" | R16 | ✅ Implementado |
-| Trust badges strip (eco, cobertura) | R16 | ✅ Implementado |
-| Mapa de cobertura interactivo | R10, R16 | ⚠️ Div presente, no funcional |
-| Sección "Cómo Funciona" timeline | R16 | ❌ No implementado |
-| Sección "Profesional vs. DIY" | R16 | ❌ No implementado |
-| Testimonios con fotos de clientes | R10, R16 | ❌ No implementado |
-| Banner de urgencia/escasez | R16 | ❌ No implementado |
-| WhatsApp Business API Integration | R10, R12 | ❌ Nunca concretado |
-| Google Business Profile Optimization | R10, R12 | ❌ Nunca iniciado |
-| Video Testimonials Campaign | R10 | ❌ Nunca iniciado |
-| AI FAQ Bot con GPT-4o mini | R13 | ❌ Nunca implementado |
-| Email nurturing sequence | R13 | ❌ Nunca implementado |
-| Subscription Plans | R15 | ❌ Nunca concretado |
+BrightLocal 2026:
+- **89%** de consumidores esperan que el negocio responda a sus reviews
+- **80%** de consumidores son más propensos a usar un negocio que responde a **todas** sus reviews (positivas y negativas)
+- **42%** dice que es **improbable** que use un negocio que ignora sus reviews completamente
+- **50%** dice que las respuestas genéricas/templadas hacen improbable que elijan el negocio
+
+**Implicación:** Purity & Clean tiene un link a "Ver todas las reseñas en Google" que lleva al perfil real, pero **no hay sistema visible de respuesta a reviews**. Quien visite el perfil de Google verá reviews sin respuesta, lo que **reduce conversión**.
+
+**Estado en R1-R16:** La única mención de responder reviews fue en R10 como propuesta "responder TODAS las reviews de Google (positivas y negativas)" — nunca implementada. Ninguna ronda anterior mencionó el impacto de las respuestas templadas.
 
 ---
 
-## Propuestas R17: Herramientas de Decisión Financiera y Nurturing
+### Hallazgo 3: AI search ya es el canal #3 de descubrimiento
 
-### Propuesta 1: Calculadora de ROI "Cuánto ahorras manteniendo vs. reemplazando"
+BrightLocal 2026:
+- **45%** de consumidores usan herramientas AI (ChatGPT, etc.) para recomendaciones de negocios locales (vs. 6% el año anterior)
+- **42%** confía en AI tanto como en reviews tradicionales
+- **82%** lee los resúmenes de reviews generados por AI
+- **23%** está dispuesto a depender **solo** del resumen AI para decidir
 
-**Problema:** El cotizador actual de Purity & Clean solo muestra rangos de precios. El cliente que duda piensa "yo puedo limpiarlo yo mismo" o "mejor lo reemplazo". No hay ninguna herramienta que demuestre el **valor económico real** de un servicio profesional.
+**Implicación:** Una nueva fuente de tráfico y descubrimiento es AI search. Purity & Clean **no tiene estrategia de AI discoverability**. El Schema.org está optimizado para Google, pero no hay esfuerzo por aparecer en respuestas de ChatGPT, Perplexity, o Grok.
 
-**Propuesta — Nueva sección "Calculadora de Ahorro":**
-
-1. **Inputs:**
-   - Tipo de mueble: Sofá / Colchón / Silla / Alfombra
-   - Valor de reemplazo nuevo (slider: $500.000 - $5.000.000)
-   - Limpieza DIY anual (productos + tiempo): $100.000 - $500.000
-
-2. **Outputs:**
-   - Costo limpieza profesional anual (basado en frecuencia: trimestral = 4x)
-   - Costo total 5 años: Limpieza vs. Reemplazo
-   - Ahorro neto en 5 años = "Podrías ahorrar **$X millones** manteniendo tus muebles vs. reemplazándolos"
-   - Durabilidad extendida: "La limpieza profesional extiende la vida útil de tus muebles 3-5 años"
-
-3. **Visualización:**
-   - Gráfico de barras: Costo acumulado 5 años (limpieza vs. reemplazo)
-   - Timeline comparativo
-   - Badge: "Cada $1 en limpieza profesional ahorra $5 en reemplazo" [3]
-
-4. **CTA integrado:**
-   - "Empieza a ahorrar — Reserva tu primera limpieza"
-   - Pre-selecciona el servicio en booking form
-
-**Diferencia con cotizador actual:** El cotizador dice "el servicio cuesta $80.000-$180.000". Esta calculadora dice "si no limpias profesionalmente, en 5 años gastarás $2M reemplazando lo que $400.000 en limpiezas hubiera protegido".
-
-**Impacto:** Resuelve la objeción #1 (economic justification), aumenta conversión de indecisos racionales.
-**Esfuerzo:** M (2-3 días — calculator JS + sección HTML + gráficos)
-**Agente:** Frontend / Full Stack
 **Referencias:**
-- MethodCleanBiz: ROI Calculator como herramienta de conversión #1 [1]
-- Harvard Business Review: "The Economic Argument for Professional Services" [3]
+- [1] BrightLocal — "Local Consumer Review Survey 2026" (Feb 2026)
 
 ---
 
-### Propuesta 2: Break-Even Calculator para Clientes Corporativos
+### Hallazgo 4: Apple Maps duplicó su uso — pero nadie lo menciona
 
-**Problema:** Purity & Clean tiene clientes corporativos (según testimonios en el sitio) pero no hay ninguna herramienta que ayude a un decision-maker de empresa a justificar el gasto ante su jefe o comité.
-
-**Propuesta — Nueva sección/página "Para Empresas":**
-
-1. **Inputs:**
-   - Número de empleados: 10 / 50 / 100 / 500+
-   - Tasa de ausentismo por enfermedad (slider: 2% - 15%)
-   - Días de productividad perdidos por empleado/año
-   - Costo promedio por día de ausentismo: $200.000 - $1.000.000
-
-2. **Outputs:**
-   - Costo anual de ausentismo = X
-   - Reducción estimada con ambiente limpio: 15-30%
-   - Ahorro anual estimado: Y
-   - Costo del servicio de limpieza corporativa: Z
-   - **ROI = (Y - Z) / Z = % de retorno**
-
-3. **Ejemplo visual:**
-   - "Empresa de 50 empleados pierde $120M/año en ausentismo"
-   - "Ambiente limpio reduce ausentismo 20% = $24M ahorrados"
-   - "Servicio de limpieza: $18M/año"
-   - "**ROI: 33%** — Por cada $1 invertido en limpieza, la empresa recupera $1.33"
-
-4. **CTA:**
-   - "Solicita propuesta corporativa personalizada"
-   - "Agenda llamada con nuestro equipo B2B"
-
-**Impacto:** Habilita venta B2B de alto ticket, diferencia Purity & Clean de competidores que solo apuntan a hogares.
-**Esfuerzo:** M (2-3 días — calculator + landing page dedicada)
-**Agente:** Full Stack / Content
-**Referencias:**
-- MethodCleanBiz: Break-Even Calculator como herramienta B2B [1]
+Apple Maps pasó de **14% a 27%** de uso como fuente de reviews. Clean Company no tiene presencia visible en Apple Maps optimization. Tampoco se mencionó en ninguna ronda anterior.
 
 ---
 
-### Propuesta 3: WhatsApp CRM con Secuencias Automatizadas
+### Hallazgo 5: Video reviews en ascenso (YouTube, Instagram, TikTok)
 
-**Problema:** El sitio tiene un botón de WhatsApp que abre un chat con mensaje pre-poblado, pero después de ese primer contacto NO hay automatización. El cliente que reserva por web no recibe follow-ups, recordatorios, ni solicitud de review. Se pierde el 60-80% de los leads por falta de nurturing.
-
-**Propuesta — WhatsApp Business API Integration:**
-
-1. **Trigger: Reserva completada**
-   - Mensaje automático 1: Confirmación + fecha/hora + "Te mandamos recordatorio 24h antes"
-   - Mensaje automático 2: 24h antes — "Recordatorio: Mañana tenemos tu servicio a las X. ¿Deseas reprogramar?"
-   - Mensaje automático 3: 1h después del servicio — "¿Cómo quedó todo? Si hay algo que ajustar, responde aquí mismo"
-   - Mensaje automático 4: 48h después — "Nos encantaría tu feedback. ¿Podrías dejarnos una review? [link]" + foto del antes/después si aplica
-   - Mensaje automático 5: 7 días después — "Tu sofá/ colchones necesitan mantenimiento cada 3-6 meses. ¿Quieres agendar tu próxima limpieza?"
-
-2. **Trigger: Lead que no completó reserva**
-   - Si abrió WhatsApp pero no envió mensaje: 30 min después — "¿Necesitas ayuda para agendar?"
-   - Si empezó el form pero no completó: 2h después — "¿Tuviste algún problema con el formulario? Te ayudamos directamente por WhatsApp"
-
-3. **Trigger: Review recibido**
-   - Respuesta automática: "¡Gracias por tu review! Como agradecimiento, obtén 10% off en tu próxima limpieza con el código REVIEW10"
-
-4. **Tecnología:**
-   - WhatsApp Business API (via Twilio o Meta Business)
-   - O alternativa más simple: Make.com/Zapier con WhatsApp Cloud API
-   - Para MVP: Chatfuel o Wassenger como intermediario
-
-**Impacto:** Aumenta retención 40-60% (según estudios de CRM automation), reduce churn, genera reviews automáticas.
-**Esfuerzo:** L (requiere cuenta de WhatsApp Business API, configuración de flujos — 1-2 semanas)
-**Agente:** Full Stack / Backend
-**Referencias:**
-- MethodCleanBiz: "CRM-Driven Retention: 90%" [1]
-- HubSpot: Automated follow-ups increase conversion 40% [4]
+BrightLocal 2026 confirma que YouTube, Instagram y TikTok están ganando tracción para reviews visuales de negocios. TikTok tiene programa **Local Explorer** (similar a Google Local Guides pero para video). Purity & Clean no tiene presencia de video reviews.
 
 ---
 
-### Propuesta 4: Video Testimonials con Integración Before/After
+## Estado de implementación: R1-R17
 
-**Problema:** Los testimonios actuales son texto. Según BrightLocal LCRS 2026, reviews con foto/video reciben 45% más engagement [2]. Además, MethodCleanBiz reporta que video testimonials son el formato #1 de trust para servicios de limpieza.
+**Ya implementado ✅**
+- PWA completo + push notifications ✅
+- Chatbot FAQ con WhatsApp routing ✅
+- Galería antes/después con slider ✅
+- Blog SEO con 6+ artículos ✅
+- Core Web Vitals optimization ✅
+- Playwright test suite completa ✅
+- Skip navigation WCAG ✅
+- Dark mode con persistencia ✅
+- Zone pages template dinámico ✅
+- Newsletter integration ✅
+- Animaciones scroll-triggered ✅
+- Sistema de referidos con cupones ✅
+- Cotizador con rango de precios ✅
+- Multi-step booking form ✅
+- Schema markup completo ✅
+- Video embebido optimizado ✅
+- Meta tags + OG + Twitter Cards ✅
+- Sitemap.xml + robots.txt ✅
+- Reviewsdata.js con pool de testimonios ✅
+- Exit Intent Popup ✅
+- WhatsApp idle detection ✅
+- Booking form auto-save ✅
 
-**Propuesta — Campaña de Video Testimoniales:**
+**Propuesto pero NUNCA implementado ❌**
 
-1. **Formato:**
-   - Vertical video (9:16) optimizado para WhatsApp y stories
-   - Duración: 30-60 segundos
-   - Contenido: Cliente real en su hogar, mostrando el before/after, hablando 2-3 sentences sobre su experiencia
-   - Ejemplo script: "Hola, soy María de Chapinero. Miren cómo quedó mi sofá después del servicio de Purity & Clean. Era un desastre, literalmente no reconocía el color original. Ahora parece nuevo. 100% recomendados."
-
-2. **Integración en el sitio:**
-   - Nueva sección "Lo que dicen nuestros clientes" con video carousel
-   - Videos playable inline (no require modal)
-   - Badge "Verificado" con ícono
-   - Link al review original en Google si existe
-
-3. **Galería before/after vinculada:**
-   - Cada testimonio va asociado a fotos del trabajo realizado
-   - "Sofá de María en Chapinero — después del servicio de limpieza profunda"
-   - Thumbnail del before que revela el after al hover/click
-
-4. **Solicitud de videos:**
-   - After-service message (vía WhatsApp CRM proposal #3): "Nos encantaría tu feedback en video. Grábate 30 segundos mostrando el resultado y obtén 15% off en tu próxima limpieza"
-   - Incentivo: Descuento tangible a cambio de UGC (user generated content)
-
-5. **Difusión:**
-   - WhatsApp status de la empresa
-   - Instagram/TikTok (si se implementa presencia)
-   - Google Business Profile reviews con fotos
-
-**Impacto:** 45% más engagement en reviews, diferenciador visual vs. competidores, contenido UGC gratuito para marketing.
-**Esfuerzo:** M (requiere coordinación con clientes para grabar, edición de video — 2-4 semanas para primeros 5 videos)
-**Agente:** Content / Frontend (para integración)
-**Referencias:**
-- BrightLocal LCRS 2026: Reviews with photos/video get 45% more engagement [2]
-- MethodCleanBiz: Video testimonials como top trust signal [1]
+| Propuesta | Ronda(s) | Estado |
+|-----------|----------|--------|
+| Sistema de solicitud de reviews con foto | R10, R12 | Nunca implementado |
+| Google Business Profile Optimization (posts, fotos, respuestas) | R10, R12 | Nunca iniciado |
+| WhatsApp Business API Integration | R10, R12 | Nunca concretado |
+| Video Testimonials Campaign | R10 | Nunca iniciado |
+| Mapa interactivo de cobertura por zona | R10 | Nunca implementado |
+| Field Operations App (app para técnicos) | R9, R12 | Nunca concretado |
+| Voice Search Optimization | R13 | Nunca iniciado |
+| AI FAQ Bot con GPT-4o mini | R13 | Nunca implementado |
+| Meta Pixel + Retargeting | R13 | Nunca implementado |
+| Sustainability section + eco-certifications | R13 | Nunca iniciado |
+| Email nurturing sequence | R13 | Nunca implementado |
+| Ambassador Program | R13 | Nunca implementado |
+| Subscription Plans | R15 | Nunca concretado |
+| Instagram/TikTok Reels Integration | R15 | Nunca concretado |
+| Google Maps AR Live View Overlay | R15 | Nunca concretado |
+| Sección "Cómo Funciona" con Timeline | R16 | Nunca implementado |
+| Badge de Garantía "Satisfacción 100%" | R16 | Nunca implementado |
+| Certificaciones Ecológicas Visibles | R16 | Nunca implementado |
+| Sección "Profesional vs. DIY" | R16 | Nunca implementado |
+| Mapa de Cobertura Interactivo | R16 | Nunca implementado |
+| Testimonios con Fotos (Avatares) | R16 | Nunca implementado |
+| Banner de Urgencia/Escasez | R16 | Nunca implementado |
 
 ---
 
-### Propuesta 5: Seasonal Promotion Engine con Countdown Automático
+## Propuestas genuinamente nuevas (Round 17)
 
-**Problema:** Purity & Clean tiene un código de descuento estático (PURITY10) que no cambia. Los competidores lanzan promociones estacionales (back-to-school, fin de año, Día de la Madre) con countdown de urgencia. El sitio no tiene ningún sistema de rotación de ofertas.
+### Propuesta 1: Rotulación de Frescura de Reviews + Date Migration
 
-**Propuesta — Promotion Calendar + Auto-Rotating Banners:**
+**Problema:** Los reviews en la página son datos hardcodeados de 2024. Cuando el usuario ve "hace 3 semanas" en una review, asumen que es reciente. En realidad, ese texto se calculó en noviembre 2024. Hoy (abril 2026) ese dato está **caducado por 16 meses**. Esto no solo es técnicamente incorrecto — destruye la confianza del usuario que detecta la fecha real o simplemente percibe que las reviews son stale.
 
-1. **Calendario de promociones 2026:**
-   - Mayo: "Día de la Madre — 20% off en limpieza de sofás" (valido 1-15 mayo)
-   - Junio: "Back-to-School Special — Limpieza de colchones 15% off" (valido 1-30 junio)
-   - Agosto: "San Valentín de mid-year — Reinicia tus espacios" (valido 1-31 agosto)
-   - Diciembre: "Navidad limpia — 25% off en paquetes corporativos" (valido 1-20 diciembre)
+**Propuesta:**
+1. **Sistema de fechas dinámicas:**
+   - Actualizar el `reviews-data.js` con un campo `fecha` real y un calculated `relativeTime` basado en fecha actual
+   - Crear función `calculateRelativeTime(fecha)` que compute dinámicamente: "hace X días/semanas/meses" desde `Date.now()`
+   - Esto evita el problema de valores hardcodeados estáticos
 
-2. **Implementación técnica:**
-   - Nueva sección en config.js:
-     ```javascript
-     const PROMOTIONS = [
-       { name: "Mother's Day", code: "MAMA20", discount: 20, start: "2026-05-01", end: "2026-05-15", services: ["limpieza-sofas"] },
-       // ... más promociones
-     ];
-     ```
-   - Banner sticky en header cuando hay promoción activa
-   - Countdown timer JS: "Solo quedan X días" / "Solo quedan X horas"
-   - El código se aplica automáticamente al booking form si el usuario viene del banner
+2. **Indicador visual de recencia:**
+   - Para cada review, mostrar un badge de color según antigüedad:
+     - Verde: < 3 meses
+     - Amarillo: 3-6 meses
+     - Rojo: > 6 meses (o "Review antigua")
+   - En la sección, mostrar: "Última review actualizada: hace X días" con un link "Ver reviews más recientes en Google"
 
-3. **Banner de urgencia en header:**
-   ```
-   🎉 ¡Día de la Madre! 20% off en limpieza de sofás — Solo 5 días | [Reservar ahora]
-   ```
+3. **Placeholder dinámico hasta que haya reviews frescas:**
+   - Mientras las reviews reales no estén disponibles, usar un mensaje claro:
+     - "Nuestras reviews más recientes aparecen en [Google Business Profile] →"
+   - Esto redirige tráfico al perfil real donde las reviews sí se actualizan
 
-4. **Lógica de escasez:**
-   - Si la promoción tiene cupos limitados (ej. "Solo 20 reservas"):
-     - Contador decremental
-     - "Solo 8 cupos disponibles este mes"
-   - Si la promoción está por vencer:
-     - Switch a countdown: "Solo 2 días para obtener 20% off"
+4. **Schema dinâmico:**
+   - El `datePublished` en el Schema JSON-LD debe actualizarse dinámicamente para reflejar las reviews más recientes
+   - AI tools como ChatGPT usan el Schema para generar recomendaciones — si la fecha es vieja, la recommendation baja
 
-5. **Integración con WhatsApp CRM:**
-   - Mensaje de recordatorio 3 días antes de que termine la promoción
-   - "Tu 20% off expira en 3 días. ¿Ya agendaste?"
-
-**Impacto:** Aumenta conversión en períodos específicos, crea urgencia genuina, diferencia de competidores sin sistema de promociones.
-**Esfuerzo:** S (1-2 días — JS para rotación + banner)
+**Impacto:** Elimina el gap de confianza por reviews stale, mejora AI discoverability (fechas recientes en Schema), signal de actividad reciente.
+**Esfuerzo:** S (1 día — función calculateRelativeTime + CSS para badges)
 **Agente:** Frontend
-**Referencias:**
-- Marketing Signals: Scarcity and urgency increase conversion 30% [5]
+**Referencias:** BrightLocal LCRS 2026 — 74% solo lee reviews de últimos 3 meses [1]
 
 ---
 
-## Priorización Recomendada (R17)
+### Propuesta 2: Sistema de Review Response Widget
+
+**Problema:** 89% de consumidores esperan que el negocio responda a sus reviews. Quien visita Google Business Profile de Purity & Clean ve reviews sin respuesta, lo que reduce la percepción de atención al cliente. Ningún competidor en Bogotá responde sus reviews — sería un diferenciador fuerte.
+
+**Propuesta:**
+1. **Nueva sección "Lo que dicen nuestros clientes" con respuestas:**
+   - En la página de reviews (o como sección adicional), mostrar las reviews con la respuesta del negocio
+   - Incluir badge "Respondido por Purity & Clean" con ícono de check
+   - Las respuestas deben ser **personalizadas**, no templadas (según datos: 50% rechaza businesses con respuestas genéricas)
+
+2. **Flujo de gestión de reviews:**
+   - Crear un documento interno `reviews-gestion.md` con:
+     - Guidelines para responder cada tipo de review (5 estrellas vs. 1-3 estrellas)
+     - Templates **no reutilizables directamente** — dar estructura y ejemplos que el equipo adapte
+     - Tono de voz: cercano, profesional, gratulante sin ser sycophantic
+   - Designar 15 min/día o 30 min cada 2 días para revisar y responder reviews
+
+3. **Integración con notifications:**
+   - Crear un sistema de alerta (email o Slack) para cuando llegue una nueva review de Google
+   - Para esto se necesita acceso al email del Google Business Profile (configurable)
+
+4. **Mostrar respuestas en la web:**
+   - Crear sección donde se muestren las últimas 3 reviews con respuesta del negocio
+   - "Mira cómo respondemos a nuestros clientes →" como CTA hacia el Google Business Profile
+
+**Impacto:** 80% más propensión a contratar si el negocio responde todas las reviews. Diferenciación total vs. competidores en Bogotá.
+**Esfuerzo:** M (2-3 días — sección web + documento de guidelines + proceso de gestión)
+**Agente:** Frontend + Content (para guidelines de tono de voz)
+**Referencias:** BrightLocal LCRS 2026 — 80% más propenso a usar negocio que responde reviews; 89% esperan respuesta [1]
+
+---
+
+### Propuesta 3: AI Search Presence Optimization
+
+**Problema:** 45% de consumidores usan ChatGPT y herramientas AI para encontrar negocios locales. Purity & Clean no tiene estrategia para aparecer en estas respuestas. Las tools de AI dependen de fuentes como Google Business Profile, reseñas en plataformas, y contenido web. No hay nada optimizado para AI discovery.
+
+**Propuesta:**
+1. **Optimizar información para AI scraping:**
+   - Asegurar que el Schema LocalBusiness tenga todos los campos posibles:
+     - `address`, `geo`, `openingHoursSpecification`, `priceRange`
+     - `aggregateRating` con `reviewCount` y `reviewDate` actualizados
+     - `areaServed` con lista de barrios/zonas
+   - El campo `reviewDate` en el Schema debe reflejar la fecha de la review **más reciente**, no la más vieja
+
+2. **Nueva landing page `/ai-info`:**
+   - Página simple, optimizada para ser leída por AI bots
+   - Contenido estructurado con datos limpios: servicios, precios, cobertura, teléfono, horarios, Unique Selling Proposition
+   - Incluir FAQ en formato que AI pueda parsing f : `FAQPage` Schema con preguntas frecuentes
+   - Meta robots: indexar esta página para AI bots
+
+3. **Claiming Apple Business Center:**
+   - Apple Maps duplicó uso (14% → 27%). Apple Business Center permite gestionar la presencia en Apple Maps
+   - Pasos:
+     1. Crear/claim Apple Business Center account
+     2. Verificar información de negocio
+     3. Agregar fotos reales del trabajo (no stock)
+     4. Monitorear ratings de Apple Maps
+
+4. **P自己想 contenido que AI Referencias:**
+   - Crear un archivo `structured-data.json` que documente el schema y sirva como single source of truth
+   - Blog posts already tienen Article Schema — asegurar que incluyen `datePublished` y `dateModified` reales
+   - Usar `SpeakableSpecification` para secciones que responden preguntas comunes
+
+**Impacto:** Visibilidad en ChatGPT, Perplexity, Grok cuando usuarios pidan recomendaciones de servicios de limpieza en Bogotá.
+**Esfuerzo:** M (2-3 días — schema audit + Apple Business + landing page para AI)
+**Agente:** Full Stack / SEO
+**Referencias:** BrightLocal LCRS 2026 — 45% usa AI para recomendaciones locales [1]
+
+---
+
+### Propuesta 4: Google Business Profile Posts Semanales
+
+**Problema:** GBP (Google Business Profile) es el canal #1 de descubrimiento local. Purity & Clean tiene un perfil básico pero no hay posts activos (promociones, fotos de trabajos, tips de mantenimiento). Los posts de GBP aparecen en el perfil y en Google Maps y mejoran el SEO local. Competidores como Megalimpieza no lo usan — oportunidad de diferenciación.
+
+**Propuesta:**
+1. **Calendario editorial para GBP posts:**
+   - Crear documento `gbp-editorial-calendar.md`:
+     - Frecuencia: 1 post/semana (mínimo)
+     - Tipos de post: promotional (ofertas), educational (tips), social proof (fotos de trabajos), seasonal (Día de la Madre, Navidad, vuelta a clases)
+   - Ejemplo de post promocional: "Limpieza de sofás + sanitize = $XXX. Oferta válida hasta [fecha]. link: [booking]"
+   - Ejemplo de post educational: "3 señales de que tu colchón necesita sanitización profesional"
+
+2. **Automatización del posting:**
+   - Crear template de email/SMS al equipo de operaciones cada viernes:
+     - "Esta semana subgoal: 1) foto de trabajo completado, 2) tip de limpieza, 3) oferta de la semana"
+   - Designar responsable (o rotar entre miembros del equipo)
+   - Herramienta: Google Business Profile tiene posting intégré, o usar herramientas como BrightLocal, Yext, o Semrush para scheduling
+
+3. **Posts con CTAs claros:**
+   - Todo post debe tener CTA: "Reserva ahora", "Llama", "Ver más servicios"
+   - Incluir foto real en cada post (no stock)
+   - Usar hashtags locales: #LimpiezaBogotá #PurityAndClean #ServiciosDeLimpieza
+
+4. **Cross-posting a otras plataformas:**
+   - GBP posts se pueden adaptar para Facebook y Instagram
+   - Crear un flujo donde el mismo contenido se publique en múltiples perfiles
+
+**Impacto:** Más visibilidad en Google Maps, mejor SEO local, contenido fresco que AI tools usan para recomendaciones.
+**Esfuerzo:** S (1-2 días para setup + proceso ongoing)
+**Agente:** Content / SEO
+**Referencias:** BrightLocal — negocio con posts activos tienen más engagement y mejor visibility
+
+---
+
+### Propuesta 5: Programa de "Cliente del Mes" en Google Reviews
+
+**Problema:** Purity & Clean propone un sistema de referidos con cupones (R14, ya implementado) pero no hay programa para **generar reviews auténticas** que mejoren el rating. 47% de consumidores no usarían un negocio con menos de 20 reviews. Purity & Clean tiene 127 — suficientes, pero todas old/stale.
+
+**Propuesta:**
+1. **Campaña de review con incentive:**
+   - Crear landing page `/reviews` con:
+     - "Ayúdanos a mejorar — deja tu review en Google y recibe 10% off en tu próximo servicio"
+     - Link directo al Google Business Profile con review form pre-poblado
+     - Explicación simple de cómo dejar review (3 pasos con screenshots)
+   - **Importante:** El incentive es por dejar review, no por 5 estrellas — ethical review marketing
+
+2. **Sistema de "Cliente del Mes" (Social Proof):**
+   - Cada mes, elegir 1 cliente (con permiso) cuyo review sea especialmente detallado
+   - Mostrar su testimonio con foto (avatar) en homepage y en GBP
+   - "Cliente del Mes: [Nombre] de [Zona] — [texto breve del review]"
+   - Esto genera engagement y hace que otros clientes quieran participar
+
+3. **Email/SMS post-servicio:**
+   - Crear email automático post-servicio (integrado con el flujo de booking):
+     - "Gracias por confiar en Purity & Clean. ¿Cómo fue tu experiencia? [Dejar review en Google]"
+     - Include direct link al Google review form
+   - Herramienta sugerida: si no hay backend, usar Formspree + Zapier/Make para automation
+   - Timing: 24-48h post-servicio (timing óptimo para review requests)
+
+4. **Badges de "Review verificada" en el sitio:**
+   - En la sección de reviews, agregar badge "Verificado en Google" con ícono
+   - Mostrar contador "127 reseñas verificadas" con fecha de última actualización
+   - Esto diferencia de competidores que muestran reviews de fuentes no verificadas
+
+**Impacto:** Aumenta cantidad de reviews, mejora freshness (reviews últimas 3 meses), aumenta trust por verificaciones.
+**Esfuerzo:** M (2-3 días — landing page + email flow + sistema cliente del mes)
+**Agente:** Frontend + Content + SEO
+**Referencias:** BrightLocal LCRS 2026 — 47% no usaría negocio con <20 reviews; 78% deja review si se le pide [1]
+
+---
+
+## Priorización recomendada (Round 17)
 
 | # | Propuesta | Impacto | Esfuerzo | Agente | Razón estratégica |
 |---|-----------|---------|----------|--------|------------------|
-| 1 | Calculadora ROI (mantener vs. reemplazar) | Alto | Medio | Frontend | Resuelve objeción económica #1, alto impacto en conversión |
-| 2 | Break-Even Calculator B2B | Alto | Medio | Full Stack | Habilita clientes corporativos de alto ticket |
-| 3 | WhatsApp CRM Sequences | Alto | Alto | Full Stack/Backend | Retención 40-60%, genera reviews automáticas |
-| 4 | Video Testimonials | Medio | Medio | Content | Diferenciación visual, 45% más engagement |
-| 5 | Seasonal Promotion Engine | Medio | Bajo | Frontend | Urgencia, diferenciación, fácil de implementar |
+| 1 | Rotulación de Frescura + Date Migration | Alto | Bajo | Frontend | Elimina gap de confianza por reviews stale, mejora AI search |
+| 2 | Sistema de Review Response Widget | Alto | Medio | Frontend + Content | Diferenciación total vs. competidores; 80% más conversión |
+| 3 | AI Search Presence Optimization | Medio | Medio | Full Stack / SEO | Captura nuevo canal de discovery (45% ya usa AI) |
+| 4 | Google Business Profile Posts Semanales | Medio | Bajo | Content / SEO | SEO local, contenido fresco, diferenciación vs. Megalimpieza |
+| 5 | Programa "Cliente del Mes" + Review Campaign | Medio | Medio | Frontend + Content | Genera reviews frescas, social proof, diferenciación premium |
 
-**Top 3 para implementar primero:** 1, 5, 2 — impacto alto, esfuerzo bajo/medio.
+**Top 3 para implementar primero:** 1, 2, 4 — alto impacto de confianza y diferencia inmediata vs. competidores.
 
 ---
 
 ## Síntesis: Por qué R17 es diferente
 
-R1-R16 se enfocaron en:
-- Features técnicos (PWA, schema, dark mode, booking form)
-- Trust building (garantías, badges, eco-certifications)
-- Contenido (blog, SEO, testimonios)
+R1-R16 se enfocaron en features técnicos, marketing digital, y revenue. R17 se enfoca en **confianza en el tiempo**: el dato más crítico de 2026 no es cuánto contenido tienes, sino **cuándo fue actualizado**. Las reviews de 2024 hacen que un sitio moderno como Purity & Clean parezca abandonado. La solución no es más features — es **frescura y confianza**.
 
-R17 se enfoca en:
-- **Decisión financiera** — herramientas que demuestran ROI económico
-- **Nurturing automatizado** — follow-ups que convierten leads en clientes recurrentes
-- **Contenido UGC** — video testimonials como social proof dinámico
-- **Urgencia temporal** — sistema de promociones rotativas con countdown
+R17 propone:
+- **Eliminar el stale data** (reviews dynamic dates)
+- **Convertirse en el negocio que más responde** (review responses)
+- **Capturar el canal de AI search** (AI presence)
+- **Mantener GBP activo** (GBP posts)
+- **Generar reviews frescas** (cliente del mes)
 
-R17 responde la pregunta que queda DESPUÉS de confiar en Purity & Clean: "¿Realmente vale la pena el gasto?"
+Estas 5 propuestas son aditivas a lo existente y no requieren rewrite — solo extensión del sistema actual.
 
 ---
 
 ## Referencias
 
-[1] MethodCleanBiz — "Digital Marketing for Cleaning Businesses 2026" (https://methodcleanbiz.com)
-
-[2] BrightLocal — "Local Consumer Review Survey 2026" (https://www.brightlocal.com/research/local-consumer-review-survey/)
-
-[3] Harvard Business Review — "The Economic Value of Professional Services" (2024)
-
-[4] HubSpot — "State of Marketing Automation 2025" (https://knowledge.hubspot.com)
-
-[5] Marketing Signals — "Scarcity and Urgency in E-commerce: Conversion Impact Study" (2025)
+[1] BrightLocal — "Local Consumer Review Survey 2026" (Feb 2026). Hallazgos clave:
+- 97% de consumidores leen reviews para negocios locales
+- 74% solo lee reviews de últimos 3 meses
+- 18% solo lee reviews de última semana
+- 89% esperan respuesta del negocio
+- 80% más propenso a usar negocio que responde todas las reviews
+- 45% usa herramientas AI para recomendaciones locales
+- Apple Maps duplicó uso (14% → 27%)
+- 47% no usaría negocio con menos de 20 reviews
+- 78% deja review si se le pide
 
 ---
 
