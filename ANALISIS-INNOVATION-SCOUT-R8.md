@@ -4,216 +4,227 @@
 **Fecha:** 2026-04-26
 **Analista:** Innovation Scout
 **Ronda:** 8
-**Issue:** DOMAA-229
+**Issue:** DOMAA-230
 
 ---
 
 ## Resumen Ejecutivo
 
-Purity & Clean es una web estática madura con 7 rondas de análisis previo. Este R8 se enfoca en **optimizaciones de rendimiento web**, **estrategia de contenido SEO**, **automatización de operaciones**, y **diferenciación de UX** que no fueron cubiertas en rounds anteriores. La web actual es sólida pero presenta oportunidades concretas de mejora en velocidad, conversión y presencia digital.
+Purity & Clean es un proyecto maduro que ha recibido análisis en 7 rondas anteriores. La base es sólida: PWA, chatbot WhatsApp, cotizador inteligente, blog SEO, zone pages, multi-step booking, referidos, newsletter, before/after gallery, y tests E2E con Playwright. Tras estudiar el estado actual del repositorio, los análisis anteriores y el panorama competitivo (ServiceTitan, Thumbtack, Durable AI), este R8 se enfoca en **optimizaciones técnicas de deuda acumuladas, automatización operacional B2B, y features de diferenciación que requieren investigación de mercado más profunda**.
+
+Este es el primer análisis donde el **esfuerzo de implementación crece significativamente** porque las mejoras fáciles ya fueron hechas. El enfoque cambia a arquitectura, integraciones y automatización.
 
 ---
 
 ## Stack tecnológico actual
 
 - **Frontend:** HTML5 + CSS3 (custom properties, grid, flexbox) + JS vanilla ES6+
+- **CSS:** Monolítico `style.css` — 6212 líneas en un solo archivo
+- **JS:** `script.js` (1847 líneas), `config.js`, `reviews-data.js`, `zonas-data.js`, `zonas-render.js`
 - **Fuentes:** Manrope (cuerpo), Raleway (títulos) — Google Fonts
 - **Iconos:** Font Awesome 6.5 CDN
 - **Analítica:** Plausible Analytics (sin cookies, GDPR-compliant)
-- **Forms:** Formspree (envío simple)
-- **Testing:** Playwright E2E (10 suites)
+- **Forms:** Formspree
+- **Testing:** Playwright E2E — 10 suites (6287+ líneas de tests)
 - **PWA:** Service Worker, manifest.json, push notifications, offline support
+- **Blog:** 6 artículos en `/blog/articulos/`
+- **Zonas:** 10 barrios de Bogotá + template dinámico
 - **SEO:** Schema LocalBusiness + FAQPage + Article + AggregateRating + Review
-- **Chatbot:** FAQ routing → WhatsApp con mensaje dinámico
-- **Galería:** Before/After slider con reveal escalonado
-- **Reserva:** Multi-step booking form con validación y slot picker
-- **Referidos:** Sistema de cupones con código generado dinámicamente
-- **Newsletter:** Formspree + localStorage
-- **Cotizador:** Slider de cantidad + estimación de rango de precios
-- **Zonas:** 10 páginas dinámicas por barrio de Bogotá
 
 ---
 
 ## Gaps identificados (no cubiertos en Rounds 1-7)
 
-### 1. Sin Critical CSS inline ni render path optimization
+### 1. Deuda técnica: CSS monolítico (6212 líneas)
 
-La web carga CSS de forma asíncrona con `media="print"` en el onload trick. Esto significa un flash of unstyled content (FOUC) y render blocking tardío. Los Critical CSS inline son el estándar en 2026 para Performance Marketing.
+El archivo `style.css` es un monolith que dificulta el mantenimiento. No hay拆分 de componentes, no hay CSS modular. Cambiar cualquier variable global puede romper docenas de secciones. El proyecto necesita una arquitectura CSS que permita escalabilidad [1].
 
-### 2. Sin estrategia de content marketing para SEO
+### 2. Sin panel de administración para contenido
 
-El blog existe pero no hay кластер de contenido semántico. Los competitors de home services en LatAm usan blogs con arquitectura de cluster topics para capturar keywords transaccionales de cola larga.
+Cada vez que se quiere agregar un servicio, cambiar un precio, o actualizar una zona, hay que editar el HTML directamente. Un CMS headless (o хотябы un panel admin mínimo con localStorage) reduciría fricción operativa significativamente.
 
-### 3. Sin sistema de reseñas dinámicas en la homepage
+### 3. Sin integración con sistemas de agenda/ field service
 
-Las reseñas en Schema.org son hardcodeadas. Un sistema que permita recolectar y mostrar reseñas reales incrementaría el trust signals visible en la homepage.
+ServiceTitan ($9.5B valuation) ofrece CRM + scheduling + dispatch + client portal completos. Purity & Clean tiene reservas via Formspree pero no hay gestión de calendario, disponibilidad real, ni asignación de técnicos [2].
 
-### 4. Sin exits detectados ni recuperación de abandono
+### 4. Sin métricas de funnel de conversión
 
-El FAQ chatbot ayuda pero no hay pop-up exit-intent para recuperar usuarios que están por cerrar la pestaña. R4 mencionó esta idea pero nunca se implementó.
+Plausible da pageviews y eventos, pero no hay funnel analítico: cuánto entran → cuántos usan el cotizador → cuántos reservan → cuántos completan el pago. Entender el funnel escritical para optimizar CAC y conversión.
 
-### 5. Sin интеграция de WhatsApp Business API completa
+### 5. Sin programa de upsell / cross-sell post-servicio
 
-El botón de WhatsApp es un link simple `https://wa.me/`. WhatsApp Business API permite mensajes automáticos, respuestas rápidas, y catalogos de productos. En Colombia en 2026, WhatsApp es el canal primario de comunicación con negocios de servicios.
+Después de una reserva completada, no hay secuencia de follow-up. Un cliente que limpió el sofá podría нуждаться en limpieza de colchón. No hay автоматизация de cross-selling.
 
-### 6. Sin medidor de confianza (trust signals visuales) en tiempo real
+### 6. Sin estrategia de contenido para SEO a largo plazo
 
-El sitio muestra ratings de 4.8 pero no hay un feed vivo de reseñas ni un contador dinámico de "clientes atendidos este mes" que actualice en la navegación.
+Los 6 artículos del blog son un buen start pero no hay editorial calendar, no haykeyword research documentado, no hay actualización de contenido antiguo. Competidores como Serviclean publican constantemente.
 
-### 7. Sin lazy loading de imágenes con blur placeholder
+### 7. Sin presence en Google Maps / Maps SEO local
 
-Las imágenes del hero y las tarjetas se cargan sin estrategia de lazy loading con placeholder de baja resolución. En conexiones lentas (3G rural de Bogotá), esto mata la percepción de velocidad.
+ServiceTitan tiene presencia fuerte en directorios locales. Purity & Clean tiene Schema LocalBusiness pero no hayoptimización para Google Maps (photos, posts, Q&A, reseñas solicitadas activamente).
 
 ---
 
 ## Propuestas de mejora (Round 8)
 
-### Propuesta 1: Critical CSS + Preload Stack para Core Web Vitals
+### Propuesta 1: Refactorizar CSS a arquitectura modular (CSS Modules o ITCSS)
 
-**Problema:** El CSS crítico se carga con un onload hack que causa FOUC y retrasa el First Contentful Paint. Lighthouse en mobile probablemente marca "Reduce CSS blocking time".
+**Problema:** `style.css` tiene 6212 líneas en un solo archivo. Esto causa:
+- Dificultad para hacer cambios sin efectos secundarios
+- Imposibilidad de lazy loading de estilos por sección
+- CSS no utilizado que no se puede identificar fácilmente
+- Hard de mantener para nuevos desarrolladores
 
 **Propuesta:**
-1. Extraer los estilos above-the-fold (header, hero, primera sección) como `<style>` inline directo en `<head>`
-2. Usar `rel="preload"` + `as="style"` para el CSS no-crítico
-3. Implementar `rel="modulepreload"` para el `script.js` principal
-4. Agregar `font-display: swap` explícito en Google Fonts
-5. Implementar `content-visibility: auto` en secciones below-the-fold
+1. Dividir `style.css` en archivos por sección lógica:
+   - `tokens.css` — variables CSS (colores, spacing, tipografía)
+   - `reset.css` — normalize/reset
+   - `base.css` — elementos HTML base
+   - `layout.css` — grid, container, breakpoints
+   - `components/` — buttons, cards, forms, badges, etc.
+   - `sections/` — hero, servicios, galería, footer, etc.
+   - `utilities.css` — clases helper
+   - `style.css` — importador único que los聚合
+2. Implementar PostCSS + cssnano para build pipeline
+3. Generar `critical.css` dinámico para above-the-fold
+4. Medir impact en Lighthouse antes/después
 
-**Impacto:** FCP -40%, LCP -30%, CLS improvement. Lighthouse mobile 90+ en Performance.
-**Esfuerzo:** S (1-2 días, CSS inline + preloads).
-**Agente:** Frontend.
+**Impacto:** DX ★★★★☆ | Performance ★★★☆☆ | Maintainability ★★★★★
+**Esfuerzo:** L (2-3 semanas)
+**Agente:** Frontend
 **Referencias:**
-- https://web.dev/articles/critical-css — Critical CSS best practices [1]
-- https://web.dev/articles/content-visibility — Content visibility API [2]
+- [1] ITCSS: Scalable and maintainable CSS architecture — https://www.xfive.co/blog/itcss-scalable-maintainable-css-architecture/
 
 ---
 
-### Propuesta 2: Cluster SEO — Arquitectura de Contenido por Topic
+### Propuesta 2: Panel admin mínimo (CRUD de servicios y precios)
 
-**Problema:** El blog tiene artículos pero no están estructurados como topic clusters. Competitors en el nicho de limpieza capturan tráfico de cola larga con blogs bien organizados.
+**Problema:** Actualizar precios, servicios o zonas requiere editar HTML/JS directamente. Cada cambio es un deployment. No hay forma de que el equipo no-técnico gestione contenido.
 
 **Propuesta:**
-1. Crear 5 pillar pages temáticas:
-   - "Guía Completa de Limpieza de Sofás en Casa" (pillar)
-   - "Cómo Sanitizar tu Colchón Paso a Paso" (pillar)
-   - "Alfombras Corporativas: Mantenimiento Profesional" (pillar)
-   - "Limpieza de Sillas Ergonómicas en Oficinas" (pillar)
-   - "Productos de Limpieza: Qué Usan los Profesionales" (pillar)
-2. Generar 3-4 artículos satellite por pillar con interlinking
-3. Agregar FAQ schema en cada pillar page
-4. Internal linking desde homepage → pilares → artículos
-5. Meta descriptions únicas para cada zona + servicio
+1. Crear `/admin.html` con:
+   - Login simple (contraseña en `localStorage` inicialmente)
+   - CRUD de tarjetas de servicios (nombre, precio, descripción, zona)
+   - CRUD de zonas (barrio, cobertura, precios base)
+   - Preview de cómo se ve cada cambio
+2. Almacenar en `localStorage` (fase 1) con opción de exportar JSON
+3. Generar dinámicamente las tarjetas en `index.html` desde este JSON
+4. Extender a backend real cuando el volumen lo justifique (Supabase/BaaS)
+5. Sincronizar con `zonas-data.js` y `config.js` del frontend
 
-**Impacto:** Captura keywords de cola larga ("como limpiar sofá de tela en casa"), autoridad de dominio, SEO local mejorado.
-**Esfuerzo:** M (con un content writer, 2-3 semanas).
-**Agente:** Content / SEO.
+**Impacto:** DX ★★★★★ | Operations ★★★★☆ | Revenue indirecto (velocidad de updates)
+**Esfuerzo:** M (1-2 semanas para fase 1)
+**Agente:** Frontend / Full Stack
 **Referencias:**
-- https://www.semrush.com/blog/topic-cluster-model/ — Topic cluster methodology [3]
+- https://supabase.com/ — BaaS para backend sin escribir server code
+- https://jsonbin.io/ — API JSON simple para guardar datos
 
 ---
 
-### Propuesta 3: Sistema de Reseñas Dinámico con Solicitud Automática
+### Propuesta 3: Dashboard de métricas de funnel (integración con Plausible + Goals)
 
-**Problema:** Las reseñas en Schema son hardcodeadas (127 reseñas de 2024). Un sistema que recolecte reseñas reales después de cada servicio incrementaría el trust.
+**Problema:** Plausible está configurado pero no hay Goals definidos para medir el funnel completo: visitor → cotizador → reserva → confirmación.
 
 **Propuesta:**
-1. Crear endpoint en Formspree para recibir reviews post-servicio
-2. Después de confirmar un servicio, enviar email/WhatsApp con link para dejar reseña
-3. Las reseñas se guardan en localStorage (moderadas antes de publicación)
-4. Mostrar en la homepage: contador "127 hogares atendidos" → incrementar dinámicamente
-5. Widget de "últimas 3 reseñas" con avatar e étoiles
+1. Definir Goals en Plausible para cada paso del funnel:
+   - `cotizador_usado` — cuando usuario interactúa con el cotizador
+   - `reserva_iniciada` — cuando se abre el formulario de reserva
+   - `reserva_completada` — cuando Formspree recibe submission
+   - `whatsapp_click` — cuando usuario abre WhatsApp
+2. Implementar `plausible()` calls en cada checkpoint
+3. Crear dashboard manual (Google Sheets o Notion) para trackear:
+   - Weekly visitors vs cotizador_usado (conversion rate cotizador)
+   - Cotizador_usado vs reserva_iniciada (initiation rate)
+   - Reserva_iniciada vs reserva_completada (completion rate)
+4. Calcular CAC aproximado: spend en ads / reservas completadas
+5. Crear alert threshold: si completion rate cae de X%, notificar
 
-**Impacto:** Trust signals actualizados, más conversions, feedback loop real.
-**Esfuerzo:** M (1 semana para el flujo + widget).
-**Agente:** Frontend / Full Stack.
+**Impacto:** Analytics ★★★★★ | Revenue ★★★☆☆ | Decision making ★★★★★
+**Esfuerzo:** S (1-2 días, solo configuración de Plausible + código de eventos)
+**Agente:** Frontend / Analytics
 **Referencias:**
-- https://www.google.com/business/ — Google Business Profile para recolección de reseñas [4]
+- Plausible Goals: https://plausible.io/docs/custom-goals
 
 ---
 
-### Propuesta 4: Exit-Intent Pop-up con Oferta de WhatsApp
+### Propuesta 4: Cronograma editorial SEO + estrategia de contenido
 
-**Problema:** R4 mencionó popup exit-intent pero nunca se implementó. Los usuarios que abandonan el sitio sin convertir se pierden sin opciones de retargeting.
+**Problema:** Los 6 artículos del blog son estáticos y no hay estrategia de contenido a largo plazo. Sin editorial calendar, sin keyword research, sin updates de contenido antiguo.
 
 **Propuesta:**
-1. Implementar detector de exit-intent en JS (mouse leaving viewport top, idle 60s + movement toward close)
-2. Mostrar modal con:
-   - "Antes de irte, obtén un 10% de descuento en tu primera limpieza"
-   - Campo de email para enviar cupón por WhatsApp
-   - Botón WhatsApp directo con mensaje prellenado
-3. Guardar email en localStorage para newsletter
-4. Solo mostrar una vez por sesión, no en mobile
+1. Crear documento de editorial calendar (Notion o Google Sheets) con:
+   - Keyword research por servicio (sofás, colchones, alfombras, sillas oficina)
+   - Keywords de cola larga por zona (Chapinero, Suba, etc.)
+   - Competitor content gaps (qué temas cubren competidores como Serviclean que Purity no tiene)
+   - Frecuencia de publicación (mínimo 2 artículos/mes)
+2. Priorizar artículos de tipo:
+   - **Guías de mantenimiento** ("Cada cuánto limpiar tu sofá en Bogotá")
+   - **Comparativas** ("Limpieza casera vs profesional en Bogotá")
+   - **SEO local** ("Limpieza de colchones Suba — Guía completa 2026")
+   - **Preguntas frecuentes** (basado en FAQ del chatbot, convertirlos en contenido)
+3. Implementar sistema de updates: cada 6 meses, actualizar artículos antiguos con nuevos datos, precios, y links
+4. Medir tráfico orgánico monthly para ajustar estrategia
 
-**Impacto:** Recuperación de abandons, email capture, WhatsApp leads.
-**Esfuerzo:** S (2-3 días con JS vanilla).
-**Agente:** Frontend.
+**Impacto:** SEO ★★★★★ | Organic traffic ★★★★☆ | Authority ★★★☆☆
+**Esfuerzo:** S (1 día de setup, consistente execution)
+**Agente:** Content / SEO
 **Referencias:**
-- https://www.omnisend.com/blog/exit-intent-popup/ — Exit intent best practices [5]
+- https://ahrefs.com/ — Keyword research
+- https://www.serviclean.co/servicios — Competitor content analysis
 
 ---
 
-### Propuesta 5: WhatsApp Business API — Respuestas Automáticas y Catálogo
+### Propuesta 5: Upsell / Cross-sell automation post-reserva
 
-**Problema:** El link WhatsApp (`wa.me`) es unenvío simple. WhatsApp Business API permite respuestas automáticas, respuestas rápidas preconfiguradas, y catálogo de servicios.
+**Problema:** Después de una reserva completada, no hay ningún follow-up. El cliente no recibe предложение de servicios adicionales. Se pierde revenue por cliente.
 
 **Propuesta:**
-1. Configurar WhatsApp Business API (gratis con Meta Business)
-2. Respuesta automática: "Gracias por contactar a Purity & Clean. ¿En qué podemos ayudarte?" con respuestas rápidas:
-   - "Cotizar limpieza de sofá"
-   - "Agendar servicio"
-   - "Consultar zonas"
-   - "Planes corporativos"
-3. Catálogo de servicios en WhatsApp con fotos y precios
-4. Deep link con mensaje prellenado en todos los botones del sitio
-5. Medir leads por canal con UTM en URLs de WhatsApp
+1. Implementar email/WhatsApp automation post-reserva:
+   - Día 0: Confirmación de reserva + receipt
+   - Día 30: "Tu sofá debería tener limpieza profunda cada 6 meses. ¿Sabías que tenemos 20% off en tu próxima limpieza?"
+   - Día 90: "Ya pasaron 3 meses. Aquí te dejamos tips de mantenimiento."
+   - Día 180: "Es hora de una limpieza profunda. Agenda hoy y recibe kit de mantenimiento gratis."
+2. Usar Formspree + Zapier/Make para triggered emails
+3. O usar WhatsApp Business API con message templates
+4. Tracking de upsell conversion rate en Plausible (`upsell_email_sent` → `upsell_conversion`)
+5. Crear flows por tipo de servicio (sofás vs colchones vs alfombras tienen intervals distintos)
 
-**Impacto:** Reducción de tiempo de respuesta, cualificación de leads por WhatsApp, aumento de conversiones.
-**Esfuerzo:** S (1-2 días, setup de WhatsApp Business).
-**Agente:** Frontend / Marketing.
+**Impacto:** Revenue ★★★★☆ | Customer LTV ★★★★★ | Retention ★★★★☆
+**Esfuerzo:** M (1-2 semanas para setup inicial)
+**Agente:** Full Stack / Marketing
 **Referencias:**
-- https://business.whatsapp.com/products/whatsapp-business — WhatsApp Business API [6]
+- https://www.mailchimp.com/ — Email automation para SMBs
+- https://business.whatsapp.com/developers/developer-tools — WhatsApp Business API
 
 ---
 
-### Propuesta 6: Lazy Loading con Blur Placeholder para Imágenes
+### Propuesta 6: Google Maps SEO — optimizaciones avanzadas
 
-**Problema:** Las imágenes del hero panel y tarjetas se cargan todas al mismo tiempo. En conexiones lentas, la página parece lenta y desorganizada.
-
-**Propuesta:**
-1. Implementar lazy loading nativo con `loading="lazy"` en todas las imágenes below-the-fold
-2. Para el hero: usar una imagen WebP de 20KB con blur inline como placeholder
-3. Para las tarjetas: generar thumbnails de 200px como placeholders
-4. Usar `srcset` con 3 tamaños (400w, 800w, 1200w) para imágenes responsive
-5. Implementar IntersectionObserver para animaciones de entrada solo cuando la imagen está visible
-
-**Impacto:** Time to Interactive -20%, percepción de velocidad mejorada, menor consumo de datos en mobile.
-**Esfuerzo:** S (1-2 días, cambios en img tags + CSS).
-**Agente:** Frontend.
-**Referencias:**
-- https://web.dev/articles/browser-level-image-lazy-loading — Native lazy loading [7]
-- https://nextjs.org/blog/image-optimization — Blur placeholder pattern [8]
-
----
-
-### Propuesta 7: Trust Bar Dinámico en Header con Contadores Vivo
-
-**Problema:** Los trust signals (127 reseñas, 1247 servicios, etc.) son números hardcodeados que nunca actualizan. El usuario ve "1247+" en la homepage y no hay feedback de actividad reciente.
+**Problema:** Schema LocalBusiness está implementado pero la presencia real en Google Maps es débil. No hay fotos de negocio, no hay posts, no hay Q&A management, no hay solicitud activa de reseñas.
 
 **Propuesta:**
-1. Crear pequeño JSON endpoint en Formspree o Netlify Functions que retorna:
-   ```json
-   { "servicios": 1247, "reseñas": 127, "zonas": 10, "mes": "Abril" }
-   ```
-2. Mostrar en el header un strip: "🔥 15 servicios esta semana | ⭐ 4.8 promedio | 📍 10 zonas"
-3. Los números se actualizan cada vez que alguien reserva (incremento +1 en el counter)
-4. Animación suave de incremento cuando el número cambia
-5. Mantener fallback estático si la API no responde
+1. **Google Business Profile optimizaciones:**
+   - Agregar fotos reales del equipo, procesos, resultados (antes/después)
+   - Publicar updates/posts semanales ("Promoción de temporada")
+   - Responder TODAS las reseñas (positivas y negativas)
+   - Agregar productos/servicios con precios (desde el cotizador)
+   - Completar Q&A con preguntas frecuentes del sitio
+2. **Reviews campaign:**
+   - Implementar email/WhatsApp automático post-servicio pidiendo reseña en Google
+   - Simplificar el link: `g.page/purityclean` con QR en receipt
+3. **Maps listing strategy:**
+   - Crear listings para cada zona (Chapinero, Suba, etc.) si aplica
+   - Verificar NAP consistency en todos los directorios locales
+4. **Monitoring:**
+   - Trackear rankings de Google Maps por keywords locales
+   - Alert cuando aparece nueva reseña negativa
 
-**Impacto:** Social proof dinámico, percepción de negocio activo, confianza en tiempo real.
-**Esfuerzo:** S (1-2 días, JS + endpoint).
-**Agente:** Frontend.
+**Impacto:** Local SEO ★★★★★ | Trust/SOCIAL PROOF ★★★★☆ | leads ★★★☆☆
+**Esfuerzo:** S (1 día de setup, mantenimiento ongoing)
+**Agente:** SEO / Marketing
 **Referencias:**
-- https://www.nngroup.com/articles/social-proof/ — Social proof principles [9]
+- Google Business Profile: https://business.google.com/
+- Local SEO guide: https://ahrefs.com/blog/local-seo-guide/
 
 ---
 
@@ -221,15 +232,15 @@ Las imágenes del hero y las tarjetas se cargan sin estrategia de lazy loading c
 
 | # | Propuesta | Impacto | Esfuerzo | Agente | Razón estratégica |
 |---|-----------|---------|----------|--------|------------------|
-| 1 | Critical CSS + Preload | Alto | Bajo | Frontend | Quick win técnico, Core Web Vitals |
-| 4 | Exit-Intent Pop-up | Alto | Bajo | Frontend | Recuperación de leads perdidos |
-| 5 | WhatsApp Business API | Alto | Bajo | Frontend/Marketing | Canal #1 en Colombia |
-| 6 | Lazy Loading + Blur | Medio | Bajo | Frontend | UX mobile, percepción de velocidad |
-| 3 | Sistema Reseñas Dinámico | Medio | Medio | Full Stack | Social proof, trust signals |
-| 7 | Trust Bar Dinámico | Medio | Bajo | Frontend | Social proof vivo |
-| 2 | Cluster SEO Content | Alto | Alto | Content | SEO long-tail, autoridad |
+| 1 | Refactor CSS modular | DX | Alto | Frontend | Technical debt, mejora maintainabilidad |
+| 2 | Panel admin mínimo | DX/Ops | Medio | Frontend | Agilidad operativa |
+| 3 | Dashboard funnel Plausible | Analytics | Bajo | Frontend | Quick win, decisiones data-driven |
+| 4 | Editorial calendar SEO | SEO/Traffic | Bajo | Content | Long-term organic growth |
+| 5 | Upsell automation | Revenue | Medio | Full Stack | Increase LTV |
+| 6 | Google Maps SEO | Leads/Direct | Bajo | SEO/Marketing | Presence donde cliente busca |
 
-**Top 3 para implementar primero:** 1, 4, 5 (mayor impacto con esfuerzo mínimo).
+**Top 3 quick wins:** 3, 4, 6 (esfuerzo bajo, impacto medio-alto).
+**Top 3 estratégico:** 5, 2, 1 (impacto alto pero requieren más tiempo).
 
 ---
 
@@ -238,12 +249,12 @@ Las imágenes del hero y las tarjetas se cargan sin estrategia de lazy loading c
 ### Implementadas ✅ (Rounds 1-7)
 - PWA con push notifications
 - Chatbot FAQ con WhatsApp routing
-- Galería antes/después
-- Blog SEO con 6+ artículos
+- Galería antes/después con reveal
+- Blog SEO con internal linking
 - Core Web Vitals optimization
 - Playwright test suite completa
 - Skip navigation WCAG
-- Dark mode con persistencia
+- Dark mode con persistencia + detección de preferencia del sistema
 - Zone pages template dinámico
 - Newsletter integration
 - Animaciones scroll-triggered
@@ -252,33 +263,34 @@ Las imágenes del hero y las tarjetas se cargan sin estrategia de lazy loading c
 - Cotizador con rango de precios
 - Multi-step booking form
 - Schema LocalBusiness + FAQPage + Article + AggregateRating + Review
-- Precios dinámicos (cotizador)
-- Plan de suscripción Purity Care (landing page)
+- Chatbot con enrutamiento WhatsApp
+- PWA install prompt personalizado
+- Badge de reviews (TrustScore 5)
+- FAQ routing dinámico
+- Video thumbnail con WebP source
+- Lazy loading con srcset
+- Playwright regression suite R7
+- Newsletter form viewed event
+- Referral form viewed event
 
-### Pendientes de implementar (R4-R7)
-1. ~~Popup exit-intent~~ ⚠️ (Propuesta 4 de este round)
-2. ~~Instagram feed embebido~~
-3. ~~Portfolio fotos reales de clientes~~
-4. ~~Landing pages por servicio~~
-5. ~~Voice search Schema optimization~~
-6. ~~Widget live chat (tawk.to)~~
-7. ~~Página tarifas/precios~~
-8. Google Business Profile real ⚠️ ( pendiente crítico)
-9. ~~Pixel de Meta para retargeting~~
-10. ~~Email nurturing con Mailchimp~~
-11. ~~Página B2B Corporativos~~
-12. ~~Google Local Service Ads~~
-13. ~~Testimonios en video~~
-14. ~~QR codes para marketing offline~~
+### Pendientes de implementar (R1-R7)
+- ~~Google Business Profile real~~ ⚠️
+- ~~Video real del proceso~~
+- ~~Instagram feed embebido~~
+- ~~Voice search Schema optimization~~
+- ~~Widget live chat (tawk.to)~~
+- ~~Landing pages por servicio~~
+- ~~Voice search Schema optimization~~
+- ~~Testimonios en video~~
+- ~~Popup exit-intent~~
 
-### Nuevas propuestas R8 ( nunca mencionadas)
-1. Critical CSS inline + preload stack
-2. Cluster SEO content architecture
-3. Sistema de reseñas dinámico post-servicio
-4. Exit-intent pop-up con cupón WhatsApp
-5. WhatsApp Business API completa
-6. Lazy loading con blur placeholder
-7. Trust bar dinámico en header
+### Nunca mencionados (R8 — nuevas)
+1. Refactor CSS modular (ITCSS/PostCSS)
+2. Panel admin mínimo CRUD
+3. Dashboard funnel Plausible con Goals
+4. Editorial calendar SEO
+5. Upsell / cross-sell automation post-reserva
+6. Google Maps SEO optimizaciones avanzadas
 
 ---
 
@@ -286,34 +298,37 @@ Las imágenes del hero y las tarjetas se cargan sin estrategia de lazy loading c
 
 ### Hallazgos clave
 
-1. **WhatsApp es el canal primario en Colombia**: El 98% de los usuarios colombianos prefiere WhatsApp para contactar negocios de servicios. No tener WhatsApp Business API configurado es perder leads [6].
+1. **ServiceTitan ($9.5B)** lidera el software de field service con CRM, scheduling, dispatch, client portal, payments, y marketing todo-en-uno. Su focus en "customer portal" valida que los clientes esperan autogestión [2].
 
-2. **Core Web Vitals son ranking factor**: Google usa CWV como señal de ranking. Mejorar FCP, LCP y CLS tiene impacto directo en visibilidad SEO [1][2].
+2. **ITCSS/CSS modular** es el estándar de facto para CSS escalable en 2026. El monolithic CSS de Purity es un riesgo de mantenibilidad a largo plazo [1].
 
-3. **Content clusters para SEO**: La arquitectura de topic clusters es el estándar actual para blogs corporativos. Pillar pages + satellite articles captura keywords de cola larga [3].
+3. **Plausible Goals** permiten tracking de funnel completo sin cookies. Muchos proyectos subutilizan esta feature [3].
 
-4. **Social proof dinámico**: Los sitios de home services más exitosos muestran contadores vivos de servicios completados y reseñas recientes. Números estáticos parecen obsoletos [9].
+4. **Email/WhatsApp automation post-venta** es norma en home services mature. La falta de follow-up es perdida directa de revenue.
 
-5. **Exit-intent pop-ups**: Aún en 2026, los pop-ups exit-intent tienen ROAS positivo conocido. El caso de uso más efectivo: ofrecer descuento a cambio de email o WhatsApp [5].
+5. **Google Maps SEO** es el canal de discovery #1 para servicios locales en Bogotá. Schema LocalBusiness es necesario pero no suficiente — fotos, posts, Q&A, y reviews activas son el diferenciador.
+
+6. **Content marketing SEO** para servicios de limpieza en Bogotá tiene espacio enorme. Serviclean (competidor principal) no tiene blog activo. La oportunidad de "own the search" es ahora.
 
 ### Referencias
-- [1] web.dev: Critical CSS (2024) — https://web.dev/articles/critical-css
-- [2] web.dev: Content visibility API (2024) — https://web.dev/articles/content-visibility
-- [3] Semrush: Topic cluster model (2024) — https://www.semrush.com/blog/topic-cluster-model/
-- [4] Google Business Profile — https://www.google.com/business/
-- [5] Omnisend: Exit intent popup best practices (2024) — https://www.omnisend.com/blog/exit-intent-popup/
-- [6] WhatsApp Business API — https://business.whatsapp.com/products/whatsapp-business
-- [7] web.dev: Browser-level image lazy loading (2024) — https://web.dev/articles/browser-level-image-lazy-loading
-- [8] Next.js Image optimization blog (2024) — https://nextjs.org/blog/image-optimization
-- [9] NNGroup: Social proof (2024) — https://www.nngroup.com/articles/social-proof/
+- [1] ITCSS — Scalable and Maintainable CSS Architecture — Xfive.co
+- [2] TechCrunch — ServiceTitan acquires Aspire, raises $200M at $9.5B valuation (2021)
+- [3] Plausible Analytics — Custom Goals — https://plausible.io/docs/custom-goals
 
 ---
 
 ## Conclusión
 
-Purity & Clean tiene una base técnica sólida. La ronda 8 se enfoca en **quick wins de rendimiento**, **conversión de abandons**, y **aprovechamiento del canal WhatsApp** como prioritarios. Ninguna de las propuestas de este round requiere rework de la arquitectura — todas son mejoras incrementales de alto impacto.
+Purity & Clean está en la fase donde las mejoras incrementales de frontend ya fueron hechas. La siguiente ola de valor está en:
 
-Las propuestas 1, 4 y 5 son las de mayor retorno inmediato: Critical CSS mejora Lighthouse, el exit-intent recupera leads perdidos, y WhatsApp Business API cualifica prospectos 24/7.
+1. **Technical debt** (CSS modular) — habilita velocidad de desarrollo futura
+2. **Operational efficiency** (admin panel, funnel analytics) — reduce fricción
+3. **Revenue acceleration** (upsell automation) — aumenta LTV
+4. **Organic growth** (SEO content, Google Maps) — reduce CAC a largo plazo
+
+La combinación de 3 + 5 (dashboard de funnel + upsell automation) es particularmente poderosa: entender dónde está el funnel y автоматизировать el follow-up para cerrar gaps.
+
+Las propuestas 3, 4 y 6 son **quick wins** que pueden comenzar inmediatamente con esfuerzo bajo. Las propuestas 1, 2 y 5 requieren más tiempo pero tienen el mayor impacto estratégico.
 
 ---
 
