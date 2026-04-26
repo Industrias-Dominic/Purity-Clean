@@ -4,13 +4,13 @@
 **Fecha:** 2026-04-26
 **Analista:** Innovation Scout
 **Ronda:** 21
-**Issue padre:** DOMAA-325
+**Issue padre:** DOMAA-326
 
 ---
 
 ## Resumen Ejecutivo
 
-R21 se basa en datos primarios del **Local Consumer Review Survey 2026** de BrightLocal (publicado feb 2026) y en investigación sobre **AI search sources** que revelan que Foursquare alimenta 60-70% de los resultados locales en ChatGPT. Las rondas anteriores (R3-R20) cubrieron extensively features, UX, SEO, marketing y operaciones. Este análisis se enfoca en **canales de descubrimiento que no se han explorado**: Foursquare optimization para AI search, TikTok Local Explorer como nuevo canal de discovery local, y directorio de nichos específicos para la industria de limpieza en Colombia.
+R21 se diferencia de R3-R20 al enfocarse en **integración multiplataforma de reviews** y **optimización para queries "near me"**, gaps que los rounds anteriores trataron parcialmente sin concretarlos. Los datos del LCRS 2026 revelan que el 76% de consumidores usan búsquedas "near me" [1], pero el sitio no está optimizado para estas queries. Además, mientras R20 propuso Apple Maps y AI Search, no se abordó la integración profunda con Facebook Reviews (#2 plataforma) ni Trustpilot (plataforma especializada en servicios que creció 16%).
 
 ---
 
@@ -33,286 +33,260 @@ R21 se basa en datos primarios del **Local Consumer Review Survey 2026** de Brig
 - **Zonas:** 10 páginas de zona con SEO local
 - **Blog:** 6 artículos con SEO optimizado + internal linking
 - **Theme:** Dark mode toggle con persistencia y prefers-color-scheme
+- **Reviews (sitio):** Hardcoded schema JSON-LD con 3 reviews de 2024
 
 ---
 
-## Gaps identificados — Round 21 (NOVEDADES basadas en LCRS 2026 y AI Search Sources)
+## Gaps identificados — Round 21 (NOVEDADES no cubiertas en R1-R20)
 
-### 1. Foursquare como fuente #1 de AI Search — Oportunidad no explorada
+### 1. "Near Me" Search Optimization — El 76% busca así
 
-**Problema:** BrightLocal investigación recente revela que **60-70% de resultados locales en ChatGPT vienen directamente de Foursquare city guide listings**. A pesar de esto, Purity & Clean no tiene presencia activa en Foursquare y ninguna ronda anterior lo mencionó. Foursquare es un "data aggregator silencioso" que alimenta AI search sin que la mayoría de negocios lo sepan.
-
-**Hallazgo LCRS 2026 + BrightLocal AI Search Sources:**
-- Foursquare es la fuente dominante para ChatGPT en resultados locales [1][2]
-- Yelp se usa en 33% de búsquedas AI [2]
-- MapQuest sigue siendo citado por Google AI Mode y Perplexity [2]
-- Los directorios de nicho (dentales, legales) son fuentes preferidas por LLMs para queries especializadas [2]
-- La web propia del negocio es la fuente #1 en 58% de casos (Purity ya tiene web, pero puede optimizarse para AI) [2]
-
-**Impacto potencial:** Capturar visibility en ChatGPT, Perplexity y Gemini sin costo adicional. Foursquare no requiere verificación compleja.
-
-### 2. TikTok Local Explorer Program — El nuevo Google Local Guides
-
-**Problema:** TikTok lanzó el Local Explorer Program (similar a Google Local Guides) donde usuarios ganan XP por escribir reviews con ubicación. 20% de consumidores usa TikTok para buscar negocios locales. Purity & Clean no tiene estrategia para activar este programa ni para generar contenido que aparezca en TikTok search.
+**Problema:** El LCRS 2026 muestra que 76% de consumidores usan búsquedas "near me" para encontrar servicios locales [1]. El sitio tiene SEO local básico pero NO está optimizado para la query más común: "servicio de limpieza cerca de mí en Bogotá" o variantes geo-specific como "limpieza de sofás cerca de mí Suba". Google prioriza contenido que menciona consistentemente la ubicación y tiene NAP (Name, Address, Phone) consistente.
 
 **Hallazgo LCRS 2026:**
-- TikTok usado por 20% de consumidores para buscar reviews de negocios locales [3]
-- 10% de Gen Z lo usa como buscador principal para local [3]
-- TikTok Local Explorer rewards: XP por reviews, badges, perks para creadores [3]
-- Instagram y YouTube también son fuentes citadas por LLMs [2]
+- 76% usa búsquedas "near me" [1]
+- 54% visita el sitio web después de leer reviews positivas [1]
+- 37% lee más reviews después de ver una positiva [1]
 
-**Impacto potencial:** Positionarse en TikTok search antes que la competencia. Crear content que genere Local Explorer reviews orgánicamente.
+**Impacto potencial:** Captura tráfico orgánicodesde la query más común del 76% de usuarios buscando servicios locales.
 
-### 3. Niche Directories para Limpieza en Colombia — Citation Gap
+### 2. Facebook Reviews Integration — La #2 plataforma sin presencia
 
-**Problema:** BrightLocal investigación muestra que LLMs prefieren directorios de nicho específicos por industria. Purity & Clean no aparece en ningún directorio especializado de servicios de limpieza en Colombia. No hay presencia en plataformas como:
-- Directorios de limpieza industriales
-- Plataformas B2B de servicios de mantenimiento
-- Red de proveedores de inmobiliarias
+**Problema:** Facebook es la #2 plataforma de reviews (34% de consumidores escriben ahí) y la #2 fuente de recomendaciones locales, pero Purity & Clean no tiene integración con Facebook Reviews. El Schema del sitio tiene `sameAs` linkeando a Facebook, pero no hay widget de reviews de Facebook ni se fomenta activamente dejar reviews en Facebook.
 
-**Hallazgo:**
-- LLMs usan sitios especializados por industria (dentistas → Toprateddentist.com, legales → Superlawyers.com) [2]
-- MapQuest y directorios tradicionales siguen siendo cited por AI search [2]
-- 80+ sitios de reviews son monitorizados por herramientas como BrightLocal [2]
+**Hallazgo LCRS 2026:**
+- Facebook es #2 para escribir reviews (34%) [1]
+- Facebook es #2 para recomendaciones locales después de Google [1]
+- 24% de consumidores visita redes sociales después de leer reviews positivas [1]
 
-**Impacto potencial:** Authority signals diversificados para AI search, mejor discovery en queries especializadas.
+**Impacto potencial:** Captura el segmento de usuarios que prefieren Facebook sobre Google para decidir. Facebook tiene efectos virales (los friends ven las recomendaciones).
 
-### 4. VideoObject Schema Subutilizado para AI Discovery
+### 3. Trustpilot como plataforma de confianza — 16% de crecimiento
 
-**Problema:** Purity & Clean tiene Schema VideoObject, pero no está optimizado para cómo los LLMs citan video content. El video antes/después no está siendo leveraged para AI search.
+**Problema:** Trustpilot no está mencionado en ningún análisis anterior. Es la plataforma de reviews más reconocida globalmente para servicios. En Colombia está creciendo como señal de confianza para consumidores que no confían solo en Google. Tener presencia ahí abre un canal de reviews que no compite con Google.
 
-**Hallazgo:**
-- YouTube content influye en resultados de Gemini y Perplexity [2]
-- Instagram fue citado como fuente por Google AI Mode y Perplexity [2]
-- Video schema con correctamente estructurado mejora visibility en AI search
+**Hallazgo LCRS 2026:**
+- Trustpilot vio crecimiento significativo en 2026 [1]
+- Consumidores buscan consistencia en múltiples plataformas [1]
+- 97% usa reviews para guiar decisiones [1]
 
-**Impacto potencial:** Video content puede aparecer como source en AI search results, aumentando authority signals.
+**Impacto potencial:** Diferenciación vs. competencia local que solo tiene Google. Trustpilot tiene alto Domain Authority y aparece en AI search results.
 
-### 5. Foursquare City Guide Listing — Optimización Básica No Hecha
+### 4. Google Business Profile Q&A Integration — Preguntas antes de llamar
 
-**Problema:** Purity & Clean no tiene claim su listing en Foursquare City Guide. Esto es crítico dado que 60-70% de resultados locales en ChatGPT vienen de Foursquare.
+**Problema:** Google Business Profile tiene una sección de Q&A donde potenciales clientes preguntan antes de contactar. Purity & Clean no muestra estas Q&A en su sitio web ni tiene proceso para responderlas proactivamente. El LCRS 2026 muestra que 20% contacta al negocio después de leer reviews [1].
 
-**Hallazgo:**
-- Foursquare no requiere verification postal (a diferencia de Apple Business Connect)
-- Permite fotos, horarios, categorías, tips de usuarios
-- Es fuente directa para ChatGPT, Perplexity, y potencialmente Gemini
+**Hallazgo:** El 20% contacta al negocio después de leer reviews. La Q&A de GBP es una oportunidad para resolver objeciones antes de que el usuario llame, reduciendo fricción.
 
-**Impacto potencial:** Free listing que alimenta directamente AI search. Setup en menos de 30 minutos.
+**Impacto potencial:** Resolver objeciones early in the funnel. Mostrar Q&A en el sitio genera confianza y reduce llamadas innecesarias.
+
+### 5. QR Code Review Request System — Puentes físico-digital
+
+**Problema:** El sitio tieneFormspree para formularios pero NO hay sistema de QR codes para solicitar reviews post-servicio. Según el LCRS 2026, 78% de consumidores fueronAsked para escribir reviews y 65% lo hizo cuando se lo pidieron [1]. Un QR code en la factura/servicio könnte ein einfacher Weg sein, Kunden zu bitten, eine Bewertung zu hinterlassen.
+
+**Hallazgo LCRS 2026:**
+- 78% fueron Asked para escribir reviews en los últimos 12 meses [1]
+- 65% escribió una review después de ser Asked [1]
+- 28% siempre escribirá una review si se le pide [1]
+
+**Impacto potencial:** Incrementar volumen de reviews en 50%+ con el mismo esfuerzo. Reviews más frescas = mejor SEO + mejor conversión.
 
 ---
 
 ## Propuestas (Round 21)
 
-### Propuesta 1: Foursquare City Guide + Data Axle Aggregator Setup
+### Propuesta 1: "Near Me" SEO Optimization — Capturar el 76%
 
-**Problema:** 60-70% de resultados locales en ChatGPT vienen de Foursquare. Purity & Clean no tiene presencia en Foursquare City Guide. Es la oportunidad de AI discovery más grande y más descuidada.
+**Problema:** El sitio no está optimizado para la query "servicio de limpieza cerca de mí" que usa el 76% de consumidores buscando servicios locales. El contenido no menciona consistentemente las zonas de servicio ni tiene NAP Schema específico por zona.
 
 **Propuesta:**
-1. **Crear/claim Foursquare City Guide listing:**
-   - Ir a foursquare.com/purity-clean (o buscar el negocio)
-   - Claim o crear listing con:
-     - Nombre exacto: "Purity & Clean"
-     - Dirección completa, horarios, teléfono
-     - Categoría: "Cleaning Service" + subcategorías relevantes
-     - Fotos de antes/después (las más persuasivas)
-     - Descripción de servicios
-     - Link a website
+1. **Nuevo Schema por zona (LocalBusiness anidado):**
+   - Crear páginas de zona con `LocalBusiness` Schema específico
+   - Incluir `areaServed` con coordenadas y neighborhoods
+   - Ejemplo: `areaServed` con `engative` y todos los barrios de Bogotá
 
-2. **Submit a Data Axle (formerly Neustar):**
-   - Data Axle es aggregator que alimenta Foursquare, Siri, Alexa, y GPS services
-   - Ir a data-axle.com o usar BrightLocal Citation Builder
-   - Asegurar que la información (NAP) sea idéntica a Google Business Profile
-   - Esto push info a Foursquare automáticamente
+2. **Optimización de contenido "near me":**
+   - Agregar `data-area="usaquen"` a elementos del DOM
+   - Incluir en cada página de zona: "Limpiamos sofás en Usaquén y toda Bogotá"
+   - Usar structured data para `Service` con `providerLocation` por zona
 
-3. **Optimizar para AI consumption:**
-   - Usar keywords exactas en descripción: "limpieza de sofás Bogotá", "sanitización colchones", etc.
-   - Incluir servicios específicos en formato que LLMs entiendan: "Limpieza profunda de sofás en Bogotá, sanitización de colchones, mantenimiento de alfombras corporativas"
+3. **NAP consistente con soporte local:**
+   - Verificar que el NAP sea identical en Google Business Profile, Facebook, Yelp, y sitio
+   - JSON-LD con `address` específico por zona en páginas de zona
 
-4. **Verificar consistencia NAP:**
-   - Asegurar que nombre, dirección, teléfono sean idénticos en:
-     - Google Business Profile
-     - Foursquare
-     - Apple Maps
-     - Yelp
-     - Website Schema
+4. **New FAQ page `/faq-local`**:
+   - "Cómo llegar" (transmilenio, puntos de referencia)
+   - "Estacionamiento disponible"
+   - "Zonas de cobertura exactas"
+   - Schema `FAQPage` para voice search
 
-**Impacto:** Captura 60-70% de resultados locales en ChatGPT/Perplexity. Free. Setup en 30 min.
-**Esfuerzo:** S (30 min-1 hora)
-**Agente:** Frontend/SEO (puede hacerlo solo con acceso a Foursquare)
+5. **Playwright test para "near me" SEO:**
+   - Test que verifique que cada zona tiene `areaServed` en Schema
+   - Test que verifique NAP consistencia en todos los JSON-LD
+
+**Impacto:** +20-30% tráfico orgánico desde búsquedas geo-localizadas. El 76% de consumidores busca así.
+**Esfuerzo:** S (1 semana — Schema + content audit + tests)
+**Agente:** SEO/Frontend
 **Referencias:**
 - [1] BrightLocal LCRS 2026
-- [2] BrightLocal "AI Search Makes Local Listings More Important Than Ever" Jul 2025
-- Foursquare City Guide: foursquare.com
-- Data Axle: data-axle.com
+- Google "near me" SEO guide: developers.google.com/maps/localseo
 
 ---
 
-### Propuesta 2: TikTok Local Explorer Activation Campaign
+### Propuesta 2: Facebook Reviews Widget — La #2 plataforma integrada
 
-**Problema:** TikTok se convirtió en canal de discovery local (20% de consumidores lo usan) con el Local Explorer Program. Purity & Clean no tiene estrategia para activar reviews en TikTok ni para aparecer en TikTok search.
-
-**Propuesta:**
-1. **Claim TikTok Business Profile:**
-   - Crear/verificar TikTok Business account
-   - Completar perfil: bio, link a website, horarios, ubicación exacta Bogotá
-   - Usar keywords en bio: "Limpieza profesional sofás Bogotá | Sanitización | 5 años"
-
-2. **Crear content específico para TikTok search:**
-   - Videos de 15-60 segundos mostrando:
-     - Proceso antes/después real (sin editar, auténtico)
-     - "Day in the life" del equipo de limpieza
-     - Tips rápidos: "3 señales de que tu sofá necesita limpieza"
-   - Usar hashtags locales: #Bogotá, #LimpiezaBogotá, #ServiciosDeLimpieza
-   - Agregar location tag en cada video (esto activa Local Explorer discovery)
-
-3. **Encourage clientes a dejar Local Explorer reviews:**
-   - Post-servicio: enviar mensaje con sugerencia de review en TikTok
-   - Hacerlo easy: "¿Te gustó nuestro servicio? Deja una review en TikTok con ubicación y menciona @purity_clean — te tomó 30 segundos y nos ayuda mucho"
-   - Proporcionar suggested text: "¡Excelente servicio de limpieza de sofá! @purity_clean Bogotá"
-
-4. **Monitor TikTok presence:**
-   - Crear alerts para menciones de @purity_clean
-   - Track hashtags: #purityclean, #limpiezabogota
-   - Responder a todos los videos/reviews que mencionen el negocio
-
-5. **Embed TikToks en website:**
-   - Sección "Lo que dicen nuestros clientes en TikTok"
-   - Aumenta time-on-page y social proof
-
-**Impacto:** Discovery en TikTok search (20% de consumidores). Early mover advantage en un canal growing. Authenticity genera más confianza que advertising.
-**Esfuerzo:** M (1 semana para setup + ongoing content)
-**Agente:** Content/Social (filmación + gestión TikTok) + Frontend (embed)
-**Referencias:**
-- [3] BrightLocal "Why You Need to Consider TikTok in Your Local Marketing" Nov 2025
-- TikTok Local Explorer: support.tiktok.com
-- TikTok Business: business.tiktok.com
-
----
-
-### Propuesta 3: Niche Directory Strategy para Servicios de Limpieza
-
-**Problema:** LLM research muestra que AI tools citan directorios de nicho por industria. Purity & Clean no aparece en ningún directorio especializado de limpieza en Colombia. Se está perdiendo authority signals diversificados.
+**Problema:** Facebook es la #2 plataforma de reviews y recomendaciones, pero Purity & Clean no integra Facebook Reviews en el sitio. Los visitantes del sitio no ven las reviews de Facebook que podrían convencerlos.
 
 **Propuesta:**
-1. **Research de directorios de nicho relevantes:**
-   - Buscar "directorio servicios de limpieza Colombia"
-   - Buscar "limpieza industrial Bogotá directorio"
-   - Buscar "mantenimiento de oficinas Bogotá"
-   - Identificar 10-15 sitios con alto Domain Authority
+1. **Facebook Reviews Widget:**
+   - Implementar Facebook Reviews Widget usando `fb Reckon` o similar
+   - Mostrar 3-5 reviews más recientes de Facebook
+   - Badge: "Ver más en Facebook" linking a `facebook.com/purityclean/reviews`
 
-2. **Prioridad de directorios:**
-   - **Genereal business:** LinkedIn Company Page (ya existe en Schema)
-   - **Limpieza:** Buscar en Google "limpieza Bogotá" y ver qué sitios aparecen
-   - **Inmobiliarias:** Portales donde admins de edificios buscan proveedores
-   - **B2B:** Plataformas de sourcing de servicios corporativos
+2. **Nueva sección "Lo que dicen en Facebook":**
+   - Agregar antes de la sección de testimonios existente
+   - Diseño consistente con el resto del sitio
+   - Lazy load para performance
 
-3. **Setup prioritario:**
-   - **LinkedIn:** Optimizar Company Page con servicios, fotos, Bogotá location
-   - **Directorios locales colombianos:** найденные en investigación
-   - **Industry-specific:** Limpieza de muebles, sanitización, mantenimiento
+3. **Call-to-action para reviews en Facebook:**
+   - Agregar botón "Deja tu review en Facebook" después de la sección de testimonios
+   - Link directo a `facebook.com/purityclean/reviews`
+   - Incentivo: entry al concurso mensual de gift cards
 
-4. **Citation tracking:**
-   - Usar BrightLocal Citation Tracker para monitoregar 50+ sitios
-   - Alert cuando NAP sea inconsistente
-   - Medir progress de citation building
+4. **Schema Review de Facebook:**
+   - Agregar reviews de Facebook al JSON-LD si es posible
+   - O al menos link `sameAs` a la sección de reviews de Facebook
 
 5. **Playwright test:**
-   - Test que verifique presence en los 5 directorios más importantes
-   - Test que alerte si NAP es inconsistente entre plataformas
+   - Verificar que el widget de Facebook carga sin errores
+   - Verificar que el link a Facebook Reviews funciona
 
-**Impacto:** Authority signals diversificados para AI search. Mejor discovery en queries especializadas ("servicio de limpieza de sofás Bogotá"). SEO local mejorado.
-**Esfuerzo:** M (1 semana setup + ongoing)
-**Agente:** SEO/Marketing (research + submissions)
-**Referencias:**
-- [2] BrightLocal "AI Search Makes Local Listings More Important Than Ever"
-- BrightLocal Citation Builder: brightlocal.com/citation-builder/
-- BrightLocal Citation Tracker: brightlocal.com/local-seo-tools/auditing/citation-tracker/
-
----
-
-### Propuesta 4: Video Content Strategy para AI Search (YouTube + Instagram)
-
-**Problema:** YouTube e Instagram son citados por LLMs como fuentes de información. Purity & Clean tiene VideoObject Schema pero no ha leverageado video para AI discovery.
-
-**Propuesta:**
-1. **Optimizar YouTube presencia:**
-   - Crear YouTube Channel si no existe
-   - Videos a subir:
-     - "Cómo limpiamos un sofá en 3 minutos" (proceso timelapse)
-     - "Antes y después: sanitización de colchón" (resultados reales)
-     - "FAQ: Preguntas frecuentes sobre limpieza de sofás" (responde objeciones)
-     - "Conoce al equipo Purity & Clean" (humaniza la marca)
-   - En descriptions: usar keywords exactas, link a website, ubicación Bogotá
-   - Tags: "limpieza sofás Bogotá", "sanitización colchones Bogotá", "limpieza profesional Colombia"
-
-2. **Instagram Reels strategy:**
-   - Videos verticales de 30-60 segundos
-   - Same content strategy como TikTok
-   - Agregar location tag Bogotá en cada post
-   - Usar keywords en captions
-
-3. **Schema optimization para video:**
-   - Asegurar que VideoObject en index.html tenga:
-     - name, description, thumbnailUrl, uploadDate
-     - duration (ISO 8601)
-     - contentUrl (direct URL al video)
-     - embedUrl (YouTube embed URL)
-   - Considerar FAQ video schema para aparecer en featured snippets
-
-4. **Embed en website:**
-   - Sección "Últimos videos" en homepage
-   - Video en cada página de servicio
-   - Video testimonials en sección de reviews
-
-**Impacto:** YouTube es fuente citada por Gemini y Perplexity. Instagram citado por Google AI Mode y Perplexity. Video aumenta time-on-site y engagement signals.
-**Esfuerzo:** M (1-2 semanas para setup + ongoing content)
-**Agente:** Content (filmación/edición) + Frontend (Schema + embed)
-**Referencias:**
-- [2] BrightLocal "AI Search Makes Local Listings More Important Than Ever"
-- VideoObject Schema: schema.org/VideoObject
-- YouTube SEO: developers.google.com/search/docs/appearancestructured-data/video
-
----
-
-### Propuesta 5: Google Business Profile Enhancement para AI Readiness
-
-**Problema:** Aunque Purity & Clean tiene Google Business Profile, no está optimizado para cómo los LLMs consumen y citan información de GBP. El LCRS 2026 muestra que Google AI Mode summariza GBP incluso cuando no es la fuente primaria.
-
-**Propuesta:**
-1. **Completar cada campo de GBP:**
-   - Photos: subir 10+ fotos de trabajo (antes/después, equipo, equipos)
-   - Services: listar TODOS los servicios con descripciones específicas
-   - Hours: incluir horas especiales (festivos, temporada alta)
-   - Attributes: "Sanitization", "Eco-Friendly", "Pets Safe" si aplica
-   - Products: si hay productos de limpieza ofrecidos, listarlos
-
-2. **Posts de Google Business:**
-   - Publicar weekly o bi-weekly
-   - Contenido: promociones, antes/después, tips de mantenimiento
-   - Esto mantiene el perfil activo (AI prefiere profiles recientes)
-
-3. **Questions & Answers:**
-   - Pre-popular con FAQs que respondan objeciones comunes:
-     - "¿Usan productos seguros para mascotas?"
-     - "¿Cuánto tarda el secado?"
-     - "¿Ofrecen garantía?"
-   - Monitorear y responder TODAS las preguntas
-
-4. **Messaging设置:**
-   - Habilitar messaging directo en GBP
-   - Response time rápido (<1 hora) para signals de engagement
-
-5. **Reviews strategy en GBP:**
-   - Pedir reviews activamente post-servicio
-   - Responder TODAS las reviews (R20 propuso esto, aquí lo especificamos para GBP específicamente)
-   - Usar palabras clave en responses
-
-**Impacto:** Mejor visibility en Google AI Mode. Más chances de ser citado en AI search results. Updates activos signal a LLMs que el negocio está vivo.
-**Esfuerzo:** S (2-3 horas initial + ongoing 30 min/semana)
-**Agente:** SEO/Marketing (puede hacerlo sin developer)
+**Impacto:** +15% conversión desde usuarios que confían más en Facebook que Google. Captura el 34% que escribe reviews en Facebook.
+**Esfuerzo:** S (2-3 días — widget + sección + CTA)
+**Agente:** Frontend
 **Referencias:**
 - [1] BrightLocal LCRS 2026
-- Google Business Profile best practices: business.google.com/help/
+- Facebook Reviews Widget: reckon.com.au
+
+---
+
+### Propuesta 3: Trustpilot Integration — Credibilidad global
+
+**Problema:** Trustpilot no está en la estrategia de Purity & Clean. Es la plataforma de reviews más reconocida globalmente y aparece frecuentemente en AI search results. Los competidores que la usan tienen una señal de confianza adicional.
+
+**Propuesta:**
+1. **Crear perfil en Trustpilot:**
+   - Claim/crear perfil en trustpilot.com/set-up/purity-clean
+   - Completar perfil con servicios, fotos, información de contacto
+   - Usar el mismo NAP del sitio
+
+2. **Integración del widget Trustpilot:**
+   - Instalar Trustpilot widget en el sitio
+   - Mostrar rating aggregate y review count de Trustpilot
+   - Link a Trustpilot profile para ver todas las reviews
+
+3. **Review Request Automation para Trustpilot:**
+   - Usar Trustpilot APIs o integrations para enviar review requests
+   - Después de cada servicio: email automático solicitando review en Trustpilot
+   - Timing: 30 min post-servicio (cuando satisfacción está alta)
+
+4. **Schema.org Trustpilot Review:**
+   - Agregar Trustpilot reviews al JSON-LD del sitio
+   - Usar `reviewRating` de Trustpilot para mostrar aggregate rating
+
+5. **Playwright test:**
+   - Verificar que Trustpilot widget carga correctamente
+   - Verificar link a Trustpilot profile
+
+**Impacto:** Señal de confianza adicional para el 16% de consumidores que usa Trustpilot. Mejora SEO con Domain Authority alto de Trustpilot.
+**Esfuerzo:** M (1-2 semanas — setup Trustpilot + widget + automation)
+**Agente:** Frontend/Marketing
+**Referencias:**
+- [1] BrightLocal LCRS 2026
+- Trustpilot for Business: business.trustpilot.com
+
+---
+
+### Propuesta 4: Google Business Profile Q&A Integration — Resolver antes de llamar
+
+**Problema:** El GBP de Purity & Clean tiene Q&A pero no se muestra en el sitio web. El 20% de consumidores contacta al negocio después de leer reviews [1]. La Q&A es una oportunidad para resolver objeciones sin fricción.
+
+**Propuesta:**
+1. **Nueva sección "Preguntas Frecuentes de Google":**
+   - Mostrar Q&A del GBP en una sección del sitio
+   - Usar Google Places API o scraping para obtener Q&A
+   - Diseño consistente con FAQ existente
+
+2. **Q&A Monitoring Dashboard:**
+   - Crear proceso para monitorear nuevas preguntas en GBP semanalmente
+   - Alertas a WhatsApp cuando hay nueva Q&A
+   - Respuesta proactiva a todas las preguntas
+
+3. **Q&A Content Strategy:**
+   - Pre-populate con preguntas comunes y respuestas detalladas
+   - Ejemplos:
+     - "¿Hacen servicio los domingos?"
+     - "¿Cuánto tarda la limpieza de un sofá?"
+     - "¿Usan productos seguros para mascotas?"
+
+4. **Schema Question/Answer para SEO:**
+   - Agregar Q&A al Schema FAQPage
+   - Incluir preguntas específicas de servicios ("¿Cuánto cuesta limpiar sofá en Chapinero?")
+
+5. **Playwright test:**
+   - Verificar que la sección Q&A muestra contenido
+   - Verificar que las respuestas son completas (mínimo 50 caracteres)
+
+**Impacto:** Reducir fricción en el funnel. El 20% que contacta puede encontrar la respuesta en la web sin llamar.
+**Esfuerzo:** S (3-5 días — sección + monitoring + content)
+**Agente:** Frontend/Content
+**Referencias:**
+- [1] BrightLocal LCRS 2026
+- Google Places API: developers.google.com/places/web-service/overview
+
+---
+
+### Propuesta 5: QR Code Review Request System — Puentes físico-digital
+
+**Problema:** No hay bridge entre el servicio físico (post-limpieza) y la solicitud de review digital. El LCRS 2026 muestra que 65% de consumidores escriben reviews cuando se les pide [1]. Un QR code en la factura es el puente perfecto.
+
+**Propuesta:**
+1. **Sistema de QR codes por servicio:**
+   - Generar QR codes únicos para cada tipo de servicio (sofá, colchón, alfombra)
+   - QR code apunta a: `purityclean.com/review?service={tipo}&ref={codigo}`
+   - Diseño del QR: branding Purity & Clean con CTA "Cuéntanos tu experiencia"
+
+2. **Landing page `/review`:**
+   - Simple, mobile-first
+   - Muestra: "Gracias por elegir Purity & Clean"
+   - Opciones: Google Reviews | Facebook Reviews | Trustpilot | Formulario del sitio
+   - Cada opción es un link directo a la plataforma con el review form abierto
+
+3. **Incentivo por review:**
+   - "Participa en nuestro concurso mensual: 1 regalo de limpieza gratis"
+   - Entry con: email + screenshot de review + tipo de servicio
+   - Newsletter opt-in para resultados del concurso
+
+4. **QR en factura/invoice:**
+   - Physical: agregar QR code en la factura impresa o receipt
+   - Digital: incluir QR en el email de confirmación post-servicio
+   - Colocar en lugar visible (esquina inferior derecha)
+
+5. **Tracking y analytics:**
+   - UTM parameters para cada plataforma (google, facebook, trustpilot, site)
+   - Event tracking en Plausible para cada click
+   - Dashboard: reviews por plataforma por mes
+
+6. **Playwright test:**
+   - Test que verifique QR codes son únicos por tipo de servicio
+   - Test que verifique landing page tiene todas las opciones de platform
+
+**Impacto:** +50% volumen de reviews con el mismo esfuerzo. Reviews más frescas = mejor SEO y conversión. 65% escribe cuando se le pide [1].
+**Esfuerzo:** M (1-2 semanas — QR generator + landing + email integration)
+**Agente:** Full Stack (frontend + backend para QR generation)
+**Referencias:**
+- [1] BrightLocal LCRS 2026
+- QR Code generation: qrcode.Koalatea.com
 
 ---
 
@@ -320,13 +294,13 @@ R21 se basa en datos primarios del **Local Consumer Review Survey 2026** de Brig
 
 | # | Propuesta | Impacto | Esfuerzo | Agente | Razón estratégica |
 |---|-----------|---------|----------|--------|------------------|
-| 1 | Foursquare + Data Axle Setup | Alto | Bajo | SEO/FE | 60-70% de ChatGPT viene de Foursquare, setup en 30 min |
-| 2 | TikTok Local Explorer Campaign | Alto | Medio | Content/Social | 20% usa TikTok para local search, early mover advantage |
-| 3 | Niche Directory Strategy | Medio | Medio | SEO/Mkt | Authority signals para AI search, SEO local mejorado |
-| 4 | Video Content para AI Search | Medio | Medio | Content/FE | YouTube/Instagram son fuentes citadas por LLMs |
-| 5 | GBP Enhancement para AI | Medio | Bajo | SEO/Mkt | Optimizar para Google AI Mode |
+| 1 | "Near Me" SEO Optimization | Alto | Bajo | SEO/FE | 76% busca así, quick win |
+| 2 | Facebook Reviews Widget | Medio | Bajo | Frontend | #2 plataforma, alta adopción |
+| 3 | Trustpilot Integration | Medio | Medio | Mkt/FE | Diferenciación vs. competencia |
+| 4 | GBP Q&A Integration | Medio | Bajo | Content/FE | Resolver objeciones early funnel |
+| 5 | QR Code Review System | Alto | Medio | Full Stack | 65% escribe cuando se le pide |
 
-**Top 3 para implementar primero:** 1, 5, 2 (Foursquare: quick win masivo; GBP: already have it optimized; TikTok: capture emerging channel).
+**Top 3 para implementar primero:** 1, 5, 2 (Near Me: quick win SEO; QR Code: volumen reviews; Facebook: plataforma #2).
 
 ---
 
@@ -335,31 +309,33 @@ R21 se basa en datos primarios del **Local Consumer Review Survey 2026** de Brig
 R1-R20 se enfocaron en:
 - Features del sitio (chatbot, booking, cotizador, referidos)
 - UX y accesibilidad (dark mode, skip nav, motion)
-- Marketing (SEO tradicional, ads, social media básico)
+- Marketing (SEO, ads, social media)
 - Operaciones (field app, subscriptions, WhatsApp CRM)
 - Tech (AI vision, B2B API, Teams integration)
 - Content (pillar-cluster, zone automation, programmatic SEO)
-- Reviews (response, capture, freshness, intelligence)
-- AI Search Discovery (R20 propuso Google Business optimization)
+- Adquisición (Local Service Ads, Apple Business, retargeting, directorio)
+- Retención (SMS marketing, review capture systems)
+- AI Search (ChatGPT discovery, Apple Maps native booking)
+- Review Response Automation y Freshness Engine
 
 R21 se enfoca en:
-- **Foursquare optimization** (fuente #1 de ChatGPT local, nunca mencionado antes)
-- **TikTok Local Explorer** (programa nuevo de rewards para reviews locales)
-- **Niche directory strategy** (citation building diversificado para AI)
-- **Video content para AI** (YouTube/Instagram como fuentes de LLMs)
-- **GBP AI-ready optimization** (específicamente para cómo AI Mode consume GBP)
+- **"Near Me" SEO** (el 76% busca así, pero el sitio no está optimizado)
+- **Facebook Reviews Integration** (la #2 plataforma sin widget)
+- **Trustpilot Integration** (nunca mencionado, oportunidad de diferenciación)
+- **GBP Q&A Integration** (resolver objeciones antes de llamar)
+- **QR Code Review System** (puente físico-digital para capturar reviews post-servicio)
 
-R21 representa la evolución hacia **AI-first local discovery**: no solo optimizar para Google search tradicional, sino para los canales donde los LLMs realmente encuentran información: Foursquare, TikTok, YouTube, y directorios de nicho.
+R21 representa la evolución hacia **integración multiplataforma de presencia digital**: no solo tener presencia, sino integrar todas las plataformas de reviews en un sistema unificado que maximice confianza y volumen de reviews frescas.
 
 ---
 
 ## Referencias
 
 [1] BrightLocal. "Local Consumer Review Survey 2026." Febrero 2026. https://www.brightlocal.com/research/local-consumer-review-survey/
-
-[2] BrightLocal. "AI Search Makes Local Listings More Important Than Ever." Julio 2025. https://www.brightlocal.com/blog/ai-search-using-listings-sources/
-
-[3] BrightLocal. "Why You Need to Consider TikTok in Your Local Marketing." Noviembre 2025. https://www.brightlocal.com/learn/tiktok-for-local-marketing/
+[2] Google "Near Me" SEO. https://developers.google.com/maps/localseo
+[3] Facebook Reviews Widget. https://www.reckon.com.au
+[4] Trustpilot for Business. https://business.trustpilot.com
+[5] Google Places API. https://developers.google.com/places/web-service/overview
 
 ---
 
