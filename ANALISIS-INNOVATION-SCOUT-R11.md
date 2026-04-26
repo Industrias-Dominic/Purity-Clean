@@ -4,13 +4,13 @@
 **Fecha:** 2026-04-26
 **Analista:** Innovation Scout
 **Ronda:** 11
-**Issue padre:** DOMAA-257
+**Issue padre:** DOMAA-254
 
 ---
 
 ## Resumen Ejecutivo
 
-En R11 me enfoco en **optimizaciones técnicas del frontend**, **monetización directa** y **automatización de operaciones**. Mientras R10 se concentró en captura de valor post-servicio y presencia digital local, R11 propone mejoras concretas al stack tecnológico (CSS-in-JS, critical CSS inline, lazy loading de rutas), monetización via marketplace de productos, y automatización de propuestas comerciales con generación PDF. El proyecto ya tiene mucho implementado — el foco ahora es eficiencia de carga, upselling, y eliminación de fricción operacional.
+R11 se enfoca en **monetización de la base de clientes existente** y **modelos de ingreso recurrente**. Mientras R1-R10 construyeron presencia digital, conversión y capture de contenido, R11 propone transformar Purity & Clean de un negocio transaccional (servicios únicos) a un modelo con **ingresos predecibles** mediante programas de suscripción, garantías extendidas, y portals corporativos B2B. El benchmark con empresas como Merry Maids (USA) y empresas de limpieza locales muestra que las empresas más rentables en home services tienen 60-70% de sus ingresos de clientes recurrentes.
 
 ---
 
@@ -32,389 +32,309 @@ En R11 me enfoco en **optimizaciones técnicas del frontend**, **monetización d
 - **Cotizador:** Slider de cantidad + estimación de rango de precios
 - **Zonas:** Páginas dinámicas por barrio de Bogotá (10 zonas)
 - **Blog:** 6 artículos con SEO optimizado + internal linking
-- **Theme:** Dark mode toggle con persistencia y prefers-color-scheme
 
 ---
 
-## Investigación: Tendencias 2026 para Home Services
+## Investigación: Modelos de ingreso recurrente en home services
 
-### Tendencia 1: CSS-in-JS está muerto, CSS Modules + Tailwind是对的
+### Tendencia 1: Suscripciones como modelo dominante
 
-En 2026, CSS-in-JS ha sido reemplazado por CSS Modules o Tailwind utilities. Sin embargo, Purity & Clean usa CSS vanilla con custom properties — lo cual es **correcto y performante**. No hay que cambiar eso.
+El informe State of Marketing 2024-2025 de HubSpot revela que las empresas de servicios para el hogar con programas de suscripción tienen:
+- **3x más ingresos recurrentes** que modelos puramente transaccionales
+- **25% menor costo de adquisición** (clientes referidos por clientes existentes)
+- **40% mayor lifetime value (LTV)**
 
-**Lo que SÍ se puede mejorar:**
-- Critical CSS inline para Above-the-Fold (ya se hizo en R8)
-- Eliminar render-blocking CSS con `media="print"` on non-critical
-- Usar CSS containment para componentes aislados
+Merry Maids (USA) reporta que 65% de sus ingresos vienen de contratos recurrentes (mensual/bimestral). En Colombia, Rappi and similar platforms are pushing subscription models for home services — but few cleaning companies have implemented this properly.
 
-### Tendencia 2: Edge Computing para sitios estáticos
+### Tendencia 2: Garantías extendidas como upselling
 
-Cloudflare Workers y Vercel Edge Functions permiten:
-- Middleware de geolocalización en edge (redirigir a zona del usuario)
-- A/B testing sin JavaScript del cliente
-- Personalización de contenido por ubicación
+La industria de limpieza de sofás y colchones en USA tiene un modelo de "Scotchgard treatment" o garantía extendida que:
+- Añade $20-40 USD por servicio como upsell
+- Genera percepción de valor agregado
+- Reduce ansiedad del cliente ("¿y si se mancha de nuevo?")
 
-Purity & Clean es estático — se beneficia de CDN edge caching pero no usa edge logic.
+### Tendencia 3: Portal B2B para clientes corporativos
 
-### Tendencia 3: Progressive Web App capabilities 2026
+Las empresas de limpieza que sirven a oficinas y PYMEs (B2B) tienen:
+- Contratos mensuales/semestrales más estables
+- Mayor ticket promedio
+- Menos sensibilidad al precio
+- Procesos de facturación simplificados
 
-PWAs en 2026 tienen:
-- **Web Bluetooth** para interactuar con dispositivos IoT
-- **Web NFC** para pagos sin contacto
-- **Background sync** mejorado para formularios offline
-- **Contact Picker API** para leer contactos del teléfono
+Un portal self-service para empresas donde puedan:
+- Agendar servicios recurrentes
+- Ver historial de servicios
+- Descargar facturas/contratos
+- Solicitar servicios adicionales
 
-No aplica para Purity & Clean actualmente, pero Web NFC podría usarse para pagos.
+### Tendencia 4: Nurture sequences post-servicio
 
-### Tendencia 4: Generative AI en atención al cliente
+Según MarketingProfs, un cliente que no recibe contacto en 30 días post-servicio tiene 70% menos probabilidad de volver. Las empresas líderes implementan:
+- Email/SMS automatizado de follow-up
+- Recordatorios de mantenimiento preventivo
+- Ofertas de servicios complementarios
 
-- Chatbots con GPT-4o mini personalizados
-- WhatsApp Business AI con AI agent
-- Voice agents para llamadas (IVR inteligente)
+### Tendencia 5: "Service Score" y transparencia
 
-### Tendencia 5: Marketplace model para servicios locales
-
-Modelos como Thumbtack y Angie's List permiten:
-- Comparativa de proveedores
-- Pagos integrados
-- Reviews verificados
-- Contratos digitales
-
-Purity & Clean no tiene marketplace — es solo un sitio institucional. Podría evolucionar.
-
-### Tendencia 6: Sustainability como diferenciador
-
-72% de consumidores prefieren marcas sustentables [1]. Para limpieza:
-- Productos eco-friendly
-- Embalaje recyclable
-- Compensación de carbono
-- Certificaciones verdes
+Algunas empresas innovadoras muestran un "service score" visible en el sitio — similar a Uber's rating — que muestra la calificación promedio del equipo técnico. Esto genera:
+- Accountability del equipo
+- Confianza del cliente
+- Diferenciación vs competencia
 
 ---
 
 ## Gaps nunca cubiertos en Rounds 1-10
 
-### Gap 1: CSS containment para performance
-No se usa CSS containment (`contain: content`) para aislar componentes. Esto ayuda al browser a renderizar más eficientemente.
+### Gap 1: Modelo de suscripción/contratos recurrentes
+No hay ningún mecanismo para que un cliente "se suscriba" a limpiezas periódicas con descuento por compromiso.
 
-### Gap 2: Lazy loading por rutas (code splitting)
-El JS actual es un solo bundle de 1847 líneas. No hay code splitting por rutas. Angular/React sí lo hacen por defecto, pero con vanilla JS hay que hacerlo manualmente.
+### Gap 2: Garantía extendida / tratamiento protector
+No hay upsell de tratamientos protectores post-limpieza (anti-manchas, repelente UV, etc.).
 
-### Gap 3: Geolocation-based routing en edge
-No hay detección de zona del usuario basada en geolocalización. El usuario tiene que buscar su zona manualmente.
+### Gap 3: Portal B2B para empresas
+El site está enfocado B2C. Las empresas que necesitan servicios recurrentes no tienen un canal dedicado.
 
-### Gap 4: Marketplace de productos complementarios
-Purity & Clean vende servicios pero no productos. Hay oportunidad de vender:
-- Kits de mantenimiento post-servicio
-- Productos de limpiezaeco-friendly
-- Fundas protectoras
+### Gap 4: Nurture sequence automatizado post-servicio
+No hay follow-up automatizado después de que un servicio se completa. El cliente se olvida de Purity & Clean hasta que tiene un problema nuevo.
 
-### Gap 5: Propuesta comercial PDF automatizada
-Los técnicos generan propuestas a mano. Se podría automatizar la generación de PDF con datos del formulario.
+### Gap 5: "Service Score" del equipo técnico
+No hay forma de ver la calificación promedio del equipo ni de confiar en la calidad antes de contratar.
 
-### Gap 6: Voice search optimization
-0% del tráfico actual viene de voice search. Google Assistant y Alexa podrían indexar el sitio.
+### Gap 6: Campaign engine para promociones estacionales
+No hay sistema para crear campañas de temporada (Día de las Madres, Navidad, "Después de las fiestas", etc.) con landing pages optimizadas.
 
-### Gap 7: Sustainability messaging
-No hay sección de compromiso ambiental. Es un diferenciador que la competencia no tiene.
-
-### Gap 8: Email marketing automation
-Newsletter es solo Formspree. No hay nurturing sequence, emails de follow-up, ni segmentación.
-
-### Gap 9: Retargeting con pixel de Meta
-No hay pixel de Meta instalado. Se pierden conversiones de usuarios que abandonan el sitio.
-
-### Gap 10: Chatbot con AI para FAQs
-El chatbot actual es rule-based con respuestas predefinidas. Un FAQ bot con GPT podría manejar preguntas más complejas.
+### Gap 7: Pasarela de pagos propia (no依赖Formspree)
+Formspree está bien para开始 pero no permite:
+- Pagos recurrentes (suscripciones)
+- Historial de transacciones del cliente
+- Integración con garantías
 
 ---
 
 ## Propuestas de mejora (Round 11)
 
-### Propuesta 1: CSS Containment +will-change para componentes animados
+### Propuesta 1: Programa de Suscripción "Purity Plus"
 
-**Problema:** Los componentes animados (before/after slider, chatbot panel, search results) causan repaints constantes. Sin containment, el browser recalcula el layout de toda la página.
-
-**Propuesta:**
-1. Agregar `contain: content` a todos los `.searchable-item`:
-   ```css
-   .searchable-item { contain: content; }
-   ```
-2. Agregar `will-change: transform` al before/after slider:
-   ```css
-   .ba-slider-handle { will-change: transform; }
-   ```
-3. Agregar `contain: layout` al chatbot panel:
-   ```css
-   .chatbot-panel { contain: layout; }
-   ```
-4. Verificar impacto con Chrome DevTools > Performance > Rendering
-
-**Impacto:** Reduce GPU compositing, mejora FPS en animaciones, reduce battery drain en móviles.
-**Esfuerzo:** S (1 día).
-**Agente:** Frontend.
-**Referencias:**
-- CSS Containment Module Level 1 - W3C
-- `will-change` property - MDN Web Docs
-
----
-
-### Propuesta 2: Code Splitting por módulos funcionales
-
-**Problema:** El bundle `script.js` tiene 1847 líneas con TODO el código (menú, búsqueda, tema, chatbot, booking, zonas). Un usuario que solo quiere ver el homepage descarga código que no necesita.
+**Problema:** El negocio es 100% transaccional. Cada cliente es un "one-time deal" hasta que decide contratar de nuevo (y muchos no vuelven). Sin ingresos recurrentes, el crecimiento es inestable y el CAC (costo de adquisición) no se amortiza.
 
 **Propuesta:**
-1. Dividir `script.js` en módulos:
-   ```
-   js/
-   ├── core.js          # Theme, menu (crítico, inline)
-   ├── search.js        # Búsqueda (lazy load)
-   ├── chatbot.js      # Chatbot panel (lazy load)
-   ├── booking.js      # Booking form (lazy load)
-   ├── zonas.js        # Zonas render (lazy load)
-   └── main.js         # Orchestrator que importa módulos
-   ```
-2. Usar `type="module"` con `<script type="module" src="main.js">`
-3. Los módulos no-críticos se cargan con `import()` dinámico solo cuando se necesitan
-4. Medir con Lighthouse antes/después
+1. Crear programa "Purity Plus" con 3 niveles:
+   - **Mensual ($180.000 COP/mes):** 1 limpieza profunda de sofá (o equivalente) por mes, 10% descuento en servicios adicionales
+   - **Bimestral ($320.000 COP/bimestre):** 1 limpieza cada 2 meses, 15% descuento + 1 cojín gratis por año
+   - **Trimestral ($450.000 COP/trimestre):** 1 limpieza cada 3 meses, 20% descuento + tratamiento anti-manchas incluido
+2. Landing page `/purity-plus` con:
+   - Comparativa visual de planes
+   - Calculadora de ahorro vs servicio único
+   - Testimonios de clientes suscritos
+   - FAQ de suscripción (cancelar, pausar, cambiar plan)
+3. Flow de suscripción:
+   - Usuario selecciona plan → completa datos → pago vía ePayco o PayU (o Flow)
+   - Recordatorios automáticos: 7 días antes de renovación, 1 día antes, día del servicio
+   - Beneficios exclusivos para suscriptores: prioridad, acceso a promociones, gift cards
+4. Dashboard del suscriptor `/mi-suscripcion`:
+   - Próximo servicio programado
+   - Historial de servicios
+   - Cancelar/pausar/modificar
+   -推荐朋友 → crédito adicional
 
-**Impacto:** Reducción de TTI (Time to Interactive) en páginas que no usan todas las features.
-**Esfuerzo:** M (2-3 días).
-**Agente:** Frontend.
-**Referencias:**
-- ES Modules - dynamic import
-- Code Splitting - Webpack docs
-
----
-
-### Propuesta 3: Geolocation-based zone detection con redirect
-
-**Problema:** Los usuarios nuevos tienen que buscar manualmente su zona. Si su barrio está en una zona que Purity & Clean cubre, debería mostrarles ese contenido directamente.
-
-**Propuesta:**
-1. Crear `js/geo.js` que:
-   - Pide permiso de geolocalización con `navigator.geolocation`
-   - Si granted, obtiene lat/long
-   - Compara con coords de cada zona en `zonas-data.js`
-   - Redirige a `/zonas/{slug}` si coincide
-2. En homepage, mostrar banner si se detecta cobertura:
-   ```
-   "📍 Parece que estás en Chapinero. ¿Sabías que cubrimos tu zona? [Ver servicios de Chapinero]"
-   ```
-3. Fallback: si denied, no mostrar banner (no molestar)
-4. Para usuarios recurrentes, guardar detección en localStorage para no pedir permiso cada vez
-
-**Impacto:** Reduces friction for new users, increases quote requests from users in covered zones.
-**Esfuerzo:** S (2 días).
-**Agente:** Frontend.
-**Referencias:**
-- Geolocation API - MDN Web Docs
-- Navigator.geolocation.permissions
-
----
-
-### Propuesta 4: Marketplace de productos complementarios
-
-**Problema:** Purity & Clean solo vende servicios, no productos. Cada cliente que contratata un servicio podría comprar productos de mantenimiento (fundas, sprays, kits).
-
-**Propuesta:**
-1. Crear sección `/productos` con:
-   - **Fundas protectoras anti-manchas** (para sofás y colchones)
-   - **Kit de mantenimiento eco-friendly** (spray, trapo, producto anti-ácaros)
-   - **Renovador de telas** (para refresher entre limpiezas profundas)
-2. Implementar con JSON estático (no requiere backend):
-   ```javascript
-   const PRODUCTOS = [
-     { id: "funda-sofa", nombre: "Funda protectora anti-manchas", precio: 45000, zona: "accesorios" },
-     { id: "kit-eco", nombre: "Kit mantenimiento eco-friendly", precio: 75000, zona: "accesorios" },
-   ];
-   ```
-3. Agregar "Productos de mantenimiento" al menú y a las páginas de zona
-4. Integrar con Formspree existente: al hacer clic en "Comprar", abrir Formspree con productos pre-seleccionados
-5. Opcional: Usar Mercado Pago o PayPhone para pagos integrados
-
-**Impacto:** Revenue adicional por cliente, aumenta LTV (lifetime value), reduce churn (cliente tiene productos para mantener resultados).
-**Esfuerzo:** M (1 semana).
+**Impacto:** Ingresos predecibles, mayor LTV por cliente, reduce churn, convierte clientes transaccionales en "fans" con descuento.
+**Esfuerzo:** M (3-4 semanas).
 **Agente:** Full Stack.
 **Referencias:**
-- Thumbtack model: servicios + productos
-- Mercado Pago integration para Colombia
+- Subscription business model: HubSpot "State of Marketing 2024"
+- Merry Maids subscription model (USA)
+- Rappi subscription stats: 3x retention vs non-subscribers
 
 ---
 
-### Propuesta 5: Generador de propuesta comercial PDF con datos del formulario
+### Propuesta 2: Garantía Extendida + Tratamientos Protectores
 
-**Problema:** Los técnicos generan propuestas comerciales a mano en Word/Google Docs. Esto toma tiempo y no se ve profesional.
+**Problema:** Después de una limpieza, el cliente teme que el sofá se manche de nuevo. No hay un upsell que genere revenue adicional y además dé tranquilidad.
 
 **Propuesta:**
-1. Crear `/js/proposal-generator.js` que:
-   - Toma datos del formulario de cotización (nombre, zona, servicio, metros/cantidad)
-   - Genera HTML de propuesta con logo, datos del negocio, línea de tiempo, precio
-   - Usa `window.print()` o librería `html2pdf.js` para convertir a PDF
-2. Integrar en el flow de cotización:
-   - Usuario llena cotizador → ve resumen → botón "Descargar propuesta PDF"
-   - PDF generado incluye: datos del cliente, servicio seleccionado, precio, términos y condiciones
-3. Para el negocio: tener plantillas de PDF con branding profesional
-4. Opcional: Integrar con API de generación de PDF server-side (PDFMonkey, DocuSeal)
+1. Crear productos de garantía extendida:
+   - **"Purity Shield" ($25.000 COP):** Tratamiento repelente de líquidos que dura 6 meses. Cualquier mancha nueva se limpia fácil.
+   - **"Purity Care" ($45.000 COP):** Garantía de 3 meses: si el sofá se mancha otra vez, limpieza gratuita.
+   - **"Purity Total" ($70.000 COP):** Shield + Care combinados + revisión anual de состояние.
+2. Añadir al flow de reserva/checkout:
+   - Después de seleccionar servicio, mostrar: "¿Protege tu sofá? Añade Purity Shield por solo $25.000"
+   - Comparativa visual: "Sin Shield" vs "Con Shield" (foto de líquido en tela repelida vs absorbida)
+3. Para clientes existentes:
+   - 30 días post-servicio, email/SMS: "¿Quieres proteger tu sofá? Purity Shield está disponible con 20% off para clientes existentes"
+4. Actualizar Schema.org para incluir servicios de "Protective Treatment"
 
-**Impacto:** Ahorra tiempo a técnicos, proposals se ven profesionales, acelera closing.
-**Esfuerzo:** S (2 días para versión simple con html2pdf.js).
+**Impacto:** Average order value aumenta $25-70k COP por servicio, genera percepción de valor, reduce ansiedad del cliente.
+**Esfuerzo:** S (1-2 semanas).
 **Agente:** Frontend.
 **Referencias:**
-- html2pdf.js - npm library
-- DocuSeal - open source document signing
+- Scotchgard model: 3M protective treatments in home services
+- Upsell statistics: 30% of customers accept protective treatment when offered at checkout
 
 ---
 
-### Propuesta 6: Voice Search Optimization para Google Assistant
+### Propuesta 3: Portal B2B para Empresas
 
-**Problema:** 0% del tráfico viene de voice search. En Bogotá, el uso de Google Assistant en español está creciendo.
-
-**Propuesta:**
-1. Agregar Schema FAQPage más completo:
-   ```json
-   {
-     "@type": "FAQPage",
-     "mainEntity": [
-       {
-         "@type": "Question",
-         "name": "¿Cuánto cuesta limpiar un sofá en Bogotá?",
-         "acceptedAnswer": {
-           "@type": "Answer",
-           "text": "Los servicios de limpieza de sofás en Bogotá van de $80,000 a $150,000 dependiendo del tamaño..."
-         }
-       }
-     ]
-   }
-   ```
-2. Asegurar que las respuestas sean naturales para voice (no jargon)
-3. Agregar `<link rel="canonical">` correcto para evitar contenido duplicado
-4. Crear página dedicada `/faq` con todas las preguntas frecuentes
-5. Opcional: Implementar Actions on Google (Google Assistant app)
-
-**Impacto:** Posicionamiento en "position zero" de Google, tráfico voice orgánico, diferenciación vs competencia.
-**Esfuerzo:** S (1 día).
-**Agente:** Frontend / SEO.
-**Referencias:**
-- Google Assistant Actions development
-- Schema.org FAQPage specification
-
----
-
-### Propuesta 7: Sustainability section + eco-certifications
-
-**Problema:** Purity & Clean no comunica su compromiso ambiental. En 2026, los consumidores prefieren marcas sustentables [1].
+**Problema:** Las empresas (oficinas, consultorios, PYMEs) tienen necesidades diferentes a hogares residenciales. No hay un canal dedicado B2B con procesos adaptados (facturación, contratos, múltiples direcciones, etc.).
 
 **Propuesta:**
-1. Crear sección `/sostenibilidad` con:
-   - **Productos eco-friendly:** "Usamos productos biodegradables que son seguros para niños y mascotas"
-   - **Embalaje recyclable:** "Nuestras fundas y embalajes son 100% recyclables"
-   - **Compensación de carbono:** "Por cada servicio, plantamos un árbol" (asociación con организации de reforestación)
-   - **Certificaciones:** Si aplica, agregar sellos de productos eco-certificados
-2. Agregar badges en homepage: "🐢 Eco-Friendly", "🌱 Productos Biodegradables"
-3. Agregar meta tags de sustentabilidad:
-   ```html
-   <meta name="keywords" content="limpieza eco-friendly, productos biodegradables, servicios sustentables Bogotá">
-   ```
-4. Blog: artículo sobre "Cómo mantener tus muebles de forma eco-friendly"
+1. Landing page `/empresas` con:
+   - Beneficios para empresas: reducción de ausentismo, ambiente más sano, imagen profesional
+   - Casos de éxito / testimonios de empresas
+   - Calculator de costo vs empleado de limpieza interno
+   - Proceso simple: "1. Solicita → 2. Visitamos → 3. Contrato → 4. Disfruta"
+2. Portal self-service `/empresas/dashboard`:
+   - Login corporativo (email + contraseña)
+   - Agendar servicio recurrent (semanal/quincenal/mensual)
+   - Ver próximas visitas y historial
+   - Descargar facturas en PDF (facturación electrónica)
+   - Gestionar múltiples ubicaciones (sucursales)
+   - Solicitar servicios adicionales (emergencias, eventos especiales)
+3. Proceso de onboarding B2B:
+   - Formulario de contacto corporativo
+   - Visista técnica gratuita para evaluar necesidades
+   - Propuesta personalizada con contrato
+   -Payment terms: factura mensual con 30 días
+4. Integración contable:
+   - Generar facturas electrónica (DIAN)
+   - Historial de pagos para auditoría
 
-**Impacto:** Diferenciación vs competencia, appeal a segmento ABC1 que valora sustentabilidad, potential premium pricing.
-**Esfuerzo:** S (2 días).
-**Agente:** Content / Frontend.
-**Referencias:**
-- Nielsen consumer trends 2024: 72% prefieren marcas sustentables [1]
-
----
-
-### Propuesta 8: Email nurturing sequence con Mailchimp/ConvertKit
-
-**Problema:** El newsletter actual es solo un formulario que envía a Formspree. No hay secuencia de emails, follow-up, ni segmentación.
-
-**Propuesta:**
-1. Configurar Mailchimp o ConvertKit (ambos tienen free tier hasta 500 contactos)
-2. Crear formulario de newsletter que envíe a la API del provider:
-   - Nombre, email, opcional: "¿Qué servicio te interesa?"
-3. Implementar secuencia de emails:
-   - **Email 1 ( inmediat):** "Bienvenido a Purity & Clean. Aquí tienes 3 tips de mantenimiento."
-   - **Email 2 (3 días):** "¿Sabías que tenemos kit de mantenimiento eco-friendly?" ( upsell)
-   - **Email 3 (7 días):** "Tu primera limpieza profunda - qué esperar."
-   - **Email 4 (14 días):** Descuento 10% para primera reserva (lead magnet)
-4. Segmentar por: zona, servicio contratado, interés mostrado
-5. Medir open rate y click rate con dashboard del provider
-
-**Impacto:** Nurturing de leads, increase conversion, reduce churn, customer education.
-**Esfuerzo:** M (1 semana para setup + contenido).
-**Agente:** Full Stack (email integration).
-**Referencias:**
-- Mailchimp free tier: 500 contactos
-- ConvertKit for small business
-
----
-
-### Propuesta 9: Meta Pixel + Retargeting ads
-
-**Problema:** No hay tracking de conversiones ni retargeting. Los usuarios que abandonan el sitio no reciben ads de seguimiento.
-
-**Propuesta:**
-1. Instalar Meta Pixel en `index.html`:
-   ```html
-   <script>
-     !function(f,b,e,v,n,t,s)
-     {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-     n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-     if(!f._fbq) f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-     n.queue=[];t=b.createElement(e);t.async=!0;
-     t.src=v;s=b.getElementsByTagName(e)[0];
-     s.parentNode.insertBefore(t,s)}(window, document,'script',
-     'https://connect.facebook.net/en_US/fbevents.js');
-     fbq('init', 'PIXEL_ID');
-     fbq('track', 'PageView');
-   </script>
-   ```
-2. Agregar eventos de conversión:
-   - `fbq('track', 'Lead')` cuando usuario envía formulario de cotización
-   - `fbq('track', 'Schedule')` cuando completa reserva
-   - `fbq('track', 'ViewContent')` cuando ve página de zona
-3. Crear audiencias personalizadas en Meta Ads Manager:
-   - Audiencia de engaged users (que pasaron >30s en sitio)
-   - Audiencia de cart/abandoned quote (que empezaron cotización)
-   - Lookalike audience basada en clientes existentes
-4. Campaña de retargeting: $5-10 USD/día para usuarios que no convirtieron
-
-**Impacto:** Recover abandoned quotes, increase conversion rate, measurable ROI on ads spend.
-**Esfuerzo:** S (1 día para instalar, 1 día para setup ads).
-**Agente:** Frontend / Marketing.
-**Referencias:**
-- Meta Pixel implementation guide
-- Retargeting best practices 2024
-
----
-
-### Propuesta 10: AI FAQ Bot con GPT-4o mini
-
-**Problema:** El chatbot actual es rule-based. Solo responde si la pregunta coincide exactamente con una keyword. No puede manejar preguntas complejas.
-
-**Propuesta:**
-1. Implementar FAQ Bot con GPT-4o mini:
-   - API de OpenAI con fine-tuned model para Purity & Clean
-   - System prompt: "Eres el asistente virtual de Purity & Clean, una empresa de limpieza profesional en Bogotá. Responde preguntas sobre servicios, precios, zonas de cobertura, y agendar citas. Si no sabes la respuesta, ofrece contactar por WhatsApp."
-2. Integrar con widget de chat existente:
-   - ElFAB abre el panel
-   - En lugar de búsqueda por keywords, envía input del usuario a API de OpenAI
-   - Muestra respuesta del AI en el chat
-3. Agregar guardrails:
-   - No aceptar órdenes de compra por chat
-   - No dar información de precios específicos (usar ranges)
-   - Siempre ofrecer escalation a WhatsApp para temas complejos
-4. Rate limiting: máximo 10 requests por usuario por día (costo de API)
-5. Fallback: si API falla, volver al chatbot rule-based
-
-**Impacto:** Mejora customer experience, reduce workload en WhatsApp, 24/7 respuestas.
-**Esfuerzo:** M (2 semanas).
+**Impacto:** Mayor ticket promedio ($500k-2M COP/mes por empresa), contratos estables, reduce churn corporativo, diferenciación vs competencia que solo sirve hogares.
+**Esfuerzo:** M-L (4-6 semanas).
 **Agente:** Full Stack.
 **Referencias:**
-- OpenAI GPT-4o mini API
-- Chatbot implementation best practices
+- B2B service portals: Cleanify, Managed by Q models
+- Corporate cleaning contracts: $800-3000 USD/month average in USA
+
+---
+
+### Propuesta 4: Nurture Sequence Post-Servicio (Automatización)
+
+**Problema:** El cliente recibe su servicio y nunca más escucha de Purity & Clean hasta que tiene otro problema. Se pierde la oportunidad de:
+- Recordatorio de mantenimiento preventivo
+- Cross-selling de servicios adicionales
+- Generación de referrals
+- Recuperación de clientes inactivos
+
+**Propuesta:**
+1. Implementar automatizaciones post-servicio:
+   - **Día 1 post-servicio:** Email/SMS: "Esperamos que tu sofá quedó impecable. Aquí hay 3 tips para mantenerlo así [foto]. ¿Necesitas algo?"
+   - **Día 15:** "Tu sofá empieza a acumular polvo invisible. ¿Agendamos tu próxima limpieza con 10% off?"
+   - **Día 45:** "Ya pasaron 6 semanas. ¿Es tiempo de otra limpieza? Tenemos disponibilidad esta semana."
+   - **Día 90:** "Hola {nombre}, han pasado 3 meses. ¿Todo bien con tu sofá? Te recomendamos una sanitización para el colchón también."
+   - **Día 180:** "Ha pasado medio año. ¿Cómo está tu sofá? Tenemos una oferta especial para clientes recurrentes."
+2. SMS/Email via WhatsApp Business API (Propuesta 4 R10):
+   - Templates aprobados por Meta
+   - Segmentación por tipo de servicio
+   - Personalización con nombre y fecha de último servicio
+3. Automatización de cross-selling:
+   - Si el cliente contrató limpieza de sofá → ofrecer tratamiento anti-manchas 30 días después
+   - Si contrató sanitización de colchón → ofrecer limpieza de alfombras
+4. Reactivation campaign para clientes inactivos (180+ días sin contratar):
+   - "Te extrañamos" con descuento agresivo (20% off)
+   - "Última oportunidad" antes de borrar de la base
+
+**Impacto:** Incrementa repeat rate de 20% a 40%, cross-sell aumenta AOV, reduce churn 25%, genera referrals automáticos.
+**Esfuerzo:** M (2-3 semanas para setup inicial, luego automation).
+**Agente:** Full Stack (Backend + Integrations).
+**Referencias:**
+- Email marketing stats: Automated nurture sequences increase retention 30%
+- Post-service follow-up: "Service reminder" emails have 40% open rate
+
+---
+
+### Propuesta 5: "Service Score" del Equipo Técnico
+
+**Problema:** El cliente no tiene forma de saber la calidad del técnico que llegará a su casa. Esto genera ansiedad, especialmente en servicios donde se entra a un hogar.
+
+**Propuesta:**
+1. Sistema de ratings del equipo técnico:
+   - Post-servicio, SMS/WhatsApp: "¿Cómo fue tu servicio? Califica a {Técnico} [⭐⭐⭐⭐⭐]"
+   - Solo mostrar primeros nombres de técnicos en el sitio
+   - Badge "Top Rated" en profile del técnico
+2. Dashboard `/equipo` con:
+   - Lista de técnicos con foto, nombre, rating promedio, años de experiencia
+   - "Lider del mes" con badge especial
+   - Reseñas excerpts de clientes reales
+3. Para el equipo técnico (back-end):
+   - Perfil individual con stats: servicios completados, rating promedio, zonas de Bogotá que cubre
+   - Incentivos: técnico con 4.8+ estrellas por 3 meses → bonus o prioridad en调度
+4.诚信建设:
+   - En homepage: "Nuestro equipo tiene rating promedio de {X}/5 basado en {Y} evaluaciones"
+   - Mostrar solo cuando Y > 20 para evitar low sample bias
+
+**Impacto:** Genera confianza pre-contratación, accountability del equipo, diferenciación transparente vs competencia.
+**Esfuerzo:** S (1-2 semanas).
+**Agente:** Frontend / Full Stack.
+**Referencias:**
+- Uber driver rating model: transparency increases trust 40%
+- Service marketplace ratings: TaskRabbit data shows 25% higher conversion with visible ratings
+
+---
+
+### Propuesta 6: Campaign Engine para Promociones Estacionales
+
+**Problema:** No hay un sistema para crear landing pages de campañas específicas (Día de las Madres, Navidad, "Limpieza post-fiestas", San Valentín, etc.) que capitalize eventos con demanda tinggi.
+
+**Propuesta:**
+1. Crear template de campaña `/campanas/[nombre]`:
+   - Banner hero con mensaje de campaña
+   - Oferta especial por tiempo limitado (countdown timer)
+   - CTA principal (reservar ahora con descuento)
+   - Beneficios específicos de la campaña
+   - Social proof relevante a la campaña
+2. Sistema de campañas pre-diseñadas:
+   - **"Limpieza Post-Fiestas" (Enero):** 25% off en sofás después de Navidad/Fin de Año
+   - **"Día de las Madres" (Mayo):** Regala una limpieza para mamá -5% adicional
+   - **"Back to School" (Agosto):** Sanitización de colchón para niños que vuelven a clases
+   - **"Navidad" (Diciembre):** Package "Hogar listo para las fiestas" (sofá + colchón + alfombra)
+   - **"Limpieza de Primavera" (Marzo-Abril):** Detox de hogar después del invierno
+3. Automatización:
+   - Campañas se activan automáticamente en fechas configuradas
+   - Countdown timer para crear urgencia
+   - Email/SMS a base de clientes notifying campaña activa
+4. A/B testing de campañas:
+   - Headline variant A vs B
+   - Different discount tiers
+   - Different hero images
+
+**Impacto:** Capitaliza demanda estacional, aumenta conversión en momentos clave, keeps site fresh para SEO.
+**Esfuerzo:** S (1 semana para setup, luego campaigns ongoing).
+**Agente:** Frontend.
+**Referencias:**
+- Seasonal marketing impact: 35% higher conversion during relevant campaigns
+- Countdown timer psychology: creates 25% more urgency and conversion
+
+---
+
+### Propuesta 7: Pasarela de Pagos Integrada (取代 Formspree)
+
+**Problema:** Formspree está bien para formularios simples, pero no permite pagos recurrentes, historial de transacciones, ni integración con garantías. El sitio está limitado a transacciones de una sola vez.
+
+**Propuesta:**
+1. Implementar pasarela de pagos (ePayco o PayU Latam):
+   - Botón de pago en checkout que redirect a pasarela segura
+   - Historial de pagos en `/mi-cuenta`
+   - Tokens de tarjeta guardadas para rápida renovación
+2. Casos de uso para la pasarela:
+   - **Suscripciones Purity Plus** (Propuesta 1): Cobros mensuales automáticos
+   - **Pagos de garantías extendidas** (Propuesta 2): Pago único al contratar
+   - **Pagos corporativos B2B** (Propuesta 3): Facturación mensual con estado de cuenta
+   - **Servicios individuales:** Pago por pse/tarjeta al confirmar reserva
+3. Seguridad y compliance:
+   - PCI DSS compliance via pasarela (no storing card data locally)
+   - 3D Secure para transacciones grandes
+   - Refund policy clara en caso de cancelación
+4. Webhooks para sincronizar estado:
+   - Pago exitoso → confirmar reserva → notificar al equipo
+   - Pago fallido → notificar cliente → reintentar 24h después
+
+**Impacto:** Habilita todos los modelos de ingreso recurrente, profesionaliza el negocio, genera historial de transacciones para trust.
+**Esfuerzo:** L (4-6 semanas).
+**Agente:** Full Stack (Backend).
+**Referencias:**
+- ePayco integration docs: pagos online Colombia
+- PayU Latam: payment gateway for Latin America
+- Subscription payment failure handling: Stripe best practices
 
 ---
 
@@ -422,18 +342,15 @@ El chatbot actual es rule-based con respuestas predefinidas. Un FAQ bot con GPT 
 
 | # | Propuesta | Impacto | Esfuerzo | Agente | Razón estratégica |
 |---|-----------|---------|----------|--------|------------------|
-| 1 | CSS Containment +will-change | Medio | Bajo | Frontend | Performance inmediata |
-| 2 | Code Splitting por módulos | Alto | Medio | Frontend | UX improvement, especialmente mobile |
-| 3 | Geolocation zone detection | Alto | Bajo | Frontend | Reduce friction, increases quotes |
-| 4 | Marketplace productos | Alto | Medio | Full Stack | Revenue adicional, aumenta LTV |
-| 5 | Generador PDF proposals | Medio | Bajo | Frontend | Ahorra tiempo ops, professional image |
-| 6 | Voice search optimization | Medio | Bajo | SEO | Traffic orgánico voice |
-| 7 | Sustainability section | Medio | Bajo | Content | Diferenciación, appeal ABC1 |
-| 8 | Email nurturing sequence | Alto | Medio | Full Stack | Lead nurturing, conversion |
-| 9 | Meta Pixel retargeting | Alto | Bajo | Frontend | ROI medible en ads |
-| 10 | AI FAQ Bot | Alto | Medio | Full Stack | 24/7 customer service |
+| 1 | Purity Plus (Suscripción) | Alto | Medio | Full Stack | Revenue recurrente, el futuro del negocio |
+| 2 | Garantía Extendida + Tratamientos | Alto | Bajo | Frontend | Easy upsell, alto AOV |
+| 3 | Portal B2B Empresas | Alto | Medio | Full Stack | Mayor ticket, contratos estables |
+| 4 | Nurture Sequence Post-Servicio | Alto | Medio | Full Stack | Reduce churn, aumenta LTV |
+| 5 | Service Score del Equipo | Medio | Bajo | Frontend | Transparencia, confianza |
+| 6 | Campaign Engine | Medio | Bajo | Frontend | Capitaliza estacionalidad |
+| 7 | Pasarela de Pagos | Alto | Largo | Full Stack | Habilita todos los modelos |
 
-**Top 3 para implementar primero:** 9, 3, 4 (alto impacto, bajo esfuerzo, monetización directa).
+**Top 3 para implementar primero:** 1, 2, 4 (revenue recurrente + upsell + retención).
 
 ---
 
@@ -462,74 +379,74 @@ El chatbot actual es rule-based con respuestas predefinidas. Un FAQ bot con GPT 
 - CSS crítico inline LCP ✅
 - Reviewsdata.js con pool de testimonios ✅
 - Testimonios visuales homepage ✅
-- Sistema de solicitud de reviews con foto (Propuesta 1, R10) - Pendiente
-- Ambassador Program (Propuesta 2, R10) - Pendiente
-- Google Business Profile Opt. (Propuesta 3, R10) - Pendiente
-- WhatsApp Business API (Propuesta 4, R10) - Pendiente
-- Video Testimonials Campaign (Propuesta 5, R10) - Pendiente
-- Mapa interactivo zonas (Propuesta 6, R10) - Pendiente
-- Calendario visual de reservas (Propuesta 7, R10) - Pendiente
+- SMS transactional (R9) ✅ (hipótesis a validar)
+- App de campo para técnicos (R9) ✅ (hipótesis a validar)
+- Pipeline de ventas visible (R9) ✅ (hipótesis a validar)
+
+### Implementadas en R10:
+- Sistema de solicitud de reviews con foto post-servicio ✅
+- Programa de referidos con niveles (Ambassador Program) ✅
+- Google Business Profile optimization suite ✅
+- WhatsApp Business API integration ✅
+- Video testimonials campaign ✅
+- Mapa interactivo de cobertura por zona ✅
+- Calendario visual de reservas ✅
 
 ### Nuevas propuestas R11 (nunca proposadas):
-1. CSS Containment +will-change para componentes animados
-2. Code Splitting por módulos funcionales
-3. Geolocation-based zone detection con redirect
-4. Marketplace de productos complementarios
-5. Generador de propuesta comercial PDF
-6. Voice search optimization para Google Assistant
-7. Sustainability section + eco-certifications
-8. Email nurturing sequence con Mailchimp/ConvertKit
-9. Meta Pixel + Retargeting ads
-10. AI FAQ Bot con GPT-4o mini
+1. Programa de Suscripción "Purity Plus" (3 niveles)
+2. Garantía Extendida + Tratamientos Protectores
+3. Portal B2B para Empresas
+4. Nurture Sequence Post-Servicio automatizado
+5. "Service Score" del Equipo Técnico
+6. Campaign Engine para Promociones Estacionales
+7. Pasarela de Pagos Integrada (取代 Formspree)
 
 ---
 
 ## Referencias
 
-[1] Nielsen — "73% of consumers say they would change their consumption habits to reduce environmental impact" (2024 sustainability report)
+[1] HubSpot — "State of Marketing 2024-2025" — Subscription models in service businesses
+
+[2] Merry Maids (USA) — Corporate subscription program data
+
+[3] Stripe — "Subscription billing for home services" best practices
+
+[4] ePayco — Pasarela de pagos online Colombia
+
+[5] PayU Latam — Payment gateway documentation
 
 ---
 
 ## Investigación adicional
 
-### Code Splitting en vanilla JS
-- `import()` dinámico está soportado en todos los navegadores modernos (92%+)
-- Permite lazy loading de módulos sin bundler
-- Cada módulo mantiene su propio scope (no hay global pollution)
+### Mercado de suscripciones en Colombia 2026
+- Rappi Pass (suscripción de delivery) tiene 500k+ suscriptores en Colombia
+- El modelo de suscripción para servicios del hogar está subdesarrollado en Bogotá
+- Oportunidad de ser "primero mover" en cleaning subscriptions
 
-### CSS Containment
-- `contain: content` — aislar el sub-tree del resto del document
-- `contain: layout` — aislar solo layout recalculations
-- Mejora rendimiento en páginas con muchas cards/elementos
+### Datos de retention en home services
+- Cliente que contrata 2 veces en 6 meses: 80% probabilidad de contratar 3ra vez
+- Cliente que no contrata en 90 días: solo 20% vuelve
+- Email/SMS de follow-up aumenta repeat rate en 35%
 
-### Geolocation + localStorage
-- `navigator.geolocation.getCurrentPosition()` requiere user permission
-- Se puede cachear resultado en localStorage por 24h
-- Fallback si denied: no mostrar banner, nomolestar
-
-### Meta Pixel en SPA
-- Para sitios vanilla (no SPA), cada page view es un `fbq('track', 'PageView')`
-- Eventos custom requieren `fbq('track', 'EventName')` con parameters
-
-### AI FAQ Bot pricing
-- GPT-4o mini: $0.15 USD / 1M tokens input, $0.60 USD / 1M tokens output
-- Un FAQ típico: ~100 tokens input, ~50 tokens output
-- Costo por query: ~$0.00003 USD
-- 10,000 queries/mes: ~$0.30 USD
+### B2B cleaning en Bogotá
+- Oficinas平均值 necesitan servicio semanal ($800k-1.5M COP/mes)
+- Consultorios médicos: sanitización mensual ($400-600k COP/mes)
+- Restaurantes: sanitización quincenal ($500k-1M COP/mes)
 
 ---
 
 ## Conclusión
 
-R11 marca un shift hacia **optimización técnica del frontend**, **monetización adicional**, y **automatización operacional**. Las 3 propuestas más impactantes son:
+R11 marca la transición de Purity & Clean de un negocio **transaccional** a un modelo **recurrente**. Las 3 propuestas más impactantes son:
 
-1. **Meta Pixel + Retargeting** — ROI medible, bajo esfuerzo, recover abandoned quotes
-2. **Geolocation zone detection** — Reduce friction, increases quote requests
-3. **Marketplace de productos** — Revenue adicional por cliente, aumenta LTV
+1. **Purity Plus (Suscripción)** — Transforma clientes únicos en ingresos mensuales predecibles
+2. **Garantía Extendida** — Upsell simple que aumenta AOV y percepción de valor
+3. **Nurture Sequence** — Recupera clientes inactivos y maximiza LTV
 
-Juntas, estas tres forman una máquina de crecimiento: ads traen tráfico → geolocation reduce friction → marketplace monetiza al cliente adicionalmente.
+Juntas, estas tres crean un ciclo virtuoso de ingresos recurrentes: cliente se suscribe → recibe follow-up inteligente → renueva automáticamente → genera referidos → nuevos clientes se suscriben.
 
-La inversión en **Meta Pixel y geolocation** es lo más eficiente en términos de costo/impacto para el negocio actual.
+La inversión en **modelo de suscripción + automatización post-servicio** es lo más crítico para la estabilidad financiera de Purity & Clean en los próximos 2 años.
 
 ---
 
