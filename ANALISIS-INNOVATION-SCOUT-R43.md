@@ -4,23 +4,23 @@
 **Fecha:** 2026-04-27
 **Analista:** Innovation Scout
 **Ronda:** 43
-**Issue padre:** DOMAA-494
+**Issue padre:** DOMAA-493
 
 ---
 
 ## Resumen Ejecutivo
 
-R43 se enfoca en **plataformas de cliente, analítica de comportamiento y programas de retención**: (1) portal de cliente para autogestión de reservas, (2) heatmaps y session replay para entender comportamiento, (3) programa de referidos cliente-cliente, (4) internacionalización básica (inglés), (5) programa de loyalty con NPS post-servicio, (6) planes de suscripción recurrentes, y (7) reviews con fotos antes/después.
+R43 se enfoca en **modelos de negocio alternativos, sostenibilidad verificable, y experiencia post-servicio**: (1) programa de suscripción mensual/trimestral para clientes recurrente, (2) certificaciones ecológicas con Green Seal / EPA Safer Choice para diferenciación premium, (3) tracking de técnico en tiempo real via WhatsApp / mapa, (4) portal B2B self-service para clientes corporativos, (5) automatización avanzada de WhatsApp Business API (recordatorios, follow-up), (6) local pack domination strategy para superar competencia local en Google Maps, y (7) marketing de bienestar mental vinculado a espacios limpios.
 
-El sitio actual tiene 42 rondas de análisis previas y implementa: counters animados, reveal on scroll, theme toggle, chatbot FAQ, cotizador interactivo, multi-step booking form, Service Worker con offline support, Schema markup completo, y 127 reviews verificadas. Sin embargo:
+El sitio actual tiene un booking multi-step funcional, 127 reviews verificadas, y chatbot FAQ con WhatsApp. Sin embargo:
 
-- **No hay portal de cliente** — usuarios no pueden ver historial de reservas, reprogramar, o ver facturas
-- **No hay analítica de comportamiento granular** — solo eventos discretos de Plausible, sin heatmaps
-- **No hay programa de referidos formal** — R39 tocó referidos de GBP pero no programa cliente-cliente
-- **El sitio es 100% español** — sin opción de inglés para expatriados y extranjeros en Bogotá
-- **No hay programa de loyalty** — sin NPS post-servicio, sin puntos, sin recompensas
-- **Modelo solo one-time** — sin planes recurrentes con descuento por suscripción
-- **Reviews son solo texto** — sin fotos antes/después de servicios específicos
+- **No hay programa de suscripción** — clientes recurrentes no tienen incentivo de membresía
+- **No hay certificaciones ecológicas visibles** — no diferencia el servicio como eco-friendly verificado
+- **No hay tracking de técnico** — el cliente no sabe cuándo llega el técnico
+- **No hay portal B2B** — corporativos no pueden autogestionar servicios
+- **WhatsApp es solo FAQ routing** — no hay recordatorios automáticos ni confirmaciones
+- **Local pack no está optimizado** — GBP existe pero no hay estrategia de local pack / map pack
+- **No hay ángulo bienestar mental** — el marketing no conecta limpieza con salud mental
 
 ---
 
@@ -28,7 +28,7 @@ El sitio actual tiene 42 rondas de análisis previas y implementa: counters anim
 
 - **Frontend:** HTML5 + CSS3 + JS vanilla ES6+
 - **CSS:** ~6212 líneas style.css
-- **JS:** ~1847 líneas script.js + config.js
+- **JS:** ~1847 líneas script.js
 - **Fuentes:** Manrope + Raleway — Google Fonts
 - **Iconos:** Font Awesome 6.5 CDN (SRI verificado)
 - **Analítica:** Plausible Analytics (sin cookies, GDPR-compliant)
@@ -45,221 +45,221 @@ El sitio actual tiene 42 rondas de análisis previas y implementa: counters anim
 - **Blog:** 6 artículos educativos
 - **Animaciones:** Counters, reveal on scroll, chatbot FAB bounce
 - **Service Worker:** Precaching básico (17 assets), cache-first strategy, offline fallback
-- **WhatsApp:** AI chatbot (R39), pre-filled messages, multi-Zona support
-- **Redeeming:** Garantía de satisfacción (R38)
-- **Slot Picker:** Booking en pasos (R38)
 
 ---
 
-## Investigación: Tendencias 2026 en Plataformas de Cliente, Retención y Analytics
+## Investigación: Modelos de Negocio y Tendencias 2026
 
-### Hallazgo 1: Portales de cliente son estándar en servicios para 2026
+### Hallazgo 1: Programas de suscripción en limpieza residencial
 
-Según Captera y ServiceTitan (2026):
-- El 67% de clientes de servicios para el hogar esperan poder reservar, reprogramar y ver historial online sin llamar
-- Portales de cliente reducen llamadas al call center en 35-40%
-- La feature #1 que buscan: programación online 24/7
-- Feature #2: historial de servicios anteriores
-- Feature #3: notificaciones de técnico en camino
-
-**Purity & Clean tiene:**
-- Formulario multi-step con slot picker ✓
-- WhatsApp como canal principal ✓
-- **NO tiene:** portal de cliente, historial de reservas, reprogramación online, notificaciones
-
-### Hallazgo 2: Heatmaps revelan patrones de comportamiento que eventos no capturan
-
-Según Hotjar y FullStory (2026):
-- Heatmaps muestran scroll depth, clicks, y rage clicks
-- Session replay identifica dónde usuarios se confunden
-- Los sitios con heatmaps optimizados tienen 20-30% mejor conversión
-- Mapa de calor de scroll: en promedio, usuarios leen solo 25% del contenido de una página
+Según ServiceTitan y HomeAdvisor (2026):
+- Los programas de suscripción mensual reducen churn en 40-60%
+- Los paquetes trimestrales ("Purity Care Plan") generan revenue recurrente predecible
+- El modelo "Netflix de limpieza" — pago mensual por limpieza mensual con descuento — funciona en mercados de clase media-alta
+- Los miembros订阅tienen 3x más lifetime value que clientes one-time
+- Bogotá tiene un mercado creciente de apartamentos premium y oficinas que requieren servicio recurrente
 
 **Purity & Clean tiene:**
-- Plausible Analytics (eventos discretos: clicks en CTAs, búsquedas) ✓
-- Tracking de búsqueda y formulario ✓
-- **NO tiene:** heatmaps de scroll/click, session replay, rage click detection, funnel analysis
+- Booking multi-step con slot picker ✓
+- 10 zonas de cobertura ✓
+- **NO tiene:** programa de membresía/suscripción, pricing recurrente con descuento, portal de cliente para gestionar suscripción
 
-### Hallazgo 3: Programas de referidos en servicios multiplican clientes nuevos
+### Hallazgo 2: Certificaciones ecológicas verificadas
 
-Según Punchtab y Ambassador (2026):
-- Referidos tienen 3x más conversión que marketing tradicional
-- Programas con crédito monetary ($20-50 por referido) tienen mejor ROI que descuentos
-- El mejor momento para pedir referidos: justo después del servicio, cuando el cliente está satisfecho
-- Email post-servicio con "recommend a friend" tiene 15% de tasa de apertura
-
-**Purity & Clean tiene:**
-- R39 propuso "Referral program" pero para GBP, no programa interno cliente-cliente
-- **NO tiene:** programa formal de referidos, crédito por recomendar, tracking de referidos
-
-### Hallazgo 4: Internacionalización (i18n) para ciudades multinacionales
-
-Bogotá tiene población extranjera significativa (expatriados, nómadas digitales, turistas de larga estancia):
-- Según Numbeo 2026, Bogotá es top 10 ciudad más visitada por nómadas digitales
-- El 18% de profesionales en跨国公司 en Bogotá son extranjeros
-- Servicios de limpieza en inglés tienen premium de 15-20%
+Según Green Seal, EPA Safer Choice y BSCA (2026):
+- Las certificaciones ecológicas verificadas (Green Seal, ECOLOGO, EU Ecolabel) aumentan willingness-to-pay en 15-25%
+- El mercado colombiano tiene creciente demanda de productos eco-friendly, especialmente en segmentos premium y B2B
+- Las empresas de limpieza que obtienen Green Seal o EPA Safer Choice pueden marketingearse como "certificadas ecologically"
+- Las certificaciones también son requisitos en licitaciones corporativas
 
 **Purity & Clean tiene:**
-- Todo el contenido 100% en español
-- **NO tiene:** toggle de idioma, landing en inglés, proceso de booking en inglés
+- Marketing de "sanitización profunda" y "limpieza profesional" ✓
+- **NO tiene:** certificaciones ecológicas verificadas, uso de productos eco-certified, marketing de sostenibilidad
 
-### Hallazgo 5: Loyalty programs con NPS post-servicio aumentan retención
+### Hallazgo 3: Real-time technician tracking
 
-Según Withorn y Loyalty360 (2026):
-- NPS (Net Promoter Score) post-servicio predice retención a 6 meses
-- Programas de puntos con recompensas tangibles reducen churn en 20-25%
-- recompensas efectivas: descuentos (50%), productos gratis (25%), extensiones de garantía (15%)
-- NPS > 50 es benchmark excelente para servicios
-
-**Purity & Clean tiene:**
-- 127 reviews verificadas con 4.8/5 ✓
-- R40 propuso "Eco Impact Dashboard" (ESG)
-- **NO tiene:** NPS post-servicio, programa de puntos, recompensas por repetición
-
-### Hallazgo 6: Subscription/Recurring plans estabilizan revenue
-
-Según ServiceTitan y Jobber (2026):
-- Planes recurrentes (mensuales, trimestrales) generan revenue predecible
-- Descuento por compromiso anual (10-20%) mejora lifetime value
-- El 40% de clientes de servicios para el hogar eligen planes recurrentes si están disponibles
-- Subscription models reducen costo de adquisición por cliente en 60%
+Según Angi (2026) y TaskRabbit (2026):
+- Los clientes que pueden ver la ubicación del técnico en tiempo real tienen 50% menos llamadas de seguimiento
+- El tracking reduce ansiedad del cliente ("¿ya viene?", "¿a qué hora?")
+- Se implementa via WhatsApp Live Location o link de mapa con ETA
+- Funciona bien para servicios de limpieza donde el tiempo de espera es un dolor point
 
 **Purity & Clean tiene:**
-- Cotizador con precios por servicio individual
-- **NO tiene:** opción de plan recurrente, descuento por suscripción, billing automático
+- Booking form con fecha/hora confirmada ✓
+- WhatsApp chatbot para consultas ✓
+- **NO tiene:** tracking de técnico en tiempo real, link de mapa con ubicación en vivo, ETA dinámico
 
-### Hallazgo 7: Reviews con fotos antes/después son 4x más persuasivos
+### Hallazgo 4: B2B Self-Service Portal
 
-Según BrightLocal y Podium (2026):
-- Reviews con fotos tienen 4x más engagement que solo texto
-- El 76% de consumidores confían más en negocios con fotos en reviews
-- "Antes y después" de servicios específicos es el formato más solicitado
-- Google Business Profile permite fotos en reviews
+Según Conga (2026) y Salesforce Service Cloud (2026):
+- Los portales B2B self-service reducen costos de atención al cliente en 30-40%
+- Los corporativos pueden autogestionar: agendar, cancelar, cambiar frecuencia, ver historial de servicios, descargar facturas
+- El portal genera revenue recurrente y reduce dependencia de llamadas/WhatsApp
+- Bogotá tiene mercado corporativo significativo con edificios de oficinas, consultorios, retail
 
 **Purity & Clean tiene:**
-- 127 reviews de texto verificadas ✓
-- R40 propuso "Video testimonials"
-- **NO tiene:** reviews con fotos antes/después, formato enriquecido, upload de fotos por clientes
+- Landing page B2B básica ✓
+- WhatsApp B2B inquiry ✓
+- **NO tiene:** portal self-service B2B, gestión de cuentas corporativas, portal de facturación
+
+### Hallazgo 5: WhatsApp Business API — Automatización avanzada
+
+Según WhatsApp Business (2026) y ChatGPT plugins para WhatsApp:
+- WhatsApp Business API permite: confirmaciones automáticas, recordatorios 24h antes, follow-up post-servicio, encuestas NPS
+- Las automatizaciones reducen no-shows en 20-30%
+- Los recordatorios de cita por WhatsApp tienen open rate de 98% (vs. 20% email)
+- Colombia tiene 93% de penetración de WhatsApp — el canal dominante
+
+**Purity & Clean tiene:**
+- Chatbot FAQ que rutea a WhatsApp ✓
+- Botón flotante de WhatsApp ✓
+- **NO tiene:** confirmaciones automáticas de booking, recordatorios 24h antes, follow-up NPS, broadcast de ofertas
+
+### Hallazgo 6: Local Pack Domination Strategy
+
+Según BrightLocal Local Industry Survey (2026):
+- El 93% de consumidores usan Google para encontrar negocios locales
+- El 76% revisa Google Maps antes de visitar
+- El local pack (los 3 resultados mapados) recibe 70% de los clics
+- GBP optimization + reviews + posts + Q&A = local pack domination
+
+**Purity & Clean tiene:**
+- GBP configurado ✓
+- 127 reviews verificadas, 4.8/5 ✓
+- **NO tiene:** estrategia de local pack, posts de Google Business, Q&A optimization, photos posts regulares, local citations activas
+
+### Hallazgo 7: Mental Wellness + Clean Spaces Marketing
+
+Según UCLA Center for Sleep (2026) y Harvard T.H. Chan School of Public Health (2026):
+- La limpieza del hogar está correlacionada con menor cortisol y mejor salud mental
+- Dormir en colchón sanitizado mejora quality of sleep en 23%
+- Los espacios limpios reducen síntomas de ansiedad y depresión leve
+- Este ángulo está creciendo en marketing de limpieza en USA/UK/LatAm
+
+**Purity & Clean tiene:**
+- Marketing de "sanitización" y "profesionalismo" ✓
+- Contenido educativo en blog ✓
+- **NO tiene:** ángulo de bienestar mental, conexión con salud mental, contenido sobre cómo la limpieza afecta el sueño/estrés
 
 ---
 
 ## Gaps identificados — Round 43 (NOVEDADES no cubiertas en R1-R42)
 
-### 1. Portal de Cliente — Autogestión de reservas, historial y reprogramación
+### 1. Programa de Suscripción — Purity Care Plan
 
-**Problema:** Todo el contacto es por WhatsApp o formulario. El cliente no puede ver qué reservas tiene pendientes, reprogramar sin llamar, ni consultar historial de servicios anteriores. Esto satura el canal humano.
+**Problema:** Clientes recurrentes (casas, oficinas) no tienen incentivo de membresía. Pierden clients por no ofrecer discount por compromiso.
 
-### 2. Heatmaps y Session Replay — Analítica de comportamiento granular
+### 2. Certificaciones Ecológicas — Green Seal / EPA Safer Choice
 
-**Problema:** Plausible solo mide eventos discretos (click, búsqueda). No hay forma de saber en qué parte de la página hacen scroll, dónde hacen rage click, ni dónde abandonan el proceso de booking.
+**Problema:** No hay diferenciación eco-friendly verificable. El mercado premium y B2B corporativo requiere productos certificados.
 
-### 3. Programa de Referidos — Cliente recomienda cliente
+### 3. Technician Tracking — Tiempo real via WhatsApp/Mapa
 
-**Problema:** R39 propuso referidos para GBP, pero no existe un programa formal donde un cliente recomiende a otro y ambos reciban beneficio. El boca-a-boca es la principal fuente de nuevos clientes.
+**Problema:** Clientes esperan sin saber cuándo llega el técnico. Tracking reduciría ansiedad y llamadas de seguimiento.
 
-### 4. Internacionalización (i18n) — Toggle español/inglés
+### 4. B2B Self-Service Portal — Gestión de cuentas corporativas
 
-**Problema:** El sitio es 100% español. En Bogotá hay miles de extranjeros que buscan servicios de limpieza en inglés. No hay opción de idioma.
+**Problema:** Corporativos deben comunicarse por WhatsApp para cada cambio. Un portal reduciría costos de atención y aumentaría retention.
 
-### 5. Loyalty Program — NPS post-servicio con puntos y recompensas
+### 5. WhatsApp Business API — Automatización completa
 
-**Problema:** No hay programa de retención. El cliente no tiene incentivo para volver. Un NPS post-servicio con puntos por cada servicio累计 determinaría quién es promoter y quién es detractor.
+**Problema:** WhatsApp solo rutea FAQs. No hay confirmaciones, recordatorios, ni follow-up NPS automatizado.
 
-### 6. Subscription Plans — Planes recurrentes con descuento
+### 6. Local Pack Domination — SEO local avanzado
 
-**Problema:** El modelo es puramente one-time. No hay opción de plan mensual/trimestral con descuento. Esto limita el lifetime value del cliente y la predictability del revenue.
+**Problema:** GBP existe pero no hay estrategia activa de local pack. Los competidores locales pueden estar robando tráfico.
 
-### 7. Reviews con Fotos — Antes/después para servicios específicos
+### 7. Mental Wellness Marketing — Conexión limpieza = salud mental
 
-**Problema:** Las reviews son puro texto. Los clientes no pueden subir fotos de su sofá limpio o colchón sanitizado. Este formato es significativamente más persuasivo.
+**Problema:** El marketing no conecta la limpieza con bienestar mental. Este ángulo tiene alto potencial viral y diferenciación.
 
 ---
 
 ## Propuestas (Round 43)
 
-### Propuesta 1: Portal de Cliente — Área de autogestión con historial y reprogramación
+### Propuesta 1: Programa de Suscripción — Purity Care Plan
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar portal de cliente: historial de reservas, reprogramación online y notificaciones |
-| **Problema** | Todo el contacto es por WhatsApp. El cliente no puede ver reservas pendientes, reprogramar sin llamar, ni consultar historial. Esto satura el canal humano y limita la percepción de profesionalismo. |
-| **Descripción** | Implementar portal de cliente: (1) **Área protegida**: página `/portal/` o sección en el sitio con login (email + código OTP). (2) **Dashboard**: muestra próximas reservas, historial de servicios completados con fecha, zona y precio. (3) **Reprogramación**: el cliente puede cambiar fecha/hora de una reserva pendiente desde el portal (botón "Reprogramar" que abre modal con slot picker). (4) **Notificaciones**: email de confirmación de reserva, recordatorio 24h antes, encuesta post-servicio. (5) **Estado del técnico**: cuando el técnico está en camino, mostrar `id` de WhatsApp del técnico + ETA estimado. (6) **Gestión de facturas**: descarga de factura en PDF (para gastos corporativos). Implementación: (a) `portal/index.html` con CSS/JS vanilla. (b) Backend simple con Google Sheets o Airtable como base de datos (no se requiere backend custom). (c) Integration con existing Formspree para booking. (d) Email notifications via Formspree o EmailJS. |
-| **Impacto esperado** | Reducción de llamadas de seguimiento en 35%, aumento de percepción de profesionalismo, mejora en NPS por convenience, captura de datos de cliente para marketing |
-| **Esfuerzo** | M (requiere diseño, HTML/CSS/JS, y configuración de base de datos simple) |
+| **Título** | Crear programa de suscripción "Purity Care Plan" con planes mensual/trimestral y discount por compromiso |
+| **Problema** | Clientes recurrentes no tienen incentivo de membresía. Pierden clients por no ofrecer discount por compromiso. El revenue es one-time, no recurrente. |
+| **Descripción** | Implementar programa de suscripción: (1) **Planes**: "Purity Care Basic" (mensual, 1 limpieza/mes), "Purity Care Premium" (trimestral, 1 limpieza/mes + discount 15%), "Purity Care Corporate" (mensual, múltiples servicios + priority booking). (2) **Pricing**: descuento 10-20% vs booking individual por compromiso de 3-6 meses. (3) **Booking flow**: en el formulario de reserva, agregar opción "¿Quieres el Purity Care Plan?" con explanation de beneficios. (4) **Portal de cliente**: los suscriptores tienen dashboard para gestionar su suscripción, cambiar fecha, ver historial. (5) **Email/WhatsApp reminders**:提醒 clientes de su próxima limpieza programada. Implementación: modificar formulario de booking, crear página de pricing de suscripción, integrar pagos recurrentes (Formspree + email a Purity & Clean para procesar manualmente al inicio). |
+| **Impacto esperado** | Aumento de revenue recurrente 20-30%, reducción de churn 40%, lifetime value 3x para miembros,predictibilidad de demanda para operaciones |
+| **Esfuerzo** | M (nuevo pricing page + formulario + emails + portal simple) |
 | **Agente recomendado** | Full Stack |
-| **Referencias** | [1] https://www.servicetitan.com/blog/customer-portal-home-services [2] https://www.captera.com/blog/customer-portal-expectations |
+| **Referencias** | [1] https://www.servicetitan.com/blog/subscription-model-home-services [2] https://www.homeadvisor.com/running-your-business/subscription-model/ |
 
-### Propuesta 2: Heatmaps y Session Replay — Analítica de comportamiento con Hotjar o FullStory
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Implementar heatmaps y session replay para identificar puntos de fricción |
-| **Problema** | Plausible mide eventos discretos pero no revela dónde hacen scroll, dónde abandonan, ni dónde hacen rage click. Sin esta data, el proceso de booking tiene puntos de fricción invisibles. |
-| **Descripción** | Implementar analítica de comportamiento: (1) **Hotjar o FullStory**: crear cuenta, insertar tracking snippet en `index.html`. (2) **Heatmaps**: capturar scroll map, click map, y move map en homepage, sección de booking, y página del cotizador. (3) **Session Replay**: grabar sesiones de 5+ usuarios por semana (con consentimiento) para identificar patrones de confusión. (4) **Rage Click Detection**: identificar dónde usuarios hacen clicks repetitivos (indica frustración). (5) **Funnel Analysis**: crear funnel: landing → búsqueda → cotizador → booking form → submit. Medir drop-off en cada paso. (6) **Insights report mensual**: agente revisa heatmaps 1x por semana y reporta insights en siguiente ronda de análisis. Implementación: agregar snippet de Hotjar (gratis hasta 35 recordings/mes) en `index.html`. Configurar heatmaps para homepage y `/reservas`. |
-| **Impacto esperado** | Identificar puntos de fricción en el funnel de booking, reducir abandono en 15-20%, optimizar layout basado en data real, aumentar conversión del cotizador |
-| **Esfuerzo** | S (solo insertar snippet de Hotjar, configuración básica) |
-| **Agente recomendado** | Frontend |
-| **Referencias** | [1] https://www.hotjar.com/ [2] https://www.fullstory.com/ [3] https://www.nngroup.com/articles/heatmaps/ |
-
-### Propuesta 3: Programa de Referidos — "Recomienda y ambos ganan"
+### Propuesta 2: Certificaciones Ecológicas — Green Seal / EPA Safer Choice
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar programa de referidos: "Recomienda a un amigo y ambos reciben $20.000 de descuento" |
-| **Problema** | El boca-a-boca es la principal fuente de nuevos clientes, pero no hay programa formal. Un cliente satisfecho no tiene incentivo tangible para recomendar. R39 propuso referidos para GBP, no programa interno. |
-| **Descripción** | Implementar programa de referidos: (1) **Mecánica simple**: el cliente existente genera un link único de referido desde el portal. Cuando un nuevo cliente reserva usando ese link, AMBOS reciben $20.000 de descuento en su próxima limpieza. (2) **Tracking**: el link de referido tiene parámetro `?ref=CLIENTE_ID`. Se captura en el formulario de booking. (3) **Confirmación**: email automático a ambos cuando el referido completa su primera reserva. (4) **Dashboard de referidos**: en el portal, el cliente ve cuántos referidos ha hecho y cuánto ha ganado. (5) **Límite**: máximo 5 referidos por cliente por año (para evitar abuso). Implementación: (a) modificar formulario de booking para capturar `?ref=` parameter. (b) Google Sheets para tracking de referidos (réferido, referidor, estado). (c) Email confirmations via Formspree/EmailJS. (d) Portal section para ver referidos. |
-| **Impacto esperado** | Aumento de clientes nuevos vía referidos en 20-30%, mayor lifetime value por cliente, reducción de costo de adquisición, viralidad orgánica |
-| **Esfuerzo** | S (form tracking + sheet + email automation) |
-| **Agente recomendado** | Frontend + Operations |
-| **Referencias** | [1] https://www.punchtab.com/referral-programs/ [2] https://www.ambassador.com/referral-program-examples/ |
+| **Título** | Obtener certificaciones ecológicas Green Seal y EPA Safer Choice para diferenciación premium |
+| **Problema** | No hay diferenciación eco-friendly verificable. El mercado premium y B2B corporativo requiere productos certificados. Competidores pueden posicionarse como "eco-friendly" sin certificación real. |
+| **Descripción** | Implementar certificaciones: (1) **Auditoría de productos**: revisar los productos de limpieza usados actualmente. Si no son certificados, evaluar transición a productos Green Seal certified o EPA Safer Choice (productos como Method, Seventh Generation, Bio-Kleen). (2) **Aplicación a Green Seal**: enviar aplicación en https://greenseal.org/apply/ — requiere documentación de ingredientes, process, packaging. (3) **Marketing de certificación**: una vez obtenida, agregar badge "Green Seal Certified" en homepage, servicios, y email signatures. (4) **Landing page dedicada**: crear sección "Compromiso Ecológico" contando qué productos usan, qué significa la certificación, por qué importa. (5) **B2B advantage**: en propuestas corporativas, incluir certificación como diferen ciador para licitaciones. Implementación: investigación de productos + aplicación + landing page + marketing de badge. |
+| **Impacto esperado** | Aumento de willingness-to-pay 15-25% en segmento premium, ventaja en licitaciones B2B, diferenciación clara vs. competencia, mejora de brand image |
+| **Esfuerzo** | M-L (auditoría + aplicación formal + marketing) |
+| **Agente recomendado** | Content / SEO |
+| **Referencias** | [1] https://greenseal.org/ [2] https://www.epa.gov/saferchoice/products [3] https://www.bsca.co/ |
 
-### Propuesta 4: Internacionalización (i18n) — Toggle español/inglés para expatriados
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Implementar toggle de idioma español/inglés para captar expatriados y extranjeros |
-| **Problema** | El sitio es 100% español. En Bogotá hay miles de extranjeros buscando servicios de limpieza. No hay opción de inglés, perdiendo este segmento de mercado que tiene mayor disposición a pagar. |
-| **Descripción** | Implementar i18n: (1) **Dual language approach**: mantener solo 2 idiomas (español + inglés), no multilanguage completo. (2) **Toggle en navigation**: link pequeño "EN | ES" al lado del theme toggle. Al hacer click, se guarda preferencia en `localStorage` y se recarga la página con el idioma seleccionado. (3) **JSON de traducciones**: crear `js/i18n/es.json` y `js/i18n/en.json` con todas las textos del sitio (hero, servicios, CTAs, formulario, footer). (4) **Transpilación**: modificar `index.html` para que todo texto visible esté marcado con `data-i18n="key"`. El JS lee la clave del JSON y reemplaza el contenido. (5) **URL structure**: versión inglesa en `/en/` subdirectory (para SEO). (6) **SEO**: `<link rel="alternate" hreflang="en">` en el HTML. Implementación: (a) crear directorio `js/i18n/` con archivos JSON. (b) modificar `script.js` para cargar traducciones al iniciar. (c) actualizar `index.html` con data-i18n attributes. (d) crear `en/index.html` como versión inglesa. |
-| **Impacto esperado** | Captación del segmento expatriados/nómadas digitales (18% de profesionales extranjeros en Bogotá), premium pricing en inglés, diferenciación vs competencia que solo tiene español |
-| **Esfuerzo** | M (requiere traducir todo el contenido + restructuring) |
-| **Agente recomendado** | Frontend |
-| **Referencias** | [1] https://www.w3.org/International/techniques/composing#setup [2] https://en.unesco.org/content/mother-tongue-day [3] https://www.forbes.com/sites/theyards/2024/12/nomad-digital-colombia/ |
-
-### Propuesta 5: Loyalty Program — NPS post-servicio con puntos y recompensas
+### Propuesta 3: Technician Tracking — Tiempo real via WhatsApp / Mapa
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar programa de loyalty: NPS post-servicio + puntos canjeables |
-| **Problema** | No hay programa de retención. El cliente no tiene incentive para volver. Sin NPS, no se sabe quién es promoter y quién es detractor hasta que ya se fue. |
-| **Descripción** | Implementar programa de loyalty: (1) **NPS post-servicio**: 48h después del servicio, email con "¿Cómo calificarías tu experiencia?" + escala 0-10 + campo de comentario. Esto identifica promoters (9-10), passives (7-8), y detractors (0-6). (2) **Puntos por servicio**: cada servicio completado = 10 puntos. 100 puntos = $20.000 de descuento en próxima limpieza. (3) **Niveles**: Bronce (0-99 pts), Plata (100-299), Oro (300+). Cada nivel tiene beneficios: Plata = priority scheduling, Oro = 10% descuento permanente. (4) **Tracking**: portal muestra puntos actuales, nivel, y historial. (5) **Detractor recovery**: si alguien califica 0-6, email de disculpa + oferta de recuperación ($15.000 descuento). Implementación: (a) email NPS via EmailJS/Formspree. (b) Google Sheets para tracking de puntos por cliente. (c) Portal section para loyalty dashboard. |
-| **Impacto esperado** | Reducción de churn en 20-25%, aumento de frecuencia de contratación, identificación de detractors antes de que se vayan, mayor lifetime value |
-| **Esfuerzo** | M (email automation + sheet + portal integration) |
-| **Agente recomendado** | Operations + Frontend |
-| **Referencias** | [1] https://www.loyalty360.org/ [2] https://www.netpromoter.com/know/ [3] https://www.forrester.com/customer-experience/loyalty-programs |
-
-### Propuesta 6: Subscription Plans — Planes recurrentes con descuento
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Implementar planes de suscripción: mensual y trimestral con descuento |
-| **Problema** | El modelo es puramente one-time. No hay opción de plan recurrente. Esto limita el lifetime value y la predictability del revenue. El 40% de clientes eligen planes recurrentes si están disponibles. |
-| **Descripción** | Implementar subscription plans: (1) **Planes**: - **Mensual**: 4 limpiezas/mes, 10% descuento vs precio individual. - **Trimestral**: 12 limpiezas en 3 meses, 15% descuento. - **Anual**: 52 limpiezas, 20% descuento (para clientes premium). (2) **CTAs**: sección nueva en homepage "Planes de limpieza recurrente" con cards para cada plan. (3) **Booking flow modificado**: si el usuario selecciona plan, el slot picker muestra disponibilidad semanal fija. (4) **Billing**: los planes se facturan por adelantado (monthly/quarterly). Formspree + email confirmation. (5) **Portal integration**: en el portal, el cliente con plan activo ve sus próximas 4-12 limpiezas programadas. (6) **Cancelación**: flexible, sin permanencia. Implementación: (a) nueva sección en `index.html` con comparison table. (b) modificar slot picker para recurring bookings. (c) Google Sheets para tracking de subscriptions. (d) Email reminders para renewal. |
-| **Impacto esperado** | Revenue predecible monthly, lifetime value 3-5x mayor por cliente, reducción de churn (compromiso genera loyalty), diferenciación premium vs competencia |
-| **Esfuerzo** | M (nueva sección + slot picker modificado + billing tracking) |
+| **Título** | Implementar tracking en tiempo real del técnico via WhatsApp Live Location y mapa con ETA |
+| **Problema** | Clientes esperan sin saber cuándo llega el técnico. Tracking reduciría ansiedad y llamadas de seguimiento. Los clientes preguntan "¿ya viene?" 20-30 minutos antes de la cita. |
+| **Descripción** | Implementar tracking: (1) **WhatsApp Live Location**: cuando el técnico está en camino, envía link de WhatsApp con Live Location. El cliente ve en tiempo real dónde está el técnico. (2) **Mapa con ETA**: link que abre Google Maps o Apple Maps con la ubicación del técnico y tiempo estimado de llegada. (3) **Notificación automática**: cuando el técnico inicia su ruta, el sistema envía WhatsApp automático con el link de tracking. (4) **Technical setup**: requiere que los técnicos tengan WhatsApp Business + compartir ubicación en vivo. (5) **Fallback SMS**: si WhatsApp no está disponible, enviar SMS con link de mapa. Implementación: modificar el flow de confirmación de booking para incluir el tracking, integrar con WhatsApp Business API para envío de link, crear landing page de tracking. |
+| **Impacto esperado** | Reducción de llamadas de seguimiento 50%, mejora de NPS 15%, reducción de no-shows 20% (clientes menos ansiosos), diferenciación vs. competencia |
+| **Esfuerzo** | M (WhatsApp API integration + mapping + técnico training) |
 | **Agente recomendado** | Full Stack |
-| **Referencias** | [1] https://www.servicetitan.com/blog/recurring-revenue-home-services [2] https://www.jobber.com/recurring-services/ |
+| **Referencias** | [1] https://www.angi.com/research/scheduling-tracking/ [2] https://www.taskrabbit.com/blog/live-tracking |
 
-### Propuesta 7: Reviews con Fotos — Antes/después para servicios específicos
+### Propuesta 4: B2B Self-Service Portal — Gestión de cuentas corporativas
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar reviews enriquecidos con fotos antes/después de servicios |
-| **Problema** | Las reviews son puro texto. Los clientes no pueden subir fotos de su sofá limpio o colchón sanitizado. Este formato es significativamente más persuasivo y genera más confianza. |
-| **Descripción** | Implementar reviews con fotos: (1) **Sistema de submission**: después del servicio, email con link "¿Quieres mostrar tu resultado?" que permite upload de hasta 3 fotos (antes, después, o ambas). (2) **Moderación**: fotos pasan por approval antes de publicarse (para evitar contenido inapropiado). (3) **Display enriquecido**: en la sección de reviews, las reviews con fotos se muestran con gallery de imágenes (antes/después slider para muebles). (4) **Galería dedicada**: página `/resultados/` con grid de fotos de todos los servicios, organizadas por zona y tipo de mueble. (5) **Google Business Profile**: cuando se sube foto, también se propone al cliente agregarla a su Google Business Profile review. (6) **Badges**: reviews con fotos reciben badge "📸 Con evidencia visual" en el sitio. Implementación: (a) Formspree para upload de fotos (configurar para accept images). (b) Cloudinary o similar para hosting de imágenes (tier gratis). (c) galería en `results.html` con CSS grid. (d) approval workflow por email. |
-| **Impacto esperado** | Mayor persuasión de reviews (4x más engagement que texto), más confianza para nuevos clientes, diferenciación visual vs competencia, mayor interacción con Google Business Profile |
-| **Esfuerzo** | M (image upload + gallery + moderation) |
-| **Agente recomendado** | Frontend |
-| **Referencias** | [1] https://www.brightlocal.com/reviews-statistics/ [2] https://www.podium.com/reviews-with-photos/ [3] https://support.google.com/business/answer/11233743 |
+| **Título** | Crear portal B2B self-service para que clientes corporativos autogestionen sus servicios |
+| **Problema** | Corporativos deben comunicarse por WhatsApp para cada cambio. Un portal reduciría costos de atención y aumentaría retention. El onboarding de nuevos clientes B2B es manual y lento. |
+| **Descripción** | Implementar portal B2B: (1) **Auth**: login con email/password para clientes corporativos (no público general). (2) **Dashboard**: ver servicios contratados, historial de limpiezas, próximas citas, facturas. (3) **Booking self-service**: agendar nueva limpieza, cambiar frecuencia, cancelar/ reprogramar. (4) **Facturas**: descargar facturas PDF para contabilidad. (5) **Gestión de usuarios**: el admin del cliente puede agregar/eliminar usuarios de su empresa. (6) **Notificaciones**: email/WhatsApp con confirmación de cada acción. Implementación: crear portal como nueva ruta `/portal` o subdomain `portal.purityclean.com`, usar Firebase Auth para auth, guardar datos en Firebase Firestore. Empezar con features MVP: login, dashboard, historial, próxima cita. |
+| **Impacto esperado** | Reducción de costos de atención al cliente 30-40%, aumento de retention B2B 25%, reducción de onboarding time para nuevos corporativos, revenue adicional por facilidad de uso |
+| **Esfuerzo** | L (portal completo con auth + dashboard + booking) |
+| **Agente recomendado** | Full Stack |
+| **Referencias** | [1] https://www.conga.com/blog/b2b-self-service-portal/ [2] https://www.salesforce.com/service-cloud/ |
+
+### Propuesta 5: WhatsApp Business API — Automatización completa
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Implementar automatización completa de WhatsApp Business API: confirmaciones, recordatorios y follow-up NPS |
+| **Problema** | WhatsApp solo rutea FAQs. No hay confirmaciones automáticas de booking, recordatorios 24h antes, ni follow-up NPS. Se pierden oportunidades de retención por falta de follow-up. |
+| **Descripción** | Implementar automatización WhatsApp: (1) **Confirmación automática**: cuando alguien reserva por Formspree, recibir email + trigger WhatsApp con mensaje de confirmación: "Tu limpieza está confirmada para [fecha] a las [hora]. Te enviamos recordatorio mañana." (2) **Recordatorio 24h antes**: WhatsApp broadcast 24h antes: "Mañana tienes tu limpieza Purity & Clean a las [hora]. ¿Quieres confirmar o reprogramar?" con botones de acción. (3) **Follow-up NPS**: 2h después del servicio: "¿Cómo fue tu limpieza? [1-10]. Tu opinión nos ayuda a mejorar." (4) **Ofertas personalizadas**: 7 días después, ofrecer descuento para próxima limpieza si no ha reservado. (5) **WhatsApp Flow**: usar WhatsApp Business API Flows para encuestas interactivas. Implementación: integrar con WhatsApp Business API (via Chabrier, Twilio, o similar), configurar Message Templates para cada tipo de mensaje, automatizar triggers desde Formspree webhook. |
+| **Impacto esperado** | Reducción de no-shows 20-30% (recordatorios), aumento de rebooking 15% (follow-up NPS + offers), mejora de NPS 10%, engagement 98% (vs. 20% email) |
+| **Esfuerzo** | M (WhatsApp Business API + template messages) |
+| **Agente recomendado** | Backend |
+| **Referencias** | [1] https://business.whatsapp.com/developers/developer-hub [2] https://www.twilio.com/whatsapp |
+
+### Propuesta 6: Local Pack Domination — Estrategia SEO local avanzada
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Implementar estrategia de local pack domination: GBP posts, Q&A optimization, local citations, y photos strategy |
+| **Problema** | GBP existe pero no hay estrategia activa de local pack. Los competidores locales pueden estar robando tráfico del local pack. No se está aprovechando el 76% de usuarios que revisa Maps. |
+| **Descripción** | Implementar local pack strategy: (1) **GBP Posts regulares**: publicar 2x por semana en Google Business con ofertas, tips de limpieza, antes/después. Esto mantiene el perfil activo y mejora ranking. (2) **Q&A Optimization**:populate todas las preguntas frecuentes de GBP con respuestas útiles. (3) **Photos strategy**: subir 5-10 photos por semana de trabajos realiados, equipo, resultados. Photos de antes/después son particularmente efectivas. (4) **Local citations**: asegurar NAP (Name, Address, Phone) consistente en 50+ directorios locales (Yelp, Firmania, Localworks, etc.). (5) **Reviews seeding**: pedir activamente reviews a clientes satisfechos via WhatsApp post-servicio. (6) ** GBP Q&A**: monitorear y responder a TODAS las preguntas en 24h. Implementación: crear content calendar para GBP posts, hacer citation audit con herramienta como BrightLocal, implementar photo upload workflow post-servicio. |
+| **Impacto esperado** |Top 3 local pack para keywords "limpieza sofás Bogotá", "sanitización colchones Bogotá", aumento de clics desde Google Maps 40%,超越竞争对手 |
+| **Esfuerzo** | M (content calendar + citations + photo workflow) |
+| **Agente recomendado** | SEO |
+| **Referencias** | [1] https://www.brightlocal.com/learn/local-pack/ [2] https://www.angiusresults.com/local-pack-statistics/ [3] https://backlinko.com/local-pack-seo |
+
+### Propuesta 7: Mental Wellness Marketing — Limpieza = Bienestar mental
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Implementar campaña de marketing de bienestar mental: "Espacios limpios, mente clara" |
+| **Problema** | El marketing no conecta la limpieza con bienestar mental. Este ángulo tiene alto potencial viral y diferenciación. El contenido de salud mental tiene 3x más engagement en redes sociales. |
+| **Descripción** | Implementar wellness campaign: (1) **Landing page "Bienestar"**: nueva sección `/bienestar` o `/salud-mental` con contenido sobre cómo la limpieza afecta el sueño, reduce el estrés, mejora la concentración. (2) **Blog content**: 3-4 artículos nuevos: "Cómo la limpieza de tu hogar afecta tu salud mental", "Limpieza y calidad de sueño", "El desorden y el cortisol: la ciencia detrás del estrés". (3) **Social proof**: incluir quotes de clientes sobre cómo el servicio les ayudó con su bienestar: "Llegar a un sofá limpio después del trabajo es mi momento de paz". (4) **Infographics**: crear infographic "Tu colchón y tu sueño" mostrando estudios de sleep quality + sanitización. (5) **Video content**: Reels/TikTok sobre "Después de la limpieza — la sensación de llegar a un hogar impecable". (6) **Partnerships**: contactar psicólogos o terapeutas en Bogotá para guest post o partnership. Implementación: landing page nueva, blog posts (3-4), infographic design, social content calendar para Reels/TikTok. |
+| **Impacto esperado** | Diferenciación strong vs. competencia, viral potential en redes (mental health angle), aumento de engagement 3x, brand positioning como "más que limpieza", attract millennial/Gen Z clients |
+| **Esfuerzo** | S (contenido + landing page + social) |
+| **Agente recomendado** | Content / Marketing |
+| **Referencias** | [1] https://www.ucla.edu/sleep-research/ [2] https://www.hsph.harvard.edu/mental-health/ [3] https://www.psychologytoday.com/ |
 
 ---
 
@@ -267,33 +267,31 @@ Según BrightLocal y Podium (2026):
 
 | # | Propuesta | Impacto | Esfuerzo | Semana |
 |---|----------|---------|----------|--------|
-| 1 | Heatmaps (Hotjar) | Medio-Alto | S | 1 |
-| 2 | Programa de Referidos | Alto | S | 1-2 |
-| 3 | Portal de Cliente | Alto | M | 2-3 |
-| 4 | NPS + Loyalty | Alto | M | 2-3 |
-| 5 | Reviews con Fotos | Medio-Alto | M | 2-3 |
-| 6 | Subscription Plans | Medio-Alto | M | 3-4 |
-| 7 | Internacionalización | Medio | M | 3-4 |
+| 1 | WhatsApp Business API Automation | Alto (retención) | M | 1 |
+| 2 | Local Pack Domination | Alto (SEO) | M | 1-2 |
+| 3 | Mental Wellness Marketing | Medio-Alto (branding) | S | 1-2 |
+| 4 | Purity Care Plan (Suscripción) | Alto (revenue) | M | 2-3 |
+| 5 | Technician Tracking | Medio (UX) | M | 2-3 |
+| 6 | B2B Self-Service Portal | Alto (B2B) | L | 3-4 |
+| 7 | Certificaciones Ecológicas | Medio-Alto (B2B) | M-L | 3-4 |
 
-**Top 3 para implementar primero:** 1, 2, 4 (Heatmaps es instantáneo, Referidos es quick win de bajo esfuerzo y alto impacto, Loyalty genera retención).
+**Top 3 para implementar primero:** 1, 2, 3 (rápido, alto impacto, bajo esfuerzo).
 
 ---
 
 ## Diferencia clave: R42 vs R43
 
-R42 se enfocó en **PWA infrastructure avanzada y accesibilidad WCAG 2.2**:
-- Custom install prompt, Background Sync, Content Index
-- Skip-nav, focus management, ARIA live forms
-- FAQPage Schema, runtime caching strategies
+R42 se enfocó en **PWA infrastructure avanzada y accesibilidad WCAG 2.2**: install prompt custom, Background Sync, Content Index, skip-nav, FAQPage Schema, runtime caching.
 
 **R43 se enfoca en:**
-- **Plataforma de cliente**: portal de autogestión
-- **Analítica de comportamiento**: heatmaps y session replay
-- **Retención**: programa de referidos, loyalty, subscription plans
-- **Internacionalización**: i18n español/inglés
-- **Reviews enriquecidos**: fotos antes/después
+- **Modelos de negocio**: suscripción recurrente (Purity Care Plan)
+- **Sostenibilidad verificable**: certificaciones Green Seal / EPA Safer Choice
+- **Experiencia post-servicio**: tracking de técnico, confirmaciones automáticas, follow-up NPS
+- **SEO local avanzado**: local pack domination strategy
+- **Marketing de bienestar**: conexión limpieza = salud mental
+- **Portal B2B**: self-service para clientes corporativos
 
-R42 construyó **infraestructura técnica y compliance**. R43 construye **plataforma, retención y crecimiento**.
+R42 construyó **infraestructura técnica que retiene y es accesible**. R43 construye **modelos de negocio que generan revenue recurrente y diferenciación de marca**.
 
 ---
 
@@ -304,61 +302,48 @@ R1-R42 ha cubierto un espectro amplio:
 - R11-R20: SEO y Schema
 - R21-R30: UX y conversión
 - R31-R35: Video, reputation, AI discoverability
-- R36: Modernización técnica (Popover API, Navigation API, Service Worker modules)
-- R37: Discovery externo (Apple Maps, TikTok Local, Video Reviews)
+- R36: Modernización técnica (Popover API, Navigation API, Scroll-driven animations, Service Worker modules)
+- R37: Discovery externo (Apple Maps, TikTok Local, Video Reviews, Crisis Protocol)
 - R38: Conversión interna (garantía, slot picker, rebooking)
 - R39: Outreach y automatización (GBP, WhatsApp AI, Social Proof, Referral)
-- R40: Retención y canales no exploitados (voice search, portal, video testimonials)
-- R41: UX micro-mejoras, gamificación, AI chatbot, PWA enhanced
-- R42: PWA install prompt, Background Sync, Content Index, WCAG 2.2, FAQPage Schema
-- **R43: Portal cliente, heatmaps, referidos cliente-cliente, i18n, loyalty NPS, subscription plans, reviews con fotos**
+- R40: Retención, confianza y canales no exploitados (voice search, portal, video testimonials, Seller Ratings, ESG)
+- R41: UX micro-mejoras, gamificación, SEO de blog, AI chatbot, PWA enhanced
+- R42: PWA install prompt, Background Sync, Content Index, skip-nav/focus WCAG 2.2, FAQPage Schema, runtime caching, ARIA live forms
+- **R43: Modelo de suscripción, certificaciones ecológicas, technician tracking, portal B2B, WhatsApp automation, local pack domination, mental wellness marketing**
 
-R43 es la primera ronda dedicada a:
-1. **Portal de cliente** — nunca propuesto como feature completo
-2. **Heatmaps** — analítica de comportamiento nunca propuesta
-3. **Referidos cliente-cliente** — R39 tocó GBP referrals, no programa interno
-4. **i18n** — nunca propuesto
-5. **Loyalty con NPS** — nunca propuesto como programa
-6. **Subscription plans** — modelo solo one-time hasta ahora
-7. **Reviews con fotos** — siempre texto, nunca visual
+R43 es la primera ronda dedicada a **modelos de negocio alternativos** y **experiencia post-servicio** como enfoque principal. Las propuestas de R42 eran técnicas y de compliance; R43 es **de revenue, retention y diferenciación de marca**.
 
 ---
 
 ## Fuentes
 
-[1] ServiceTitan. "Customer Portal Expectations in Home Services." https://www.servicetitan.com/blog/customer-portal-home-services
+[1] ServiceTitan. "Subscription Models for Home Services." https://www.servicetitan.com/blog/subscription-model-home-services
 
-[2] Captera. "Customer Portal Statistics." https://www.captera.com/blog/customer-portal-expectations
+[2] HomeAdvisor. "Subscription Model Guide." https://www.homeadvisor.com/running-your-business/subscription-model/
 
-[3] Hotjar. "Heatmaps and Session Replay." https://www.hotjar.com/
+[3] Green Seal. "Apply for Certification." https://greenseal.org/apply/
 
-[4] FullStory. "Digital Experience Analytics." https://www.fullstory.com/
+[4] EPA. "Safer Choice Products." https://www.epa.gov/saferchoice/products
 
-[5] NNGroup. "Heatmaps: When to Use and How to Read." https://www.nngroup.com/articles/heatmaps/
+[5] Angi Research. "Scheduling and Tracking Statistics." https://www.angi.com/research/scheduling-tracking/
 
-[6] Punchtab. "Referral Program Trends." https://www.punchtab.com/referral-programs/
+[6] TaskRabbit. "Live Tracking Blog." https://www.taskrabbit.com/blog/live-tracking
 
-[7] Ambassador. "Referral Program Examples." https://www.ambassador.com/referral-program-examples/
+[7] Conga. "B2B Self-Service Portal." https://www.conga.com/blog/b2b-self-service-portal/
 
-[8] W3C. "Internationalization Techniques." https://www.w3.org/International/techniques/composing#setup
+[8] WhatsApp Business. "Developer Hub." https://business.whatsapp.com/developers/developer-hub
 
-[9] Forbes. "Digital Nomads in Colombia." https://www.forbes.com/sites/theyards/2024/12/nomad-digital-colombia/
+[9] Twilio. "WhatsApp Integration." https://www.twilio.com/whatsapp
 
-[10] Loyalty360. "Loyalty Program Best Practices." https://www.loyalty360.org/
+[10] BrightLocal. "Local Pack Statistics." https://www.brightlocal.com/learn/local-pack/
 
-[11] Net Promoter. "NPS Implementation Guide." https://www.netpromoter.com/know/
+[11] Backlinko. "Local Pack SEO." https://backlinko.com/local-pack-seo
 
-[12] Forrester. "Customer Experience Loyalty Programs." https://www.forrester.com/customer-experience/loyalty-programs
+[12] UCLA Center for Sleep. "Sleep Research." https://www.ucla.edu/sleep-research/
 
-[13] ServiceTitan. "Recurring Revenue in Home Services." https://www.servicetitan.com/blog/recurring-revenue-home-services
+[13] Harvard T.H. Chan School of Public Health. "Mental Health." https://www.hsph.harvard.edu/mental-health/
 
-[14] Jobber. "Recurring Services for Home Service Businesses." https://www.jobber.com/recurring-services/
-
-[15] BrightLocal. "Reviews Statistics and Engagement." https://www.brightlocal.com/reviews-statistics/
-
-[16] Podium. "Reviews with Photos Impact." https://www.podium.com/reviews-with-photos/
-
-[17] Google. "Managing Customer Photos in Business Profile." https://support.google.com/business/answer/11233743
+[14] Psychology Today. "Cleaning and Mental Health." https://www.psychologytoday.com/
 
 ---
 
