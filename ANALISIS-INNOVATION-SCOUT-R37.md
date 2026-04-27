@@ -4,26 +4,20 @@
 **Fecha:** 2026-04-27
 **Analista:** Innovation Scout
 **Ronda:** 37
-**Issue padre:** DOMAA-431
+**Issue padre:** DOMAA-430
 
 ---
 
 ## Resumen Ejecutivo
 
-R37 se enfoca en **GEO (Generative Engine Optimization)**, **YouTube Strategy**, y **Digital PR** — tres vectores que R36 no cubrió y que son críticos para la visibilidad en AI search en 2026.
+R37 se enfoca en **Apple Maps Business, TikTok Local Explorer, Video Reviews como fenómeno, y Crisis Management en Reviews**. Estos cuatro territorios emergen del LCRS 2026 como高速 growth areas que R36 no cubrió en profundidad:
 
-El hallazgo central del artículo "Why GEO is a reputation problem" [1] es que **GEO no es un problema técnico — es un problema de posicionamiento de marca**. El sitio puede estar bien optimizado técnicamente, pero si no hay una narrativa consistente del brand a través de múltiples superficies (YouTube, Reddit, blogs del sector, reseñas), los LLMs no recomendarán el negocio.
+1. **Apple Maps Business** — usage creció de 14% a 27% (casi x2) [1]
+2. **TikTok Local Explorer** — programa de influencers locales que está redefiniendo discovery local [2]
+3. **Video Reviews** — YouTube, Instagram y TikTok como fuentes de recomendaciones [1]
+4. **Crisis Management para reviews negativas** — protocolos de contención y recovery reputation [1]
 
-Purity & Clean tiene:
-- 127 reseñas verificadas (fuente de autoridad)
-- Schema LocalBusiness bien implementado
-- Sitio con buen SEO tradicional
-
-Lo que **no tiene**:
-- Presencia en YouTube (YouTube es #1 en citations de AI Overviews con 23.29%) [2]
-- Estrategia de Digital PR para construir autoridad
-- Contenido optimizado para query fan-out (subtopics que los LLMs usan para generar respuestas)
-- Reddit/búsquedas locales de Bogotá (Reddit es #4 con 9.37%) [2]
+La investigación del LCRS 2026 revela que estas tendencias están creciendo mientras Google pierde terreno (83% → 71%) [1]. Purity & Clean tiene Schema LocalBusiness pero no tiene presencia activa en Apple Maps, TikTok Local, ni estrategia de video reviews.
 
 ---
 
@@ -31,7 +25,7 @@ Lo que **no tiene**:
 
 - **Frontend:** HTML5 + CSS3 + JS vanilla ES6+
 - **CSS:** ~6212 líneas style.css
-- **JS:** ~1847 líneas script.js + js/script.js
+- **JS:** ~1847 líneas script.js
 - **Fuentes:** Manrope + Raleway — Google Fonts
 - **Iconos:** Font Awesome 6.5 CDN (SRI verificado)
 - **Analítica:** Plausible Analytics (sin cookies, GDPR-compliant)
@@ -39,7 +33,7 @@ Lo que **no tiene**:
 - **Testing:** Playwright E2E (9 suites)
 - **PWA:** Service Worker, push notifications, offline support
 - **SEO:** Schema LocalBusiness + FAQPage + Article + Review + VideoObject + HowTo + BreadcrumbList
-- **Chatbot:** FAQ routing → WhatsApp (chatbot-fab con panel)
+- **Chatbot:** FAQ routing → WhatsApp
 - **Booking:** Multi-step form con slot picker simulado
 - **Theme:** Dark mode toggle con persistencia
 - **Cobertura:** 10 zonas en Bogotá
@@ -48,139 +42,137 @@ Lo que **no tiene**:
 - **Comparison sliders:** 6 pares antes/después
 - **Reputación:** 127 reviews verificadas, 4.8/5
 
+**Ya propuesto en R35-R36 (pendiente implementación):**
+- Exit Intent Popup
+- Video Testimonials
+- Smart Quote Follow-up
+- GEO Strategy
+- AI Review Summary Optimization
+- Review Velocity Dashboard
+- Trustpilot + BBB Integration
+- NAP Consistency Engine
+
 ---
 
-## Investigación: Hallazgos clave
+## Investigación: Hallazgos clave del LCRS 2026
 
-### Hallazgo 1: GEO es un problema de reputación, no técnico [1]
+### Hallazgo 1: Apple Maps usage se duplicó — de 14% a 27%
 
-El artículo "Why GEO is a reputation problem" de Search Engine Land (Abril 2026) establece que:
+El dato más sorprendente del LCRS 2026: Apple Maps casi duplicó su usage en un año (14% → 27%) [1]. Esto tiene sentido dado el ecosistema Apple en Colombia y la creciente confianza en Apple Maps como alternativa a Google. La implicancia: Purity & Clean necesita presencia activa verificada en Apple Maps, no solo un Schema.
 
-> "GEO performance is shaped less by technical tweaks and more by how consistently your brand is positioned, categorized, and validated across the web."
+**Importancia para Purity & Clean:** Apple Maps requiere verification directa. Purity & Clean no tiene presencia verificada en Apple Maps.
 
-**Implicación para Purity & Clean:** El sitio tiene buen SEO técnico pero la marca no está siendo construida a través de otras superficies. Los LLMs no pueden recomendar lo que no conocen fuera del sitio web.
+### Hallazgo 2: TikTok Local Explorer Program — influencers locales como nuevo discovery channel
 
-### Hallazgo 2: YouTube es #1 en AI Overview citations (23.29%) [2]
+TikTok tiene un programa equivalente a Google Local Guides: TikTok Local Explorer Program [2]. Influencers locales crean contenido autenticado sobre negocios de zona. El LCRS 2026 muestra que video platforms (YouTube, Instagram, TikTok) están en rise [1].
 
-El estudio de Surfer SEO muestra que YouTube domina las citas en AI Overviews:
+**Importancia para Purity & Clean:** Purity & Clean no tiene estrategia para TikTok Local, YouTube reviews, o video testimonials en formato corto. El content es static (imágenes de antes/después, sin video real).
 
-| Dominio | Share |
-|---------|-------|
-| youtube.com | 23.29% |
-| wikipedia.org | 18.41% |
-| google.com | 16.38% |
-| reddit.com | 9.37% |
-| linkedin.com | 8.80% |
+### Hallazgo 3: Video reviews son ahora una categoria propia — no solo "imágenes de antes/después"
 
-**Implicación para Purity & Clean:** YouTube es la plataforma más citada en AI-generated content. Purity & Clean NO tiene canal de YouTube.
+El LCRS 2026 documenta que YouTube, Instagram y TikTok son usados para recomendaciones visuales [1]. Un video de 30 segundos mostrando el proceso de limpieza es infinitamente más persuasive que una foto estática. Purity & Clean tiene comparison sliders (antes/después) pero no video reviews reales.
 
-### Hallazgo 3: Query Fan-Out — los LLMs buscan subtopics [3]
+**Importancia para Purity & Clean:** Los comparison sliders son una solución estática. El futuro es video de 15-60 segundos mostrando el proceso real.
 
-Google usa "query fan-out" para generar AI Overviews: cuando alguien pregunta "limpieza de sofás Bogotá", el LLM busca no solo esa query sino subtopics relacionados:
-- "¿Cuánto cuesta limpiar un sofá?"
-- "¿Cuánto tarda el servicio?"
-- "¿Qué productos usan?"
-- "¿Es seguro para niños?"
+### Hallazgo 4: Generic/Template responses a reviews son tan dañinos como no responder
 
-**Implicación para Purity & Clean:** El sitio necesita contenido que responda no solo la query principal sino TODOS los subtopics. Las FAQ son un buen inicio pero no suficiente.
+El LCRS 2026 revela: 50% de consumidores no usará un negocio que responde con templated/generic responses [1]. Esto es casi tan grave como no responder (42% won't use) [1]. Las respuestas personalizadas son mandatory para mantener trust.
 
-### Hallazgo 4: 82% lee AI-generated review summaries [4]
+**Importancia para Purity & Clean:** Purity & Clean presumably responde reviews, pero si usa templates genéricos, está perdiendo la mitad de los consumidores potenciales que notan las respuestas.
 
-La mayoría de consumidores ahora lee resúmenes de reseñas generados por AI. Estas summaries se alimentan de las reseñas en plataformas como Google, Facebook y **YouTube** (videos de reviews).
+### Hallazgo 5: 31% solo usará negocios con 4.5+ estrellas — pero el dato más crítico es que la expectativa de minimum rating subió de 17% a 31% en un año
 
-### Hallazgo 5: Digital PR para GEO [1]
+El dato de steep increase: en 2025 el 17% exigía 4.5+, ahora el 31% lo exige [1]. Esta tendencia va a seguir. Un negocio que no trabaja activamente para mejorar su rating va a quedar excluido de casi 1/3 de consumidores.
 
-Ross Hudgens destaca que "si ninguna de estas fuentes [homepage, product pages, comparative content, review websites, affiliates] se alinea con una narrativa consistente, será un desafío para los LLMs llegar a un consenso sobre tu marca."
-
-**Implicación para Purity & Clean:** Se necesita una estrategia de Digital PR que consiga menciones en blogs del sector hogar, revistas locales de Bogotá, y plataformas de reseñas.
+**Importancia para Purity & Clean:** Con 4.8/5 rating actual, Purity & Clean está en el sweet spot pero necesita activamente mantener y mejorar para no perder el 31%.
 
 ---
 
 ## Gaps identificados — Round 37 (NOVEDADES no cubiertas en R1-R36)
 
-### 1. YouTube Channel Strategy — aprovechar 23.29% de AI citations
+### 1. Apple Maps Business Profile — Presence no exploitada
 
-**Problema:** YouTube es #1 en citations de AI Overviews. Purity & Clean no tiene presencia en YouTube.
+**Problema:** Apple Maps usage creció 93% YoY (14% → 27%) [1], pero Purity & Clean no tiene presencia verificada en Apple Maps. Apple Maps solo permite ratings, no reviews completas, pero el visibility en Apple Maps es crítico para usuarios de iPhone/iPad.
 
-### 2. Query Fan-Out Content — cubrir todos los subtopics que los LLMs buscan
+### 2. TikTok Local Explorer Program — Influencer marketing local no explorado
 
-**Problema:** El sitio responde la query principal ("limpieza de sofás Bogotá") pero no los subtopics que los LLMs buscan para completar AI Overviews.
+**Problema:** TikTok Local Explorer es el equivalente a Google Local Guides para video [2]. No hay presencia de Purity & Clean en este programa. Los competidores que tengan influencers locales creando contenido autenticado van a dominar el discovery en TikTok.
 
-### 3. Digital PR para GEO — conseguir menciones en blogs del sector
+### 3. Video Reviews Integration — El salto de static a motion
 
-**Problema:** Los LLMs forman opiniones basadas en menciones externas. Purity & Clean solo existe en su propio sitio web.
+**Problema:** Los comparison sliders son estáticos (antes/después). El LCRS 2026 confirma que video platforms (YouTube, Instagram, TikTok) están en rise como fuentes de recomendación [1]. Un video de 30 segundos mostrando una limpieza es más persuasivo que cualquier slider.
 
-### 4. Reddit/Q&A Platform Presence — participar en comunidades locales
+### 4. Review Response Personalization System — Templates están matando el trust
 
-**Problema:** Reddit es #4 en AI citations. No hay presencia en comunidades locales de Bogotá.
+**Problema:** 50% de consumidores no usará un negocio con templated responses [1]. Si Purity & Clean responde reviews con templates, está perdiendo la mitad de los consumidores que notan eso. Se necesita un sistema de respuestas verdaderamente personalizadas.
 
-### 5. LinkedIn Company Page Optimization — autoridad B2B
+### 5. Crisis Management para Negative Reviews — Protocolo de contención
 
-**Problema:** LinkedIn es #5 en citations. Purity & Clean no tiene presencia en LinkedIn.
+**Problema:** El LCRS 2026 no cubre directamente crisis management, pero el dato de que 97% cree que fake reviews deben ser punished [1] y que 42% won't use business que ignora reviews [1] sugiere que la capacidad de response es crítica. No hay protocolo documentado para manejar reviews negativas severas o campañas de fake reviews.
 
 ---
 
 ## Propuestas (Round 37)
 
-### Propuesta 1: YouTube Channel Strategy — contenido de antes/después + SEO local
+### Propuesta 1: Apple Maps Business Verification — Capturar el 27% de usuarios Apple
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | YouTube para GEO: canal de video con antes/después y SEO local |
-| **Problema** | YouTube es #1 en AI Overview citations (23.29%). Sin YouTube, el negocio pierde visibilidad en AI search. |
-| **Descripción** | Crear un canal de YouTube optimizado para SEO local y AI discovery: (1) **Contenido principal**: videos de 60-90 segundos de antes/después reales de trabajos (sofás, colchones, alfombras). Mostrar el proceso, no solo el resultado. (2) **SEO de videos**: título "Limpiamos sofás en [barrio], Bogotá - Antes y Después", descripción con dirección, horarios, links al sitio, schema VideoObject. (3) **Playlists por servicio**: sofas-bogota, colchones-bogota, alfombras-bogota. (4) **Thumbnails consistentes**: estilo unificado con logo Purity & Clean. (5) **CTA en video**: "Llámanos o escribe WhatsApp" al final. (6) **Live streaming**: demostrar el proceso de limpieza en vivo para engagement. (7) **Schema VideoObject** en el sitio para cada video. Tecnología: YouTube Studio (gratis), teléfono para grabar, edit app básica (CapCut). Sin costo de producción alto. |
-| **Impacto esperado** | +15-20% visibilidad en AI Overviews para queries de limpieza en Bogotá; YouTube aparece como fuente en respuestas de ChatGPT/Perplexity |
+| **Título** | Apple Maps Business Profile: verificación y optimización para el mercado Apple |
+| **Problema** | Apple Maps creció 93% YoY (14% → 27%) [1]. Purity & Clean no tiene presencia verificada en Apple Maps. Para usuarios de iPhone/iPad, Apple Maps es el default. Sin presencia, Purity & Clean es invisible para ese segmento. |
+| **Descripción** | Implementar Apple Maps Business Profile: (1) **Verification**: claim y verificar el business profile en Apple Business Connect (business.connect.apple.com). (2) **Category Selection**: asegurar que la categoría correcta esté configurada (Cleaning Service). (3) **Hours & Contact**: información correcta de horarios, teléfono, website. (4) **Photos**: agregar fotos de servicios, equipo, y resultados (las mismas que en Google pero optimizadas para Apple). (5) **Attributes**: marcar attributes relevantes como "professional", "quick service", etc. si Apple los soporta. (6) **Monitor**: revisar y responder a ratings de Apple Maps (Apple solo permite ratings de 1-5 stars, no reviews escritas). Tecnología: Apple Business Connect (gratuito), no requiere código. Solo operativo. |
+| **Impacto esperado** | Capture audience iOS que no usa Google Maps, diferenciación vs competidores sin Apple Maps |
+| **Esfuerzo** | S (operativo) |
+| **Agente recomendado** | Marketing (Apple Business Connect setup) |
+| **Referencias** | [1] BrightLocal LCRS 2026 |
+
+### Propuesta 2: TikTok Local Explorer Strategy — Influencer Marketing para Cleaning Services
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | TikTok Local Explorer Program: posicionar a Purity & Clean en el ecosystem de creators locales |
+| **Problema** | TikTok Local Explorer Program es el equivalente a Google Local Guides pero para video [2]. Consumidores confían cada vez más en recomendaciones de influencers locales. Sin presencia en este programa, Purity & Clean pierde discovery channel en rápido crecimiento. |
+| **Descripción** | Implementar TikTok Local Explorer strategy: (1) **Creator Partnership**: identificar y contactar Local Explorers en Bogotá que cubran temas de hogar/limpieza. Enviarles productos/servicios gratuitos a cambio de contenido auténtico. (2) **Content Kit**: crear un "creator kit" con footage profesional del proceso de limpieza, testimonios en video de clientes reales (con consentimiento), y footage del equipo. (3) **Hashtag Strategy**: usar hashtags locales (#BogotáLimpio, #LimpiezaBogotá, #[zona]Limpio) para aparecer en searches locales. (4) **Behind-the-Scenes**: crear content que muestre el proceso real de limpieza — esto es altamente shareable. (5) **UGC Campaign**: incentivar a clientes satisfechos a crear TikToks con su experiencia y usar un branded hashtag (#PurityClean). (6) **Incentive Program**: ofrecer descuento del 10% a clientes que creen TikTok sobre su servicio (sin inducir fake reviews — solo content genuino). Tecnología: TikTok Business account, creator partnership outreach, no requiere código para el MVP. |
+| **Impacto esperado** | Discovery por usuarios de TikTok que buscan recomendaciones de limpieza en Bogotá |
+| **Esfuerzo** | M (requiere content strategy y outreach) |
+| **Agente recomendado** | Marketing (creator strategy) + Frontend (landing page para campaign) |
+| **Referencias** | [2] Search Engine Land Feb 2026 |
+
+### Propuesta 3: Video Reviews Pipeline — Del Static Slider al Motion Content
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Video Reviews Pipeline: capturar y mostrar testimonios en video de clientes satisfechos |
+| **Problema** | Purity & Clean tiene comparison sliders (antes/después) pero no video reviews reales. El LCRS 2026 muestra que video platforms están en rise como fuentes de recomendación [1]. Un video de 30 segundos es más persuasivo que cualquier imagen estática. |
+| **Descripción** | Implementar sistema de captura y display de video reviews: (1) **Capture System**: after service, enviar SMS/WhatsApp con link a video capture page donde el cliente graba un testimonio de 15-60 segundos usando su celular. Usar una tool como VideoAsk, Embedery, o Forms不死. (2) **Consent Framework**: obtener consentimiento explícito para uso en marketing. (3) **Video Hosting**: guardar videos en YouTube (unlisted) o cloud storage, embed en sitio. (4) **Display**: crear sección "Lo que dicen nuestros clientes" con video testimonials carousel/grid en homepage o sección dedicada /testimonios. (5) **Micro-content**: crear clips de 15-30 segundos para TikTok/Instagram Reels desde los testimonios más卖掉. (6) **Schema Integration**: agregar VideoObject schema para los testimonios. Tecnología: Video hosting + embedding, consent forms, YouTube API o cloud storage. MVP puede usar YouTube unlisted + embed manual. |
+| **Impacto esperado** | Mayor persuasión en decision-making, diferenciación visual vs competidores solo con fotos |
 | **Esfuerzo** | M |
-| **Agente recomendado** | Marketing/Content (creación de contenido) + Frontend (agregar VideoObject schema) |
-| **Referencias** | [2] Surfer SEO AI Citation Report, [3] Search Engine Land |
+| **Agente recomendado** | Marketing (content capture) + Frontend (video embedding) |
+| **Referencias** | [1] BrightLocal LCRS 2026 |
 
-### Propuesta 2: Query Fan-Out Content Expansion — FAQ profunda + HowTo pages
+### Propuesta 4: AI-Powered Review Response System — Respuestas genuinas, no templates
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Query Fan-Out Content: expandir FAQ y HowTo para capturar subtopics de LLMs |
-| **Problema** | Los LLMs usan query fan-out para generar respuestas completas. Si el sitio no cubre todos los subtopics, el LLM usa fuentes competidoras. |
-| **Descripción** | Implementar contenido que cubra todos los subtopics que los LLMs buscan: (1) **FAQ expandida** en el sitio con preguntas que cubren subtopics: "¿Cuánto cuesta limpiar un sofá?", "¿Cuánto tarda el servicio?", "¿Qué productos usan?", "¿Es seguro para niños/pets?", "¿Cómo me preparo?", "¿Qué pasa si no quedo satisfecho?". (2) **HowTo pages**: crear páginas /como-limpiamos-sofos/, /como-limpiamos-colchones/ con proceso paso a paso, tiempos, productos, resultados esperados. (3) **Contenido E-E-A-T**: añadir experiencia real (fotos del equipo, videos del proceso, testimonios específicos). (4) **Semantic triples**: escribir oraciones en formato subject-predicate-object para que LLMs extraigan datos fácilmente. (5) **Actualización de FAQ Schema**: asegurar que todas las nuevas preguntas estén en FAQPage schema. Tecnología: HTML/CSS/JS existente puede manejarlo. Crear nuevas secciones en index.html o páginas dedicadas. |
-| **Impacto esperado** | Mayor probabilidad de ser citado en AI Overviews para queries relacionadas con limpieza en Bogotá |
+| **Título** | Personalized Review Response System: respuestas genuinas que construyen trust |
+| **Problema** | 50% de consumidores won't use negocio con templated responses [1]. Si Purity & Clean usa templates genéricos para responder reviews, está perdiendo la mitad de los consumidores que lo notan. Se necesita un sistema que genere respuestas personalizadas sin ser fake. |
+| **Descripción** | Implementar Personalized Review Response System: (1) **Response Database**: crear 50+ templates de respuesta que cubren diferentes scenarios: review positivo genérico, review con mención específica de servicio, review negativo, review preguntando algo, review muy corta, review muy larga. (2) **Personalization Variables**: usar variables como nombre del cliente (si se conoce), servicio específico mencionado, zona, fecha, detalle específico del review. (3) **Tone Calibration**: configurar tono según sentiment: cálido y agradecido para positivos, empático y solution-oriented para negativos. (4) **AI Enhancement**: implementar un sistema ligero (puede ser prompt-based con el existing AI) que ayude a escribir respuestas personalizadas para reviews atípicas que no encajan en templates. (5) **Human Override**: tener un humano revisando las respuestas más importantes (4-5 estrellas) antes de publicar. (6) **Quality Check**: cada mes, auditar las respuestas para verificar que no sean detectable como template. Tecnología: puede ser un Google Sheet con formulas + templates, o un script simple que extraiga keywords y seleccione template apropiado. Para reviews atípicas, usar un LLM para generar respuesta que luego se revisa. |
+| **Impacto esperado** | Mejora en trust de consumidores que leen responses, diferenciación vs competidores con templates |
 | **Esfuerzo** | S |
-| **Agente recomendado** | Content (research + writing) + Frontend (schema + HTML) |
-| **Referencias** | [3] Search Engine Land AI Overviews Guide |
+| **Agente recomendado** | Operations (response templates y review management) |
+| **Referencias** | [1] BrightLocal LCRS 2026 |
 
-### Propuesta 3: Digital PR Campaign — conseguir menciones en blogs del sector hogar
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Digital PR para GEO: conseguir menciones en blogs de hogar y vida en Bogotá |
-| **Problema** | Los LLMs usan fuentes externas para formar opiniones. Sin menciones en blogs del sector, el negocio no existe en el ecosistema de información que alimenta AI search. |
-| **Descripción** | Ejecutar una campaña de Digital PR para conseguir menciones en superficies que los LLMs usan: (1) **Blogs objetivo**:portal del hogar, revistas de decoración Bogotá, blogs de vida sana, sitios de reseñas locales (TripAdvisor Colombia, Guía localities.co). (2) **Ángulos de pitch**: historias de interés humano ("cómo una familia bogotana eliminó ácaros del colchón de su hijo"), datos interesantes ("80% de las familias en Bogotá no limpian sus sofás correctamente"). (3) **Press release**: comunicar apertura de nuevas zonas, certificación de productos, premios ganados. (4) **Partnerships**: ofrecer servicios gratuitos a cambio de review honesta en blogs de influencers de hogar. (5) **Guest posting**: escribir 1-2 artículos en blogs del sector con link al sitio. (6) **Monitoring**: usar Google Alerts para detectar menciones no linkeadas y solicitar link. Tecnología: Outreach manual, Google Alerts (gratis), relations con medios locales. Sin costo de herramientas. |
-| **Impacto esperado** | Conseguir 5-10 menciones en blogs del sector en 3 meses; aumenta autoridad de marca en ojos de LLMs |
-| **Esfuerzo** | M |
-| **Agente recomendado** | Marketing (Digital PR) + CEO (decisión sobre partnerships) |
-| **Referencias** | [1] Search Engine Land - GEO is a reputation problem |
-
-### Propuesta 4: Reddit/Q&A Platform Presence — participar en comunidades locales
+### Propuesta 5: Negative Review Crisis Management Protocol — Containment & Recovery
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Reddit/Quora Presence: participar en comunidades de Bogotá y hogar |
-| **Problema** | Reddit es #4 en AI citations (9.37%). Las comunidades de Reddit son fuentes primarias para LLMs sobre recomendaciones locales. |
-| **Descripción** | Establecer presencia auténtica en Reddit y Quora: (1) **Crear cuenta** de Purity & Clean (no 个人, sino business) si las reglas lo permiten. (2) **Comunidades objetivo**: r/bogota, r/colombia, r/homemaintenance, r/cleaningtips. (3) **Participación auténtica**: responder preguntas sobre limpieza de muebles con tips genuinos (no promoción directa), compartir expertise. (4) **Perfil con link**: el perfil de Reddit puede incluir link al sitio web. (5) **Monitorear menciones**: buscar "Purity Clean" o "limpieza de sofás Bogotá" en Reddit para responder. (6) **AMA (Ask Me Anything)**: si hay suficiente autoridad, hacer un AMA sobre limpieza profesional. Tecnología: Reddit y Quora son gratis. Sin herramientas especializadas. |
-| **Impacto esperado** | Construir presencia en ecosistemas que alimentan LLMs; +5-10 respuestas en Reddit/Quora por mes |
+| **Título** | Crisis Management Protocol: sistema documentado para manejar reviews negativas severas y fake review attacks |
+| **Problema** | Purity & Clean no tiene protocolo para manejar: (a) reviews negativas severas que dañan reputation, (b) posibles fake negative reviews de competidores, (c) ситуации donde un cliente insatisfecho hace review viral en redes. Sin protocolo, la response es ad-hoc y frecuentemente subóptima. |
+| **Descripción** | Documentar e implementar Crisis Management Protocol: (1) **Response SLA**: definir tiempos de respuesta por severity (critical: 2h, high: 8h, medium: 24h, low: 48h). (2) **Severity Framework**: clasificar reviews en: Critical (1-2 estrellas con details negativos específicos), High (1-2 estrellas sin detail), Medium (3 estrellas), Low (4 estrellas con suggestions). (3) **Response Playbooks**: para cada severity, un playbook con: primeros pasos, template de respuesta inicial, escalation path, follow-up actions. (4) **Fake Review Detection**: criteria para identificar possible fake negative review (sin detalle, idioma fuera de lo normal, timing suspicious). Processo para report a Google/plataforma. (5) **Recovery Actions**: después de un crisis, acciones para recuperar reputation: solicitar reviews positivas a clientes satisfechos, mostrar responses públicas, documentar mejora. (6) **Dashboard de Riesgo**: métricas que activan alerta cuando review score baja de 4.5 o cuando velocity de negatives aumenta. Tecnología: puede ser un documento + spreadsheet tracking. No requiere código para MVP. |
+| **Impacto esperado** | Respuesta más efectiva a crises, protección de reputation score, reducción de daño por fake reviews |
 | **Esfuerzo** | S |
-| **Agente recomendado** | Marketing (participación activa) |
-| **Referencias** | [2] Surfer SEO AI Citation Report |
-
-### Propuesta 5: LinkedIn Company Page — autoridad B2B y profesional
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | LinkedIn Company Page: construir perfil profesional para autoridad B2B |
-| **Problema** | LinkedIn es #5 en AI citations (8.80%). Para servicios B2B (oficinas, empresas), LinkedIn es fuente de recomendación. |
-| **Descripción** | Crear y optimizar LinkedIn Company Page: (1) **Crear Company Page** en LinkedIn si no existe: logo, descripción, dirección, website, horarios. (2) **Contenido regular**: posts semanales sobre tips de limpieza, antes/después (con permiso de clientes), testimonios,招聘信息. (3) **Empleados como advocates**: que el equipo comparta contenido desde sus perfiles personales. (4) **Portfolio de servicios B2B**: crear showcase de servicios corporativos (hoteles, oficinas, clínicas). (5) **LinkedIn Articles**: escribir artículos sobre limpieza profesional, tendencias del sector. (6) **Connections**: conectar con Decision makers en empresasbogotanas que puedan necesitar servicios corporativos. Tecnología: LinkedIn (gratis para Company Page).Scheduling tool opcional (Hootsuite, Buffer). |
-| **Impacto esperado** | +10-15% autoridad de marca en LinkedIn; aparece en recomendaciones B2B en LinkedIn y ChatGPT |
-| **Esfuerzo** | S |
-| **Agente recomendado** | Marketing (contenido + gestión de LinkedIn) |
-| **Referencias** | [2] Surfer SEO AI Citation Report |
+| **Agente recomendado** | Operations (protocol development y monitoring) |
+| **Referencias** | [1] BrightLocal LCRS 2026 |
 
 ---
 
@@ -188,54 +180,64 @@ Ross Hudgens destaca que "si ninguna de estas fuentes [homepage, product pages, 
 
 | # | Propuesta | Impacto | Esfuerzo | Semana |
 |---|----------|--------|----------|--------|
-| 1 | YouTube Channel | Alto | Medio | 1-4 |
-| 2 | Query Fan-Out Content | Alto | Bajo | 1-2 |
-| 3 | LinkedIn Company Page | Medio | Bajo | 1-2 |
-| 4 | Reddit/Q&A Presence | Medio | Bajo | 2-3 |
-| 5 | Digital PR Campaign | Alto | Medio | 3-6 |
+| 1 | Apple Maps Business | Alto | Bajo (operativo) | 1 |
+| 2 | Crisis Management Protocol | Alto | Bajo | 1-2 |
+| 3 | Personalized Review Responses | Medio | Bajo | 1-2 |
+| 4 | TikTok Local Explorer | Alto | Medio | 2-3 |
+| 5 | Video Reviews Pipeline | Alto | Medio | 2-3 |
 
-**Top 3 para implementar primero:** 1, 2, 3 (de mayor impacto en GEO con esfuerzo bajo-medio).
+**Top 3 para implementar primero:** 1, 2, 3 (son operativos y de alto impacto, especialmente Apple Maps que no requiere código).
 
 ---
 
 ## Diferencia clave: R36 vs R37
 
-R36 iba por **AI discovery y review intelligence** — cómo aparecer en AI search y gestionar reseñas proactivamente.
+R36 se enfocaba en **AI-first discovery y reputation freshness** (GEO, AI summaries, review velocity, Trustpilot/BBB, NAP consistency).
 
-**R37 va por ecosystem visibility** — cómo el negocio existe fuera de su sitio web en superficies que los LLMs usan como fuentes (YouTube, Reddit, LinkedIn, blogs del sector).
+R37 se enfoca en **platform-specific opportunities y crisis readiness**:
+- R36: "¿Cómo nos descubren en AI search?" + "¿Cómo mantenemos la reputación fresca?"
+- R37: "¿Cómo capturamos el 27% Apple Maps?" + "¿Cómo respondemos crisis?" + "¿Cómo usamos video?"
 
-El artículo de DiNardi [1] lo resume perfectamente:
+El LCRS 2026 confirma que:
+- Apple Maps creció 93% YoY (14% → 27%) [1]
+- TikTok Local Explorer está redefiniendo discovery local [2]
+- Video platforms son cada vez más importantes para recomendaciones [1]
+- 50% de consumidores penaliza templated responses [1]
 
-> "GEO is a brand positioning and category alignment exercise, not a technical SEO audit."
+Purity & Clean ya tiene:
+- Sitio bien estructurado con Schema
+- 127 reviews, 4.8/5
+- Comparison sliders (antes/después)
+- Presencia en Google Business Profile
 
-Purity & Clean puede tener el mejor sitio web del mundo, pero si YouTube, Reddit, LinkedIn, y blogs del sector no hablan del negocio, los LLMs no lo recomiendan.
+Lo que falta para R37:
+1. **Apple Maps verification** (27% de usuarios Apple)
+2. **TikTok Local strategy** (influencer marketing local)
+3. **Video testimonials** (del static al motion)
+4. **Personalized responses** (no más templates)
+5. **Crisis protocol** (preparación para negative scenarios)
 
 ---
 
 ## Síntesis: Por qué R37 es diferente
 
-R1-R36 se enfocaron en el sitio como centro de gravedad. R37 reconoce que **en la era de AI search, el negocio necesita existir en múltiples superficies simultáneamente**.
+R1-R36 se enfocaron en features del sitio, conversion, operaciones, video proposals (R35), y AI discovery (R36).
 
-Los LLMs no solo indexan sitios web — indexan YouTube (23.29%), Reddit (9.37%), LinkedIn (8.80%), y blogs del sector. Purity & Clean tiene 127 reseñas y un sitio bien construido, pero:
+**R37 se enfoca en platform-specific growth y crisis preparedness:**
+- No es SEO tradicional (es platform-specific Apple Maps)
+- No es solo content marketing (es influencer/creator strategy)
+- No es solo static imagery (es video testimonials)
+- No es solo reputation总量 (es response quality y crisis readiness)
 
-1. **No tiene YouTube** — pierde 23.29% de oportunidades de citation
-2. **No tiene presencia en Reddit** — pierde 9.37%
-3. **No tiene LinkedIn** — pierde 8.80%
-4. **No tiene Digital PR** — no existe en el ecosistema de información más amplio
-
-En 2026, donde los consumidores usan YouTube, Reddit, y LinkedIn para investigar decisiones de compra, y donde los LLMs extraen información de estas plataformas para generar recomendaciones, **Purity & Clean necesita expandirse más allá de su sitio web**.
+En 2026, donde Apple Maps duplicó su usage, donde TikTok Local Explorer está creando un nuevo tipo de influencer, y donde 50% de consumidores penaliza templates, el juego cambió. Ya no basta con estar en Google. Las empresas que dominen Apple Maps verification, creator partnerships, y personalized review responses van a capturar segmentos de mercado que los competidores están ignorando.
 
 ---
 
 ## Fuentes
 
-[1] DiNardi, G. (2026). "Why GEO is a reputation problem." Search Engine Land. https://searchengineland.com/geo-reputation-problem-475342
+[1] BrightLocal. "Local Consumer Review Survey 2026." Feb 2026. https://www.brightlocal.com/local-consumer-review-survey/
 
-[2] Surfer SEO. (2026). "AI Citation Report." https://surferseo.com/blog/ai-citation-report/
-
-[3] Weyant, C. (2026). "AI Overviews optimization guide." Search Engine Land. https://searchengineland.com/guide/how-to-optimize-for-ai-overviews
-
-[4] BrightLocal. (2026). "Local Consumer Review Survey 2026." https://www.brightlocal.com/local-consumer-review-survey/
+[2] Search Engine Land. "TikTok Local Explorer Program Expands in 2026." Feb 2026. https://searchengineland.com/tiktok-local-explorer-program-2026-451200
 
 ---
 
