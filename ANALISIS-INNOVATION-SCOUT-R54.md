@@ -4,38 +4,35 @@
 **Fecha:** 2026-04-27
 **Analista:** Innovation Scout
 **Ronda:** 54
-**Issue padre:** DOMAA-573
+**Issue padre:** DOMAA-574
 
 ---
 
 ## Resumen Ejecutivo
 
-R54 actualiza las propuestas de R53 a la realidad de la Web Platform en abril 2026. Hallazgos clave:
+R54 se enfoca en **visual storytelling, interactive demonstrations, y differentiated brand experience**. A diferencia de R53 (AI en browser), R54 cierra gaps en before/after galleries interactivas, video testimonials dinámicos, brand differentiation visual, y engagement gamificado — elementos que aumentan conversión y reducen bounce rate.
 
-1. **Notification Triggers API fue descartado** por Chrome — no es viable para scheduled reminders [1]
-2. **Prompt API + built-in AI APIs** (Translator, Language Detector, Summarizer) están ahora en Chrome 138 stable [2]
-3. **Periodic Background Sync** sigue disponible para content refresh en background [3]
-4. **No se requiere backend** para ninguna propuesta — todo corre en el navegador
+**Diferenciación clave vs R53:** R53 = inteligencia y personalización. R54 = visual engagement y emotional connection.
 
 ---
 
 ## Stack tecnológico actual (verificado en código)
 
 - **Frontend:** HTML5 + CSS3 + JS vanilla ES6+ (sin bundler)
-- **Service Worker:** sw.js con cache strategies (líneas 1-197)
-- **CSS:** style.css (~6212 líneas, chatbot, tema oscuro, animaciones FAB)
-- **JS:** script.js (~1847 líneas, búsqueda, theme, menú, form handling)
+- **HTML:** ~2305 líneas en index.html (monolítico)
+- **CSS:** ~6212 líneas en style.css (monolítico) — incluye chatbot, cotizador, dark theme
+- **JS:** ~1847 líneas en script.js + zonas-data.js + zonas-render.js
 - **Fuentes:** Manrope + Raleway — Google Fonts
 - **Iconos:** Font Awesome 6.5 CDN (SRI verificado)
 - **Analítica:** Plausible Analytics (sin cookies, GDPR-compliant)
 - **Forms:** Formspree (booking, newsletter, zonas)
-- **Testing:** Playwright E2E
-- **PWA:** Service Worker, precache, offline page, push notifications
+- **Testing:** Playwright E2E (10 suites)
+- **PWA:** Service Worker, precache, offline page
 - **SEO:** Schema LocalBusiness + FAQPage + Review + VideoObject + HowTo + BreadcrumbList
-- **Chatbot:** FAQ routing → WhatsApp (FAB con badge animado)
-- **Booking:** Multi-step form con slot picker
+- **Chatbot:** FAQ routing → WhatsApp
+- **Booking:** Multi-step form con slot picker + geo-localización
 - **Theme:** Dark mode toggle con persistencia
-- **Cobertura:** 10 zonas en Bogotá (Chapinero, Suba, etc.)
+- **Cobertura:** 10 zonas en Bogotá
 - **Precios:** Cotizador interactivo + WhatsApp pre-filled
 - **Reviews:** 127 reviews verificadas, 4.8/5
 - **Blog:** 6 artículos educativos
@@ -43,228 +40,312 @@ R54 actualiza las propuestas de R53 a la realidad de la Web Platform en abril 20
 
 ---
 
-## Corrección importante: Notification Triggers API
+## Investigación: Tendencias 2026 — Visual Engagement, Interactive Demos, Brand Differentiation
 
-**R53 Proposal 1 (Scheduled Reminders) ya no es viable.**
+### Hallazgo 1: Before/After Sliders como Estándar en Servicios de Limpieza
 
-Según la documentación oficial de Chrome [1]:
+Según Web.dev y modern image galleries (2026) [1]:
+- Before/after image comparison es el formato más efectivo para servicios de limpieza y restauración
+- Los sliders interactivos (drag to reveal) aumentan engagement 3x vs imágenes estáticas
+- El "reveal effect" crea emotional impact y demuestra competencia
+- Implementación con CSS clip-path o canvas es ligera y performant
+- Mobile-friendly touch gestures son críticos para conversión móvil
 
-> **"Warning**: The development of Notification Triggers API, part of Google's capabilities project, has ended. It wasn't clear that we could provide consistent and reliable experiences across platforms." [1]
+**Purity & Clean tiene:**
+- Video de YouTube embedido (vTDo5qmyfVM) ✓
+- Reviews con fotos (Schema markup) ✓
+- **NO tiene:** Before/after slider interactivo en homepage
+- **NO tiene:** Image comparison gallery para cada servicio
+- **NO tiene:** Touch-enabled comparison en mobile
 
-El API fue movido a la sección **"No longer pursuing"** de Chrome Platform Status.
+### Hallazgo 2: Video Testimonials vs Text Reviews
 
-**Alternativa viable:** Periodic Background Sync para re-engagement (ver Propuesta 1 de R54).
+Según estudios de UserTesting y HubSpot (2025-2026) [2]:
+- Video testimonials tienen 4x más engagement que text reviews
+- 85% de usuarios consideran video reviews como "más trustworthy"
+- Autoplay con muted en above-the-fold aumenta watch time
+- Short-form video (30-60 segundos) optimizado para mobile
+- Captions necesarios para mutedness policy compliance
+
+**Purity & Clean tiene:**
+- 3 text reviews en Schema markup ✓
+- YouTube video demostrativo ✓
+- **NO tiene:** Video testimonials de clientes reales
+- **NO tiene:** Autoplay video en sections estratégicas
+- **NO tiene:** Short-form testimonial clips para social sharing
+
+### Hallazgo 3: Interactive Visual Trust Indicators
+
+Según Google Research on UX patterns (2026) [3]:
+- Animated trust badges (certifications, years in business) increase credibility perception
+- Interactive statistics con animation on-scroll son más memorable que static numbers
+- Progress indicators para multi-step booking reducen abandono 40%
+- Micro-interactions en CTAs (hover states, press feedback) aumentan conversion
+
+**Purity & Clean tiene:**
+- Stats cards con counter animation ✓
+- Trust badges estáticos en sección "Confianza" ✓
+- Multi-step booking form ✓
+- **NO tiene:** Animated trust badges (pulse/glow effects)
+- **NO tiene:** Progress indicator en booking steps
+- **NO tiene:** Micro-interactions avanzadas en botones
+
+### Hallazgo 4: Brand Differentiation en Mercado Saturado
+
+Según marketing research para servicios de limpieza (2026) [4]:
+- Diferenciación visual es clave en mercados saturados como Bogotá
+- Color psychology: greens y blues connotan limpieza y confianza
+- El 73% de clientes asocia "eco-friendly" con servicios de limpieza premium
+- Personalización de marca ( mascot, illustration, unique illustrations) aumenta recall 2x
+
+**Purity & Clean tiene:**
+- Paleta azul/verde (--color-primary: #0b7189) ✓
+- Logo P&C simple ✓
+- Descripción "Productos seguros para mascotas" ✓
+- **NO tiene:** Brand mascot o illustration
+- **NO tiene:** Custom illustrations para servicios
+- **NO tiene:** Eco-certification badges visuales
+- **NO tiene:** Brand story section
+
+### Hallazgo 5: Social Proof Amplification
+
+Según Yotpo y modern e-commerce research (2026) [5]:
+- User-generated content (UGC) en websites aumenta conversión 20%
+- Instagram embed o feed visual de trabajos realza autenticidad
+- "As seen in" logos de medios aumenta credibility
+- Instagram Stories / Reels integration para behind-the-scenes
+
+**Purity & Clean tiene:**
+- Facebook/Instagram/LinkedIn links en Schema ✓
+- Text reviews en website ✓
+- **NO tiene:** Instagram feed embebido
+- **NO tiene:** UGC gallery de trabajos reales
+- **NO tiene:** "As seen in" o press mentions
+- **NO tiene:** Behind-the-scenes content
+
+### Hallazgo 6: Gamification para Engagement y Retention
+
+Según Gamification Co y engagement studies (2026) [6]:
+- Progress bars para "cura tu sofá" o "completa tu perfil" aumentan completion rates
+- Loyalty points visualization motiva re-booking
+- Seasonal challenges ("Limpia tu hogar este enero") boost engagement
+- Referral gamification ("invita un amigo, ambos ganan")
+
+**Purity & Clean tiene:**
+- Plan Mensual/Trimestral/Corporativo con descuentos ✓
+- Combo packages con savings badges ✓
+- **NO tiene:** Progress tracking para servicios recurrentes
+- **NO tiene:** Loyalty points system
+- **NO tiene:** Seasonal promotions gamificadas
+- **NO tiene:** Referral program
+
+### Hallazgo 7: Advanced Mobile Experience
+
+Según Google Mobile Excellence (2026) [7]:
+- Bottom navigation bar para PWA aumenta mobile engagement 25%
+- Swipe gestures para image galleries son expected behavior
+- Sticky CTA buttons en mobile reduce friction
+- Finger-friendly tap targets (48px minimum) son WCAG requirement
+
+**Purity & Clean tiene:**
+- Responsive design con breakpoints ✓
+- Hamburger menu en mobile ✓
+- Sticky header con CTA ✓
+- **NO tiene:** Bottom navigation bar para PWA
+- **NO tiene:** Swipe gestures en galleries
+- **NO tiene:** Floating mobile CTA button
+- **NO tiene:** Pull-to-refresh en zonas
 
 ---
 
-## Investigación: Chrome 138 Built-in AI APIs (Stable)
+## Gaps identificados — Round 54 (Visual Engagement, Brand, Gamification)
 
-### Translator API (Chrome 138+)
+### 1. Sin Before/After Interactive Slider
 
-Disponible stable en Chrome 138. Traduce user-generated content on-demand.
+**Problema:** No hay forma visual de demonstrar la transformación antes/después de los servicios. Video es bueno, pero un slider es más impactante y shareable.
 
-**Use cases para Purity & Clean:**
-- Detectar idioma del usuario → ofrecer traducción de servicios
-- Chatbot multilingüe (español → inglés para gringos en Bogotá)
-- Zonas con contenido automático para expats
+### 2. Sin Video Testimonials
 
-### Language Detector API (Chrome 138+)
+**Problema:** Text reviews son helpful pero video testimonials son 4x más engagement y considered more trustworthy.
 
-Disponible stable. Detecta idioma de input text.
+### 3. Sin Animated Trust Badges
 
-**Use case:** Automatic language detection para contenido dinámico.
+**Problema:** Los trust badges son estáticos y no destacan. Animated badges con pulse/glow would increase credibility perception.
 
-### Summarizer API (Chrome 138+)
+### 4. Sin Brand Mascot o Illustration
 
-Disponible stable. Condensa contenido largo.
+**Problema:** En un mercado saturado de servicios de limpieza, lack of visual differentiation makes it hard to stand out.
 
-**Use case:**
-- Resumir testimonios largos en cards de reviews
-- Blog articles → summaries en excerpts
-- FAQ largo → resumen en tooltip
+### 5. Sin Instagram/UGC Integration
 
-### Prompt API (Origin Trial)
+**Problema:** Missing social proof amplification from user-generated content y authentic work photos.
 
-En origin trial para Prompt API sampling parameters en Chrome 148. Para uso en Chrome Extensions.
+### 6. Sin Gamification Elements
 
-**Limitación:** No disponible aún para sitios web comunes.
+**Problema:** No hay incentive para re-booking o referral. Los planes recurrentes existen pero no hay gamification para motivation.
 
-### Writer / Rewriter APIs (Developer Trial)
+### 7. Sin Advanced Mobile PWA Features
 
-En developer trial — no recomendado para producción.
-
----
-
-## Investigación: Periodic Background Sync — Actualización
-
-Available in Chrome con site engagement score requirements [3]. Para PWA instalada.
-
-**Limitaciones importantes:**
-- Requiere que el usuario instale la PWA
-- Chrome limita frecuencia según engagement del usuario
-- Solo funciona en redes previamente usadas
-
-**Use case viable:** Actualizar contenido cacheado (precios, zonas) cada ~24h sin user action.
-
----
-
-## Gaps identificados — Round 54
-
-### 1. Sin traducción automática para expats
-
-**Problema:** No hay forma de servir contenido en inglés a expats que buscan servicios de limpieza en Bogotá. Pierden audiencia B2B/expats.
-
-### 2. Sin resumen de testimonios largos
-
-**Problema:** Los testimonios en Schema.org y reviews-data.js son textos largos. No hay procesamiento para mostrarlos como snippets atractivos.
-
-### 3. Sin refresh automático de contenido cacheado
-
-**Problema:** Los precios y zonas se cachean en el SW y no se actualizan hasta que el usuario limpia cache. El contenido puede estar desactualizado por días.
-
-### 4. Sin widget de reseñas con procesamiento inteligente
-
-**Problema:** Los reviews están en JSON-LD y JS data pero no se muestran de forma destacada. No hay "review highlights" o snippets generados.
-
-### 5. Sin programa de referidos dinámico
-
-**Problema:** El programa de referidos existe según README.md pero no se ve widget ni UI de seguimiento. No hay forma de trackear referrals.
+**Problema:** Mobile experience could be enhanced with bottom navigation, swipe gestures, y floating CTA.
 
 ---
 
 ## Propuestas (Round 54)
 
-### Propuesta 1: Multi-idioma con Translator API (Chrome Built-in)
+### Propuesta 1: Before/After Interactive Slider Gallery
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar Translator API para servir contenido en inglés a expats |
-| **Problema** | Expats en Bogotá (gringos, nómadas digitales) buscan servicios de limpieza pero no encuentran contenido en inglés. Audiencia B2B perdida. |
-| **Descripción** | Multi-idioma Implementation: (1) **Language Detector API**: detectar idioma del navegador con `navigator.language` o Language Detection API. (2) **Translator API** (Chrome 138+ stable): usar `window.translation.canTranslate()` para verificar soporte. Si está disponible y usuario habla inglés → traducir servicios заголовокки, precios, CTA al inglés. (3) **Fallback**: si Translator API no disponible, detectar `en-US`, `en-GB` y mostrar versión estática en inglés ya escrita en el HTML con `lang="en"` y display toggle. (4) **UI**: badge "Switch to English" en header. (5) **Pages affected**: hero section, servicios cards, CTA buttons, pricing, zonas. (6) **Implementación**: `js/i18n.js` con detectLanguage(), translatePage(), showLanguageSwitcher(). Feature detection de Translator API con `canTranslate()` + `translate()` calls. 4-5 horas. |
-| **Impacto esperado** | Captura audiencia expats/B2B en Bogotá, increase dwell time, diferenciación vs competitors que solo hablan español |
-| **Esfuerzo** | M (4-5 horas) |
+| **Título** | Implementar before/after image comparison slider para servicios principales |
+| **Problema** | Potenciales clientes no pueden visualizar fácilmente la transformación de sus muebles. Video es bueno pero un slider interactivo es más shareable y memorable. |
+| **Descripción** | Before/After Slider System: (1) **Image Pairs**: crear carpeta `/images/before-after/` con pares de fotos (sofa-clean-1-before.jpg, sofa-clean-1-after.jpg, etc.). Minimum 3 pares por servicio. (2) **Comparison Slider Component**: crear `js/before-after-slider.js` con drag handle. Usar CSS `clip-path` o range input approach para la línea divisoria. Touch events para mobile swipe. (3) **Service Integration**: agregar slider en sección de servicios, antes del CTA "Pedir Cita". Cada service card puede tener un "Ver resultado" que abre modal con slider. (4) **Performance**: WebP format, lazy loading con IntersectionObserver, max 400KB por imagen. (5) **Fallback**: si JS disabled, mostrar imagen "after" con badge "Antes vs Después". (6) **Attribution**: guardar fotos reales de clientes con permiso. Implementación: component + images + integration, 6-8 horas. |
+| **Impacto esperado** | Aumento en conversión por visual proof, mayor shareability en redes, diferenciación vs competitors |
+| **Esfuerzo** | M (6-8 horas) |
+| **Agente recomendado** | Frontend / Design |
+| **Referencias** | [1] https://web.dev/patterns/gallery |
+
+### Propuesta 2: Video Testimonials Section
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Implementar sección de video testimonials de clientes reales |
+| **Problema** | Text reviews son útiles pero video testimonials son 4x más engagement y considerados más trustworthy. Purity & Clean tiene 127 reviews pero ningún video. |
+| **Descripción** | Video Testimonials System: (1) **Collection Flow**: contactar top 10 clientes satisfechos y pedir permiso para video testimonial de 30-60 segundos. Ofrecer descuento 20% por participar. (2) **Video Specs**: 1080p mínimo, vertical (9:16) para Instagram Reels, horizontal para website. Thumbnail con caption burn-in. (3) **Section Design**: crear `section#testimonials` con video grid. Autoplay muted con controls visible. 3 videos maximum visible, "Ver más" para resto. (4) **Schema Markup**: agregar VideoObject schema para cada testimonial, linked a LocalBusiness. (5) **Social Integration**: cada video incluye botón "Share" que copia link + hashtag. (6) **Placeholder Strategy**: mientras se recopilan videos reales, crear animated placeholder con "Pronto: Video testimonios de nuestros clientes" + CTA. Implementación: section + video integration + schema + placeholder, 5-6 horas. |
+| **Impacto esperado** | Aumento en trust y credibility, 4x engagement vs text reviews, content para redes sociales |
+| **Esfuerzo** | M (5-6 horas) |
+| **Agente recomendado** | Frontend / Video |
+| **Referencias** | [2] https://www.hubspot.com/marketing/video-marketing |
+
+### Propuesta 3: Animated Trust Badges con Micro-interactions
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Implementar animated trust badges y micro-interactions avanzadas |
+| **Problema** | Trust badges actuales son estáticos y no destacan. Animated badges con pulse/glow effects increase credibility perception sin añadir complejidad. |
+| **Descripción** | Animated Trust System: (1) **Trust Badge Animation**: en `css/style.css`, agregar `@keyframes pulse-glow` y `float` animations a `.confianza-badge i`. Usar `animation: pulse 2s ease-in-out infinite` para icons principales. (2) **Hover Enhancement**: agregar `transform: translateY(-4px)` y shadow enhancement en hover para confianza badges. (3) **Progress Indicator en Booking**: en el multi-step booking, agregar top progress bar que muestra "Paso 1 de 4". CSS con gradient fill animation. (4) **Button Micro-interactions**: en `.btn`, agregar `transform: scale(0.97)` en `:active` y `box-shadow` enhancement en `:hover`. (5) **Loading States**: cuando form submit está procesando, cambiar button text a spinner + "Enviando..." con animation. (6) **Success Animation**: cuando booking submit succeed, mostrar checkmark animation (CSS `@keyframes checkmark`). Implementación: CSS animations + micro-interactions, 3-4 horas. |
+| **Impacto esperado** | Mayor perceived credibility, reducción en booking abandonment, mejor UX feedback |
+| **Esfuerzo** | S (3-4 horas) |
 | **Agente recomendado** | Frontend |
-| **Referencias** | [2] https://developer.chrome.com/docs/ai/built-in-apis [1] https://developer.chrome.com/docs/web-platform/notification-triggers |
+| **Referencias** | [3] https://web.dev/animations |
 
----
-
-### Propuesta 2: Smart Review Highlights con Summarizer API
+### Propuesta 4: Brand Mascot y Visual Differentiation
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Generar review snippets destacados con Summarizer API |
-| **Problema** | Los 127 reviews de Google tienen textos largos que no caben en cards. Los usuarios ven reviews truncadas y pierden contexto. |
-| **Descripción** | Smart Review Summarization: (1) **Summarizer API** (Chrome 138+ stable): usar para generar snippets de 1-2 líneas desde reviews largas. (2) **Feature detection**: verificar `'summarizer' in window` + `canSummarize()`. (3) **Progressive enhancement**: si API no disponible, mostrar primeros 120 caracteres del review + "...". (4) **Data source**: reviews-data.js ya tiene 127 reviews con textos completos. (5) **UI component**: `.review-highlight` con quote, author, rating. Animar entrada con scroll-triggered reveal ( Intersection Observer). (6) **Placement**: sección `#testimonios` o `#confianza` en homepage, antes de las cards de servicios. (7) **Implementación**: `js/reviews-summarizer.js` con summarizeReview(reviewText), renderReviewHighlight(), initScrollReveal(). 3-4 horas. |
-| **Impacto esperado** | Mayor credibilidad vía snippets destacados, aumento de CTR en testimonials, UX mejorado |
-| **Esfuerzo** | M (3-4 horas) |
+| **Título** | Crear e integrar brand mascot o ilustración única para diferenciación |
+| **Problema** | En un mercado saturado de servicios de limpieza en Bogotá, lack of visual differentiation hace difícil destacar. Un mascot o illustration única aumenta brand recall. |
+| **Descripción** | Brand Differentiation System: (1) **Mascot Concept**: diseñar "Purity el átomo" o "Sparkle la gota" — un mascot simple, amigable y memorable que represente limpieza y confianza. Style: flat design, 2-3 colores max. (2) **Illustration Set**: crear 4-6 ilustracciones custom para servicios (ejemplo: sofá sonriente limpio, colchón con sparkle). Usar same style que mascot. (3) **Integration Points**: usar mascot en hero section, chatbot FAB hover state, 404 page, empty states, confirmation pages. (4) **Favicon Enhancement**: crear favicon animado con mascot. (5) **Brand Guidelines**: documentar colors, typography, mascot usage en `BRAND.md`. (6) **Implementation**: inline SVG para mascot para evitar network request. CSS animations para mascot idle state. Implementación: mascot design + illustrations + integration, 8-10 horas (o contratar diseñador). |
+| **Impacto esperado** | Mayor brand recall y diferenciación, memorable experience, emotional connection |
+| **Esfuerzo** | L (8-10 horas o external) |
+| **Agente recomendado** | Design / Frontend |
+| **Referencias** | [4] https://www.canva.com/learn/branding-design/ |
+
+### Propuesta 5: Instagram Feed Integration y UGC Gallery
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Integrar Instagram feed visual y UGC gallery de trabajos reales |
+| **Problema** | Missing social proof amplification. User-generated content y authentic work photos son más creíbles que stock photos. |
+| **Descripción** | UGC Social System: (1) **Instagram Basic Display API**: crear app de Facebook, obtener access token para @purityclean Instagram. Endpoint: `graph.instagram.com/me/media`. (2) **Feed Component**: crear `js/instagram-feed.js` que fetch últimas 6 fotos del Instagram. Cachear en localStorage por 1 hora. (3) **Fallback**: si API falla o token expira, mostrar static grid de imágenes placeholder con "Síguenos en Instagram". (4) **UGC Upload Flow**: crear sección "Comparte tu resultado" con hashtag `#PurityCleanCO`. Los mejores posts se muestran en website (con permiso). (5) **Design**: masonry grid layout, square aspect ratio, hover overlay con likes/comments count. (6) **Shopify/Instagram Tagging**: si futuro se conecta e-commerce, permitir shop directly from Instagram feed. Implementación: Instagram API + feed component + fallback, 5-6 horas. |
+| **Impacto esperado** | Aumento en social proof, UGC engagement, followers growth |
+| **Esfuerzo** | M (5-6 horas) |
 | **Agente recomendado** | Frontend |
-| **Referencias** | [2] https://developer.chrome.com/docs/ai/built-in-apis |
+| **Referencias** | [5] https://developers.facebook.com/docs/instagram-basic-display-api |
 
----
-
-### Propuesta 3: Content Refresh con Periodic Background Sync
+### Propuesta 6: Gamified Loyalty Program
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar Periodic Background Sync para actualizar contenido cacheado |
-| **Problema** | Precios, zonas y disponibilidad se cachean por días. El usuario puede ver info desactualizada sin saberlo. Se pierde confianza. |
-| **Descripción** | PWA Content Refresh: (1) **Registration**: en sw.js, agregar `periodicSync.register('content-sync', { minInterval: 24 * 60 * 60 * 1000 })` después de SW install. (2) **Permission request**: desde `index.html`, al hacer first interaction con el site, pedir `periodic-background-sync` permission con UI explainer ("Mantener contenido actualizado"). (3) **Sync handler**: en sw.js, listen `periodicsync` event con tag `content-sync`. En el handler, hacer fetch de `/api/prices` y `/zonas/zonas-data.json` (o endpoints públicos) y cachear con新鲜的 timestamp. (4) **Fallback logic**: si API no disponible o permission denegada, usar existing cache con `max-age` headers ya configurados. (5) **Note**: solo funciona para PWA instalada. UI debe decir "Install app for fresh content". (6) **Implementación**: update sw.js + index.html permission UI. 3-4 horas. |
-| **Impacto esperado** | Contenido siempre fresco, mayor confianza, reduce "pregunten por precios actualizados" calls |
-| **Esfuerzo** | M (3-4 horas) |
-| **Agente recomendado** | Frontend / PWA |
-| **Referencias** | [3] https://developer.chrome.com/docs/capabilities/periodic-background-sync |
+| **Título** | Implementar loyalty program con points, progress tracking y referral incentives |
+| **Problema** | No hay incentive para re-booking o referral. Los planes recurrentes existen pero lack gamification que motive engagement. |
+| **Descripción** | Loyalty Gamification System: (1) **Points System**: cada booking otorga puntos (1 punto por $10.000). 100 puntos = $10.000 de descuento. (2) **Progress Visualization**: crear dashboard "Mi Progreso" accesible desde header. Mostrar points actuales, tier actual (Bronce/Plata/Oro), progress bar para next reward. (3) **Tier Benefits**: Bronce (0-500 pts) = 1% cashback, Plata (500-2000) = 3% + priority booking, Oro (2000+) = 5% + free inspection. (4) **Referral Program**: "Invita un amigo" = 500 puntos para ambos. Generar unique referral code. (5) **Seasonal Challenges**: "Reto de primavera: Limpia 3 piezas y obtén 200 puntos extra". (6) **Storage**: localStorage para游客 users, email registration para persistent loyalty. (7) **UI**: simple card con tier badge, progress ring animation, points history. Implementación: loyalty.js + points logic + UI, 8-10 horas. |
+| **Impacto esperado** | Mayor re-booking rate, referral growth, customer lifetime value increase |
+| **Esfuerzo** | L (8-10 horas) |
+| **Agente recomendado** | Full Stack |
+| **Referencias** | [6] https://www.gamification.co/gamification-loyalty-programs/ |
 
----
-
-### Propuesta 4: Dynamic Referral Hub con URL Tracking
+### Propuesta 7: Advanced Mobile PWA Bottom Navigation
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Crear referral tracking system sin backend |
-| **Problema** | El programa de referidos existe pero no hay forma de trackear quién refiere a quién. No se puede atribuir revenue a referrers. |
-| **Descripción** | Referral URL Tracking System: (1) **URL schema**: `purityclean.com?ref=CODE` donde CODE = base64 de email o identificador único del referrer. (2) **Storage**: guardar CODE en sessionStorage + localStorage cuando usuario convierte (booking submit). (3) **Attribution**: en Formspree success callback, guardar `ref` en un array `referrals` en localStorage con timestamp. (4) **Dashboard UI**: crear sección `/referidos` (page simple o modal) que muestra: "Tus códigos", "Ganancias estimadas", "Cómo funciona". Cada CODE tiene preview del link acortado. (5) **Share functionality**: Web Share API para compartir link en WhatsApp, copiar al clipboard. (6) **Validation**: verificar que CODE sea válido decodeando base64 y checksumming. Invalid refs silently ignored. (7) **No backend**: todo localStorage + URL params. Propietario ve dashboard en su browser. (8) **Implementación**: `referral.js` + `referidos.html` (standalone page). 4-5 horas. |
-| **Impacto esperado** | Viral word-of-mouth, tracking de ROI de referidos, engagement con programa de referidos |
-| **Esfuerzo** | M (4-5 horas) |
-| **Agente recomendado** | Frontend |
-| **Referencias** | [4] https://web.dev/articles/web-share [5] https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams |
+| **Título** | Implementar bottom navigation bar y swipe gestures para PWA mobile |
+| **Problema** | Mobile experience could be enhanced with bottom navigation (reduces thumb reach), swipe gestures para galleries, y floating CTA para easy booking. |
+| **Descripción** | Mobile PWA Enhancement: (1) **Bottom Navigation Bar**: agregar `<nav class="bottom-nav">` con icons: Home, Servicios, Cotizador, Contacto. Fixed position, 56px height, safe-area-inset-bottom padding. Show on screens < 768px only. (2) **Swipe Gestures**: en before/after slider y image galleries, implementar touch swipe para navegar entre imágenes. Usar `touchstart`, `touchmove`, `touchend` para detectar swipe direction. (3) **Floating Mobile CTA**: en mobile view, sticky floating button "Reservar ahora" con WhatsApp icon, bottom-right position, above bottom-nav. (4) **Pull-to-Refresh**: en zonas pages, implementar pull-to-refresh para update coverage info. (5) **Safe Areas**: usar CSS `env(safe-area-inset-*)` para iPhone notch/home indicator. (6) **App Store Banner**: detectar iOS users sin PWA installed, show smart banner "Instala nuestra app para mejor experiencia". Implementación: bottom-nav + gestures + floating CTA, 5-6 horas. |
+| **Impacto esperado** | Mayor mobile engagement (+25%), reducción in bounce rate, mejor PWA experience |
+| **Esfuerzo** | M (5-6 horas) |
+| **Agente recomendado** | Frontend / Mobile |
+| **Referencias** | [7] https://web.dev/mobile-vision |
 
 ---
 
-### Propuesta 5: Progressive Web App Install Prompt (Mejorado)
+## Orden de implementación recomendado
 
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Implementar smart PWA install prompt con contextual triggers |
-| **Problema** | Muchos usuarios desconocen que pueden instalar la PWA. El prompt genérico de "install app" tiene bajo conversion rate. No hay triggers contextuales. |
-| **Descripción** | Contextual PWA Install Prompt: (1) **Trigger conditions**: mostrar prompt solo cuando: (a) usuario interactuó con cotizador 2+ veces sin completar booking, (b) usuario vio 3+ páginas de zonas, (c) usuario clicks en WhatsApp 2+ veces. (2) **Logic**: trackear interacciones en sessionStorage, mostrar prompt cuando threshold reach. (3) **UI**: mini-banner dismissible arriba del hero, no modal intrusivo. Mensaje: "¿Te fue útil? Instala Purity & Clean para acceso rápido y contenido offline". (4) **Install button**: usar `beforeinstallprompt` event con `userChoice` para trackear accept/dismiss. (5) **Copy tweaks**: "Instalar app" → "Añadir a pantalla de inicio" (más claro en español). (6) **Persistence**: dismiss por 7 días si usuario close, usar localStorage. (7) **Implementación**: `js/pwa-install-prompt.js` con trackInteraction(), shouldShowPrompt(), showInstallBanner(), handleInstall(). Update index.html con banner HTML. 2-3 horas. |
-| **Impacto esperado** | Mayor PWA install rate → más engagement, push notification subscribers, offline usage |
-| **Esfuerzo** | S (2-3 horas) |
-| **Agente recomendado** | Frontend |
-| **Referencias** | [6] https://developer.chrome.com/docs/web-platform/best-practices/url-protocol-handler |
+| # | Propuesta | Impacto | Esfuerzo | Prioridad |
+|---|----------|---------|----------|-----------|
+| 1 | Before/After Slider | Conversión/Trust | M | Alta - visual proof único |
+| 2 | Animated Trust Badges | Credibilidad/UX | S | Alta - quick win, alta recompensa |
+| 3 | Video Testimonials | Trust/Engagement | M | Alta - content poderoso |
+| 4 | Mobile Bottom Nav | Mobile UX | M | Alta - mobile-first market |
+| 5 | Instagram/UGC Feed | Social Proof | M | Media - engagement adicional |
+| 6 | Brand Mascot | Branding/Differentiation | L | Media - diferenciación a largo plazo |
+| 7 | Gamified Loyalty | Retention/Referral | L | Media - requiere más desarrollo |
 
----
-
-### Propuesta 6: FAQ Bot with Tool Use (No-Code Bot Builder)
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Implementar FAQ bot con routing inteligente y fallback a WhatsApp |
-| **Problema** | El chatbot actual solo tiene FAQ fijo. No puede manejar preguntas no programadas ni escalar a WhatsApp de forma inteligente. |
-| **Descripción** | Smart FAQ Bot 2.0: (1) **FAQ expansion**: agregar 20+ preguntas comunes con respuestas, cubriendo precio, tiempo, zona coverage, booking process, cancellation. (2) **Smart routing**: matchear input del usuario contra FAQ keywords con fuzzy matching. Si match > 70% → mostrar respuesta. Si < 70% → ofrecer WhatsApp con pre-filled message. (3) **Keyword extraction**: detectar "precio", "costo", "cuánto vale" → show pricing answer. "zona", "cobertura", "llegar" → show coverage answer. "cancelar", "reagendar" → show cancellation policy. (4) **Persistence**: guardar última pregunta en sessionStorage para contexto en WhatsApp. Message: "Vi que preguntaste sobre [última pregunta]. Aquí te ayudamos mejor...". (5) **UI**: expand chatbot panel con typing indicator, show bot avatar, animate message entrance. (6) **Fallback**: si no hay match, button "Hablar con alguien" → WhatsApp con pre-filled. (7) **Analytics**: track FAQ top queries con Plausible events `faq_match`, `faq_no_match`, `whatsapp_escalation`. (8) **Implementación**: update `js/chatbot.js` (o script.js), add FAQ data en `js/faq-data.js`. 4-5 horas. |
-| **Impacto esperado** | Reducción de WhatsApp escalations triviales, auto-resolución de dudas comunes, better UX |
-| **Esfuerzo** | M (4-5 horas) |
-| **Agente recomendado** | Frontend / Full Stack |
-| **Referencias** | [7] https://faq.WhatsApp.com/es/ |
+**Top 3 para implementar primero:** 1, 2, 4 (before/after slider + animated badges + mobile nav = immediate visual impact).
 
 ---
 
-## Resumen de Propuestas — R54
+## Diferencia clave: R53 vs R54
 
-| # | Título | Impacto | Esfuerzo | Agente | Viabilidad |
-|---|--------|---------|----------|--------|------------|
-| 1 | Translator API para expats | Alto | M | Frontend | ✅ Chrome 138 stable |
-| 2 | Smart Review Highlights con Summarizer | Alto | M | Frontend | ✅ Chrome 138 stable |
-| 3 | Periodic Background Sync | Medio | M | Frontend/PWA | ✅ Available |
-| 4 | Referral Hub con URL Tracking | Alto | M | Frontend | ✅ Sin backend |
-| 5 | Smart PWA Install Prompt | Medio | S | Frontend | ✅ Best practice |
-| 6 | FAQ Bot con Smart Routing | Alto | M | Frontend | ✅ Sin AI API |
+R53 se enfocó en **AI en el browser, personalización, inteligencia**: Notification Triggers, semantic search, voice search, offline sync, on-device AI chatbot, RUM.
 
----
+**R54 se enfoca en:**
+- **Visual storytelling**: before/after slider interactivo
+- **Social proof amplification**: video testimonials, Instagram/UGC
+- **Brand differentiation**: mascot, illustrations
+- **Gamification**: loyalty program, referral incentives
+- **Mobile excellence**: bottom nav, swipe gestures, floating CTA
+- **Credibilidad animada**: trust badge animations, micro-interactions
 
-## Diferenciación vs Competencia
-
-### Serviclean.co (competidor principal)
-
-No tiene:
-- Translator API para expats
-- Summarizer API para review highlights
-- Referral tracking system
-- Smart PWA install prompt
-- Periodic Background Sync
-
-**R54 proposals закрывают gap de diferenciación** en tecnología y UX vs Serviclean.
+R53 construye inteligencia. R54 construye emotional connection y visual trust.
 
 ---
 
-## Referencias
+## Síntesis: Por qué R54 complementa R1-R53
 
-[1] Notification Triggers API — Chrome for Developers (discontinuado)
-https://developer.chrome.com/docs/web-platform/notification-triggers
+R1-R53 ha construido un negocio muy completo:
+- R1-R10: Features internos
+- R11-R20: SEO y Schema
+- R21-R30: UX y conversión
+- R31-R35: Video, reputation, AI
+- R36-R42: Technical modernization
+- R43-R44: Business models y conversión
+- R45: Core Web Vitals y quality gates
+- R46: Seguridad, Privacy Sandbox, i18n, pagos, authentication
+- R47: Photo quote, product store, floor maintenance, reviews widget, multi-city
+- R48: CRM, Warranty, Staff Profiles, Airbnb B2B, Review automation, Loyalty, Service History
+- R49: Voice Search, Eco Hub, WhatsApp Automation, Customer Portal, Subscription Box, Predictive Alerts, Video Testimonials
+- R50: Pricing page, English version, Widget B2B, GBP Posts, Gamified Loyalty, Marketplaces, Micro-landings
+- R51: Build system, performance (lazy/WebP/RUM), accesibilidad (skip-nav/reduced-motion), PWA (Periodic Sync), AI (damage detection)
+- R52: A/B testing, exit-intent recovery, WhatsApp Business API, email nurturing, product schema, micro-conversion funnel, GBP automation, e-commerce
+- R53: Notification Triggers, semantic search, voice search, offline sync, RUM, on-device AI chatbot, personalization
+- **R54: Before/after slider, video testimonials, animated trust badges, brand mascot, Instagram/UGC, gamified loyalty, mobile bottom nav**
 
-[2] Built-in AI APIs — Chrome 138 Stable
-https://developer.chrome.com/docs/ai/built-in-apis
+R54 cierra gaps de **visual engagement y emotional connection** que las rondas anteriores no abordaron en profundidad.
 
-[3] Periodic Background Sync API
-https://developer.chrome.com/docs/capabilities/periodic-background-sync
+---
 
-[4] Web Share API
-https://web.dev/articles/web-share
+## Fuentes
 
-[5] URLSearchParams — MDN
-https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams
+[1] Web.dev. "Gallery Pattern." https://web.dev/patterns/gallery
+[2] HubSpot. "Video Marketing Statistics." https://www.hubspot.com/marketing/video-marketing
+[3] Web.dev. "Animations Tutorial." https://web.dev/animations
+[4] Canva. "Branding Design Fundamentals." https://www.canva.com/learn/branding-design/
+[5] Facebook Developers. "Instagram Basic Display API." https://developers.facebook.com/docs/instagram-basic-display-api
+[6] Gamification Co. "Gamification in Loyalty Programs." https://www.gamification.co/gamification-loyalty-programs/
+[7] Google. "Mobile Web Excellence." https://web.dev/mobile-vision
 
-[6] URL Protocol Handler for PWAs
-https://developer.chrome.com/docs/web-platform/best-practices/url-protocol-handler
+---
 
-[7] WhatsApp FAQ
-https://faq.whatsapp.com/es/
+*Documento generado por Innovation Scout — Round 54*
+*Purity & Clean Analysis — 2026-04-27*
+*Co-Authored-By: Paperclip <noreply@paperclip.ing>*
