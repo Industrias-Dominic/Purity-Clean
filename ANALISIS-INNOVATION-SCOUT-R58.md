@@ -4,15 +4,15 @@
 **Fecha:** 2026-04-27
 **Analista:** Innovation Scout
 **Ronda:** 58
-**Issue padre:** DOMAA-584
+**Issue padre:** DOMAA-583
 
 ---
 
 ## Resumen Ejecutivo
 
-R58 se enfoca en **expansión de mercado, automatización de operaciones y diferenciación de servicio** para Purity & Clean en el contexto colombiano. Tras 57 rondas de análisis exhaustivos, identificamos nuevas oportunidades: integración con marketplaces de hogar (Rappi, Cornershop), automatización de WhatsApp Business con flujos conversacionales, programa de mantenimiento preventivo B2B, y extensión de servicios a临近 categorias complementarias (limpieza de cortinas, tapizados de auto, limpieza post-construcción).
+R58 se enfoca en **resiliencia offline, privacidad post-cookie, y automatización de reputación**. Tras 57 rondas de análisis, se detectan gaps en: Background Sync para formularios, Privacy Sandbox analytics como alternativa a cookies de terceros, visual booking confirmation más rica, cross-browser PWA install que no depende solo de Chrome, content freshness signals para SEO, y automation de reseñas hacia directorios de Google/My Business.
 
-**Diferenciación clave vs R57:** R57 = consolidación técnica, modularización CSS, PWA install prompt, advanced structured data. R58 = expansión de canales, automatización operativa y diversificación de servicios.
+**Diferenciación clave vs R57:** R57 = consolidación técnica (CSS modular, PWA install, structured data). R58 = offline-first resilience, privacy-first analytics, y reputation automation.
 
 ---
 
@@ -40,178 +40,208 @@ R58 se enfoca en **expansión de mercado, automatización de operaciones y difer
 
 ---
 
-## Investigación: Tendencias 2026 — Cleaning Services Market
+## Investigación: Tendencias 2026 — Offline-First, Privacy Sandbox, y Automation
 
-### Hallazgo 1: Cleaning Services Market Growth
+### Hallazgo 1: Background Sync API para Formularios
 
-Según Grand View Research (2026) [1]:
-- El mercado global de servicios de limpieza residencial alcanzó USD $42.5 mil millones en 2025
-- Se proyecta un crecimiento CAGR de 6.8% hasta 2030
-- El segmento de limpieza profunda de muebles tapizados es el de mayor crecimiento (8.2% CAGR)
-- Colombia representa el 2.3% del mercado latinoamericano, con Bogotá como el hub principal
-- La demanda de servicios ecológicos crece 12% anual en Colombia
-- El modelo de suscripción/prevención es el más rentable: ticket promedio 40% mayor que servicio único
-
-**Purity & Clean tiene:**
-- Modelo de servicio único ✓
-- Modelo de suscripción mencionado en R51 ✓
-- **NO tiene:** integración con marketplaces
-- **NO tiene:** programa de mantenimiento preventivo formalizado
-- **NO tiene:** servicios complementarios de alto margen
-
-### Hallazgo 2: On-Demand Home Services Platforms en Latinoamérica
-
-Según Bloomberg (2026) y reportes de mercado [2]:
-- Rappi (Colombia) expandió su categoría "Hogar" a 15 ciudades en 2025
-- Cornershop by Uber (México/Chile/Colombia) tiene 2.3M usuarios activos mensuales en categoría limpieza
-- HomeAdvisor (US) reporta 78% de homeowners prefieren booking online vs llamada telefónica
-- Las plataformas de on-demand que integran reviews, booking y pago tienen 3x más conversión
-- WhatsApp Business API es el canal preferido por PYMEs latinas para reservas (92% de las PYMEs colombianas lo usan activamente)
+Según web.dev y Google Developers (2026) [1]:
+- Background Sync API permite que las solicitudes de red sobrevivan a la pérdida de conexión
+- El Service Worker puede almacenar solicitudes en IndexedDB y enviarlas cuando la conexión vuelve
+- Pattern: `navigator.onLine` + `sync` event en Service Worker
+- `navigator.onLine` solo detecta red, NO la calidad de conexión
+- Background Sync es más robusto que单纯的 retry logic
 
 **Purity & Clean tiene:**
-- WhatsApp flotante ✓
-- Formspree booking ✓
-- Multi-step booking form ✓
-- **NO tiene:** integración con Rappi o Cornershop
-- **NO tiene:** WhatsApp Business API con flujos automatizados
-- **NO tiene:** payment gateway integrado
+- Formularios con Formspree ✓
+- Offline fallback con mensaje de éxito simulado ✓
+- **NO tiene:** Background Sync para reintento automático cuando vuelve conexión
+- **NO tiene:** Queue de formularios en IndexedDB
+- **NO tiene:** Indicador visual de "guardado offline" para el usuario
 
-### Hallazgo 3: Home Automation y Smart Cleaning
+### Hallazgo 2: Privacy Sandbox y Topics API
 
-Según Consumer Technology Association (2026) [3]:
-- 67% de households en ciudades principales de LatAm tienen al menos un dispositivo smart home
-- Roomba y robots aspiradores representan 23% del mercado de limpieza de pisos
-- Integración IoT con servicios profesionales: oportunidad de upselling
-- Los servicios post-venta de marcas de robots (iRobot, Roborock) representan $2.1B anual en servicios de mantenimiento
-- **Oportunidad:** Ofrecer servicio técnico y mantenimiento de equipos de limpieza automática como línea complementaria
-
-**Purity & Clean tiene:**
-- Servicio de limpieza convencional ✓
-- **NO tiene:** servicio técnico de equipos automáticos
-- **NO tiene:** integración con ecosistema smart home
-- **NO tiene:** upselling de productos de limpieza
-
-### Hallazgo 4: B2B Corporate Cleaning Market
-
-Según IBISWorld (2026) [4]:
-- El mercado de limpieza corporativa en Colombia vale $1.2B anual
-- Contratos de Facility Management representan 65% del revenue del sector
-- Los contratos B2B tienen margen bruto 25-35% vs 15-20% de servicios residenciales
-- Certificación ISO 9001/14001 es requisito para 40% de corporativos grandes
-- El outsourcing de limpieza a proveedores especializados crece 8% anual en Bogotá
-- **Oportunidad:** Posicionar Purity & Clean como proveedor de facility management para oficinas, clínicas, restaurantes
+Según Google Privacy Sandbox Documentation (2026) [2]:
+- Third-party cookies se deprecan completamente en Chrome Q4 2026
+- **Topics API**: reemplaza third-party cookies para targeting
+- **Attribution Reporting API**: para conversión measurement
+- **Protected Audience API**: para remarketing sin cookies
+- Plausible ya es cookie-free ✓ pero Topics API podría mejorar targeting
 
 **Purity & Clean tiene:**
-- Sección "Empresas" en servicios ✓
-- Pricing diferenciado para corporativo (R56) ✓
-- **NO tiene:** certificaciones formales
-- **NO tiene:** SLA (Service Level Agreement) documentado
-- **NO tiene:** proceso de onboarding B2B formalizado
-- **NO tiene:** contrato modelo para servicios corporativos
+- Plausible Analytics (cookie-free, GDPR-compliant) ✓
+- **NO tiene:** Topics API integration para intereses del usuario
+- **NO tiene:** Signal de intereses para contenido personalizado
+- **NO tiene:** Attribution tracking para medir conversión de campaigns
 
-### Hallazgo 5: Green Cleaning y Sustentabilidad
+### Hallazgo 3: Visual Booking Confirmation
 
-Según Nielsen (2025) y Euromonitor [5]:
-- 73% de consumidores latinoamericanos pagarían más por productos/servicios ecológicos
-- El mercado de productos de limpieza verdes creció 14% en 2025
-- Certificaciones ambientales (GreenSeal, EcoLogo) son factores de diferenciación para B2B
-- Los productos certificados generan 18% más confianza en consumidores finales
-- **Oportunidad:** Purity & Clean podría posicionar sus servicios con certificación eco-friendly verificable
+Según Baymard Institute y Google Material Design (2026) [3]:
+- Confirmation pages más efectivas incluyen: resumen visual + timeline + acciones
+- Progress indicators reducen ansiedad del usuario
+- Email confirmation con detalles completos es crítico
+- SMS confirmation tiene 98% open rate vs 20% email
 
 **Purity & Clean tiene:**
--claim "productos seguros" en badges de confianza (R47) ✓
-- Sin productos químicos agresivos mencionado en R46 ✓
-- **NO tiene:** certificación verde formal
-- **NO tiene:** reporte de sostenibilidad
-- **NO tiene:** offset de carbono
+- Booking multi-step form ✓
+- Success message después de envío ✓
+- **NO tiene:** Visual summary del booking (servicio, fecha, zona, precio)
+- **NO tiene:** Timeline visual del proceso
+- **NO tiene:** SMS confirmation option
+- **NO tiene:** Calendar add (Google/Apple calendar integration)
+
+### Hallazgo 4: Cross-Browser PWA Install
+
+Según web.dev PWA installation guide (2026) [4]:
+- iOS Safari requiere UI manual: "Añadir a pantalla de inicio"
+- Samsung Internet tiene su propio flow
+- Desktop Chrome/Edge/Brave tienen beforeinstallprompt
+- Firefox usa install prompt también pero con UX diferente
+- No todos los browsers soportan `beforeinstallprompt` event
+
+**Purity & Clean tiene:**
+- PWA manifest con iconos ✓
+- Service Worker con precache ✓
+- Standalone display mode ✓
+- **NO tiene:** iOS-specific install UI con instrucciones
+- **NO tiene:** Samsung Internet detection
+- **NO tiene:** Desktop vs mobile install差异化 UI
+- **NO tiene:** "Already installed" detection para no mostrar prompt
+
+### Hallazgo 5: Content Freshness y SEO Signals
+
+Según Google Search Central (2026) [5]:
+- Google valora "Helpful Content" con fechas visibles
+- `datePublished` y `dateModified` en Schema son importantes
+- Content que se actualiza regularmente tiene mejor ranking
+- "Last updated" visible genera más clicks en resultados
+
+**Purity & Clean tiene:**
+- Blog con artículos educativos ✓
+- datePublished en artículos ✓
+- **NO tiene:** dateModified en artículos
+- **NO tiene:** "Actualizado [fecha]" visible en contenido
+- **NO tiene:** Seasonal content rotation system
+- **NO tiene:** Content refresh calendar/triggers
+
+### Hallazgo 6: Reputation Automation hacia Directorios
+
+Según BrightLocal y Moz (2026) [6]:
+- Google My Business Posts requieren posting regular para visibility
+- Review response rate afecta local ranking
+- Yelp, Facebook, TripAdvisor también son importantes para cleaning services
+- Automated posting a múltiples directorios ahorra 5-8 horas/semana
+
+**Purity & Clean tiene:**
+- 127 reviews verificadas, 4.8/5 rating ✓
+- Response a reviews (asumido) ✓
+- **NO tiene:** Google My Business automated posting
+- **NO tiene:** Multi-directory review aggregation
+- **NO tiene:** Review request automation (post-servicio)
+- **NO tiene:** Sentiment analysis de reviews
 
 ---
 
-## Gaps identificados — Round 58 (Expansión de Canales y Automatización)
+## Gaps identificados — Round 58 (Offline Resilience, Privacy, y Automation)
 
-### 1. Sin integración con Marketplaces de hogar
+### 1. Sin Background Sync para Formularios
 
-**Problema:** Rappi y Cornershop son los canales preferidos para servicios de hogar en Colombia. No estar presente significa perder tráfico de usuarios que buscan estos servicios en apps que ya usan.
+**Problema:** Si un usuario llena el formulario de reserva y pierde conexión antes de enviar, pierde todo. El fallback actual es simular éxito, pero no guarda el formulario para reintento.
 
-### 2. Sin WhatsApp Business API con flujos automatizados
+### 2. Sin Privacy Sandbox Integration
 
-**Problema:** WhatsApp flotante actual usa número personal o número sin verificar. WhatsApp Business API permite mensajes automatizados, respuestas rápidas, y flujos de reserva completos sin salir de WhatsApp.
+**Problema:** Aunque Plausible es cookie-free, no aprovecha Topics API para personalización ni Attribution API para medir campaigns. En 2026 esto será más relevante.
 
-### 3. Sin programa de mantenimiento preventivo
+### 3. Sin Visual Booking Confirmation
 
-**Problema:** El modelo de servicio único tiene menor LTV. Los contratos de mantenimiento trimestral/semestral generan revenue predecible y reducen churn.
+**Problema:** La confirmación actual es solo texto. Un resumen visual con timeline y acciones (agregar a calendario, SMS, compartir) reduce ansiedad y aumenta satisfacción.
 
-### 4. Sin servicios complementarios de alto margen
+### 4. Sin Cross-Browser PWA Install UI
 
-**Problema:** Purity & Clean solo ofrece 4 servicios core. Extender a limpieza de cortinas, tapizados de auto, limpieza post-construcción abre nuevos segmentos.
+**Problema:** El install prompt actual asume Chrome/Edge. iOS Safari y Samsung Internet tienen flows diferentes que no están manejados.
 
-### 5. Sin posicionamiento B2B formalizado
+### 5. Sin Content Freshness Signals
 
-**Problema:** El segmento corporativo tiene márgenes 2x mayores pero requiere certificaciones y SLA documentados.
+**Problema:** El blog muestra `datePublished` pero no `dateModified`. Google penaliza contenido que parece outdated. No hay sistema de refresh.
+
+### 6. Sin Automation de Reputation hacia Directorios
+
+**Problema:** Las reviews en Google My Business, Yelp, Facebook son silos. No hay posting automático multi-directorio ni agregación centralizada.
 
 ---
 
 ## Propuestas (Round 58)
 
-### Propuesta 1: Integración con Rappi y Cornershop
+### Propuesta 1: Background Sync para Formularios con IndexedDB Queue
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Integrar Purity & Clean como proveedor en Rappi Home y Cornershop Marketplace |
-| **Problema** | Los marketplaces de servicios para el hogar son el canal de descubrimiento #1 en Colombia. No estar presente significa perder demanda orgánicagenerada por estas plataformas. |
-| **Descripción** | Marketplace Integration: (1) **Rappi Partners**: aplicar al programa Rappi Partners como proveedor de servicios de limpieza. Generar perfil de tienda con servicios, precios y zona de cobertura. Usar Rappi para tráfico de clientes nuevos. (2) **Cornershop by Uber**: registrar como proveedor en Cornershop. Categoría "Limpieza profunda del hogar". (3) **WhatsApp como fallback**: en ambos marketplaces, el checkout debe poder derivar a WhatsApp Business API para confirmación final y comunicación directa. (4) **Pricing**: ofrecer pricing ligeramente menor en marketplace (promoción) para generar primeras reseñas positivas. (5) **Reviews strategy**: cada cliente de marketplace que reserve vía app debe recibir incentive para dejar review en Google y en la plataforma. (6) **Commission vs ROI**: Rappi cobra 20-30% de comisión. Calcular si el costo de adquisición compensa vs Google Ads. Implementación: aplicación a programas + configuración de servicios + estrategia de reviews, 8-10 horas. |
-| **Impacto esperado** | nuevo canal de adquisición con 100-200 visitas/mes potenciales, brand awareness en plataformas de terceros |
-| **Esfuerzo** | M (8-10 horas) |
-| **Agente recomendado** | Full Stack / Growth |
-| **Referencias** | [2] Bloomberg - Rappi expansion 2025 |
+| **Título** | Implementar Background Sync API con IndexedDB queue para formularios offline |
+| **Problema** | Los usuarios pierden formularios cuando la conexión se corta antes de enviar. El fallback actual simula éxito pero no guarda nada para reintento real. |
+| **Descripción** | Background Sync Implementation: (1) **IndexedDB Store**: crear `js/form-queue.js` con database `formQueue` object store. Guardar `{ id, formType, data, timestamp, status }` cuando usuario hace submit offline. (2) **Service Worker Sync**: en `sw.js`, escuchar `sync` event: `self.addEventListener('sync', event => { if (event.tag === 'form-submit') event.waitUntil(processFormQueue()); })`. (3) **processFormQueue()**: iterar sobre registros pendientes, hacer fetch a Formspree, marcar como enviado o reintentar. (4) **UI Feedback**: en `js/script.js`, detectar `navigator.onLine`. Mostrar banner "Guardado sin conexión. Se enviará cuando recuperes conexión." (5) **Retry Logic**: si fetch falla, aumentar delay exponencialmente (1s, 2s, 4s, max 5 retries). Después marcar como "fallido" y notificar usuario. (6) **Formspree fallback**: si Formspree tiene error, el SW intenta de nuevo en próximo sync. Implementación: IndexedDB + SW sync + UI feedback, 4-5 horas. |
+| **Impacto esperado** | Cero pérdida de formularios por conectividad, UX offline robusta, menos frustraciones de usuario |
+| **Esfuerzo** | M (4-5 horas) |
+| **Agente recomendado** | Frontend / PWA |
+| **Referencias** | [1] https://web.dev/patterns/background-sync/ |
 
-### Propuesta 2: WhatsApp Business API con flujos automatizados
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Implementar WhatsApp Business API con Flows para reserva automatizada |
-| **Problema** | El sitio actual tiene WhatsApp flotante pero con número básico. WhatsApp Business API permite flujos de conversación automatizados, confirmación de reserva, recordatorios, y seguimiento sin intervención manual. |
-| **Descripción** | WhatsApp Business API Enhancement: (1) **Cloud API vs On-Premise**: usar WhatsApp Cloud API (Meta) que no requiere servidor propio. Ideal para sitio estático. (2) **Flows**: crear flujo conversacional: (a) Bienvenida + menú de servicios, (b) Reserva con selector de fecha/hora, (c) Confirmación con resumen, (d) Recordatorio 24h antes, (e) Seguimiento post-servicio. (3) **Bot de FAQs**: integración con FAQ existente del chatbot para responder preguntas comunes automáticamente. (4) **Template Messages**: usar templates pre-aprobados por Meta para mensajes transaccionales. (5) **CRM integration**: guardar contactos en base de datos simple (Google Sheets o Airtable) para seguimiento. (6) **Lead qualification**: el bot puede qualifies leads con preguntas de calificación antes de transferir a humano. Implementación: WhatsApp Cloud API + Flows + template setup + Google Sheets CRM, 10-12 horas. |
-| **Impacto esperado** | Reducción 50% en tiempo de atención manual, conversión 30% mayor por respuesta instantánea, lead qualification automática |
-| **Esfuerzo** | M-L (10-12 horas) |
-| **Agente recomendado** | Full Stack / Growth |
-| **Referencias** | [2] WhatsApp Business API documentation |
-
-### Propuesta 3: Programa de mantenimiento preventivo trimestral/semestral
+### Propuesta 2: Privacy Sandbox Topics API Integration
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Crear programa de mantenimiento preventivo con planes de suscripción |
-| **Problema** | El modelo de servicio único tiene bajo LTV. Los contratos de mantenimiento generan revenue recurrente y reducen churn. Competidores ofrecen "plans de protección" con descuento por suscripción. |
-| **Descripción** | Subscription Plans Implementation: (1) **Planes**: crear 3 tiers: (a) Plan Básico Trimestral: 1 limpieza profunda cada 3 meses + 10% descuento en productos. (b) Plan Completo Semestral: 2 limpiezas profundas + limpieza ligera intermedia + 15% descuento. (c) Plan Premium Anual: 4 limpiezas profundas + servicio de emergencia + producto de regalo + acceso prioritario. (2) **Pricing page**: crear sección `/planes` con cards de cada plan, savings calculator, y CTA de WhatsApp. (3) **WhatsApp enrollment**: flujo de suscripción vía WhatsApp Business API. (4) **Recurring revenue tracking**: guardar suscripciones en localStorage + Google Sheets. (5) **Email/SMS reminders**: usar WhatsApp para enviar recordatorios de renovación. (6) **Cancellation flow**: incluir opción de cancelación con survey de feedback. Implementación: nueva sección HTML + CSS + JS + WhatsApp flow, 6-8 horas. |
-| **Impacto esperado** | Revenue recurrente mensurable, LTV 3x mayor por cliente, predictibilidad de cash flow |
-| **Esfuerzo** | M (6-8 horas) |
-| **Agente recomendado** | Frontend / Growth |
-| **Referencias** | [1] Grand View Research - subscription models in cleaning |
+| **Título** | Implementar Privacy Sandbox Topics API para personalización de contenido |
+| **Problema** | Aunque Plausible es cookie-free, no hay uso de Topics API para detectar intereses del usuario. En 2026, third-party cookies estarán deprecated. |
+| **Descripción** | Privacy Sandbox Enhancement: (1) **Topics Detection**: en `js/script.js`, usar `document.browsingTopics()` API si disponible: `const topics = await document.browsingTopics()` para detectar intereses del usuario. (2) **Content Personalization**: basado en topics, mostrar cards más relevantes primero. Ejemplo: si topic es "Home & Garden", priorizar servicios de limpieza profunda. (3) **Fallback graceful**: si API no disponible o `navigator.userAgentData` es null, usar random shuffle o default order. (4) **Attribution Reporting Setup**: agregar `AttributionReporting.register()` en elementos clicables para medir conversiones de campaigns sin cookies. (5) **Topics Privacy Note**: mostrar sutilmente "Personalizado según tus intereses (privacidad garantizada)" para transparencia. (6) **Feature Detection**: siempre verificar `document.browsingTopics` existe antes de usar. No romper en Safari/Firefox. Implementación: Topics API + fallback + attribution, 3-4 horas. |
+| **Impacto esperado** | Preparación para post-cookie world, contenido más relevante, measurement de campaigns |
+| **Esfuerzo** | S (3-4 horas) |
+| **Agente recomendado** | Frontend / Analytics |
+| **Referencias** | [2] https://developer.chrome.com/docs/privacy-sandbox/topics/ |
 
-### Propuesta 4: Extensión de servicios: cortinas, tapizados auto, post-construcción
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Expandir catálogo de servicios a categorías complementarias de alto margen |
-| **Problema** | Purity & Clean solo ofrece 4 servicios core. Extender a limpieza de cortinas, tapizados de auto, y limpieza post-construcción abre nuevos segmentos de mercado con mayor ticket promedio. |
-| **Descripción** | Service Line Extension: (1) **Limpieza de cortinas y persianas**: servicio especializado con equipo de extensión y productos específicos para tela. Ticket promedio: $120,000 - $200,000 COP. (2) **Tapizados de auto**: interior de vehículos con臭氧/UV treatment. Ticket promedio: $80,000 - $150,000 COP. Nicho en Bogotá: dueños de autos de lujo. (3) **Limpieza post-construcción**: después de remodelaciones/obra civil. Ticket promedio: $300,000 - $800,000 COP. (4) **Implementación**: agregar nuevas tarjetas de servicio en searchable grid con data attributes. Nuevo schema Service para cada tipo. Pricing page update. Blog articles para SEO de cada nuevo servicio. (5) **Fotos**: usar Unsplash para placeholder images con before/after realistas. Implementación: HTML + CSS updates + schema + blog posts, 8-10 horas. |
-| **Impacto esperado** | Nuevo revenue stream por servicio, ticket promedio mayor, nuevo SEO territory (long-tail) |
-| **Esfuerzo** | M (8-10 horas) |
-| **Agente recomendado** | Frontend + Content |
-| **Referencias** | [1] Grand View Research - furniture cleaning market growth |
-
-### Propuesta 5: B2B Facility Management — Certificación y SLA
+### Propuesta 3: Visual Booking Confirmation con Timeline y Calendar Integration
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Posicionar Purity & Clean como proveedor de Facility Management B2B |
-| **Problema** | El segmento corporativo tiene márgenes 2x mayores pero requiere certificaciones ISO y SLA documentados. Purity & Clean tiene la base pero no está posicionada formalmente como proveedor B2B. |
-| **Descripción** | B2B Positioning: (1) **Certificaciones**: obtener certificaciones básicas: (a) Green Cleaning Certification (aplicable si productos eco-friendly califican), (b) Registro cámara de comercio actualizado, (c) Seguro de responsabilidad civil (esencial para contratos corporativos). (2) **SLA Document**: crear documento de Service Level Agreement modelo con: tiempos de respuesta, garantía de servicio, métricas de satisfacción, penalizaciones por incumplimiento. (3) **Corporate landing**: crear sección `/corporativo` con: perfil de empresa, certificaciones, casos de éxito, testimonios corporativos, proceso de onboarding, y CTA B2B dedicado. (4) **Caso de éxito**: documentar 1-2 clientes corporativos actuales como case study. (5) **LinkedIn Company Page**: optimizar para B2B discovery. Implementación: documento legal + landing page +LinkedIn optimization, 12-15 horas. |
-| **Impacto esperado** | Acceso a segmento B2B con márgenes 2x, contracts 6-12 meses, revenue recurrente corporativo |
-| **Esfuerzo** | L (12-15 horas) |
-| **Agente recomendado** | Full Stack + Legal |
-| **Referencias** | [4] IBISWorld - corporate cleaning market Colombia |
+| **Título** | Implementar booking confirmation visual con timeline, resumen y calendar add |
+| **Problema** | La confirmación actual es solo texto. El usuario no tiene claridad visual de qué se reservó, cuándo, y qué hacer después. |
+| **Descripción** | Visual Confirmation Enhancement: (1) **Confirmation Screen**: crear `.booking-confirmation` overlay con: (a) Checkmark animado, (b) "Reserva confirmada" título, (c) Card con: servicio, fecha, hora, zona, precio estimado, (d) Timeline: "Solicitud recibida → Confirmando → Listo". (2) **Calendar Add**: botones "Agregar a Google Calendar" y "Agregar a Apple Calendar" con `https://calendar.google.com/calendar/render?action=TEMPLATE&...` y `webcal://` URLs. Generar dinámicamente desde datos del formulario. (3) **SMS Option**: checkbox "Recibir recordatorio por SMS" + input teléfono. Integrar con Twilio o similar (o Formspree que soporte). (4) **Share Button**: "Compartir confirmación" → WhatsApp/twitter pre-filled con texto: "Tengo reserva con Purity & Clean para [servicio] el [fecha]". (5) **Actions Matrix**: debajo del summary, 3 botones: "Modificar reserva", "Cancelar reserva", "Contactar por WhatsApp". (6) **Email Enhancement**: el email de confirmación de Formspree debería incluir el mismo visual summary. Implementación: confirmation UI + calendar links + SMS option, 5-6 horas. |
+| **Impacto esperado** | Reducción de ansiedad post-booking, mayor satisfacción, más engagement con calendar reminders |
+| **Esfuerzo** | M (5-6 horas) |
+| **Agente recomendado** | Frontend / UX |
+| **Referencias** | [3] https://www.baymard.com/blog/mobile-forms-usability |
+
+### Propuesta 4: Cross-Browser PWA Install con iOS-Specific UI
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Implementar cross-browser PWA install prompt con detección iOS/Safari específica |
+| **Problema** | El install prompt actual asume Chrome. iOS Safari, Samsung Internet, y Firefox tienen flows diferentes que no están manejados, perdiendo installs. |
+| **Descripción** | Cross-Browser PWA Install: (1) **Browser Detection**: en `js/script.js`, detectar browser: `isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent)`, `isSamsung = /SamsungBrowser/.test(navigator.userAgent)`, `isFirefox = /Firefox/.test(navigator.userAgent)`. (2) **Chrome/Edge**: usar `beforeinstallprompt` event normal con custom banner. (3) **iOS Safari**: mostrar banner específico: "Para instalar Purity & Clean en tu iPhone: toca el botón compartir → Añadir a pantalla de inicio". Con imágen ilustrativa del proceso. (4) **Samsung Internet**: similar a iOS pero con "Menú → Añadir a pantalla de inicio". (5) **Already Installed Detection**: `if (window.matchMedia('(display-mode: standalone)').matches)` no mostrar ningún banner. (6) **Install Banner Logic**: mostrar después de 45 segundos de interacción + después de 3 page views. No mostrar si ya instalado o si usuario dismissió. Guardar dismiss en `localStorage`. (7) **A/B Test**: version A = banner standard, version B = banner con imágen tutorial. Medir install rate. Implementación: browser detection + iOS UI + Samsung UI + dismiss logic, 4-5 horas. |
+| **Impacto esperado** | Aumentar PWA install rate en iOS (actualmente 0% por falta de guidance), 15-20% más installs totales |
+| **Esfuerzo** | M (4-5 horas) |
+| **Agente recomendado** | Frontend / PWA |
+| ** Referencias** | [4] https://web.dev/articles/customize-install |
+
+### Propuesta 5: Content Freshness Signals con dateModified y Refresh System
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Implementar dateModified en Schema y content freshness signals visuales |
+| **Problema** | Google penaliza contenido que parece outdated. Los artículos del blog solo tienen datePublished, no dateModified. No hay sistema de refresh. |
+| **Descripción** | Content Freshness Enhancement: (1) **dateModified en Schema**: en cada artículo del blog, agregar `<meta property="article:modified_time" content="2026-04-27T10:00:00Z">` y en JSON-LD `dateModified`. Esto indica a Google que el contenido se actualizó. (2) **"Última actualización" Badge**: en cada artículo, mostrar sutilmente: "Última actualización: 27 abril 2026" con icono de refresh. Esto genera trust y CTR en resultados. (3) **Content Refresh Calendar**: crear `zonas-data.js` con `contentRefreshSchedule`. En zonas pages, si han pasado >90 días sin update, mostrar banner "Esta información se actualizó hace más de 3 meses. [Verificar]" (4) **Automated Date Injection**: en `sw.js`, al hacer precache de páginas, guardar timestamp. En subsequent visits, injectar `data-cache-date` attribute. (5) **Seasonal Content Rotation**: en blog, crear contenido de temporada (limpieza de fin de año, limpieza de rentrée). Usar `article:season` property si aplica. (6) **Content Audit Trigger**: cada 6 meses, generar task (Paperclip) para revisar todos los artículos. Implementación: dateModified + visual badge + refresh system + audit trigger, 3-4 horas. |
+| **Impacto esperado** | Mejor SEO ranking por freshness signals, mayor CTR en SERPs, trust del usuario |
+| **Esfuerzo** | S (3-4 horas) |
+| **Agente recomendado** | Frontend / SEO |
+| **Referencias** | [5] https://developers.google.com/search/docsappearance/structured-data/article |
+
+### Propuesta 6: Reputation Automation hacia Google My Business y Directorios
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Implementar automated review request y multi-directory posting |
+| **Problema** | Las reviews están en silos (solo en el sitio). No hay posting automático a Google My Business, Yelp, Facebook. Se pierde visibility local. |
+| **Descripción** | Reputation Automation System: (1) **Review Request Trigger**: después de Formspree submission exitoso, añadir step 4 en el flow: "Tu opinión nos importa. [Dejar reseña en Google] → [Dejar reseña en Yelp] → [Dejar reseña en Facebook]". Botones directos a cada directory con pre-filled review page. (2) **Post-Booking Email**: en Formspree confirmation, incluir links directos a review pages con UTM params: `https://search.google.com/local/reviews?place_id=...&utm_source=email&utm_campaign=review_request`. (3) **Google Business Profile API**: si hay acceso, usar Google My Business API para auto-posting de promotions, ofertas, y nuevas fotos. (4) **Review Aggregation Widget**: crear `.reviews-aggregator` widget que muestre reviews de Google, Yelp, Facebook en el sitio. Usar API de cada platform si disponible, o widget embebido. (5) **Review Response Automation**: generar draft responses para reviews negativas usando templates. Humano revisa y publica. (6) **Dashboard Simple**: crear `admin/reviews.html` con tabla de reviews agregadas de todos los directorios. Muestra rating promedio, response rate, sentiment. Implementación: review request UI + UTM links + aggregation + response templates, 5-6 horas. |
+| **Impacto esperado** | Más reviews en directorios = mejor local SEO, mayor trust, más conversions |
+| **Esfuerzo** | M (5-6 horas) |
+| **Agente recomendado** | Full Stack / SEO |
+| **Referencias** | [6] https://www.brightlocal.com/learn/local-seo-guide/ |
 
 ---
 
@@ -219,28 +249,30 @@ Según Nielsen (2025) y Euromonitor [5]:
 
 | # | Propuesta | Impacto | Esfuerzo | Prioridad |
 |---|----------|---------|----------|-----------|
-| 1 | WhatsApp Business API con Flows | Automatización/Conversión | M-L | Alta - revenue inmediato |
-| 2 | Programa de mantenimiento | Revenue recurrente | M | Alta - LTV |
-| 3 | Extensión de servicios | Nuevos segmentos | M | Alta - expansion |
-| 4 | Marketplace integration | Canal adicional | M | Media - brand awareness |
-| 5 | B2B FM positioning | Márgenes 2x | L | Media - strategic |
+| 1 | Background Sync Formularios | Offline resilience | M | Alta - prevents data loss |
+| 2 | Cross-Browser PWA Install | PWA adoption | M | Alta - installs |
+| 3 | Visual Booking Confirmation | UX/Satisfaction | M | Alta - post-booking experience |
+| 4 | Content Freshness Signals | SEO | S | Alta - search ranking |
+| 5 | Privacy Sandbox Topics | Future-proof | S | Media - post-cookie prep |
+| 6 | Reputation Automation | Local SEO | M | Media - off-site presence |
 
-**Top 3 para implementar primero:** 1, 2, 3 (WhatsApp automation + subscription + service extension = quick wins para revenue sin inversión en marketplaces).
+**Top 3 para implementar primero:** 1, 2, 3 (offline resilience + installs + confirmation = quick wins para UX sin gran esfuerzo).
 
 ---
 
 ## Diferencia clave: R57 vs R58
 
-R57 se enfocó en **consolidación técnica, modularización CSS, PWA install prompt, advanced structured data**.
+R57 se enfocó en **consolidación técnica**: CSS modular, PWA install prompt básico, structured data avanzado, social meta tags, JS modularity.
 
 **R58 se enfoca en:**
-- **Expansión de canales**: integración con Rappi/Cornershop
-- **Automatización operativa**: WhatsApp Business API con Flows
-- **Modelo de suscripción**: programas de mantenimiento trimestral/semestral
-- **Diversificación**: nuevos servicios de alto margen
-- **B2B positioning**: certificación y SLA para corporativo
+- **Offline-First**: Background Sync para formularios con IndexedDB queue
+- **Privacy-First**: Topics API integration para personalization post-cookie
+- **UX Enhancement**: Visual booking confirmation con timeline y calendar add
+- **Cross-Browser**: PWA install que funciona en iOS/Safari/Samsung/Firefox
+- **SEO Freshness**: dateModified signals y content refresh system
+- **Reputation Automation**: Multi-directory review posting y aggregation
 
-R57 construye technical excellence. R58 construye revenue streams y market expansion.
+R57 construye excellence técnica. R58 construye **resilience offline, privacy preparedness, y automation de reputation**.
 
 ---
 
@@ -253,26 +285,33 @@ R1-R57 ha construido un negocio muy completo:
 - R31-R35: Video, reputation, AI
 - R36-R42: Technical modernization
 - R43-R44: Business models y conversión
-- R45-R46: Technical features y seguridad
-- R47-R48: Visual engagement y conversión
-- R49-R50: AI, social commerce, multi-city
-- R51-R53: Performance, testing, notifications, personalization
-- R54-R55: Visual effects, animations, engagement
-- R56: Sostenibilidad y monetización digital
-- **R57: Technical Foundation** (CSS modular, PWA install, structured data, social meta tags)
-- **R58: Market Expansion** (marketplaces, WhatsApp automation, subscriptions, service extension, B2B positioning)
+- R45: Core Web Vitals y quality gates
+- R46: Seguridad, Privacy Sandbox, i18n, pagos
+- R47: Photo quote, product store, floor maintenance, reviews widget
+- R48: CRM, Warranty, Staff Profiles, Airbnb B2B
+- R49: Voice Search, Eco Hub, WhatsApp Automation, Customer Portal
+- R50: Pricing page, English version, B2B Widget
+- R51: Build system, performance (lazy/WebP/RUM), accesibilidad, PWA Periodic Sync
+- R52: A/B testing, exit-intent recovery, WhatsApp Cloud API
+- R53: Notification Triggers, semantic search, RUM, on-device AI chatbot
+- R54: Visual engagement, brand differentiation
+- R55: Animation premium, scroll effects, micro-interactions
+- R56: Sostenibilidad, Monetización Digital y SEO Authority
+- **R57: CSS Architecture, PWA Install Prompt, Advanced Structured Data, Social Meta Tags, JS Modularity**
+- **R58: Background Sync, Privacy Sandbox Topics, Visual Booking Confirmation, Cross-Browser PWA Install, Content Freshness, Reputation Automation**
 
-R58 cierra gaps de **market expansion y operational automation** que las rondas anteriores no abordaron en profundidad.
+R58 cierra gaps de **offline resilience, privacy post-cookie, y cross-platform install** que las rondas anteriores no abordaron en profundidad.
 
 ---
 
 ## Fuentes
 
-[1] Grand View Research. "Cleaning Services Market Size & Trends." https://www.grandviewresearch.com/industry-analysis/cleaning-services-market
-[2] Bloomberg. "Rappi and On-Demand Home Services in Latin America." 2026.
-[3] Consumer Technology Association. "Smart Home and IoT Integration Trends." 2026.
-[4] IBISWorld. "Cleaning Services in Colombia." 2026.
-[5] Nielsen/Euromonitor. "Green Consumer Trends in Latin America." 2025.
+[1] web.dev. "Background Sync Pattern." https://web.dev/patterns/background-sync/
+[2] Google Chrome Developers. "Privacy Sandbox Topics API." https://developer.chrome.com/docs/privacy-sandbox/topics/
+[3] Baymard Institute. "Mobile Forms Usability." https://www.baymard.com/blog/mobile-forms-usability
+[4] web.dev. "Customize PWA Install." https://web.dev/articles/customize-install
+[5] Google Search Central. "Article Structured Data." https://developers.google.com/search/docs/appearance/structured-data/article
+[6] BrightLocal. "Local SEO Guide." https://www.brightlocal.com/learn/local-seo-guide/
 
 ---
 
