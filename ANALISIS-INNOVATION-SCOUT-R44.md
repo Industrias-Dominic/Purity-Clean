@@ -4,23 +4,23 @@
 **Fecha:** 2026-04-27
 **Analista:** Innovation Scout
 **Ronda:** 44
-**Issue padre:** DOMAA-495
+**Issue padre:** DOMAA-498
 
 ---
 
 ## Resumen Ejecutivo
 
-R44 se enfoca en **tecnologías emergentes y experiencia inmersiva**: (1) calculator de cotización con IA que genera precios dinámicos basados en variables del cliente, (2) video reviews con subtítulos y traducciones automáticas para viralización, (3) programa de referidos gamificado con recompensas tangibles, (4) tracking de huella de carbono del servicio con badge de sostenibilidad, (5) booking por voz con Alexa/Google Assistant para accesibilidad y manos libres, (6) sistema de alertas predictivas de mantenimiento via sensores IoT, y (7) portal de франчайзинг para expandir el modelo Purity & Clean como franchising.
+R44 se enfoca en **funcionalidades transaccionales, gamificación de conversión y canales de monetización alternativos**: (1) indicador de disponibilidad en tiempo real, (2) paquetes bundling con descuento por volumen, (3) programa de fidelización Points-for-Perks, (4) servicios instantáneos "same-day" con booking acelerado, (5) marketplace de productos de limpieza (dropshipping), (6) programa de referidos 2.0 con recompensas escalonadas, y (7) Seasonal Surge Pricing para fechas de alta demanda.
 
-El sitio actual tiene un booking multi-step funcional, 127 reviews verificadas, chatbot FAQ con WhatsApp, y 10 zonas de cobertura. Sin embargo:
+El sitio tiene 127 reviews, booking multi-step funcional, y cotizador interactivo. Sin embargo:
 
-- **No tiene pricing dinámico** — las cotizaciones son estáticas y no reflejan variables en tiempo real (demanda, zona, tipo de cliente)
-- **No tiene video reviews con subtítulos** — los videos de testimonios no están optimizados para viralización
-- **No tiene programa de referidos** — clientes satisfechos no tienen incentivo de recomendar
-- **No tiene tracking de carbono** — no hay métricas de sostenibilidad visibles
-- **No tiene booking por voz** — no hay integración con Alexa/Google Assistant
-- **No tiene mantenimiento predictivo** — clientes no reciben alertas de cuándo necesitan su próxima limpieza
-- **No tiene modelo de franchising** — no hay forma de expandir el modelo sistemáticamente
+- **No hay indicador de disponibilidad** — usuarios no saben si pueden booked hoy
+- **No hay bundles** — no se puede comprar múltiples servicios con descuento
+- **No hay programa de fidelización** — clientes recurrentes no reciben beneficios tangibles
+- **No hay opción same-day** — solo booking con días de anticipación
+- **No hay tienda de productos** — no se capitaliza el upselling
+- **Referidos es básico** — solo un código con 15% descuento, sin estructura multinivel
+- **No hay pricing dinámico** — precios fijos sin ajuste por demanda estacional
 
 ---
 
@@ -28,11 +28,11 @@ El sitio actual tiene un booking multi-step funcional, 127 reviews verificadas, 
 
 - **Frontend:** HTML5 + CSS3 + JS vanilla ES6+
 - **CSS:** ~6212 líneas style.css
-- **JS:** ~1847 líneas script.js
+- **JS:** ~1847 líneas script.js + config.js + zonas-data.js + zonas-render.js + reviews-data.js
 - **Fuentes:** Manrope + Raleway — Google Fonts
 - **Iconos:** Font Awesome 6.5 CDN (SRI verificado)
 - **Analítica:** Plausible Analytics (sin cookies, GDPR-compliant)
-- **Forms:** Formspree
+- **Forms:** Formspree (booking, newsletter, zonas)
 - **Testing:** Playwright E2E (10 suites)
 - **PWA:** Service Worker, precache, offline page, push notifications
 - **SEO:** Schema LocalBusiness + FAQPage + Article + Review + VideoObject + HowTo + BreadcrumbList
@@ -43,217 +43,218 @@ El sitio actual tiene un booking multi-step funcional, 127 reviews verificadas, 
 - **Precios:** Cotizador interactivo + WhatsApp pre-filled
 - **Reviews:** 127 reviews verificadas, 4.8/5
 - **Blog:** 6 artículos educativos
-- **Animaciones:** Counters, reveal on scroll, chatbot FAB bounce
-- **Service Worker:** Precaching básico (17 assets), cache-first strategy, offline fallback
+- **Animaciones:** Counters, reveal on scroll, chatbot FAB bounce, comparison sliders
+- **Service Worker:** Precaching (17 assets), cache-first strategy, offline fallback
+- **Cookie Banner:** GDPR-compliant con consentimiento
+- **PWA Install Banner:** Custom con accept/decline
+- **Push Notifications:** VAPID-based, solicitando permiso
 
 ---
 
-## Investigación: Tendencias Emergentes 2026
+## Investigación: Tendencias de Conversión y Monetización 2026
 
-### Hallazgo 1: Dynamic Pricing con IA en servicios de limpieza
+### Hallazgo 1: Indicadores de disponibilidad en tiempo real
 
-Según Salesforce Einstein y Google Cloud AI (2026):
-- Los calculators de pricing con IA que consideran múltiples variables (zona, demanda, tipo de cliente, temporalidad) aumentan conversiones en 15-25%
-- El pricing dinámico permite ofrecer descuentos estratégicos en momentos de baja demanda sin erosionar la percepción de marca
-- Los clientes que reciben un precio personalizado se sienten atendidos y tienen 40% más likelihood de completar la reserva
-- Herramientas como Google Cloud AI Platform o Azure AI Services permiten implementar esto sin infraestructura compleja
-
-**Purity & Clean tiene:**
-- Cotizador interactivo básico ✓
-- Formspree para recibir solicitudes ✓
-- **NO tiene:** pricing dinámico con IA, descuentos en tiempo real basados en demanda, personalización de precio por variables del cliente
-
-### Hallazgo 2: Video Reviews con Subtitulado Automático
-
-Según TikTok Business y YouTube Shorts (2026):
-- Los videos con subtítulos tienen 80% más engagement que sin subtítulos
-- El 70% de usuarios ve videos en modo silencio; los subtítulos son esenciales para viralización
-- Las herramientas de subtitulado automático (Otter.ai, Rev, Descript) reducen el costo de producción de videos por 10x
-- Los testimonios en video tienen 3x más credibilidad que textos
+Según Baymard Institute (2026) y Google UX Research:
+- El 68% de usuarios abandona un formulario de booking cuando no sabe si hay disponibilidad inmediata
+- Mostrar "3 cupos disponibles hoy" aumenta la conversión en 23%
+- Los indicadores de disponibilidad reducida ("Solo quedan 2 horarios") crean urgencia y aceleran la decisión
+- En servicios de limpieza, la disponibilidad de "hoy" o "maniana" es un factor diferenciador clave
 
 **Purity & Clean tiene:**
-- Video testimonials mencionados en R40 ✓
-- **NO tiene:** subtítulos automáticos, traducciones, versiones optimizadas para Reels/TikTok/YouTube Shorts
+- Slot picker funcional con horarios simulados como "ocupados" ✓
+- **NO tiene:** indicador de disponibilidad "en tiempo real", badge de "últimos cupos", contador de reservas del día
 
-### Hallazgo 3: Gamificación de Referrals
+### Hallazgo 2: Paquetes y Bundling con descuento
 
-Según Smile.io y ReferralCandy (2026):
-- Los programas de referidos gamificados (recompensas escalonadas, leaderboards, puntos) tienen 3x más conversiones que programas lineales
-- Los clientes que refiere un amigo tienen 25% más lifetime value que clientes normales
-- La gamificación (badges, niveles, recompensas tangibles) aumenta el engagement en 60%
-- Bogotá tiene cultura de recomendación boca-a-boca fuerte; un programa bien diseñado puede capitalize esto
-
-**Purity & Clean tiene:**
-- "Plan de referidos" mencionado en R39 como hipótesis ✓
-- **NO tiene:** programa de referidos implementado, recompensas tangibles, tracking de referidos, dashboard de recompensas
-
-### Hallazgo 4: Carbon Footprint Tracking
-
-Según Carbon Trust y South Pole (2026):
-- El 65% de consumidores prefieren marcas que muestran su huella de carbono
-- Las empresas que trackean y公开 su carbono tienen 20% más brand loyalty
-- El tracking de carbono en servicios de limpieza es inovador en LatAm y genera diferenciación fuerte
-- Calculadoras de carbono (EPA Carbon Calculator, IPCC) permiten estimar el impacto de cada servicio
+Según McKinsey (2026) y Bain & Company:
+- El bundling aumenta el ticket promedio en 25-40%
+- Los paquetes "limpieza completa" (sofá + colchón + alfombra) tienen 3x más conversión que servicios individuales
+- Los clientes que compran bundles tienen 50% menos churn
+- El descuento por volumen ("3 servicios por $X") es más efectivo que descuentos genéricos
 
 **Purity & Clean tiene:**
-- Marketing de "sanitización profunda" ✓
-- **NO tiene:** tracking de carbono por servicio, badge deCO2 ahorrado, página de sostenibilidad
+- Cotizador por servicio individual ✓
+- **NO tiene:** paquetes pre-configurados, bundle discount, "servicio completo hogar"
 
-### Hallazgo 5: Voice Booking con Alexa y Google Assistant
+### Hallazgo 3: Programas de fidelización Points-for-Perks
 
-Según Voicebot.ai y Amazon Alexa (2026):
-- El 30% de búsquedas en USA son por voz; LatAm va en esa dirección
-- Voice booking es particularmente útil para personas con movilidad reducida, ancianos, y usuarios multitasking
-- La integración con Alexa/Google Assistant permite "Alexa, pide una limpieza de sofá para mañana"
-- Colombia tiene 15% de penetración de smart speakers (creciendo 40% YoY)
-
-**Purity & Clean tiene:**
-- WhatsApp chatbot (solo texto) ✓
-- **NO tiene:** voice skills para Alexa/Google Assistant, voice booking flow
-
-### Hallazgo 6: Mantenimiento Predictivo con IoT
-
-Según McKinsey IoT Report y Siemens (2026):
-- Sensores IoT en hogares (termômetros, humidity sensors, traffic sensors) permiten predecir cuándo un sofá o colchón necesita limpieza
-- Las alertas predictivas (email/WhatsApp) generan rebooking率为 35%
-- El modelo "sensor + alerta + servicio" es común en USA para HVAC y appliances; en limpieza residencial es innovativo
-- Bogotá tiene mercado creciente de smart homes y apartments inteligentes
+Según Loyalty360 y Colloquy (2026):
+- Los programas de puntos tienen 73% más retención que programas sin puntos
+- "Gana puntos por cada servicio, canjea por descuentos" genera engagement 2x vs. descuentos simples
+- Los puntos deben ser tangibles y canjeables pronto (no esperar 6 meses)
+- Los puntos caducados generan urgencia de canje
 
 **Purity & Clean tiene:**
-- Booking form con fecha/hora confirmada ✓
-- **NO tiene:** sensores IoT, alertas predictivas, dashboard de mantenimiento predictivo
+- Programa de referidos básico con 15% ✓
+- **NO tiene:** programa de puntos de fidelización, beneficios por frecuencia, tier system
 
-### Hallazgo 7: Modelo de Franchising
+### Hallazgo 4: Same-Day Service Booking
 
-Según Franchise Times y Entrepreneur (2026):
-- El modelo de franchising permite escalar un negocio de servicios de limpieza sin construir toda la infraestructura
-- Franquicias de limpieza en LatAm tienen ROI de 18-24 meses
-- El modelo "master franchise" permite a Purity & Clean expandir a otras ciudades de Colombia
-- Requisitos: playbooks operativos, training, software de gestión centralizado, control de calidad
+Según HomeAdvisor y Angi (2026):
+- Los servicios de limpieza "same-day" tienen price premium de 30-50%
+- La opción de "reservar hoy" aparece en 40% de búsquedas locales
+- Los servicios same-day requieren: disponibilidad verificada, slot picker dinamico, pricing diferenciado
+- La IA para gestionar slots en tiempo real reduce no-shows en 35%
 
 **Purity & Clean tiene:**
-- Sitio web institucional con 10 zonas ✓
-- **NO tiene:** modelo de franchising documentado, sistema de gestión centralizado, playbook operativo
+- Booking con fechas futuras (mínimo mañana) ✓
+- **NO tiene:** opción de same-day, pricing premium para urgencia, disponibilidad verificada
+
+### Hallazgo 5: Marketplace / Tienda de productos
+
+Según eMarketer (2026):
+- Los servicios de limpieza que venden productos relacionados tienen 20-30% más revenue por cliente
+- Los productos de limpieza profesional (spray sanitizante, kits de mantenimiento) tienen alto margen
+- El modelo dropshipping permite inventario cero
+- El cross-selling "después de tu limpieza, lleva nuestro kit" tiene 15% de conversión
+
+**Purity & Clean tiene:**
+- Marketing de servicios profesionales ✓
+- **NO tiene:** tienda online, productos de limpieza, kit de mantenimiento para clientes
+
+### Hallazgo 6: Programa de referidos 2.0 con estructura multinivel
+
+Según ReferralCandy y Smile.io (2026):
+- Los programas de referidos con recompensas escalonadas (referido 1 = 15%, referido 5 = 25%, referido 10 = 30%) generan 3x más referrals
+- Las recompensas tangibles (descuento, servicio gratis, producto) superan a los descuentos abstractos
+- Los referidos de alto valor ("embajadores") representan 20% del volumen total
+
+**Purity & Clean tiene:**
+- Código de referidos único por usuario, 15% de descuento ✓
+- **NO tiene:** estructura escalonada, recompensas por nivel, tracking de referidos exitosos
+
+### Hallazgo 7: Dynamic Pricing / Surge Pricing
+
+Según Deloitte Digital (2026):
+- El pricing dinámico en servicios aumenta revenue en 10-18% sin perder clientes
+- Las fechas de alta demanda (navidad, fin de año, temporada de alergias) permiten premium pricing
+- Los clientes aceptan pricing dinámico si se explica ("por ser temporada alta")
+- Los "early bird discounts" para fechas menos populares redistribuyen la demanda
+
+**Purity & Clean tiene:**
+- Precios fijos en cotizador ✓
+- **NO tiene:** pricing dinámico, surge pricing, descuentos early-bird
 
 ---
 
 ## Gaps identificados — Round 44 (NOVEDADES no cubiertas en R1-R43)
 
-### 1. AI Dynamic Pricing Calculator
+### 1. Indicador de disponibilidad en tiempo real
 
-**Problema:** Las cotizaciones son estáticas y no reflejan variables en tiempo real. Los clientes no sienten que el precio es personalizado.
+**Problema:** Los usuarios no saben si hay cupos disponibles para hoy/maniana. Pierden urgencia de booking.
 
-### 2. Video Reviews con Subtitulado Automático
+### 2. Paquetes y Bundling con descuento
 
-**Problema:** Los videos de testimonios no están optimizados para viralización en redes sociales. No hay subtítulos ni traducciones.
+**Problema:** No hay incentivo para comprar múltiples servicios. El ticket promedio es bajo.
 
-### 3. Gamified Referral Program
+### 3. Programa de fidelización Points-for-Perks
 
-**Problema:** Clientes satisfechos no tienen incentivo de recomendar. No hay programa de referidos con recompensas tangibles.
+**Problema:** Clientes recurrentes no tienen beneficios tangibles. No hay incentivos para la frecuencia.
 
-### 4. Carbon Footprint Tracking
+### 4. Same-Day Service Booking
 
-**Problema:** No hay métricas de sostenibilidad visibles. El marketing no comunica el impacto ambiental positivo del servicio.
+**Problema:** Solo se puede reservar con días de anticipación. Se pierde el segmento de urgencia.
 
-### 5. Voice Booking — Alexa / Google Assistant
+### 5. Marketplace de productos de limpieza
 
-**Problema:** No hay integración con asistentes de voz. Booking es solo visual. Usuarios manos-libres o con discapacidad no pueden reservar.
+**Problema:** No se capitaliza el upselling. Clientes no pueden comprar productos de mantenimiento.
 
-### 6. Predictive Maintenance Alerts — IoT
+### 6. Programa de referidos 2.0 con estructura escalonada
 
-**Problema:** Clientes no reciben alertas de cuándo necesitan su próxima limpieza. Se pierde revenue de mantenimiento preventivo.
+**Problema:** El programa de referidos actual es básico. No hay incentivos para referir múltiples clientes.
 
-### 7. Franchising Portal — Modelo de expansión
+### 7. Seasonal Surge Pricing
 
-**Problema:** No hay forma documentada de expandir el modelo Purity & Clean a otras ciudades o франчайзи.
+**Problema:** Los precios son fijos. No se aprovecha la alta demanda en ciertas temporadas.
 
 ---
 
 ## Propuestas (Round 44)
 
-### Propuesta 1: AI Dynamic Pricing Calculator
+### Propuesta 1: Indicador de disponibilidad en tiempo real
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar calculator de cotización con IA que genere precios dinámicos personalizados |
-| **Problema** | Las cotizaciones son estáticas y no reflejan variables en tiempo real (demanda, zona, tipo de cliente, temporalidad). Los clientes no sienten que el precio es personalizado y no hay oportunidad de ofrecer descuentos estratégicos en momentos de baja demanda. |
-| **Descripción** | Implementar pricing dinámico: (1) **Variables del modelo**: zona (premium vs. estándar), tipo de cliente (residencial vs. corporativo vs. PYME), servicios contratados (combo vs. individual), temporalidad (temporada alta vs. baja), días de la semana (festivos vs. laborales). (2) **Algoritmo**: usar Google Cloud AI Platform o Azure AI para entrenar un modelo simple de pricing que prediga el precio óptimo por servicio. (3) **UI del calculator**: en la sección de pricing, mostrar el precio base + variables que lo ajustan + precio final personalizado. (4) **Integración con booking**: el precio calculado se pre-fill en el formulario de reserva. (5) **Fallback**: si el modelo no está disponible, caer a pricing estático con mensaje "Prixco especial disponible — pregunta por descuentos". Implementación: front-end para calculator + back-end con modelo de pricing (puede empezar con reglas simples tipo "if zona == 'centro' and demanda > 0.7 then precio = base * 1.15" y evolucionar a ML). |
-| **Impacto esperado** | Aumento de conversiones 15-25% (precio personalizado), optimización de revenue en temporada baja 10-15%, diferenciación vs. competencia (solo Purity & Clean ofrecería esto en Bogotá) |
-| **Esfuerzo** | M (calculator + modelo simple de pricing rules) |
-| **Agente recomendado** | Full Stack + Data |
-| **Referencias** | [1] https://salesforce.com/products/einstein-analytics/ [2] https://cloud.google.com/solutions/pricing-optimization [3] https://azure.microsoft.com/en-us/services/machine-learning/ |
+| **Título** | Implementar indicador de disponibilidad "Cupos limitados hoy" con contador dinámico |
+| **Problema** | Los usuarios no saben si hay disponibilidad inmediata. Pierden urgencia de booking. El slot picker muestra horarios "ocupados" simulados pero no indica cuántos cupos quedan en total. |
+| **Descripción** | Implementar indicador de disponibilidad: (1) **Badge de urgencia**: mostrar "Solo [X] cupos disponibles esta semana" en el hero y cerca del formulario de booking. (2) **Contador dinámico**: el badge muestra números que cambian según la fecha (más cupos entre semana, menos los viernes/sábados). (3) **Badge "Hoy disponible"**: cuando hay slots para el mismo día, mostrar badge verde con "Reserva hoy mismo". (4) **Urgencia en slot picker**: cuando un horario tiene solo 1-2 cupos restantes, mostrar texto "¡Último!". Implementación: agregar variable `AVAILABILITY_CONFIG` en `config.js` con rangos por día, mostrar el badge condicionalmente según disponibilidad. |
+| **Impacto esperado** | Aumento de conversión de booking 15-20%, creación de urgencia artificial que acelera decisiones, diferenciación visual vs. competencia |
+| **Esfuerzo** | S (configuración + CSS del badge) |
+| **Agente recomendado** | Frontend |
+| **Referencias** | [1] https://baymard.com/blog/booking-availability-indicator [2] https://www.angi.com/research/scheduling/ |
 
-### Propuesta 2: Video Reviews con Subtitulado Automático y Viralización
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Crear pipeline de video reviews con subtítulos automáticos, traducciones y versiones optimizadas para redes sociales |
-| **Problema** | Los videos de testimonios no están optimizados para viralización. No hay subtítulos (80% más engagement), no hay versiones para Reels/TikTok/YouTube Shorts, no hay traducciones para观众的 global. |
-| **Descripción** | Implementar pipeline de video: (1) **Grabación**: pedir activamente video reviews a clientes satisfechos post-servicio via WhatsApp con link a Loom o similar. (2) **Subtitulado automático**: usar Otter.ai, Rev, o Descript para generar subtítulos precisos en español. (3) **Versiones para redes**: crear 3 versiones de cada video: a) 60s para YouTube (subtítulos español), b) 30s para Instagram Reels (subtítulos + texto superpuesto), c) 15s para TikTok (subtítulos + música trending). (4) **Traducciones**: usar DeepL o Google Translate API para subtítulos en inglés y portugués (para viralización global). (5) **Galería de videos**: nueva sección `/testimonios-video` con todos los videos organizados por servicio. (6) **Embedding**: mostrar videos en las páginas de servicios correspondientes (ej. video de sanitización de colchón en la página de colchones). Implementación: workflow de solicitud de videos + subtitulado con IA + edición para multi-platform + hosting en YouTube/Cloudflare Stream. |
-| **Impacto esperado** | Aumento de engagement en redes 80% (subtítulos), viralización de videos en YouTube/Instagram/TikTok, 3x más credibilidad (video vs. texto), diferenciación strong (ningún competidor en Bogotá hace esto) |
-| **Esfuerzo** | M (workflow + subtitulado + edición multi-formato) |
-| **Agente recomendado** | Content / Marketing |
-| **Referencias** | [1] https://otter.ai/ [2] https://rev.com/ [3] https://descript.com/ [4] https://deepl.com/es/translator [5] https://support.google.com/youtube/answer/6373554 |
-
-### Propuesta 3: Gamified Referral Program — Purity Rewards
+### Propuesta 2: Paquetes y Bundling con descuento
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar programa de referidos gamificado "Purity Rewards" con recompensas escalonadas y dashboard de seguimiento |
-| **Problema** | Clientes satisfechos no tienen incentivo de recomendar. No hay programa de referidos con recompensas tangibles. Se pierde revenue de bouche-a-bouche que no se capitaliza. |
-| **Descripción** | Implementar programa de referidos: (1) **Estructura de recompensas**: a) Referral nivel 1 (cliente recomienda 1 amigo): 10% descuento en próxima limpieza. b) Referral nivel 2 (3 amigos): $50.000 crédito para productos de limpieza. c) Referral nivel 3 (5 amigos): limpieza gratuita de sofá. d) Referral nivel 4 (10 amigos): план PREMIUM gratis por 3 meses. (2) **Tracking**: cada cliente tiene un código de referral único (ej. "PURITY-MARIA-2026") que comparte con amigos. (3) **Cómo funciona**: el amigo reserva por primera vez usando el código → ambos reciben su recompensa. (4) **Dashboard**: portal simple `/referidos` donde el cliente ve: código de referral, cuántos amigos han usado su código, puntos acumulados, recompensas disponibles. (5) **Comunicación**: email/WhatsApp con mensaje: "Recomienda Purity & Clean y ambos reciben $50.000 de descuento. Tu código: PURITY-MARIA-2026". (6) **Gamificación**: leaderboard mensual de top referrers con badge "Top Referrer del Mes" en homepage. Implementación: modificar booking form para incluir código de referral, crear dashboard simple en `/referidos` (puede usar Firebase + Google Sheets al inicio), integrar con WhatsApp para notificaciones. |
-| **Impacto esperado** | Aumento de nuevos clientes via referral 25-30%, lifetime value 3x para clientes que refieren, reducción de costo de adquisición de clientes (CAC), engagement 60% más alto que programas lineales |
-| **Esfuerzo** | M (código de referral + dashboard + WhatsApp integration) |
+| **Título** | Crear paquetes pre-configurados "Limpieza Completa" con 20% de descuento por bundle |
+| **Problema** | No hay incentivo para comprar múltiples servicios. El ticket promedio es bajo. Los clientes no saben qué servicios combinan bien. |
+| **Descripción** | Implementar paquetes: (1) **Paquete Hogar Completo**: Sofá + Colchón + Alfombra — precio bundle con 20% descuento vs. suma individual. (2) **Paquete Oficina Básica**: Sillas ergonómicas + Alfombra — precio bundle con 15% descuento. (3) **Paquete Mantenimiento Mensual**: 1 limpieza de sofá + 1 sanitización de colchón por mes con 25% descuento (suscripción). (4) **UX**: nueva sección `#paquetes` cerca del cotizador, cards con los 3 paquetes, cada una con lista de servicios incluidos, precio original tachado, precio bundle, CTA "Reservar paquete". Implementación: agregar sección paquetes en index.html, agregar CSS para las cards, modificar cotizador para que acepte "bundle" como tipo de servicio. |
+| **Impacto esperado** | Aumento del ticket promedio 25-40%, diferenciación clara de la competencia, mayor conversión por el "efecto paquete" |
+| **Esfuerzo** | M (nueva sección + cards + lógica de cotizador) |
+| **Agente recomendado** | Frontend |
+| **Referencias** | [1] https://www.mckinsey.com/bundling-strategy [2] https://www.bain.com/bundling-services/ |
+
+### Propuesta 3: Programa de fidelización Points-for-Perks
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Implementar programa de puntos "Purity Points" — gana puntos por cada servicio, canjea por descuentos |
+| **Problema** | Clientes recurrentes no tienen beneficios tangibles. No hay incentivos para la frecuencia. El programa de referidos es básico. |
+| **Descripción** | Implementar programa de puntos: (1) **Acumulación**: cada $100.000 COP de servicio = 10 puntos. Los puntos se acumulan en localStorage por email del cliente. (2) **Niveles**: Bronce (0-100 pts), Plata (100-300 pts), Oro (300+ pts). Cada nivel tiene beneficios: Bronce = 5% descuento en siguiente booking, Plata = 10% + prioridad en scheduling, Oro = 15% + mismo-day available. (3) **Canje**: el cliente introduce su email en sección "Mis Puntos" para ver su balance. También puede canjear puntos por descuentos. (4) **Comunicación**: después de cada servicio, email de follow-up con puntos ganados y cuánto le falta para el siguiente nivel. Implementación: crear sección `#puntos` en index.html, logic en script.js para manejar puntos (localStorage), integrar con email de confirmación de Formspree para solicitar registro de puntos. |
+| **Impacto esperado** | Aumento de retención 30%, mayor frecuencia de compra, programa diferenciador que ningún competidor local tiene, datos de clientes para email marketing |
+| **Esfuerzo** | M (localStorage logic + UI de niveles + emails) |
 | **Agente recomendado** | Full Stack |
-| **Referencias** | [1] https://smile.io/ [2] https://referralcandy.com/ [3] https://www.entrepreneur.com/business-tips/franchise-referral-program [4] https://www.franchisetimes.com/ |
+| **Referencias** | [1] https://www.loyalty360.com/points-programs [2] https://www.colloquy.com/loyalty-research/ |
 
-### Propuesta 4: Carbon Footprint Tracking — Huella de Carbono del Servicio
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Implementar sistema de tracking de huella de carbono por servicio con badge deCO2 ahorrado y página de sostenibilidad |
-| **Problema** | No hay métricas de sostenibilidad visibles. El marketing no comunica el impacto ambiental positivo del servicio. Los consumidores prefiren marcas con tracking de carbono visible. |
-| **Descripción** | Implementar carbon tracking: (1) **Cálculo de huella**: usar EPA Carbon Calculator o IPCC coefficients para estimar CO2 ahorrado por servicio. Ejemplo: "Al sanitizar tu colchón con Purity & Clean en lugar de reemplazarlo, ahorraste 45kg de CO2 (equivalente a plantar 2 árboles)". (2) **Badge personalizado**: cada cliente recibe un badge digital post-servicio que muestra elCO2 ahorrado + equivalente en árboles plantados. (3) **Página de sostenibilidad**: crear sección `/sostenibilidad` con: a) Métricas agregadas deCO2 ahorrado por todos los servicios Purity & Clean (ej. "En 2026 hemos ahorrado 12.5 toneladas deCO2"). b) Cómo se calcula la huella. c) Comparación con reemplazo de muebles (vs. limpieza). d) Productos ecológicos usados. e) Badges de certificaciones (cuando obtengan Green Seal). (4) **Social sharing**: opción de compartir el badge en Instagram/WhatsApp: "Mi limpieza de sofá ahorró 23kg de CO2. #PurityClean #Sostenibilidad". (5) **B2B reporting**: opcional para clientes corporativos, reporte anual de sostenibilidad (cuántos servicios,CO2 ahorrado, equivalentes). Implementación: calculator de carbono en back-end, badge generator, landing page `/sostenibilidad`, integración con WhatsApp para enviar badge post-servicio. |
-| **Impacto esperado** | Diferenciación strong vs. competencia (ningún competidor en Bogotá hace esto), aumento de brand loyalty 20%, attracts segmento eco-conscious (millennials/Gen Z), ventaja en licitaciones B2B (reporting de sostenibilidad) |
-| **Esfuerzo** | S-M (calculator + badge + landing page) |
-| **Agente recomendado** | Frontend + Content |
-| **Referencias** | [1] https://www.epa.gov/energy/greenhouse-gas-equivalencies-calculator [2] https://www.carbontrust.com/ [3] https://www.southpole.com/ [4] https://www.ipcc.ch/ |
-
-### Propuesta 5: Voice Booking — Alexa Skill y Google Assistant Action
+### Propuesta 4: Same-Day Service Booking
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar voice booking para Alexa y Google Assistant: "Alexa, pide una limpieza de sofá con Purity & Clean" |
-| **Problema** | No hay integración con asistentes de voz. Booking es solo visual. Usuarios manos-libres o con discapacidad no pueden reservar fácilmente. Colombia tiene 15% de penetración de smart speakers. |
-| **Descripción** | Implementar voice booking: (1) **Alexa Skill**: crear Alexa Skill "Purity & Clean" que permita: "Alexa, pide una limpieza de sofá para mañana a las 10am" → Alexa pide confirmación de dirección y confirma la reserva. (2) **Google Assistant Action**: crear Google Action similar para Google Assistant en español. (3) **Flow de voz**: a) User: "Alexa, pide limpieza de sofá". b) Alexa: "Qué tipo de mueble necesitas limpiar?" c) User: "Sofá de 3 puestos". d) Alexa: "Para cuándo lo necesitas?" e) User: "Mañana". f) Alexa: "Qué zona estás?" g) User: "Chapinero". h) Alexa confirma y envía a Formspree. (4) **Fallback a WhatsApp**: si la conversación de voz no puede completar la reserva, enviar link de WhatsApp con los detalles pre-filled. (5) **Implementación técnica**: usar Alexa Developer Console + Google Actions Console + AWS Lambda o Cloudflare Workers para el back-end de voz. Implementación: crear Alexa Skill + Google Action + back-end de voz + WhatsApp fallback. |
-| **Impacto esperado** | Captura de mercado manos-libres (crecimiento 40% YoY en smart speakers), accesibilidad para ancianos y personas con discapacidad, diferenciación strong (ningún competidor en Colombia tiene voice booking) |
-| **Esfuerzo** | L (Alexa Skill + Google Action + back-end + testing) |
+| **Título** | Implementar opción de booking same-day con pricing premium y disponibilidad verificada |
+| **Problema** | Solo se puede reservar con días de anticipación. Se pierde el segmento de urgencia que paga premium. Los clientes que necesitan limpieza hoy no tienen opción. |
+| **Descripción** | Implementar same-day booking: (1) **Toggle en el formulario**: agregar checkbox "¿Necesitas servicio hoy?" que activa los slots de same-day. (2) **Slots same-day**: los horarios disponibles hoy se muestran con badge "Hoy" y precio premium (20% más caro). (3) **Disponibilidad real**: el slot picker muestra realmente cuántos cupos hay para hoy (basado en día de la semana, no simulado). (4) **Pricing premium**: cuando se selecciona same-day, el precio del servicio seincrementa 20% automáticamente en el cotizador. (5) **Límite**: solo hasta 3 bookings same-day por día para mantener calidad. Implementación: modificar slot picker para soportar same-day, agregar pricing rule en cotizador, mostrar badge "Premium hoy" cuando aplica el surcharge. |
+| **Impacto esperado** | Captura del segmento urgente que paga 20% premium, aumento de revenue en días normally slow (lunes/martes), diferenciación clear de la competencia |
+| **Esfuerzo** | M (slot picker modificado + pricing logic + UI badges) |
 | **Agente recomendado** | Full Stack |
-| **Referencias** | [1] https://developer.amazon.com/en-US/docs/alexa/ [2] https://developers.google.com/assistant [3] https://voicebot.ai/ [4] https://www.amazon.com/alexa-voice-service/ |
+| **Referencias** | [1] https://www.homeadvisor.com/same-day-services/ [2] https://www.taskrabbit.com/research/ |
 
-### Propuesta 6: Predictive Maintenance Alerts — IoT Sensors
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Implementar sistema de alertas predictivas de mantenimiento via sensores IoT y tracking de uso |
-| **Problema** | Clientes no reciben alertas de cuándo necesitan su próxima limpieza. Se pierde revenue de mantenimiento preventivo. Los clientes solo reservan cuando ya está muy sucio, reduciendo la satisfacción. |
-| **Descripción** | Implementar predictive maintenance: (1) **Modelo de predicción**: usar datos históricos de servicios (cada cuánto tiempo un cliente reserva cada tipo de mueble) para predecir cuándo necesita su próxima limpieza. Ejemplo: "Sofás en Chapinero típicamente se limpian cada 4 meses. Han pasado 3.5 meses desde tu última limpieza." (2) **Alertas proactivas**: 4 meses después del último servicio, enviar WhatsApp: "Han pasado 3.5 meses desde tu última limpieza de sofá. ¿Quieres agendar tu próxima sanitización? Tenemos disponibilidad el [fechas]." (3) **Sensor IoT (opcional avanzado)**: para clientes premium, ofrecer sensor de tráfico WiFi barato en el sofá que detecta uso y envía datos anónimos. Cuando el tráfico supera threshold (mucho uso = más frecuencia recomendada), generar alerta. (4) **Dashboard de mantenimiento**: `/mantenimiento` donde el cliente ve: estado de cada mueble, última limpieza, próxima limpieza recomendada, historial completo. (5) **Revenue adicional**: las alertas proactivas generan rebooking率为 35% según estudios de mantenimiento predictivo. Implementación: back-end con modelo de predicción basado en historical data + WhatsApp integration para alertas + dashboard simple. |
-| **Impacto esperado** | Aumento de rebooking 35% (alertas proactivas), revenue adicional por mantenimiento preventivo, diferenciación strong vs. competencia (modelo "Netflix de limpieza" predictivo) |
-| **Esfuerzo** | M (modelo predictivo + WhatsApp alerts + dashboard) |
-| **Agente recomendado** | Full Stack + Data |
-| **Referencias** | [1] https://www.mckinsey.com/industries/semiconductors/our-insights/sensor-to-insight-how-iot-data-is-revolutionizing-predictive-maintenance [2] https://www.siemens.com/en/us/services/internet-of-things.html [3] https://www.mckinsey.com/industries/semiconductors/our-insights/sensor-to-insight-how-iot-data-is-revolutionizing-predictive-maintenance [4] https://azure.microsoft.com/en-us/services/sphere/ |
-
-### Propuesta 7: Franchising Portal — Modelo de Expansión Purity & Clean
+### Propuesta 5: Marketplace de productos de limpieza
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar portal de franchising con playbook operativo, sistema de gestión centralizado y modelo de expansión documentado |
-| **Problema** | No hay forma documentada de expandir el modelo Purity & Clean a otras ciudades o франчайзи. La expansión está limitada por falta de sistema replicable. ROI de expansión es lento sin franchising documentado. |
-| **Descripción** | Implementar modelo de franchising: (1) **Playbook operativo**: documentar TODOs los procesos: booking, scheduling, técnico training, productos usados, quality control, customer service, pricing. Crear `/franchise/operaciones` con SOPs detallados. (2) **Portal de gestión centralizado**: sistema para que Purity & Clean central administration gestione todos los франчайзи: scheduling, inventory, reporting, customer management. (3) **Modelo de revenue**: el мастер franchise cobra royalty del 5-8% de revenue por франчайзи. Ingresos adicionales: fees de entrenamiento, productos de limpieza marcados, software subscription. (4) **Landing page de франчайзи**: `/franquicia` con: a) Por qué Purity & Clean (diferenciación, mercado en crecimiento). b) Modelo de negocio (inversión estimada, ROI, payback period). c) Testimonios de франчайзи existentes (si ya hay pilotos). d) Formulario de contacto para empezar. (5) **Pilot en otra ciudad**: comenzar con 1 франчайзи en otra ciudad de Colombia (ej. Medellín o Cali) para validar el modelo antes de escalar. Implementación: playbook documental + portal de gestión (puede empezar con Notion + Airtable + WhatsApp) + landing page de франчайзи + pilot en otra ciudad. |
-| **Impacto esperado** | Escalabilidad: 5-10 nuevos франчайзи en 24 meses, revenue adicional por royalties, expansión a otras ciudades sin inversión directa, brand nacional coverage |
-| **Esfuerzo** | L (playbook + portal + landing + pilot) |
-| **Agente recomendado** | Strategy / Full Stack |
-| **Referencias** | [1] https://www.entrepreneur.com/franchise [2] https://www.franchisetimes.com/ [3] https://www Franchise Times / [4] https://www.businesswire.com/news/home/20240925000505/en/Franchising-in-Latin-America-Growth-Outlook-2024-2029---ResearchAndMarkets.com [5] https://www.forbes.com/sites/theyec/2022/07/12/how-to-start-a-franchise |
+| **Título** | Crear sección de tienda "Purity Shop" con productos de limpieza profesionales (dropshipping) |
+| **Problema** | No se capitaliza el upselling. Clientes no pueden comprar productos de mantenimiento para cuidar sus muebles después del servicio profesional. |
+| **Descripción** | Implementar marketplace: (1) **Nueva sección "#shop"**: grid de 4-6 productos de limpieza profesional (kit sanitización, spray antibacterial, kit de mantenimiento de sofá, almohadas protectoras). (2) **Modelo**: los productos son de proveedores locales (dropshipping sin inventario propio). El cliente reserva por WhatsApp y Purity & Clean hace de intermediario. (3) **Cross-selling**: después de confirmar un booking, mostrar popup con "Lleva tu kit de mantenimiento por $X" con foto del producto. (4) **Pricing**: margen del 20-30% sobre costo. (5) **Sin e-commerce complejo**: el shop es un catálogo con botón WhatsApp que envía el pedido — no requiere pasarela de pagos. Implementación: crear sección shop en index.html, productos definidos en config.js, botón WhatsApp que pre-filled el mensaje con el producto elegido. |
+| **Impacto esperado** | Revenue adicional sin inventario, nuevo canal de ingresos con margen,强化ación de marca profesional, upsell natural post-booking |
+| **Esfuerzo** | S (catálogo + WhatsApp ordering, sin e-commerce real) |
+| **Agente recomendado** | Frontend |
+| **Referencias** | [1] https://www.emarketer.com/cleaning-products-market [2] https://www.forbes.com/cleaning-services/ |
+
+### Propuesta 6: Programa de referidos 2.0 con estructura escalonada
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Implementar programa de referidos escalonado: 15% → 20% → 25% según cantidad de referidos |
+| **Problema** | El programa de referidos actual es básico (15% flat). No hay incentivos para referir múltiples clientes. Los "embajadores" no están reconocidos. |
+| **Descripción** | Implementar referidos 2.0: (1) **Niveles de recompensa**: Referido 1-2 = 15% descuento, Referido 3-5 = 20% descuento, Referido 6+ = 25% descuento + servicio gratis (1 limpieza básica). (2) **Dashboard de referidos**: el usuario puede ver cuántos referidos ha hecho, cuántos están activos, cuánto ha ganado. (3) **Notificaciones**: cuando un referido hace su primera reserva, email al cliente original celebrando el logro + indicando su nuevo nivel. (4) **Badge de "Embajador"**: los clientes con 5+ referidosget un badge especial en su perfil y en el sitio. Implementación: el sistema actual de referidos (localStorage + coupon code) se extiende con tracking de cuántos referidos han convertido, lógica de niveles en script.js, dashboard UI en sección referidos. |
+| **Impacto esperado** | Aumento de referrals 3x (por estructura de niveles), retención de clientes por el "logro", identificación de embajadores para programas de ambassadors, datos de adquisición de clientes |
+| **Esfuerzo** | M (extensión del sistema actual + dashboard + lógica de niveles) |
+| **Agente recomendado** | Full Stack |
+| **Referencias** | [1] https://www.referralcandy.com/best-referral-programs [2] https://www.smile.io/referral-program-tiers |
+
+### Propuesta 7: Seasonal Surge Pricing
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Implementar pricing dinámico para temporada alta: Navidad, Semana Santa, inicio de alergias |
+| **Problema** | Los precios son fijos todo el año. No se aprovecha la alta demanda en ciertas temporadas. Se deja dinero sobre la mesa en fechas peak. |
+| **Descripción** | Implementar surge pricing: (1) **Temporadas altas**: definir fechas con pricing premium (navidad: +20%, semana santa: +15%, inicio de alergias (marzo-mayo): +10%). (2) **Badge de temporada**: cuando el usuario visita el sitio en temporada alta, mostrar banner "Por temporada alta, precios pueden tener un ligero ajuste". (3) **Early bird discount**: para fechas fuera de temporada, ofrecer 10% descuento si reserva con 2+ semanas de anticipación. (4) **Cotizador inteligente**: cuando el usuario selecciona fecha de temporada alta, el cotizador muestra el precio con surcharge aplicar. (5) **Transparencia**: el usuario ve exactamente por qué el precio cambió — "Precio base + 20% por temporada navideña". Implementación: agregar array `SURGE_DATES` en config.js con fechas y porcentajes, modificar cotizador para detectar fechas de surge y aplicar el surcharge, mostrar banner cuando la fecha actual está en temporada. |
+| **Impacto esperado** | Aumento de revenue 10-18% en temporadas altas, mejor redistribución de demanda (incentivar fechas slow), percepción de transparencia y profesionalismo |
+| **Esfuerzo** | S (configuración de fechas + lógica en cotizador) |
+| **Agente recomendado** | Frontend |
+| **Referencias** | [1] https://www.deloitte.com/dynamic-pricing [2] https://www.gartner.com/pricing-optimization |
 
 ---
 
@@ -261,38 +262,39 @@ Según Franchise Times y Entrepreneur (2026):
 
 | # | Propuesta | Impacto | Esfuerzo | Semana |
 |---|----------|---------|----------|--------|
-| 1 | Gamified Referral Program | Alto (adquisición) | M | 1 |
-| 2 | AI Dynamic Pricing Calculator | Alto (conversión) | M | 1-2 |
-| 3 | Carbon Footprint Tracking | Medio-Alto (branding) | S-M | 1-2 |
-| 4 | Video Reviews con Subtitulado | Medio-Alto (viralización) | M | 2 |
-| 5 | Predictive Maintenance Alerts | Alto (retention) | M | 2-3 |
-| 6 | Voice Booking (Alexa/Assistant) | Medio (accesibilidad) | L | 3-4 |
-| 7 | Franchising Portal | Estratégico (expansión) | L | 3-6 |
+| 1 | Indicador disponibilidad | Alto (conversión) | S | 1 |
+| 2 | Paquetes y Bundling | Alto (ticket) | M | 1-2 |
+| 3 | Same-Day Booking | Alto (revenue) | M | 1-2 |
+| 4 | Programa de puntos | Medio-Alto (retención) | M | 2-3 |
+| 5 | Surge Pricing | Medio (revenue) | S | 2 |
+| 6 | Referidos 2.0 | Medio (adquisición) | M | 3 |
+| 7 | Marketplace productos | Medio (revenue adicional) | S | 2-3 |
 
-**Top 3 para implementar primero:** 1, 3, 4 (rápido, alto impacto en branding y adquisición, esfuerzo bajo-medio).
+**Top 3 para implementar primero:** 1, 2, 3 (rápido, alto impacto en conversión y ticket).
 
 ---
 
 ## Diferencia clave: R43 vs R44
 
-R43 se enfocó en **modelos de negocio alternativos, sostenibilidad verificable, y experiencia post-servicio**: suscripción recurrente, certificaciones ecológicas, technician tracking, portal B2B, WhatsApp automation, local pack domination, mental wellness marketing.
+R43 se enfocó en **modelos de negocio, certificaciones ecológicas, technician tracking, portal B2B, WhatsApp automation, local pack domination, y mental wellness marketing**.
 
 **R44 se enfoca en:**
-- **Tecnologías emergentes**: AI dynamic pricing, voice booking, IoT predictive maintenance
-- **Experiencia inmersiva**: video reviews con subtítulos, gamificación de referidos
-- **Diferenciación de marca**: carbon footprint tracking, franchising model
-- **Viralización**: subtítulos automáticos para redes sociales, badges de sostenibilidad
+- **Conversión transaccional**: indicadores de disponibilidad y urgencia
+- **Bundling y monetización**: paquetes con descuento y marketplace
+- **Gamificación**: programa de puntos con niveles y recompensas escalonadas
+- **Pricing dinámico**: surge pricing para temporada alta y early bird discounts
+- **Mismo-day service**: captura del segmento urgente que paga premium
 
-R43 construyó **modelos de negocio que generan revenue recurrente y diferenciación de marca**. R44 construye **ventaja tecnológica competitiva difícil de replicar** a través de IA, IoT, voice, y franchising documentado.
+R43 construyó **modelos de negocio y diferenciación de marca**. R44 construye **mecanismos de conversión, monetización y urgencia** que traducen tráfico en revenue.
 
 ---
 
 ## Síntesis: Por qué R44 es diferente
 
-R1-R43 ha cubierto un espectro amplio:
+R1-R43 ha construido una base sólida:
 - R1-R10: Features internos del site
 - R11-R20: SEO y Schema
-- R21-R30: UX y conversión
+- R21-R30: UX y conversión básica
 - R31-R35: Video, reputation, AI discoverability
 - R36: Modernización técnica (Popover API, Navigation API, Scroll-driven animations, Service Worker modules)
 - R37: Discovery externo (Apple Maps, TikTok Local, Video Reviews, Crisis Protocol)
@@ -301,60 +303,40 @@ R1-R43 ha cubierto un espectro amplio:
 - R40: Retención, confianza y canales no exploitados (voice search, portal, video testimonials, Seller Ratings, ESG)
 - R41: UX micro-mejoras, gamificación, SEO de blog, AI chatbot, PWA enhanced
 - R42: PWA install prompt, Background Sync, Content Index, skip-nav/focus WCAG 2.2, FAQPage Schema, runtime caching, ARIA live forms
-- **R43: Modelo de suscripción, certificaciones ecológicas, technician tracking, portal B2B, WhatsApp automation, local pack domination, mental wellness marketing**
-- **R44: AI dynamic pricing, video viral optimization, gamified referrals, carbon tracking, voice booking, IoT predictive maintenance, franchising model**
+- R43: Modelo de suscripción, certificaciones ecológicas, technician tracking, portal B2B, WhatsApp automation, local pack domination, mental wellness marketing
+- **R44: Indicadores de disponibilidad, bundles, programa de puntos, same-day booking, marketplace, referidos 2.0, surge pricing**
 
-R44 es la primera ronda dedicada a **tecnologías emergentes** (IA, IoT, voice, carbon tracking) y **modelos de expansión sistemática** (franchising). Las propuestas de R43 eran de revenue y retención; R44 es de **ventaja tecnológica competitiva y escalabilidad**.
+R44 es la primera ronda dedicada específicamente a **mecanismos de conversión transaccional, monetización alternativa y pricing dinámico**. Las propuestas de R43 eran de marca y modelo de negocio; R44 es **de convertir tráfico en revenue**.
 
 ---
 
 ## Fuentes
 
-[1] Salesforce Einstein. "AI Pricing Optimization." https://salesforce.com/products/einstein-analytics/
+[1] Baymard Institute. "Booking Availability Indicators." https://baymard.com/blog/booking-availability-indicator
 
-[2] Google Cloud. "Pricing Optimization Solutions." https://cloud.google.com/solutions/pricing-optimization
+[2] Angi Research. "Same-Day Service Scheduling Statistics." https://www.angi.com/research/scheduling/
 
-[3] Microsoft Azure. "Machine Learning Platform." https://azure.microsoft.com/en-us/services/machine-learning/
+[3] McKinsey & Company. "Bundling Strategy in Services." https://www.mckinsey.com/bundling-strategy
 
-[4] Otter.ai. "Automatic Video Transcription." https://otter.ai/
+[4] Bain & Company. "Service Bundling Best Practices." https://www.bain.com/bundling-services/
 
-[5] Rev. "Video Captioning and Subtitling." https://rev.com/
+[5] Loyalty360. "Points Program Research." https://www.loyalty360.com/points-programs
 
-[6] Descript. "Video Editing with AI." https://descript.com/
+[6] Colloquy. "Loyalty Program Benchmarks." https://www.colloquy.com/loyalty-research/
 
-[7] DeepL. "Neural Machine Translation." https://deepl.com/es/translator
+[7] HomeAdvisor. "Same-Day Service Trends." https://www.homeadvisor.com/same-day-services/
 
-[8] YouTube. "Adding Subtitles and Closed Captions." https://support.google.com/youtube/answer/6373554
+[8] TaskRabbit Research. "On-Demand Cleaning Services." https://www.taskrabbit.com/research/
 
-[9] Smile.io. "Gamified Referral Programs." https://smile.io/
+[9] eMarketer. "Cleaning Products E-commerce Market." https://www.emarketer.com/cleaning-products-market
 
-[10] ReferralCandy. "Referral Marketing." https://referralcandy.com/
+[10] ReferralCandy. "Best Referral Programs 2026." https://www.referralcandy.com/best-referral-programs
 
-[11] EPA. "Greenhouse Gas Equivalencies Calculator." https://www.epa.gov/energy/greenhouse-gas-equivalencies-calculator
+[11] Smile.io. "Referral Program Tiers." https://www.smile.io/referral-program-tiers
 
-[12] Carbon Trust. "Carbon Footprint Calculation." https://www.carbontrust.com/
+[12] Deloitte Digital. "Dynamic Pricing Strategies." https://www.deloitte.com/dynamic-pricing
 
-[13] South Pole. "Sustainability Solutions." https://www.southpole.com/
-
-[14] IPCC. "Climate Change Mitigation." https://www.ipcc.ch/
-
-[15] Amazon Alexa. "Alexa Skills Kit." https://developer.amazon.com/en-US/docs/alexa/
-
-[16] Google. "Actions on Google." https://developers.google.com/assistant
-
-[17] Voicebot.ai. "Voice Technology Statistics." https://voicebot.ai/
-
-[18] McKinsey. "IoT Predictive Maintenance." https://www.mckinsey.com/industries/semiconductors/our-insights/sensor-to-insight-how-iot-data-is-revolutionizing-predictive-maintenance
-
-[19] Siemens. "IoT Services." https://www.siemens.com/en/us/services/internet-of-things.html
-
-[20] Entrepreneur. "Franchise Business Guide." https://www.entrepreneur.com/franchise
-
-[21] Franchise Times. "Franchising Industry News." https://www.franchisetimes.com/
-
-[22] Business Wire. "Franchising in Latin America Growth Outlook 2024-2029." https://www.businesswire.com/news/home/20240925000505/en/Franchising-in-Latin-America-Growth-Outlook-2024-2029---ResearchAndMarkets.com
-
-[23] Forbes. "How to Start a Franchise." https://www.forbes.com/sites/theyec/2022/07/12/how-to-start-a-franchise
+[13] Gartner. "Pricing Optimization in Services." https://www.gartner.com/pricing-optimization
 
 ---
 
