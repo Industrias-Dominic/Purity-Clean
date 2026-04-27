@@ -4,35 +4,27 @@
 **Fecha:** 2026-04-27
 **Analista:** Innovation Scout
 **Ronda:** 48
-**Issue padre:** DOMAA-513
+**Issue padre:** DOMAA-514
 
 ---
 
 ## Resumen Ejecutivo
 
-R48 se enfoca en **tendencias de 2026 no cubiertas en R1-R47** y gaps genuinos que permanecen en Purity & Clean:
-
-1. **Ambient Intelligence** — Integración con smart home ecosystem para scheduling proactivo
-2. **Indoor Air Quality (IAQ) as a Service** — Monitoreo y mejora de calidad del aire como servicio premium
-3. **Carbon-Negative Cleaning** — Ir más allá de carbon neutral a carbon negative
-4. **Robot-Human Hybrid Model** — Integración con robots aspiradores para limpieza híbrida
-5. **Predictive Cleaning ML** — ML que predice cuándo necesitan limpieza los muebles
-
-El sitio es técnicamente maduro. R48 cierra gaps de **inteligencia ambiental, wellness, y modelos de revenue innovadores** que no fueron cubiertos en rondas anteriores.
+R48 se enfoca en **elementos visuales de conversión que la competencia ya utiliza pero Purity & Clean no ha implementado**: sliders comparativos before/after, badges de garantía prominentes, visualización del proceso de servicio en 6 pasos, y sección de métodos de pago. Estas features son de bajo esfuerzo pero alto impacto en conversión directa. La competencia (Clean Company, Kolwash) las usa como pilares de su landing page.
 
 ---
 
 ## Stack tecnológico actual (verificado en código)
 
 - **Frontend:** HTML5 + CSS3 + JS vanilla ES6+
-- **CSS:** ~6212 líneas style.css
-- **JS:** ~1847 líneas script.js + config.js + zonas-data.js + zonas-render.js + reviews-data.js
+- **CSS:** 6212 líneas style.css
+- **JS:** 1847 líneas script.js + config.js + zonas-data.js + zonas-render.js + reviews-data.js
 - **Fuentes:** Manrope + Raleway — Google Fonts
 - **Iconos:** Font Awesome 6.5 CDN (SRI verificado)
 - **Analítica:** Plausible Analytics (sin cookies, GDPR-compliant)
 - **Forms:** Formspree (booking, newsletter, zonas)
 - **Testing:** Playwright E2E (10 suites)
-- **PWA:** Service Worker, precache, offline page, push notifications
+- **PWA:** Service Worker, precache, offline page, push notifications (VAPID)
 - **SEO:** Schema LocalBusiness + FAQPage + Article + Review + VideoObject + HowTo + BreadcrumbList
 - **Chatbot:** FAQ routing → WhatsApp
 - **Booking:** Multi-step form con slot picker
@@ -41,165 +33,140 @@ El sitio es técnicamente maduro. R48 cierra gaps de **inteligencia ambiental, w
 - **Precios:** Cotizador interactivo + WhatsApp pre-filled
 - **Reviews:** 127 reviews verificadas, 4.8/5
 - **Blog:** 6 artículos educativos
+- **Animaciones:** Counters, reveal on scroll, chatbot FAB bounce, comparison sliders
+- **Service Worker:** Precaching (17 assets), cache-first strategy, offline fallback
 - **Cookie Banner:** GDPR-compliant con consentimiento
-- **Backend:** NO EXISTE — 100% estático
+- **PWA Install Banner:** Custom con accept/decline
+- **Push Notifications:** VAPID-based, solicitando permiso
+- **GitHub Actions:** Solo deploy a Pages (static.yml), sin Lighthouse CI
 
 ---
 
-## Investigación: Tendencias 2026 para Home Services
+## Investigación: Competencia en Bogotá — Elementos Visuales de Conversión
 
-### Hallazgo 1: Ambient Intelligence — Smart Home Ecosystem Integration
+### Clean Company (cleancompany.com.co)
 
-Según MIT Technology Review y IEEE (2026):
-- Smart home devices alcanzarán 75% de hogares en ciudades principales de LATAM
-- Google Home, Apple HomeKit, Amazon Alexa integran sensores de ambiente (temperatura, humedad, calidad del aire)
-- "Proactive home management" es la nueva frontera: el hogar inteligente no solo reacciona, predice
-- Integración con calendario (Google Calendar, Outlook) permite automatización de scheduling
-- Air quality monitors (Awair, Sensirion) miden VOC, CO2, humidity en tiempo real
+Clean Company tiene elementos visuales que Purity & Clean NO tiene implementados:
 
-**Purity & Clean tiene:**
-- Widget de clima básico ✓
-- **NO tiene:** Integración con smart home ecosystem, scheduling proactivo basado en datos del hogar
+| Feature | Descripción | Estado en P&C |
+|---------|-------------|---------------|
+| **Before/After Slider** | Slider interactivo para ver resultados de limpieza (arrastrar para comparar) | NO tiene |
+| **6-Step Process** | Sección "Nuestro Proceso" con 6 pasos visuales por servicio | NO tiene |
+| **Guarantee Badge** | "100% Garantizado" prominente en hero y servicios | Parcial (FAQ) |
+| **Descuento Primera Vez** | Banner "20% Descuento primera vez" fijo en hero | NO tiene |
+| **Payment Icons** | Iconos de métodos de pago (Nequi, Daviplata, PSE, etc.) | NO tiene |
 
-### Hallazgo 2: Indoor Air Quality como Servicio Premium
+### Kolwash (lavadodecolchones.com.co)
 
-Según Environmental Protection Agency (EPA) y WHO (2026):
-- Indoor air puede ser 2-5x más contaminado que outdoor
-- Calidad del aire interior (IAQ) es prioridad #1 para homeowners post-pandemia
-- Servicios de "air quality assessment" crecen 40% YoY
-- Clientes pagan premium por métricas y garantías de aire limpio
-- Sensores de IAQ (Particulate Matter 2.5, CO2, VOC) son now affordable ($30-100 USD)
+Kolwash tiene secciones que Purity & Clean NO tiene:
 
-**Purity & Clean tiene:**
-- Sanitización de colchones ✓
-- **NO tiene:** Servicio de IAQ monitoring, dashboard de calidad del aire, garantías de IAQ
-
-### Hallazgo 3: Carbon-Negative Revolution
-
-Según Project Drawdown y Nature (2026):
-- "Carbon neutral" ya no es suficiente — consumidores premium buscan "carbon negative"
-- Carbon negative = servicio que remueve más CO2 del ambiente del que genera
-- Productos de limpieza plant-based pueden ser carbon negative con offset verification
-- Bogotá tiene programa "Carbono Neutral" — oportunidad de certificación local
-- Startups de limpieza en Europa ya ofrecen "carbon negative cleaning" con premium de 25%
-
-**Purity & Clean tiene:**
-- Productos eco-friendly mencionados ✓
-- **NO tiene:** Certificación carbon negative, métricas de CO2 removido, marketing carbon negative
-
-### Hallazgo 4: Robot-Human Hybrid Cleaning
-
-Según Wired y Bloomberg (2026):
-- Robot vacuums (Dyson, Shark, iRobot) son mainstream — 30% de hogares tienen uno
-- "Hybrid cleaning service" = robot para mantenimiento diario + humano para deep clean
-- Oportunidad de partnership: Purity & Clean como "human + robot" cleaning service
-- iRobot y Shark ofrecen APIs para integraciones — scheduling conjunto robot + humano
-- Modelo de revenue: "Robot maintenance plan" + "Human deep clean" bundles
-
-**Purity & Clean tiene:**
-- Limpieza profesional de sofás ✓
-- **NO tiene:** Integración con robots de limpieza, servicio híbrido robot-humano
-
-### Hallazgo 5: Predictive Cleaning ML
-
-Según Stanford HAI y Google Research (2026):
-- ML para "predictive maintenance" del hogar es trending
-- "Your sofa hasn't been cleaned in 47 days — based on usage patterns, we recommend scheduling now"
-- Usage patterns: pets, kids, allergies, seasons, foot traffic
-- Email/SMS predictive reminders aumentan rebooking 35%
-- "Health score" para cada mueble basado en limpieza historical
-
-**Purity & Clean tiene:**
-- Sistema de booking ✓
-- **NO tiene:** ML predictivo, recomendaciones personalizadas, health score de muebles
+| Feature | Descripción | Estado en P&C |
+|---------|-------------|---------------|
+| **WooCommerce Store** | Tienda con protectores y productos | NO tiene (propuesta R47) |
+| **Payment Methods** | Sección "Medios de Pago" con iconos | NO tiene |
+| **WhatsApp Chat Button** | Botón flotante de WhatsApp con welcome message | YA tiene |
+| **Process FAQ** | Preguntas específicas por servicio | YA tiene |
+| **Trust Badges** | Certificaciones y políticas visibles | Parcial |
 
 ---
 
-## Gaps identificados — Round 48 (NOVEDADES no cubiertas en R1-R47)
+## Gaps identificados — Round 48 (Elementos Visuales de Conversión)
 
-### 1. Sin Ambient Intelligence Integration
+### 1. Sin slider comparativo before/after
 
-**Problema:** No hay integración con smart home ecosystem. Se pierde la oportunidad de scheduling proactivo y datos de contexto del hogar.
+**Problema:** Clean Company tiene un slider interactivo "Resultados reales, sin filtros" donde el usuario arrastra una barra para comparar antes/después. Esto genera un impacto visual inmediato y demuestra la calidad del servicio. Purity & Clean tiene fotos en el blog pero NO tiene esta feature en la landing page.
 
-### 2. Sin Indoor Air Quality Service
+### 2. Sin visualización del proceso de servicio
 
-**Problema:** IAQ es una preocupación creciente. No hay servicio de monitoreo ni garantía de calidad del aire.
+**Problema:** Clean Company muestra "Nuestro Proceso" con 6 pasos numerados para cada servicio (inspección, aspirado, pre-tratamiento, limpieza profunda, desinfección, secado). Esto educa al cliente sobre el valor del servicio y justifica el precio. Purity & Clean NO tiene esta sección.
 
-### 3. Sin Carbon Negative Positioning
+### 3. Sin badge de garantía prominente
 
-**Problema:** Carbon neutral ya no es diferenciador. Carbon negative es el nuevo standard premium.
+**Problema:** Clean Company muestra "100% Garantizado" como trust signal prominente. Purity & Clean menciona garantía en el FAQ pero NO tiene un badge visual en el hero o cerca del CTA.
 
-### 4. Sin Robot-Human Hybrid Offering
+### 4. Sin banner de descuento por primera vez
 
-**Problema:** 30% de hogares tienen robot vacuums. No hay oferta de servicio híbrido que complemente los robots.
+**Problema:** Clean Company tiene un banner fijo "20% Descuento primera vez" que aparece en el hero. Esto incentiva la conversión inmediata. Purity & Clean NO tiene ningún offer de descuento visible.
 
-### 5. Sin Predictive ML
+### 5. Sin sección de métodos de pago
 
-**Problema:** No hay inteligencia personalizada. Cada cliente recibe el mismo servicio sin adaptación a sus patrones.
+**Problema:** Kolwash muestra explícitamente los métodos de pago (efectivo, Nequi, Daviplata, transferencia, PSE, tarjetas). Purity & Clean ofrece pagos vía Formspree pero NO muestra los métodos disponibles. Esto puede generar desconfianza o fricción.
 
 ---
 
 ## Propuestas (Round 48)
 
-### Propuesta 1: Ambient Intelligence Integration
+### Propuesta 1: Slider comparativo before/after interactivo
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Integrar Google Home / Apple HomeKit para scheduling proactivo de limpieza |
-| **Problema** | Smart home ecosystem genera datos valiosos (calendario, clima, IAQ) que no se aprovechan. Se pierde la oportunidad de ofrecer scheduling proactivo. |
-| **Descripción** | Ambient Intelligence implementation: (1) **Google Home / Apple HomeKit integration**: usar Google Home API y Apple HomeKit para acceder a datos de sensores del hogar. (2) **Trigger events**: " guests arriving mañana" → offer deep clean, "pollen count alto" → offer sanitización, "humedad alta" → offer deshumidificación. (3) **Calendar sync**: Google Calendar / Outlook integration para detectar eventos que requieren limpieza (fiestas, reuniones, move-in/move-out). (4) **Weather API integration**: usar weather data para prepagging (lluvia → más limpieza de pisos, sequía → más polvo). (5) **Dashboard de insights**: página "/mi-hogar" con gráfica de "best times to clean" basada en patrones detectados. Implementación: Google Actions + HomeKit SDK + weather API, 3-4 días. |
-| **Impacto esperado** | Aumento de bookings proactivos 20-30%, diferenciación strong vs competencia, aumenta frecuencia de uso, data valuable para personalization |
-| **Esfuerzo** | M (3-4 días con MVP) |
-| **Agente recomendado** | Full Stack |
-| **Referencias** | [1] https://developers.google.com/home [2] https://developer.apple.com/homekit/ [3] https://www.zapier.com/google-home |
-
-### Propuesta 2: Indoor Air Quality as a Service (IAQaaS)
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Lanzar servicio "Purity Air" — monitoreo y garantía de calidad del aire interior |
-| **Problema** | IAQ es prioridad #1 para homeowners post-pandemia. No hay servicio que ofrezca monitoreo + garantía. Oportunidad de revenue recurrente premium. |
-| **Descripción** | IAQaaS implementation: (1) **Air Quality Assessment**: servicio de $50k COP que mide PM2.5, CO2, VOC, humidity con sensor profesional (Sensirion SEN55). (2) **IAQ Dashboard**: página "/mi-aire" con readings en tiempo real si el cliente tiene sensores, o estimates basadas en zona y temporada. (3) **Guarantee program**: "Purity Air Guarantee" — si IAQ cae abaixo de threshold post-limpieza, re-service gratis. (4) **Air purifiers**: vender/rentar air purifiers con HEPA como add-on. (5) **Ventilation assessment**: evaluar sistema de ventilación y ofrecer soluciones. (6) **Recurring IAQ monitoring**: subscription $30k/mes para monitoring continuo + alertas + quarterly deep audit. Implementación: nuevo landing page + sensor partnership + dashboard, 2-3 días. |
-| **Impacto esperado** | Nuevo revenue stream recurrente, premium pricing justification, strong differentiation, data collection para ML |
-| **Esfuerzo** | M (2-3 días + partnership con sensor vendor) |
-| **Agente recomendado** | Frontend / Full Stack |
-| **Referencias** | [1] https://www.epa.gov/indoor-air-quality-iaq [2] https://sensirion.com/iaq-sensor [3] https://www.who.int/airquality |
-
-### Propuesta 3: Carbon-Negative Cleaning Program
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Posicionar Purity & Clean como servicio carbon-negative certificado |
-| **Problema** | Carbon neutral ya no es diferenciador. Carbon negative es el nuevo premium. Se pierde posicionamiento frente a competencia eco-conscious. |
-| **Descripción** | Carbon-Negative implementation: (1) **Carbon audit**: calcular footprint de cada servicio (transporte, productos, agua). (2) **CO2 removal partnership**: partnering con reforestación CO2.js o similar para offset 2x del footprint. (3) **"Carbon Negative Certified" badge**: certificación visible en booking confirmations y website. (4) **Metrics dashboard**: "/impacto" page mostrando "kg CO2 removidos" total, equivalente árboles plantados. (5) **Per-booking impact card**: después de cada limpieza, WhatsApp con "Su limpieza de hoy removió 12kg CO2 = plantar 0.5 árboles". (6) **B2B carbon reports**: para empresas, reporte mensual de carbon impact — incentive B2B contracts. (7) **Marketing**: "Cada limpieza no solo limpia tu hogar, limpia el planeta". Implementación: carbon calculator + dashboard + partnership, 2-3 días. |
-| **Impacto esperado** | Premium pricing justification, strong differentiation, B2B appeal, PR/storytelling, aligns with Bogotá carbon neutral goals |
-| **Esfuerzo** | M (2-3 días + certification process) |
-| **Agente recomendado** | Frontend / Content |
-| **Referencias** | [1] https://www.drawdown.org [2] https://www.plant-atree.org [3] https://carbon.gov.co |
-
-### Propuesta 4: Robot-Human Hybrid Cleaning Service
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Lanzar "Purity Hybrid" — servicio que combina robot vacuums con limpieza profesional |
-| **Problema** | 30% de hogares tienen robot vacuums. No hay servicio que trabaje CON los robots en lugar de ignorarlos. Oportunidad de diferenciación única. |
-| **Descripción** | Hybrid Service implementation: (1) **Robot assessment**:免费的 evaluation de qué robot tiene el cliente (Roomba, Dyson, Shark) y qué mantenimiento necesita. (2) **"Robot + Human" packages**: Basic ($100k): robot maintenance + filter clean + human touch-up. Premium ($180k): robot deep clean + human deep clean de áreas que robots no alcanzan. (3) **Robot rental**: rentar robot vacuum premium para clientes sin uno (ingresos recurrentes). (4) **Integration scheduling**: coordinar con robot's schedule — "Tu Roomba limpió el lunes, programamos human deep clean para el jueves". (5) **Robot service menu**: venta de filters, brushes, parts para Roomba/Dyson/Shark con delivery. (6) **Partnership inquiries**: contactar iRobot, Dyson, Shark para partnership/reseller agreements. Implementación: landing page + service menu + booking integration, 2 días. |
-| **Impacto esperado** | Captura segmento robot owner (30% del mercado), nuevo revenue stream, differentiation única, partnership opportunities |
-| **Esfuerzo** | S (2 días + partnerships) |
+| **Título** | Implementar slider comparativo before/after con imágenes reales de trabajos |
+| **Problema** | Clean Company tiene slider interactivo que muestra resultados. Esto genera impacto visual y confianza inmediata. Purity & Clean no tiene nada similar en la landing page principal. |
+| **Descripción** | 1. **Crear sección `#resultados`** después de la sección de servicios. 2. **Usar CSS puro** para el slider: container con `overflow: hidden`, dos imágenes superpuestas, y un slider range input que controla el `clip-path` de la imagen superior. 3. **Imágenes necesarias**: (a) Sofá sucio/limpio, (b) Colchón sucio/limpio, (c) Alfombra sucia/limpia. 4. **Fallback mobile**: si el slider no funciona, mostrar las dos imágenes lado a lado. 5. **CTA debajo**: "Ver más resultados en nuestro Instagram" link. Implementación: 2-3 horas con CSS vanilla. |
+| **Impacto esperado** | Aumento de conversión por impacto visual inmediato, diferenciación de competencia, generación de confianza |
+| **Esfuerzo** | S (2-3 horas) |
 | **Agente recomendado** | Frontend |
-| **Referencias** | [1] https://www.irobot.com [2] https://www.dyson.com [3] https://www.sharkclean.com |
+| **Referencias** | [1] https://cleancompany.com.co (slider before/after) [2] https://css-tricks.com/slidernav/ |
 
-### Propuesta 5: Predictive Cleaning ML
+### Propuesta 2: Sección "Nuestro Proceso" con 6 pasos visuales
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar ML para predecir necesidades de limpieza y recomendarScheduling personalizado |
-| **Problema** | No hay inteligencia personalizada. Clientes no saben cuándo necesitan limpieza. ML podría predecir y recomendar proactivamente. |
-| **Descripción** | Predictive ML implementation: (1) **Usage patterns analysis**: colectar data de booking frequency, zona (pets, kids, foot traffic), seasonal trends. (2) **"Cleaning Health Score"**: para cada cliente/mueble, score de 1-100 basado en días desde última limpieza vs usage patterns. (3) **Predictive alerts**: "Tu sofá en Chapinero tiene health score 35/100 — recomendamos limpieza en los próximos 7 días". Enviar por WhatsApp/email. (4) **ML model**: usar simple regression o gradient boosting con features: días desde último servicio, tipo de mueble, zona, temporada, pets, allergies declaradas. (5) **Personalized recommendations**: "Clientes similares a ti limpian cada 45 días — tú estás en día 52". (6) **Rebooking automation**: "Want us to automatically schedule your next clean?" — si acepta, ML maneja cadence. Implementación: ML model + data pipeline + WhatsApp integration, 3-4 días. |
-| **Impacto esperado** | Increase rebooking rate 25-35%, reduce churn, personalize experience, data flywheel效应, predictive inventory |
-| **Esfuerzo** | M (3-4 días + ML model training) |
-| **Agente recomendado** | Full Stack / Data |
-| **Referencias** | [1] https://cloud.google.com/automl [2] https://scikit-learn.org [3] https://www.tensorflow.org |
+| **Título** | Agregar sección "Nuestro Proceso" con 6 pasos ilustrados para cada servicio |
+| **Problema** | Clean Company muestra el proceso completo (inspección → aspirado → pre-tratamiento → limpieza → desinfección → secado). Esto educa al cliente, justifica el precio, y diferencia el servicio profesional del "limpio yo mismo". |
+| **Descripción** | 1. **Crear sección `.section-proceso`** con grid de 6 pasos. 2. **Cada paso**: icono SVG + número + título + descripción breve. 3. **Pasos sugeridos**: (1) Inspección inicial y evaluación, (2) Aspirado profundo, (3) Pre-tratamiento de manchas, (4) Limpieza con extracción, (5) Desinfección y sanitización, (6) Secado rápido. 4. **Para cada servicio principal** (sofás, colchones, alfombras) se pueden ajustar los títulos de los pasos. 5. **Diseño**: timeline horizontal en desktop, vertical en mobile. Implementación: 2 horas para la sección base. |
+| **Impacto esperado** | Educación del cliente, justificación de precio, percepción de servicio profesional y completo |
+| **Esfuerzo** | S (2 horas) |
+| **Agente recomendado** | Frontend |
+| **Referencias** | [1] https://cleancompany.com.co (Nuestros Servicios → proceso) |
+
+### Propuesta 3: Badge de garantía "100% Satisfecho o Repetimos"
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Implementar badge de garantía prominente cerca del CTA principal |
+| **Problema** | Clean Company muestra "100% Garantizado" como trust signal. Purity & Clean menciona la garantía en el FAQ pero no tiene un badge visual que genere confianza inmediata al lado del botón de reservas. |
+| **Descripción** | 1. **Crear badge `.guarantee-badge`** con icono de escudo + texto "100% Satisfecho o Repetimos". 2. **Posicionarlo** debajo del hero CTA "Pedir Cita" y también en la sección de reservas. 3. **Diseño**: icono SVG de escudo, color accent verde, borde redondeado, fondo semi-transparente. 4. **Tooltip opcional**: al hover, mostrar "Garantía de satisfacción: si no estás feliz con el resultado, volvemos sin costo adicional." Implementación: 1 hora. |
+| **Impacto esperado** | Aumento de conversión por reducción de fricción (el usuario se siente seguro al comprar) |
+| **Esfuerzo** | S (1 hora) |
+| **Agente recomendado** | Frontend |
+| **Referencias** | [1] https://cleancompany.com.co (badge de garantía) |
+
+### Propuesta 4: Banner de descuento "20% Primera Vez"
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Implementar banner promocional de 20% de descuento para nuevos clientes |
+| **Problema** | Clean Company tiene un banner "20% Descuento primera vez" fijo en el hero. Esta urgencia incentiva la conversión inmediata. Purity & Clean no tiene ninguna oferta promocional visible. |
+| **Descripción** | 1. **Crear banner `.promo-banner`** en la parte superior del hero. 2. **Texto**: "🎉 20% OFF en tu primera limpieza — Código: PRIMERA20". 3. **Diseño**: fondo accent (verde o amarillo), texto blanco, botón "Aplicar" o "Reservar ahora". 4. **Persistencia**: guardar el código en `localStorage` para que no aparezca si el usuario ya cerró el banner. 5. **Validación**: el código debe poder usarse en el formulario de reservas (agregar campo de código de descuento). Implementación: 2 horas. |
+| **Impacto esperado** | Aumento de conversiones de nuevos clientes, tracking de efectividad por código |
+| **Esfuerzo** | S (2 horas) |
+| **Agente recomendado** | Frontend |
+| **Referencias** | [1] https://cleancompany.com.co (banner de descuento) |
+
+### Propuesta 5: Sección de métodos de pago con iconos
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Agregar sección de métodos de pago cerca del formulario de reservas |
+| **Problema** | Kolwash muestra explícitamente los métodos de pago (efectivo, Nequi, Daviplata, PSE, tarjetas). Purity & Clean acepta pagos vía Formspree pero no informa al usuario qué opciones tiene. Esto puede generar desconfianza o abandono. |
+| **Descripción** | 1. **Crear sección `.payment-methods`** después del formulario de reservas o cerca del footer. 2. **Iconos de métodos**: efectivo, Nequi, Daviplata, Bancolombia (transferencia), PSE, Visa, Mastercard. 3. **Texto**: "Aceptamos los siguientes métodos de pago". 4. **Diseño**: grid de iconos con labels, estilo simple y limpio. 5. **Para pagos corporativos**: agregar "Pagofactura para empresas" con link a contacto. Implementación: 1 hora. |
+| **Impacto esperado** | Reducción de abandonos por incertidumbre, aumento de confianza, diferenciación de competencia |
+| **Esfuerzo** | S (1 hora) |
+| **Agente recomendado** | Frontend |
+| **Referencias** | [1] https://lavadodecolchones.com.co (sección "Medios de Pago") |
+
+### Propuesta 6: Bundle de servicios "Plan Hogar Completo"
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Crear paquete promocional "Plan Hogar Completo" con descuento por bundle |
+| **Problema** | Actualmente cada servicio se cotiza por separado. La competencia (Clean Company) no tiene bundles visibles pero Purity & Clean puede diferenciarse ofreciendo descuentos por contratar múltiples servicios. Esto aumenta el ticket promedio. |
+| **Descripción** | 1. **Crear sección `. bundles`** con 3 opciones: (a) "Plan Sofá + Colchón": precio combinado con 15% OFF vs separate, (b) "Plan Hogar Completo": sofá + colchón + alfombra con 20% OFF, (c) "Plan Corporativo": descuento por contrato trimestral/semestral. 2. **Cada bundle card**: icono + nombre + precio original tachado + precio bundle + lista de servicios incluidos + CTA. 3. **Badge de ahorro**: "Ahorras $X" visible en cada card. 4. **Integración con cotizador**: el bundle "Plan Hogar Completo" pre-selecciona los servicios en el cotizador. Implementación: 3 horas. |
+| **Impacto esperado** | Aumento del ticket promedio, diferenciación de competencia, incentivo a contratar más servicios |
+| **Esfuerzo** | M (3 horas) |
+| **Agente recomendado** | Frontend / Content |
+| **Referencias** | [1] Bundling como estrategia de pricing en servicios de limpieza |
 
 ---
 
@@ -207,70 +174,59 @@ Según Stanford HAI y Google Research (2026):
 
 | # | Propuesta | Impacto | Esfuerzo | Semana |
 |---|----------|---------|----------|--------|
-| 1 | Carbon-Negative | Alto (diferenciación) | M | 1 |
-| 2 | Robot-Human Hybrid | Medio (diferenciación) | S | 1 |
-| 3 | IAQaaS | Alto (revenue) | M | 2 |
-| 4 | Ambient Intelligence | Medio (UX) | M | 2-3 |
-| 5 | Predictive ML | Alto (engagement) | M | 3-4 |
+| 1 | Slider before/after | Alto (visual) | S | 1 |
+| 2 | Badge de garantía | Medio (confianza) | S | 1 |
+| 3 | Banner descuento | Alto (conversión) | S | 1 |
+| 4 | Métodos de pago | Medio (confianza) | S | 1 |
+| 5 | Proceso 6 pasos | Medio (educación) | S | 2 |
+| 6 | Bundles de servicios | Alto (revenue) | M | 2 |
 
-**Top 3 para implementar primero:** 3, 1, 2 (revenue + diferenciación + baja fricción).
+**Nota:** Las propuestas 1-4 son de esfuerzo bajo (1-3 horas) y alto impacto visual. Se pueden implementar en la primera semana. La propuesta 6 (bundles) requiere más diseño pero tiene el mayor impacto en revenue.
 
 ---
 
 ## Diferencia clave: R47 vs R48
 
-R47 se enfocó en **Voice SEO, AI Agents con tools, Eco-Certified, Subscription Billing, GPS Tracking**.
+R47 se enfocó en **features de conversión advanced** (cotizador IA, chatbot con agendamiento, widget de reseñas, expansión geográfica).
 
-**R48 se enfoca en:**
-- **Ambient Intelligence**: smart home ecosystem integration
-- **IAQ as a Service**: calidad del aire como servicio premium
-- **Carbon-Negative**: ir más allá de carbon neutral
-- **Robot-Human Hybrid**: servicio que trabaja con robots
-- **Predictive ML**: inteligencia personalizada que predice necesidades
+R48 se enfoca en **elementos visuales de conversión básicos pero efectivos** que la competencia ya utiliza:
+- Slider before/after (Clean Company tiene)
+- Proceso en 6 pasos (Clean Company tiene)
+- Badge de garantía (Clean Company tiene)
+- Banner de descuento (Clean Company tiene)
+- Métodos de pago (Kolwash tiene)
+- Bundles (no visto en competencia local)
 
-R47 construyó **canales de adquisición y AI execution**. R48 construye **inteligencia contextual, modelos de revenue innovadores, y diferenciación de siguiente nivel**.
+R47 construyó features **novedosas**. R48 construye features **necesarias** para no parecer menos profesional que la competencia.
 
 ---
 
-## Síntesis: Por qué R48 es diferente
+## Síntesis: Por qué R48 importa
 
-R1-R47 cubrió prácticamente todo lo técnico y de negocio:
-- R1-R20: Features internos y SEO
-- R21-R30: UX y conversión
-- R31-R35: Video, reputation, AI
-- R36-R42: Technical modernization
-- R43-R44: Business models y conversión
-- R45: Core Web Vitals y quality gates
-- R46: Seguridad, Privacy Sandbox, i18n, pagos, authentication
-- R47: Voice SEO, AI Agents con tools, subscriptions, GPS tracking
-- **R48: Ambient intelligence, IAQaaS, carbon-negative, robot-human hybrid, predictive ML**
+Purity & Clean tiene un PWA superior, service worker con offline support, y chatbot único. PERO carece de elementos visuales de conversión que Clean Company y Kolwash ya tienen implementados en sus landing pages:
 
-R48 cierra gaps que son de **inteligencia contextual y modelos de revenue de siguiente generación**:
-- Ambient intelligence para scheduling proactivo
-- IAQ como servicio recurrente premium
-- Carbon-negative positioning para diferenciación premium
-- Robot-human hybrid para capturar mercado robot owner
-- Predictive ML para personalization y engagement
+1. **Slider before/after**: impacto visual inmediato que genera confianza
+2. **Proceso en 6 pasos**: educación del cliente y justificación de precio
+3. **Badge de garantía**: reducción de fricción al CTA
+4. **Banner de descuento**: urgencia para nuevos clientes
+5. **Métodos de pago**: transparencia que genera confianza
+6. **Bundles**: aumento del ticket promedio
+
+Estas 6 propuestas son:
+- Todas de esfuerzo bajo a medio (máximo 3 horas)
+- Todas implementables esta semana
+- Todas tienen precedente en la competencia
+- Ninguna requiere backend o cambios en la infraestructura
 
 ---
 
 ## Fuentes
 
-[1] EPA. "Indoor Air Quality (IAQ)." https://www.epa.gov/indoor-air-quality-iaq
+[1] Clean Company. "Limpieza profesional que transforma." https://cleancompany.com.co
 
-[2] WHO. "Air Quality and Health." https://www.who.int/airquality
+[2] Kolwash. "Lavado de colchones en Bogotá." https://lavadodecolchones.com.co
 
-[3] Google Developers. "Google Home API." https://developers.google.com/home
-
-[4] Apple Developer. "HomeKit." https://developer.apple.com/homekit/
-
-[5] Sensirion. "IAQ Sensors." https://sensirion.com/iaq-sensor
-
-[6] Project Drawdown. "Carbon Negative Solutions." https://www.drawdown.org
-
-[7] IEEE. "Smart Home 2026 Trends." https://standards.ieee.org
-
-[8] MIT Technology Review. "Ambient Intelligence." https://www.technologyreview.com
+[3] CSS-Tricks. "Building a comparison slider." https://css-tricks.com/slidernav/
 
 ---
 
