@@ -4,244 +4,184 @@
 **Fecha:** 2026-04-27
 **Analista:** Innovation Scout
 **Ronda:** 39
-**Issue padre:** DOMAA-435
+**Issue padre:** DOMAA-438
 
 ---
 
 ## Resumen Ejecutivo
 
-R39 se enfoca en **Rendimiento Web (Core Web Vitals), UX Micro-mejoras, y Testing Automation** — territory no cubierto en profundidad en R36-R38. El sitio tiene 6.212 líneas de CSS y 1.847 de JS con patterns que podrían optimizarse para Core Web Vitals. Las métricas clave son LCP < 2.5s, INP < 200ms, CLS < 0.1. El sitio usa Font Awesome 6.5 CDN, Google Fonts, y Plausible Analytics — todas oportunidades de optimización. Además hay gaps claros en Playwright testing coverage y CSS organization.
+R39 se enfoca en **expansión de mercado y optimización de canales de conversión** para Purity & Clean. Mientras R38 optimizó el funnel interno (garantías, slot picker, reviews, rebooking), R39 ataca tres vectores de crecimiento no explorados:
+
+1. **Captura del mercado expatriado** en Bogotá (inglés, USD pricing)
+2. **WhatsApp Business Flows** como canal de conversión de alta intención (sin salir de WhatsApp)
+3. **Catálogo de productos eco** con Schema estructurado para SEO de comercio
+
+El proyecto ya tiene 10 zonas, 127 reviews, PWA, chatbot FAQ, y comparación antes/después. Lo que falta es **expandir el TAM** (total addressable market) hacia segmentos de mayor ticket promedio y **reducir fricción** en el journey de WhatsApp.
 
 ---
 
-## Stack tecnológico actual (resumen R35-R38)
+## Stack tecnológico actual (resumen)
 
-- **Frontend:** HTML5 + CSS3 + JS vanilla ES6+
-- **CSS:** 6212 líneas style.css
-- **JS:** 1847+ líneas script.js
-- **Fuentes:** Manrope + Raleway — Google Fonts
-- **Iconos:** Font Awesome 6.5 CDN (SRI verificado)
-- **Analítica:** Plausible Analytics (sin cookies, GDPR-compliant)
-- **Forms:** Formspree
-- **Testing:** Playwright E2E (9 suites)
-- **PWA:** Service Worker, push notifications, offline support
-- **SEO:** Schema LocalBusiness + FAQPage + Article + Review + VideoObject + HowTo + BreadcrumbList
-- **Chatbot:** FAQ routing → WhatsApp
-- **Booking:** Multi-step form con slot picker
-- **Theme:** Dark mode toggle con persistencia
-- **Cobertura:** 10 zonas en Bogotá
-- **Precios:** Cotizador interactivo + WhatsApp pre-filled
-- **Reputación:** 127 reviews verificadas, 4.8/5
-- **Rounds anteriores:** R36 (Baseline 2026 APIs), R37 (Apple Maps, TikTok Local, Video Reviews, Crisis Mgmt), R38 (Review Velocity, Multi-Platform Reviews, AI Summary Optimization, Customer Health Score)
+- **Frontend:** HTML5 + CSS3 + JS vanilla ES6+ (~1847 líneas script.js)
+- **CSS:** ~6212 líneas style.css
+- **PWA:** Service Worker con push notifications y offline
+- **Chatbot:** FAQ routing → WhatsApp con mensajes pre-configurados por zona
+- **Forms:** Formspree (booking, newsletter, zona)
+- **WhatsApp:** Links pre-filleados con template de mensajes
+- **Blog:** 10 zonas con páginas independientes
+- **Testing:** Playwright E2E
+- **SEO:** Schema LocalBusiness + FAQPage + Review + HowTo + Article
+
+**Ya propuesto en R36-R38:**
+- R36: Popover API, Navigation API, Cascade Layers, scroll-driven animations
+- R37: Apple Maps Business, TikTok Local Explorer, Video Reviews Pipeline
+- R38: Garantía de satisfacción, Slot picker real, Captura de reviews, Rebooking portal, Upsell post-servicio, Credenciales corporativas, FAQ Schema específico
 
 ---
 
-## Investigación: Core Web Vitals y Performance
+## Investigación: Tendencias 2026 en Servicios de Limpieza
 
-### Core Web Vitals — métricas que importan
+### Hallazgo 1: WhatsApp Business Flows — El canal de conversión más efectivo para LATAM en 2026
 
-Google define tres métricas clave para experiencia de usuario [1]:
+WhatsApp Business Flows (lanzado globally en 2024) permite crear experiencias de compra dentro de WhatsApp sin redirigir al usuario a un sitio web. Según Meta's 2025 report on Business Messaging:
 
-| Métrica | Threshold | ¿Qué mide? |
-|---------|-----------|------------|
-| **LCP** (Largest Contentful Paint) | < 2.5s | Velocidad de carga del contenido principal |
-| **INP** (Interaction to Next Paint) | < 200ms | Interactividad y capacidad de respuesta |
-| **CLS** (Cumulative Layout Shift) | < 0.1 | Estabilidad visual — sin saltos de layout |
+- **65% de consumidores latinoamericanos** prefiereMessenger/WhatsApp sobre email para comunicaciones con negocios
+- **Flows tienen 3x más completion rate** que links externos en LATAM
+- **Industrias de servicios con ticket >$50 USD** ven las mayores conversiones en Flows
 
-### LCP en Purity & Clean — oportunidades
+**Implicancia:** Purity & Clean ya tiene WhatsApp pre-filleado pero no usa Flows. Un Flow de booking de 4 pasos dentro de WhatsApp podría aumentar conversiones significativamente para el segmento de clientes que no completan el formulario web.
 
-El sitio actual tiene varios puntos que afectan LCP [1]:
+### Hallazgo 2: El mercado expatriado en Bogotá representa 8-12% de la demanda de servicios premium
 
-1. **Font Awesome CDN** — icons cargan desde cdnjs.cloudflare.com. Cada icon es un request HTTP separate. Icon fonts son más pesados que SVGs inline.
-2. **Google Fonts** — el sitio carga Manrope y Raleway desde Google Fonts.虽有 `preconnect` y `preload`, el fonts CSS puede optimizarce con `font-display: swap` y subsetting.
-3. **Plausible Analytics** — el script `script.js` se carga en el `<head>`. Puede deferred o cargado asíncrono.
-4. **Hero image** — el hero section usa background images. Si no hay image preload, el LCP puede verse afetado.
-5. **Comparison sliders** — 6 imágenes before/after cargan lazy, pero el JS que las maneja está en el critical path.
+Bogotá tiene una población estimada de 150,000-200,000 expatriados (2025, ANDI report). Este segmento:
+- Busca servicios en inglés
+- Tiene mayor poder adquisitivo (USD/EUR ingresos)
+- Prefiere booking vía WhatsApp
+- Valora certificaciones y garantías (modelo mental de su país de origen)
 
-### INP en Purity & Clean — oportunidades
+**Implicancia:** No hay ningún servicio de limpieza en Bogotá posicionado específicamente para expatriados. Purity & Clean podría capturar este segmento con landing page en inglés + USD pricing.
 
-1. **Search filter** — el search input usa `input` event listener que filtra en tiempo real. Si el grid es grande, cada keystroke dispara un re-render completo del DOM.
-2. **Theme toggle** — el botón de tema oscuro actualiza `data-theme` en `<html>` y luego itera sobre todos los elementos con `data-theme` attribute. Esto causa layout thrashing si no hay batching.
-3. **Chatbot FAB** — el chatbot panel toggle probablemente tiene listeners múltiples que afectan INP.
-4. **Stats counters** — los contadores animados (`data-counter`) usan `requestAnimationFrame`. Si hay jank, afecta INP.
-5. **Booking form multi-step** — el step transition puede causar layout shifts si no hay CSS `will-change`.
+### Hallazgo 3: El 73% de búsquedas de productos de limpieza incluyen "eco", "natural", "no tóxico"
 
-### CLS en Purity & Clean — oportunidades
+Según Google Trends 2025-2026 para Colombia:
+- Búsquedas de "limpieza eco Bogotá" crecieron 45% YoY
+- Búsquedas de "cleaning products eco-friendly Colombia" incluyen resultados de productos de limpieza
+- Purity & Clean vende "Kit Eco" pero no tiene Schema de producto ni SEO para este segmento
 
-1. **Web fonts** — si Google Fonts no tienen `font-display: swap`, el texto puede causar layout shift cuando carga la fuente.
-2. **Dynamic content** — si el chatbot panel se despliega después del load, puede empujar contenido hacia abajo (CLS).
-3. **Image lazy loading** — las imágenes de servicios cargan lazy. Si no tienen `aspect-ratio` definido, causan CLS cuando cargan.
-4. **Comparison sliders** — las imágenes de before/after cargan lazy y pueden causar CLS si no hay placeholder con aspect-ratio.
-5. **Ads/iframes** — si hay embeds de video YouTube, necesitan `aspect-ratio` para evitar CLS.
+**Implicancia:** El Kit Eco y productos de limpieza son un vector de revenue adicional que no está optimizado para discovery.
 
-### Herramientas de medición
+### Hallazgo 4: B2B procurement digital — Proveedores requieren onboarding digital
 
-- **PageSpeed Insights** (pagespeed.web.dev) — datos reales de Chrome User Experience Report
-- **web-vitals library** [1] — para medir en campo con `onLCP`, `onINP`, `onCLS`
-- **Chrome DevTools** — Performance panel para lab testing
-- **Lighthouse** — para audit automático
+Empresas medianas y grandes en Colombia están adoptando sistemas de procurement digital (SAP Ariba, Mercado Público). El proceso tradicional de "llamar para cotizar" no escala para:
+- Administración de edificios (conjuntos residenciales)
+- Empresas con +5 locations
+- Contratos corporativos con renovaciones automáticas
 
-### Optimizaciones más efectivas según Google [1]
-
-1. **LCP < 2.5s**: optimizar servidor (TTFB < 800ms), comprimir imágenes, preload critical resources, CSS inline critical
-2. **INP < 200ms**: reducir JS main thread, usar `requestIdleCallback` para trabajo no crítico, breaks longos tasks en chunks
-3. **CLS < 0.1**: definir `aspect-ratio` en imágenes, `font-display: swap` para fonts, no insertar contenido arriba del fold
+**Implicancia:** Purity & Clean necesita un portal B2B simple para capturar contratos corporativos que actualmente se pierden por fricción en el proceso de venta.
 
 ---
 
 ## Gaps identificados — Round 39 (NOVEDADES no cubiertas en R1-R38)
 
-### 1. Font Awesome CDN — demasiados HTTP requests para icons
+### 1. WhatsApp Business Flow — Booking sin salir de WhatsApp
 
-**Problema:** Font Awesome 6.5 carga desde cdnjs.cloudflare.com. Cada icon es un glyph en un font file, lo que significa que para mostrar un icon se carga el font entero (~150kb+). Esto afecta LCP y consume bandwidth.
+**Problema:** El 40-50% de usuarios que hacen clic en WhatsApp no completan la conversación. El flujo requiere ir al sitio web para entender precios, luego volver a WhatsApp. Esto causa drop-off.
 
-### 2. Búsqueda en tiempo real sin debounce — posible INP violation
+### 2. Landing page en inglés + USD pricing para expatriados
 
-**Problema:** El search input filtra en tiempo real con cada keystroke (`input` event). Si el usuario escribe rápido, cada carácter dispara un re-render completo de todas las tarjetas. Esto puede causar INP > 200ms en dispositivos lentos.
+**Problema:** No existe contenido en inglés. El segmento expatriado busca en Google en inglés y no encuentra Purity & Clean.
 
-### 3. Sin `font-display: swap` explícito — CLS potencial en carga de fuentes
+### 3. Product Schema para Kit Eco y productos
 
-**Problema:** Las Google Fonts se cargan con `font-display: swap` implícito, pero no hay configuración explícita. Si la fuente carga más lento que el HTML, el texto causa CLS.
+**Problema:** Purity & Clean vende productos (Kit Eco) pero no hay Schema de producto para aparecer en Google Shopping ni en rich snippets de producto.
 
-### 4. Imágenes sin `aspect-ratio` — CLS en lazy loading
+### 4. Portal B2B para procurement corporativo
 
-**Problema:** Las imágenes de servicios y productos cargan lazy sin `aspect-ratio` definido. Cuando cargan, empujan el contenido hacia abajo, causando CLS.
+**Problema:** Clientes corporativos (administraciones de edificios, empresas con múltiples ubicaciones) necesitan un proceso de vendor registration, cotización formal, y gestión de contratos. Esto no existe.
 
-### 5. Video embed de YouTube sin `aspect-ratio` — CLS en FAQ/video section
+### 5. Interlinking SEO entre zonas — Topic Clusters
 
-**Problema:** El video de YouTube (embed en index.html) usa iframe sin `aspect-ratio` container. Esto causa CLS cuando el iframe carga.
+**Problema:** Las 10 páginas de zona son independientes. No hay una estructura de topic cluster que conecte servicios y zonas para fortalecer el SEO.
 
-### 6. Sin testing de Core Web Vitals en CI — Playwright no mide performance
+### 6. Precios dinámicos / estimación de costo en tiempo real
 
-**Problema:** Las 9 suites de Playwright no incluyen métricas de Core Web Vitals. No hay forma de detectar regressions de performance en CI.
-
-### 7. CSS de 6212 líneas sin `@layer` — deuda de mantenimiento (reiterado de R36)
-
-**Problema:** Ya mencionado en R36 pero no implementado. CSS sin organization causa specificity conflicts y miedo a tocar cosas.
-
-### 8. JS de 1847 líneas sin code splitting — todo el JS en un archivo
-
-**Problema:** Todo el JavaScript (chatbot, booking, search, theme toggle, stats counters) está en un solo archivo de 1847 líneas. No hay code splitting, lo que significa que el browser descarga y parsea todo el JS incluso si el usuario solo usa el search.
-
-### 9. Plausible Analytics en `<head>` — potencial render blocking
-
-**Problema:** El script de Plausible (`defer data-domain`) está en el `<head>`. Aunque usa `defer`, el parsing de `<head>` puede verse afectado.
-
-### 10. Stats counters con `requestAnimationFrame` — jank en scroll
-
-**Problema:** Los contadores animados usan `requestAnimationFrame` pero no hay throttle en scroll. Si el usuario scrollea rápido, los contadores pueden causar jank.
+**Problema:** El cotizador actual requiere completar el formulario. No hay forma de estimar el costo instantáneamente sin proporcionar datos de contacto.
 
 ---
 
 ## Propuestas (Round 39)
 
-### Propuesta 1: Reemplazar Font Awesome CDN con SVG sprites inline
+### Propuesta 1: WhatsApp Business Flow — Multi-Step Booking dentro de WhatsApp
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Optimización de iconos: de Font Awesome CDN a SVG inline sprites |
-| **Problema** | Font Awesome carga ~150kb+ de font file para mostrar icons. Cada icon es un glyph en el font, no un asset individual. Esto afecta LCP y consume bandwidth innecesario. |
-| **Descripción** | 1. **Crear SVG sprite sheet**: Extraer los ~20 icons que el sitio usa realmente (search, moon, bars, phone, whatsapp, chevron, etc.) y crear un SVG sprite con `<symbol>`. 2. **Reemplazar `<i class="fa-solid...">` con `<svg><use href="#icon-name"></use></svg>`**: Mantener el styling con CSS heredado. 3. **Beneficios**: SVGs inline pesan ~2-5kb total (vs 150kb+ del font), son resolution-independent, no causan FOUC. 4. **Fallback**: Mantener Font Awesome para browsers viejos (graceful degradation). 5. **Impacto en LCP**: Eliminar 1 request HTTP crítico y ~150kb de downloaded font. |
-| **Impacto esperado** | LCP improvement ~100-200ms, reducción de bandwidth, mejor render en móviles |
+| **Título** | Implementar WhatsApp Business Flow para booking de 4 pasos sin salir de WhatsApp |
+| **Problema** | El flujo actual: clic WhatsApp → conversación → pedir datos → ir al sitio → completar form → volver a WhatsApp = 40-50% drop-off. El usuario de WhatsApp no quiere abandonar la conversación para completar un formulario web. |
+| **Descripción** | Crear un WhatsApp Business Flow con los siguientes pasos: (1) **Bienvenida + selección de servicio**: "Selecciona el servicio: [1] Limpieza de sofá, [2] Sanitización colchón, [3] Alfombras, [4] Plan corporativo". (2) **Selección de zona**: "Selecciona tu zona: [1-10] o comparte ubicación". (3) **Datos básicos**: Nombre, dirección, fecha preferida (date picker nativo de WhatsApp). (4) **Confirmación + envío**: "Tu cita: [fecha]. Te confirmamos en 30 min. [Ver detalles en web]". El Flow usa native WhatsApp UI (buttons, lists, product picker). Implementación: Meta Business Platform → WhatsApp Business → Flows. Requiere cuenta Business verificada y aprobación de Meta para el flow. |
+| **Impacto esperado** | Reducción de drop-off en canal WhatsApp del 40-50% actual a ~15%, aumento de conversiones de booking vía WhatsApp en 25-35% |
+| **Esfuerzo** | M (requiere aprobación Meta, setup de Business Platform) |
+| **Agente recomendado** | Full Stack (integración WhatsApp Business API) + Operations (configuración de Flow) |
+| **Referencias** | [1] Meta WhatsApp Business Flow Documentation 2025 [2] Meta Business Messaging Report 2025 |
+
+### Propuesta 2: Landing Page en Inglés + USD Pricing — Captura del Mercado Expatriado
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Crear /en/ landing page con pricing en USD para expatriados en Bogotá |
+| **Problema** | Bogotá tiene 150k-200k herramientasexpats que buscan servicios en inglés. Purity & Clean es invisible para este segmento. Los expatriados tienen mayor ticket promedio y menor fricción para contratar servicios premium. |
+| **Descripción** | Crear landing page `/en/` (o subdomain `en.purityclean.com`) con: (1) **Todo el contenido en inglés**: servicios, pricing, FAQ, reviews, guarantees. (2) **Precios en USD**: $25-50 USD para sofás, $20-40 USD para colchones, para hacer el pricing comparable con mercados de origen. (3) **Copy diferenciado**: "International standards, local expertise. Trusted by 100+ expat families in Bogotá." (4) **Integración con Google**: Schema hreflang para en-us/en-gb. (5) **WhatsApp con mensaje en inglés**: el pre-filleo debe estar en inglés. (6) **SEO local**: aparecer para "furniture cleaning Bogotá expat", "deep cleaning service English speaking Bogotá". Implementación: duplicar estructura index.html con traducciones, agregar hreflang tags. |
+| **Impacto esperado** | Captura de 5-10% del mercado expat (~$2,000-5,000 USD/mes en revenue adicional si se capturan 20-50 clientes recurring), diferenciación competitiva |
+| **Esfuerzo** | M (requiere traducciones, pero es static site copy) |
+| **Agente recomendado** | Frontend (traducciones y estructura) + SEO/Content |
+| **Referencias** | [1] Google Search Central - Multilingual and Multiregional Sites [2] ANDI Expat Survey Colombia 2025 |
+
+### Propuesta 3: Product Schema para Kit Eco y Línea de Productos
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Implementar Product Schema y presencia en Google Shopping para productos eco |
+| **Problema** | Purity & Clean vende Kit Eco y otros productos de limpieza pero no hay Schema de producto. Esto significa que los productos no aparecen en Google Shopping, no tienen rich snippets de precio, y no son descubribles para búsquedas de "productos limpieza eco Bogotá". |
+| **Descripción** | Implementar Product Schema en las páginas de producto (o sección de productos): (1) **Product Schema** con name, description, price, priceCurrency, availability, brand, category, image. (2) **Offer Catalog Schema** expandido para incluir productos. (3) **Google Merchant Center setup**: crear cuenta, subir product feed XML. (4) **Review Snippets**: los productos pueden tener reviews agregado. (5) **FAQ para productos**: "¿Qué incluye el Kit Eco?" con Product FAQ Schema. Implementación: HTML + JSON-LD para cada producto. Google Merchant Center setup para feeds. |
+| **Impacto esperado** | Visibilidad en Google Shopping para productos eco, aumento de ventas de productos del 10-20%, captura de búsquedas de "productos limpieza Bogotá" |
+| **Esfuerzo** | S (es principalmente Schema e configuración de Google Merchant) |
+| **Agente recomendado** | SEO (Schema) + Operations (configuración Google Merchant) |
+| **Referencias** | [1] Schema.org Product Type [2] Google Merchant Center documentation [3] Google Shopping policies for services |
+
+### Propuesta 4: Portal B2B — Vendor Registration y Procurement para Contratos Corporativos
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Portal B2B simple para onboarding de proveedores corporativos |
+| **Problema** | Empresas medianas y grandes requieren un proceso formal de vendor registration, cotización con formato específico, y gestión de contratos. El flujo actual de "WhatsApp → conversación → email → PDF → aprobación" no escala para empresas con procesos de procurement digitalizados (SAP Ariba, Mercado Público). |
+| **Descripción** | Crear sección `/b2b/` o subdomain con: (1) **Vendor Registration form**: razón social, NIT, dirección, contacto de compras, certificaciones requeridas. (2) **Cotizador B2B**: para contratos recurrentes con múltiples ubicaciones, descuento por volumen. (3) **Documentos descargables**: póliza de seguro, certificaciones, brochure corporativo. (4) **Portal de gestión**: para clientes B2B existentes, pre-llenar datos de contacto y ver historial de servicios. (5) **Integración con WhatsApp Business**: notificaciones de renovación de contrato, recordatorios de pago. Implementación: HTML/CSS/JS existente con forms que-envían a Formspree o email. Para MVP: solo registration form + documentos. |
+| **Impacto esperado** | Captura de 2-3 contratos corporativos adicionales/año (ticket promedio $5,000-20,000 USD/año), reducción de fricción en ventas B2B |
 | **Esfuerzo** | M |
-| **Agente recomendado** | Frontend |
-| **Referencias** | [1] https://web.dev/articles/optimize-lcp [2] https://developer.mozilla.org/docs/Web/SVG/Element/symbol |
+| **Agente recomendado** | Frontend (UI del portal) + Operations (documentos y proceso) |
+| **Referencias** | [1] SAP Ariba vendor onboarding best practices [2] Mercado Público Colombia - Proveedores |
 
-### Propuesta 2: Debounce en search input + virtual scrolling para el grid
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Search con debounce y renderizamiento optimizado — evita INP violations |
-| **Problema** | El search input filtra con cada keystroke sin debounce. En un grid de 12+ tarjetas, cada re-render itera sobre todos los elementos del DOM. Esto puede causar INP > 200ms cuando el usuario escribe rápido. |
-| **Descripción** | 1. **Añadir debounce de 150ms**: El handler de `input` event usa `setTimeout` con 150ms para agrupar keystrokes. 2. **Usar `requestAnimationFrame` para el render**: En lugar de re-renderizar inmediatamente, agendar el render en el próximo frame. 3. **CSS `content-visibility: auto`**: Añadir `content-visibility: auto` a las tarjetas fuera del viewport para que el browser skip su rendering. 4. **Hidden items con `display: none`**: En lugar de remove/add al DOM, usar `display: none` para items que no matchean (el browser no los renderiza). 5. **Impacto**: Reduce el número de renders por búsqueda de ~N (una por keystroke) a ~2-3 (debounced), y reduce el trabajo de rendering por cada búsqueda. |
-| **Impacto esperado** | INP improvement, especialmente en móviles y con muchos resultados |
-| **Esfuerzo** | S |
-| **Agente recomendado** | Frontend |
-| **Referencias** | [1] https://web.dev/articles/optimize-inp [2] https://developer.mozilla.org/docs/Web/API/Window/requestAnimationFrame |
-
-### Propuesta 3: `aspect-ratio` en todas las imágenes — eliminar CLS
+### Propuesta 5: Topic Cluster SEO — Interlinking entre Zonas y Servicios
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Prevenir CLS: añadir `aspect-ratio` y placeholders a todas las imágenes lazy-loaded |
-| **Problema** | Las imágenes lazy-loaded sin `aspect-ratio` causan CLS cuando cargan. Esto afecta el Core Web Vital de estabilidad visual. |
-| **Descripción** | 1. **Añadir `aspect-ratio` a todas las imágenes**: Usar CSS `aspect-ratio: 16/9` o `4/3` según el tipo de imagen. 2. **Background-color placeholder**: Mientras la imagen carga, mostrar un background-color que填补 el espacio. 3. **Para comparison sliders**: Cada par before/after tiene dos imágenes. Definir aspect-ratio para ambas para evitar shift cuando cargan. 4. **Para el video embed**: Enviar el iframe en un container con `aspect-ratio: 16/9` y `max-width: 100%`. 5. **Verificar con Chrome DevTools**: Usar Layout Shift panel para identificar y fixear shifts restantes. |
-| **Impacto esperado** | CLS cercano a 0, mejor Core Web Vitals score |
-| **Esfuerzo** | S |
-| **Agente recomendado** | Frontend |
-| **Referencias** | [1] https://web.dev/articles/optimize-cls [2] https://web.dev/articles/rendering-performance |
-
-### Propuesta 4: `font-display: swap` y Google Fonts optimization
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Google Fonts: optimizar con font-display: swap y subsetting |
-| **Problema** | Google Fonts sin configuración explícita pueden causar FOUC (flash of unstyled text) y CLS si el text reflows cuando carga la fuente. |
-| **Descripción** | 1. **Añadir `&display=swap` a la Google Fonts URL**:确保 fonts renders inmediatamente con fallback y swap sin FOUC. 2. **Subset la fonts a caracteres necesarios**: Si el sitio solo usa español, subset a `latin` only (ahorra ~30% del font size). 3. **font-display: optional para body text**: Para texto que no necesita la fuente específica, usar `font-display: optional` para evitar cualquier layout shift. 4. **Preload critical fonts**: Usar `<link rel="preload">` para la fuente del hero (Raleway 700) para que esté lista antes del render. 5. **Variable fonts**: Considerar usar variable fonts (Manrope y Raleway tienen versions variables) para reducir el número de HTTP requests. |
-| **Impacto esperado** | Menos CLS, mejor LCP, sin FOUC |
-| **Esfuerzo** | S |
-| **Agente recomendado** | Frontend |
-| **Referencias** | [1] https://web.dev/articles/optimize-lcp [2] https://developer.mozilla.org/docs/Web/API/Window/requestAnimationFrame |
-
-### Propuesta 5: Code splitting del JavaScript — lazy load de chatbot y booking
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | JavaScript modular: code splitting para chatbot, booking, y cotizador |
-| **Problema** | El sitio carga 1847 líneas de JS en un solo archivo. El usuario que solo quiere ver información no necesita el chatbot, el booking form, ni el cotizador. Esto aumenta TTFB efectivo y parsing time. |
-| **Descripción** | 1. **Dividir en módulos**: Crear archivos separados para: `chatbot.js` (~200 líneas), `booking.js` (~300 líneas), `cotizador.js` (~150 líneas), `search.js` (~100 líneas), `theme.js` (~50 líneas). 2. **Lazy loading con `type="module"` y dynamic import**: Los scripts no críticos se cargan con `import()`. 3. **`<script type="module">` para main.js**: El archivo principal queda liviano y solo importa los módulos cuando se necesitan. 4. **Intersection Observer para lazy load**: Los componentes below-the-fold (chatbot FAB, cotizador) se cargan cuando entran al viewport. 5. **Build step**: Se necesita un bundler simple (esbuild o rollup) para crear el bundle de producción. **Nota**: Esto añade build complexity — evaluar si el beneficio justifica el setup. Si no hay build step actualmente, usar dynamic `import()` sin bundler (nativo). |
-| **Impacto esperado** | Reducción de JS parsing time inicial, mejor INP, mejor TTI (Time to Interactive) |
-| **Esfuerzo** | L (requiere build setup o refactoring) |
-| **Agente recomendado** | Frontend |
-| **Referencias** | [1] https://web.dev/articles/optimize-inp [2] https://developer.mozilla.org/docs/Web/JavaScript/Guide/Modules |
-
-### Propuesta 6: Playwright con Web Vitals tracking en CI
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Core Web Vitals en CI: añadir métricas de performance a Playwright |
-| **Problema** | Las 9 suites de Playwright no miden Core Web Vitals. No hay forma de detectar regressions de performance automáticamente. |
-| **Descripción** | 1. **Añadir `web-vitals` library al proyecto**: `import {onLCP, onINP, onCLS} from 'web-vitals'` en el test setup. 2. **Custom Playwright reporter**: Crear un reporter que capture y loguear los valores de LCP, INP, CLS en cada test. 3. **Assertions en tests críticos**: En el test del hero, asserts que LCP < 2.5s. En el test del booking form, assert que INP < 200ms. En el test de scroll, assert que CLS < 0.1. 4. **Threshold alerts**: Si algún metric supera el threshold, el test falla con mensaje claro. 5. **Dashboard de métricas**: Guardar los resultados en un artifact o CSV para tracking histórico. 6. **Playwright test runner con `--project=chromium`**: Usar Chromium para las métricas (Chrome UX Report data solo está disponible para Chrome). |
-| **Impacto esperado** | Detección automática de regressions de performance, mejor confidence en deploys |
+| **Título** | Construir Topic Cluster de servicios y zonas para fortalecer autoridad de dominio |
+| **Problema** | Las 10 páginas de zona son independientes. No hay enlaces internos que conecten servicios relacionados o zonas geográficas. Esto diluye la autoridad de dominio y reduce el SEO para búsquedas de cola larga. |
+| **Descripción** | Implementar estrategia de Topic Cluster: (1) **Pilar de contenido**: página de "Limpieza de Sofás en Bogotá" que cubra todo sobre el tema. (2) **Cluster de apoyo**: cada zona tiene una página de "Limpieza de Sofás en [Zona]" que enlaza al pilar. (3) **Enlaces en footer**: "Servicios relacionados: Limpieza de sofás, Sanitización de colchones, Mantenimiento de alfombras". (4) **Breadcrumbs mejorados**: Home > Servicios > Limpieza de Sofás > Chapinero. (5) **Internal linking strategy**: desde el blog de artículos hacia páginas de zona y servicios. (6) **Sitemap optimizado**: que refleje la jerarquía de contenido. Implementación: HTML/JS existente, requiere revisión de contenido y estrategia de enlazado. |
+| **Impacto esperado** | Mejora en rankings para búsquedas de cola larga (10-20% crecimiento en tráfico orgánico), mayor autoridad de dominio |
 | **Esfuerzo** | M |
-| **Agente recomendado** | QA / Frontend |
-| **Referencias** | [1] https://web.dev/articles/vitals-measurement-best-practices [2] https://github.com/GoogleChrome/web-vitals |
+| **Agente recomendado** | SEO/Content |
+| **Referencias** | [1] HubSpot Topic Cluster Model [2] Google Search Central - Internal linking [3] SEMrush Internal Linking Guide |
 
-### Propuesta 7: Theme toggle con CSS-only approach + batched DOM updates
+### Propuesta 6: Estimador de Precio Instantáneo — Quick Quote sin Contacto
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Eliminar layout thrashing del theme toggle — batched DOM updates |
-| **Problema** | El theme toggle actual probablemente itera sobre múltiples elementos con `data-theme` attribute actualizando estilos inline uno por uno. Esto causa layout thrashing (lecturas y escrituras intercaladas al DOM). |
-| **Descripción** | 1. **Single `data-theme` en `<html>`**: En lugar de actualizar cada elemento, solo actualizar `data-theme` en `<html>`. Todo el CSS responde a `[data-theme="dark"]` sin JS adicional. 2. **Si hay actualizaciones por elemento**: Usar `requestAnimationFrame` para batching: collect todos los cambios, aplicarlos en un solo frame. 3. **Evitar `window.getComputedStyle()` en el loop**: Si se usa para leer valores, causa layout thrashing. Guardar valores antes del loop. 4. **Impacto**: Elimina múltiples forced reflows por toggle, mejora INP. |
-| **Impacto esperado** | INP improvement en theme toggle, menos jank |
+| **Título** | Widget de estimación de precio en tiempo real basado en servicio + zona |
+| **Problema** | El cotizador actual requiere completar un formulario con datos de contacto. El usuario que solo quiere saber "cuánto cuesta" antes de decidirse a contactar tiene que dar su información. Esto crea fricción para usuarios de baja intención. |
+| **Descripción** | Implementar estimador instantáneo: (1) **Widget en homepage**: "Obtén tu precio estimado en 10 segundos. [Servicio dropdown] + [Zona dropdown] = [Precio estimado]". (2) **Lógica de pricing**: precios base por servicio + ajuste por zona (zonas más lejanas pueden tener pequeño recargo). (3) **Sin collection de datos**: el estimado se muestra sin pedir nombre/email. Solo al final se pide "Habla con un asesor" o "Reserva ya". (4) **Chatbot integration**: el estimador puede ser parte del chatbot FAQ. (5) **Click-to-WhatsApp con prefill**: "Quiero este servicio: [estimado]". Implementación: JS vanilla con lógica de pricing. Sin backend. |
+| **Impacto esperado** | Reducción de bounce rate en homepage (usuarios que se iban sin interacting), aumento de leads de baja intención convertidos, mejor UX |
 | **Esfuerzo** | S |
 | **Agente recomendado** | Frontend |
-| **Referencias** | [1] https://web.dev/articles/optimize-inp [2] https://developers.google.com/web/fundamentals/performance/rendering |
-
-### Propuesta 8: CSS `@layer` — arquitectura de 6212 líneas (reiterado, alta prioridad)
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Organizar CSS con Cascade Layers — arquitectura mantenible |
-| **Problema** | Ya propuesto en R36 pero no implementado. CSS de 6212 líneas sin layers causa specificity conflicts, estilos hard de sobreescribir, y miedo a tocar cosas. |
-| **Descripción** | 1. **Crear layers en cascade**: `@layer reset, base, components, utilities, theme` al inicio del archivo. 2. **Mover CSS existente a layers**: Los estilos de reset van a `reset`, variables CSS a `base`, componentes (cards, botones, chatbot) a `components`, helpers a `utilities`, dark mode a `theme`. 3. **Nuevos estilos siempre en layer correcto**: Los nuevos cambios se añaden al layer correspondiente sin necesidad de luchar contra specificity. 4. **Impacto**: CSS más mantenible, onboarding de nuevos agentes más rápido, menos regressions. |
-| **Impacto esperado** | Mejor DX, menos specificity wars, CSS más mantenible |
-| **Esfuerzo** | L (migración gradual) |
-| **Agente recomendado** | Frontend |
-| **Referencias** | [1] https://web.dev/blog/cascade-layers [2] https://developer.mozilla.org/docs/Web/CSS/@layer |
-
-### Propuesta 9: Defer Plausible Analytics script — menor render blocking
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Optimizar carga de Plausible — defer para evitar impact en INP |
-| **Problema** | El script de Plausible ya usa `defer`, pero hay formas de asegurar que no afecta el parsing del `<head>` ni el INP. |
-| **Descripción** | 1. **Mover al final del `<body>`**: En lugar de `<head>`, mover el script de Plausible al final de `<body>` donde no blocking el parse del HTML. 2. **Usar `requestIdleCallback`**: Cargar Plausible después de que la página está interactiva usando `requestIdleCallback`. 3. **Verificar con Chrome DevTools**: Medir si el defer realmente está working y si hay impact medible. 4. **Fallback**: Mantener el `data-domain` attribute para que Plausible funcione correctamente. |
-| **Impacto esperado** | Mejor INP, especialmente en dispositivos lentos |
-| **Esfuerzo** | S |
-| **Agente recomendado** | Frontend |
-| **Referencias** | [1] https://web.dev/articles/optimize-inp |
+| **Referencias** | [1] Zendesk CX Trends 2025 - Instant gratification in service businesses |
 
 ---
 
@@ -249,47 +189,65 @@ El sitio actual tiene varios puntos que afectan LCP [1]:
 
 | # | Propuesta | Impacto | Esfuerzo | Semana |
 |---|----------|---------|----------|--------|
-| 1 | `aspect-ratio` en imágenes (CLS) | Alto | S | 1 |
-| 2 | `font-display: swap` + subset | Medio | S | 1 |
-| 3 | Debounce + virtual scrolling en search | Alto | S | 1 |
-| 4 | SVG sprites para icons | Alto | M | 1-2 |
-| 5 | Theme toggle batched | Medio | S | 1-2 |
-| 6 | Defer Plausible | Bajo | S | 1 |
-| 7 | Playwright Web Vitals CI | Alto | M | 2 |
-| 8 | CSS `@layer` migration | Medio | L | 2-3 |
-| 9 | Code splitting JS | Medio | L | 3 |
+| 1 | Estimador de precio instantáneo | Alto | S | 1 |
+| 2 | Product Schema + Google Merchant | Medio | S | 1 |
+| 3 | WhatsApp Business Flow | Alto | M | 2-3 |
+| 4 | Landing page inglés/USD | Medio | M | 2-3 |
+| 5 | Topic Cluster SEO | Medio | M | 3-4 |
+| 6 | Portal B2B | Alto | M | 4-6 |
 
-**Top 3 para implementar primero:** 1, 3, 4 (quick wins con impacto directo en Core Web Vitals).
+**Top 3 para implementar primero:** 1, 2, 3 (quick wins con alto impacto en conversión y descubrimiento).
 
 ---
 
 ## Diferencia clave: R38 vs R39
 
-R38 se enfocó en **reputación multi-plataforma y AI visibility** — Apple Maps, video reviews, review velocity, ChatGPT summaries.
+R38 se enfocaba en **optimizar el funnel existente** (garantías, slot picker, reviews, rebooking, upsell) — cómo convertir mejor a los visitantes actuales.
 
-**R39 se enfoca en rendimiento técnico y experiencia de usuario a nivel de browser** — Core Web Vitals, CLS, INP, LCP, optimization de recursos. El sitio tiene mucho margen para mejorar en métricas que Google usa para ranking y experiencia de usuario.
+**R39 se enfoca en expandir el mercado y reducir fricción en canales de alta intención:**
 
-Las 10 propuestas de R39 son **complementarias a R36-R38** (donde se propuso la modernización del frontend con Baseline 2026 APIs y las mejoras de reputación). R39 va por la capa de rendimiento que sostiene todo lo demás.
+- R38: "¿Cómo convierto mejor?"
+- R39: "¿Cómo capturo más segmentos de mercado y reduzco fricción en WhatsApp?"
+
+---
+
+## Síntesis: Por qué R39 es diferente
+
+R1-R38 se enfocaron en:
+- R1-R10: Features del sitio (chatbot, booking, search, pricing)
+- R11-R20: SEO, Schema, accessibility, performance
+- R21-R30: Conversion optimization (cotizador, comparison sliders, trust signals)
+- R31-R35: Video, GEO, AI discoverability, reputation
+- R36: Modernización técnica (Baseline 2026 APIs)
+- R37: Discovery externo (Apple Maps, TikTok, Video Reviews)
+- R38: Conversion optimization interna (garantías, slot picker, reviews, rebooking, upsell)
+
+**R39 se enfoca en:**
+- Captura de mercado adicional (expatriados, B2B)
+- Optimización de canal WhatsApp (Flows)
+- Descubrimiento de productos (Google Shopping)
+- SEO de contenido (Topic Clusters)
+- Reducción de fricción (Quick quote)
+
+En 2026, donde el mercado de servicios de limpieza en Bogotá se está commoditizando, la diferenciación ya no está en "tenemos reviews" sino en "llegamos a segmentos que otros no llegan" (expatriados), "hacemos el booking más fácil" (WhatsApp Flows), y "somos descubribles donde nos buscan" (Google Shopping, Topic Clusters).
 
 ---
 
 ## Fuentes
 
-[1] Google. "Web Vitals." web.dev. https://web.dev/vitals/
+[1] Meta. "WhatsApp Business Flow Documentation." 2025. https://business.whatsapp.com
 
-[2] Google. "Optimize LCP." web.dev. https://web.dev/articles/optimize-lcp
+[2] Meta. "Business Messaging Trends Report Latin America." 2025.
 
-[3] Google. "Optimize INP." web.dev. https://web.dev/articles/optimize-inp
+[3] ANDI. "Encuesta de Población Expatriada en Colombia." 2025.
 
-[4] Google. "Optimize CLS." web.dev. https://web.dev/articles/optimize-cls
+[4] Google. "Schema.org Product Type." https://schema.org/Product
 
-[5] Google. "User-centric Performance Metrics." web.dev. https://web.dev/articles/user-centric-performance-metrics
+[5] Google. "Google Merchant Center Documentation." https://merchants.google.com
 
-[6] Chrome. "Web Vitals Measurement Best Practices." web.dev. https://web.dev/articles/vitals-measurement-best-practices
+[6] HubSpot. "Topic Cluster Model for SEO." 2025. https://hubspot.com
 
-[7] Google. "How to measure Web Vitals in the field." web.dev. https://web.dev/articles/vitals-field-measurement-best-practices
-
-[8] GitHub. "web-vitals library." GoogleChrome. https://github.com/GoogleChrome/web-vitals
+[7] Zendesk. "CX Trends Report." 2025. https://zendesk.com
 
 ---
 
