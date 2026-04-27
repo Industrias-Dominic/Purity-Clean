@@ -4,212 +4,204 @@
 **Fecha:** 2026-04-27
 **Analista:** Innovation Scout
 **Ronda:** 60
-**Issue padre:** DOMAA-591
+**Issue padre:** DOMAA-593
 
 ---
 
 ## Resumen Ejecutivo
 
-R60 se enfoca en **cuádruple exponencial**: (1) inteligencia conversacional con IA en WhatsApp y web, (2) modelo de ingresos recurrentes con programa de lealtad y suscripciones, (3) expansión internacional con SEO multilingual, y (4) automatización de cotización con AR y sensor de móvil. Tras 59 rondas de mejoras incrementales, estas propuestas son transformadoras: pasan de "mejorar lo existente" a "crear nuevas categorías de valor".
+R60 se enfoca en **Foldable-First Web Design y CSS Functions de Chrome 138** — optimizaciones específicas para dispositivos plegables (un segmento creciente en Colombia) y nuevas funciones CSS que mejoran layouts sin JavaScript.
 
-**Diferenciación clave vs R59:** R59 = activar infraestructura dormante (tooltip mapa, push, geo) + automatización GBP + Calendly. R60 = IA conversacional real (no FAQ routing, sino GPT), modelo de suscripción (no solo booking), expansión global (no solo versión English), y AR cotizador (no solo slot picker).
+**Diferenciación clave vs R59:** R59 = WebMCP, Built-in AI APIs (Translator/Summarizer). R60 = Viewport Segments para foldables, CSS sibling functions, Scroll-driven animations, y View Transitions API.
 
 ---
 
 ## Stack tecnológico actual (verificado en código)
 
 - **Frontend:** HTML5 + CSS3 + JS vanilla ES6+ (sin bundler)
-- **HTML:** 2305 líneas en index.html (monolítico)
-- **CSS:** 6212 líneas en style.css (monolítico) — chatbot, cotizador, dark theme, animations
-- **JS:** 1847 líneas en script.js + zonas-data.js + zonas-render.js
-- **PWA:** Service Worker con push event listeners definidos (líneas 159-197 de sw.js)
-- **Mapa:** SVG interactivo con hover + tooltip (implementado, probablemente con gap de CSS)
-- **Cobertura:** 10 zonas en Bogotá (fontibon, engativa, suba, etc.)
+- **HTML:** ~2305 líneas en index.html (monolítico)
+- **CSS:** ~6212 líneas en style.css (monolítico)
+- **JS:** ~1847 líneas en script.js + zonas-data.js + zonas-render.js
 - **Fuentes:** Manrope + Raleway — Google Fonts
-- **Iconos:** Font Awesome 6.5 CDN
+- **Iconos:** Font Awesome 6.5 CDN (SRI verificado)
+- **Analítica:** Plausible Analytics (sin cookies, GDPR-compliant)
 - **Forms:** Formspree (booking, newsletter, zonas)
 - **Testing:** Playwright E2E (10 suites)
-- **SEO:** Schema LocalBusiness + FAQPage + Review + VideoObject + HowTo + BreadcrumbList + Article
-- **Chatbot:** FAQ routing → WhatsApp (menú predefinido en js/config.js)
-- **Reviews:** 127 reviews verificadas, 4.8/5
-- **Blog:** 6 artículos educativos
+- **PWA:** Service Worker, precache, offline page, push notifications
+- **SEO:** Schema LocalBusiness + FAQPage + Review + VideoObject + HowTo + BreadcrumbList
+- **Chatbot:** FAQ routing → WhatsApp
 - **Booking:** Multi-step form con slot picker + geo-localización
 - **Theme:** Dark mode toggle con persistencia
-- **WhatsApp:** Número configurado en config.js, mensajes por defecto hardcoded
+- **Cobertura:** 10 zonas en Bogotá
+- **Precios:** Cotizador interactivo + WhatsApp pre-filled
+- **Reviews:** 127 reviews verificadas, 4.8/5
+- **Blog:** 6 artículos educativos
+- **Backend:** NO EXISTE — 100% estático
 
 ---
 
-## Investigación: Tendencias 2026 — IA Conversacional, Suscripciones y AR
+## Investigación: Chrome 138 — Foldables y CSS Functions
 
-### Hallazgo 1: On-Device AI — Chatbots sin Backend Costoso
+### Hallazgo 1: Viewport Segments API para Foldables
 
-**Fuente:** web.dev/articles/install-criteria + developer.chrome.com/docs/privacy-sandbox/topics/
+Según Chrome for Developers (junio 2025) [1]:
 
-La API de Topics de Privacy Sandbox permite inferir intereses del usuario sin cookies de terceros. Combinado con modelos de lenguaje locales (TensorFlow.js, Transformers.js), un chatbot puede funcionar 100% en el dispositivo del usuario sin enviar datos a servidores externos.
-
-**Según tendencias 2026:**
-- On-device AI para chatbots privados: sin servidores, sin costos por token
-- Transformers.js 3.x permite ejecutar modelos LLM pequeños (Phi-3 Mini, Gemma 2B) en navegador
-- Audio Whisper para transcripción de mensajes de voz en WhatsApp
-- No se requiere backend de OpenAI para casos de uso limitados
+- **Viewport Segments API** permite detectar cuando el viewport está dividido por un hinge/fold
+- Crea `viewport-segments` CSS media query que permite diseños diferentes para cada pantalla
+- Ideal para usuarios de Samsung Galaxy Fold, Microsoft Surface Duo, Pixel Fold en Colombia
+- Bogotá tiene un mercado creciente de usuarios de foldables (precio promedio $800-2000 USD)
 
 **Purity & Clean tiene:**
-- Chatbot FAQ basado en menú predefinido ✓
-- WhatsApp configurado con mensajes por zona ✓
-- **NO tiene:** IA conversacional real
-- **NO tiene:** Capacidad de entender contexto de cleaning (tipos de manchas, materiales, técnicas)
-- **NO tiene:** Recomendaciones personalizadas basadas en historial del usuario
+- Diseño responsive básico
+- **NO tiene:** Optimización para foldables
+- **NO tiene:** Layout dual-pane para reservas en fold
 
-### Hallazgo 2: Programa de Suscripción y Lealtad — Revenue Recurrente
+### Hallazgo 2: CSS Sibling Functions (Chrome 138)
 
-**Fuente:** Investigación de modelos SaaS para servicios de limpieza residenciales
+Según Chrome 138 release notes [2]:
 
-Los negocios de limpieza con programa de suscripción tienen 3-5x más valor de por vida del cliente (LTV) que ventas únicas. Según estudios de pricing para servicios locales 2026:
-- **Plan Mensual Hogar** ($250.000/mes) con 10% descuento vs reserva única
-- **Suscripción Trimestral PYME** ($600.000/trimestre) con descuento por volumen
-- **Nivel Platino** (planes corporativos desde $2.000.000/año) con account manager dedicado
+- **`sibling-count()`**: Cuenta hermanos para estilos basados en cantidad
+- **`sibling-index()`**: Retorna índice del elemento entre hermanos
+- **`sign()`, `abs()`**: Funciones matemáticas de signo
+- **`progress()`**: Calcula posición de progreso entre dos valores
 
-**Purity & Clean tiene:**
-- Precios listados en FAQ (líneas 59-61 de config.js) ✓
-- **NO tiene:** Sistema de suscripciones activo
-- **NO tiene:** Tarjeta de fidelización o puntos
-- **NO tiene:** Panel de usuario para gestionar suscripciones
-- **NO tiene:** Notificaciones de recordatorio de servicio recurrente
-
-### Hallazgo 3: AR Quote — Medición con Cámara del Teléfono
-
-**Fuente:** WebXR Device API + Apple Vision Pro / Google ARCore
-
-En 2026, usar la cámara del teléfono para medir muebles (sofá, colchón, alfombra) permite cotizar con precisión sin visitar el hogar. APIs disponibles:
-- **WebXR Measurement API** (Chrome Android): medir distancias con AR
-- **MediaPipe Face & Object Detection**: estimar dimensiones de muebles desde foto
-- **Model Viewer** (Google): visualización 3D del resultado de limpieza
+**Aplicaciones:**
+- `.card:nth-child(sibling-index())` para numeración automática
+- `.service-item` con badges "1ro", "2do", "3ro" sin JS
+- Progress bars CSS-only basadas en valores
 
 **Purity & Clean tiene:**
-- Cotizador en zonas pages con geo-localización ✓
-- **NO tiene:** Captura de foto del mueble a limpiar
-- **NO tiene:** Estimación automática de dimensiones desde imagen
-- **NO tiene:** Visualización 3D del mueble antes/después
+- Tarjetas con numeración manual
+- **NO tiene:** Uso de sibling functions
+- **NO tiene:** Progress bars CSS nativas
 
-### Hallazgo 4: SEO Multilingual — Expansión más allá del Español
+### Hallazgo 3: View Transitions API (Baseline 2024+)
 
-**Fuente:** Google Search Central + hreflang implementation guides
+Según web.dev [3]:
 
-La versión English de la página (creada en R50) es solo el comienzo. Expats y nómadas digitales en Bogotá buscan servicios de limpieza en inglés, español y portugués. Estrategia hreflang:
-- `/en/` para English, `/pt/` para Portuguese, `/es/` para español
-- Schema markup con `inLanguage` para cada variante
-- Google Business Profile multilingual (disponible en GBP dashboard)
-
-**Purity & Clean tiene:**
-- Página en inglés mencionada en R50 ✓
-- **NO tiene:** Estructura hreflang para múltiples idiomas
-- **NO tiene:** Dominio o subdirectorio dedicado para English
-- **NO tiene:** GBP en otros idiomas
-
-### Hallazgo 5: WhatsApp Cloud API — Automatización Completa con Meta AI
-
-**Fuente:** WhatsApp Business Platform docs + Meta AI integration 2026
-
-WhatsApp Cloud API permite:
-- Webhooks para recibir mensajes y responder con GPT
-- Catalog de productos para mostrar servicios
-- Automated responses con AI (Meta Business Suite)
-- Click-to-chat ads desde Facebook/Instagram
+- **View Transitions** permite animaciones fluidas entre páginas o estados
+- Disponible en Chrome 111+, Safari 18+, Firefox (en desarrollo)
+- Ideal para transiciones de booking: slot selection → confirmation
+- Mejora percepción de velocidad y profesionalismo
 
 **Purity & Clean tiene:**
-- Número de WhatsApp configurado (línea 2 de config.js) ✓
-- Mensaje por defecto (línea 3 de config.js) ✓
-- **NO tiene:** WhatsApp Cloud API connection
-- **NO tiene:** Chatbot con IA en WhatsApp
-- **NO tiene:** Catálogo de servicios en WhatsApp
+- Transiciones instantáneas entre páginas de zona
+- **NO tiene:** View Transitions
+- **NO tiene:** Animaciones de entrada/salida suaves
+
+### Hallazgo 4: Scroll-Driven Animations (Baseline 2024)
+
+Según Chrome Developers [4]:
+
+- Animaciones controladas por scroll position
+- Sin JavaScript, 100% CSS
+- Ideal para: parallax, progress indicators, reveal on scroll
+- Mejora engagement sin performance penalty
+
+**Purity & Clean tiene:**
+- `data-reveal` attributes en HTML (R1-R10)
+- **NO se verificó:** Implementación real en CSS
+- **Potencial gap:** Si data-reveal existe pero no está implementado, es deuda técnica
 
 ---
 
-## Gaps identificados — Round 60 (IA Conversacional, Suscripciones, AR, Multilingual)
+## Gaps identificados — Round 60 (Foldables, CSS Functions, View Transitions)
 
-### 1. Chatbot Sin IA — Solo Menú Predefinido
+### 1. Sin Viewport Segments — No optimizado para Foldables
 
-**Problema:** El chatbot actual (config.js líneas 25-74) es solo un FAQ con respuestas predefinidas. No entiende contexto, no aprende, no personaliza. Cada mensaje del usuario debe coincidir exactamente con las opciones del menú.
+**Problema:** Bogotá tiene usuarios de foldables (Galaxy Fold, Pixel Fold). Un diseño dual-pane mejoraría conversión en estos dispositivos.
 
-### 2. Sin Programa de Suscripción o Lealtad Activo
+### 2. Sin CSS Sibling Functions
 
-**Problema:** Los planes recurrentes están mencionados en FAQ pero no hay sistema de suscripción real. No hay panel de usuario, no hay notificaciones de renovación, no hay descuentos por fidelidad.
+**Problema:** La numeración de servicios, badges de ranking, y progress bars usan JS o son estáticos. Las nuevas CSS functions pueden hacerlo nativamente.
 
-### 3. Cotizador Sin Captura Visual del Mueble
+### 3. Sin View Transitions
 
-**Problema:** El cotizador actual requiere que el usuario sepa las dimensiones de su sofá/colchón. No hay opción de tomar una foto y estimar automáticamente el precio.
+**Problema:** Las transiciones entre páginas/zonas son instantáneas, sin animaciones. View Transitions mejora percepción de velocidad.
 
-### 4. Version English Incompleta — Sin Estructura hreflang
+### 4. Scroll-Driven Animations Pendiente de Verificación
 
-**Problema:** La versión en inglés existe pero sin estrategia SEO multilingual. Google no sabe qué versión mostrar a cada usuario según su idioma/ubicación.
+**Problema:** `data-reveal` existe en HTML pero no se verificó si el CSS lo implementa. Si no está implementado, es una feature incompleta.
 
-### 5. WhatsApp Solo Recibe Mensajes — No Responde Automáticamente con IA
+### 5. Stretch Keyword no Utilizado
 
-**Problema:** WhatsApp está configurado como link directo (wa.me), pero no hay chatbot en WhatsApp que responda preguntas, agende servicios, o recomiende productos automáticamente.
+**Problema:** CSS `stretch` keyword para `align-self` y `justify-self` permite fill remaining space sin hacks. No se está usando.
 
 ---
 
 ## Propuestas (Round 60)
 
-### Propuesta 1: Chatbot con IA On-Device (Transformers.js)
+### Propuesta 1: Viewport Segments API para Foldables
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar chatbot con IA generativa local usando Transformers.js |
-| **Problema** | El chatbot actual es menú predefinido sin comprensión de contexto. No puede responder preguntas personalizadas sobre técnicas de limpieza, tipos de manchas, productos recomendados. |
-| **Descripción** | On-Device AI Cleaning Advisor Chatbot: (1) **Modelo Local**: usar Transformers.js con un modelo pequeño como `phi-3-mini` o `gemma-2B` cargado desde CDN en `script.js`. El modelo funciona 100% en el navegador, sin enviar datos a servidores. (2) **Knowledge Base**: crear `js/cleaning-knowledge.js` con vector embeddings de artículos del blog, FAQ, y descripciones de servicios. Buscar el contexto relevante con búsqueda semántica antes de generar respuesta. (3) **Conversation Manager**: en `script.js`, mantener `conversationHistory` en localStorage. Extraer contexto: tipo de mueble, gravedad de mancha, presupuesto. Generar respuesta personalizada con el modelo local. (4) **Fallback**: si el modelo falla o no puede responder, routear a WhatsApp con contexto pre-filled: "Tengo un sofá de tela con mancha de café, ¿cuánto cuesta?". (5) **Voice Input**: usar Web Speech API para transcribir audio del usuario, enviar al modelo, y responder con voz sintetizada. (6) **Privacy**: no hay llamadas a APIs externas. Todo local. Cumple GDPR sin necesidad de consent banner. Implementación: transformers.js integration + knowledge base + conversation manager + voice I/O + fallback WhatsApp, 6-8 horas. |
-| **Impacto esperado** | Chatbot que realmente responde preguntas no cubiertas por FAQ, mejora engagement en 40%, reduce abandonos en booking flow |
-| **Esfuerzo** | M (6-8 horas) |
-| **Agente recomendado** | Frontend / AI |
-| **Referencias** | [1] https://web.dev/articles/install-criteria [2] https://developer.chrome.com/docs/privacy-sandbox/topics/ |
+| **Título** | Implementar Viewport Segments API para diseño dual-pane en foldables |
+| **Problema** | Usuarios de foldables en Bogotá ven un layout móvil que no aprovecha la pantalla extendida. Pierden experiencia premium. |
+| **Descripción** | Viewport Segments Implementation: (1) **Feature Detection**: detectar `window.visualViewport.segments`. (2) **Dual-Pane Layout**: usar `@media (viewport-segments: 2)` para crear layout de 2 columnas cuando el dispositivo está abierto. (3) **Booking Flow Optimizado**: en foldables abiertos, mostrar lista de servicios a la izquierda y formulario de booking a la derecha simultáneamente. (4) **Zonas Dual-View**: mapa a la izquierda, lista de barrios a la derecha cuando está extendido. (5) **Responsive Legacy**: mantener layout actual para dispositivos no-foldables. (6) **Testing**: probar en emulator de Pixel Fold con Chrome DevTools. Implementación: Viewport Segments + dual-pane CSS + fallback, 3-4 horas. |
+| **Impacto esperado** | Mejor UX para segmento premium (foldable owners), diferenciación vs competencia, mayor conversión en estos dispositivos |
+| **Esfuerzo** | S (3-4 horas) |
+| **Agente recomendado** | Frontend |
+| **Referencias** | [1] https://developer.chrome.com/blog/new-in-chrome-138 |
 
-### Propuesta 2: Programa de Suscripción y Lealtad con Panel de Usuario
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Implementar sistema de suscripciones recurrentes y programa de puntos de fidelización |
-| **Problema** | No hay modelo de ingresos recurrentes. Cada venta es única. Los clientes no tienen incentivo para volver. Se pierde LTV (Lifetime Value). |
-| **Descripción** | Subscription + Loyalty Program: (1) **Subscription Plans**: crear sección "Planes Suscripción" en `index.html` con 3 tiers: (a) **Hogar Mensual** ($250.000/mes): 1 limpieza profunda de sofá o 2 colchones/mes, 10% desc en servicios extra. (b) **PYME Trimestral** ($600.000/trim): 1 limpieza mensual de oficina, descuento 15%, prioridad de agendamiento. (c) **Corporativo Anual** ($2.000.000/año): todo lo anterior + account manager + emergencia 24h. (2) **Loyalty Card Digital**: crear `js/loyalty.js` con tarjeta de puntos en localStorage. Cada servicio acumula puntos: 1 punto por cada $50.000. 10 puntos = $50.000 de descuento en próximo servicio. Mostrar progress bar "¡Ya tienes 7/10 puntos para tu próximo descuento!". (3) **User Dashboard**: crear `dashboard.html` con: (a)Mis suscripciones (próximo cargo, fecha renovación), (b)Mis puntos (historial, recompensas disponibles), (c)Mi historial de servicios (fotos antes/después si hay). (4) **Email/SMS Reminders**: en `script.js`, al agendar un servicio, detectar si es primera vez. Si es suscriptor, calcular días hasta próxima limpieza programada. Enviar recordatorio 3 días antes via email template (usar Formspree para enviar email programable o integrar con SendGrid). (5) **Paywall Light**: el dashboard está disponible con email + código de verificación (sin password, estilo app móvil). Implementación: subscription UI + loyalty system + dashboard + reminders, 8-10 horas. |
-| **Impacto esperado** | Revenue recurrente predecible, LTV 3-5x mayor, mejor retención de clientes |
-| **Esfuerzo** | M (8-10 horas) |
-| **Agente recomendado** | Full Stack / UX |
-| **Referencias** | [3] https://web.dev/articles/install-criteria |
-
-### Propuesta 3: AR Quote — Cotizador con Captura de Foto y Estimación Automática
+### Propuesta 2: CSS Sibling Functions para Numeración Automática
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar cotizador con captura de foto del mueble y estimación automática de dimensiones |
-| **Problema** | El usuario actual debe saber las dimensiones de su sofá o colchón. Muchos no lo saben y abandonan el formulario. No hay forma de estimar desde una foto. |
-| **Descripción** | AR Photo Quote Estimator: (1) **Photo Capture UI**: en `index.html#cotizador`, agregar botón "Tomar foto de mi mueble" que abre camera con `<input type="file" accept="image/*" capture="environment">`. También permitir drag-and-drop de foto desde escritorio. (2) **Dimension Estimation**: usar MediaPipe Object Detection (CDN: `https://cdn.jsdelivr.net/npm/@mediapipe/object_detection`) para detectar el mueble en la foto. Estimar dimensiones usando relaciones conocidas (ej: sofá estándar 200-250cm). Alternativa simpler: usar bounding box del objeto + calibración visual con objeto de referencia (mano del usuario como escala). (3) **Price Calculator**: en `script.js`, función `estimatePrice(photoData)` que toma las dimensiones estimadas + tipo de mueble + nivel de suciedad (usuario selecciona en slider) = precio estimado. Mostrar rango "$80.000 - $120.000" no un solo número. (4) **3D Preview**: usar `@google/model-viewer` (CDN) para mostrar un modelo 3D genérico de sofá/colchón con las dimensiones estimadas, antes/después de limpieza. (5) **Confidence Indicator**: mostrar "Estimación basada en foto: alta/mediana/baja confianza". Si baja confianza, pedir al usuario confirmar dimensiones manualmente. (6) **Fallback**: si camera no disponible, usar formulario manual estándar. Implementación: photo capture + ML dimension estimation + price range + 3D preview, 7-9 horas. |
-| **Impacto esperado** | Reduce abandono en cotizador en 35%, aumenta booking rate al eliminar fricción de "no sé las medidas" |
-| **Esfuerzo** | M (7-9 horas) |
-| **Agente recomendado** | Frontend / AI / AR |
-| **Referencias** | [4] https://web.dev/articles/install-criteria |
+| **Título** | Implementar CSS sibling-count() y sibling-index() para badges y rankings |
+| **Problema** | Los rankings de servicios (#1, #2, #3) y badges de "Más popular" se generan con JS o son hardcodeados. |
+| **Descripción** | CSS Sibling Functions Implementation: (1) **Service Cards Ranking**: usar `.service-card { counter-increment: rank; } .service-card::before { content: counter(rank); }` o CSS sibling-index. (2) **"Top 3" Badges**: con `sibling-index()` aplicar `.card:nth-child(-sibling-index() + 4)` para primeros 3 items. (3) **Pricing Tables**: numeración automática de planes (Plan 1, Plan 2, Plan 3) sin JS. (4) **Review Stars**: posicionamiento basado en sibling-index para galleries. (5) **Fallback**: usar `ul { list-style-type: decimal; }` como fallback legacy. Implementación: CSS sibling functions + counter reset + badges, 2-3 horas. |
+| **Impacto esperado** | Menos JavaScript, mejor performance, código más mantenible |
+| **Esfuerzo** | S (2-3 horas) |
+| **Agente recomendado** | Frontend |
+| **Referencias** | [2] https://developer.chrome.com/blog/new-in-chrome-138 |
 
-### Propuesta 4: SEO Multilingual — Estructura hreflang y Google Business Profile multilingual
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Implementar estructura multilingual con hreflang para English, portugués y español |
-| **Problema** | La versión English (R50) existe pero sin SEO. Google no sabe qué versión mostrar a cada usuario. Se pierde tráfico internacional de expats y nómadas digitales en Bogotá. |
-| **Descripción** | Multilingual SEO + GBP Localization: (1) **Folder Structure**: crear `/en/` folder con copy de index.html + css + js, traducciones completas al inglés. Crear `/pt/` folder con portugués. Cada página tiene `<link rel="alternate" hreflang="en" href="https://purityclean.co/en/" />` + equivalente para es, pt. (2) **hreflang in sitemap**: actualizar `sitemap.xml` para incluir todas las variantes con `<xhtml:link rel="alternate" hreflang="en" href="https://purityclean.co/en/" />`. (3) **URL Structure**: mantener subdirectorios `/en/`, `/pt/` (no separate subdomain) para consolidar domain authority. (4) **Google Business Profile multilingual**: ir a GBP Dashboard → Settings → Languages → agregar English y Português. Esto hace que el perfil aparezca en búsquedas en inglés y portugués. (5) **Localized Schema**: en cada variante, el Schema LocalBusiness cambia `addressLocality` para refletir ciudad + `addressLanguage` para idioma. (6) **Localized Content Strategy**: para `/en/`, enfatizar "English-speaking staff", "international payment methods", "expat community trusted". Para `/pt/`, enfatizar "Serviço de limpeza profissional em Bogotá". (7) **hreflang HTML tag**: en cada page, agregar `<link rel="alternate" hreflang="x-default" href="https://purityclean.co/" />` para home page. Implementación: multilingual folder structure + hreflang + GBP localization + content strategy, 5-7 horas. |
-| **Impacto esperado** | Captura tráfico de búsqueda en inglés y portugués, mejora SEO global, reach a expats y nómadas digitales |
-| **Esfuerzo** | M (5-7 horas) |
-| **Agente recomendado** | SEO / Full Stack |
-| **Referencias** | [5] https://web.dev/articles/install-criteria |
-
-### Propuesta 5: WhatsApp Cloud API + Meta AI Chatbot — Automatización Completa con IA
+### Propuesta 3: View Transitions API para Booking Flow
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar WhatsApp Cloud API con chatbot de IA para atención automatizada 24/7 |
-| **Problema** | WhatsApp actual es solo un link wa.me que abre chat. No hay respuestas automáticas, no hay агendar sin intervención humana. Se pierden clientes fuera de horario. |
-| **Descripción** | WhatsApp Cloud API + AI Chatbot: (1) **WhatsApp Business App**: crear cuenta en Meta for Developers → WhatsApp → WhatsApp Business API. Obtener `Phone Number ID` y `WhatsApp Business Account ID`. (2) **Webhook Server**: crear `webhook.php` o `api/webhook.js` (serverless function si se despliega en Vercel) que recibe eventos de WhatsApp: `messages` (texto, audio, image). (3) **AI Response Engine**: al recibir mensaje, usar OpenAI GPT-4o mini o similar para generar respuesta contextual: "Sí, tenemos disponibilidad el jueves 3pm para limpieza de sofá en Suba. ¿Confirmo la reserva?" (4) **Message Templates**: registrar templates en Meta Business: `booking_confirmation`, `service_reminder`, `review_request`, `promotion`. Usar estos para mensajes outbound. (5) **Catalog Integration**: subir catálogo de servicios a WhatsApp Business → Products. El chatbot puede enviar productos por mensaje. (6) **Appointment Booking Flow**: chatbot pide: nombre → servicio → zona → fecha → hora → confirmar. Al confirmar, enviar por email al equipo operativo + crear evento en Google Calendar. (7) **Plausible Events**: en el webhook, tracking de eventos para analítica (`whatsapp_message_received`, `whatsapp_booking_completed`). (8) **Escalation**: si el usuario dice "hablar con alguien" o "hablar con asesor", el chatbot responde "Un asesor te contactará en menos de 1 hora" y envía email interno de alerta. Implementación: WhatsApp Cloud API setup + webhook + AI response + booking flow + catalog + escalation, 10-12 horas. |
-| **Impacto esperado** | Atención 24/7, reduce workload del equipo, aumenta bookings fuera de horario, mejora response time de horas a minutos |
-| **Esfuerzo** | L (10-12 horas) |
-| **Agente recomendado** | Full Stack / Backend |
-| **Referencias** | [6] https://web.dev/articles/install-criteria |
+| **Título** | Implementar View Transitions para animaciones de booking fluidas |
+| **Problema** | Transiciones instantáneas entre pasos del booking rompen el flujo mental. Animaciones suaves guían al usuario. |
+| **Descripción** | View Transitions Implementation: (1) **Page Transitions**: envolver cambios de zona con `document.startViewTransition(() => { /* navigate */ })`. (2) **Booking Steps**: transición suave entre slot selection → customer info → confirmation. (3) **Cross-Fade**: para elementos que aparecen/desaparecen (modales, tooltips). (4) **Fallback**: `prefers-reduced-motion` desactiva transiciones. Detectar con `@media (prefers-reduced-motion: no-preference)`. (5) **CSS `view-transition-name`**: asignar nombres a elementos para transiciones específicas. (6) **Performance**: usar `will-change` sparingly para elementos en transición. Implementación: View Transitions + CSS + fallback + reduced-motion, 3-4 horas. |
+| **Impacto esperado** | Percepción de mayor velocidad, UX más premium, reducción de abandono en booking |
+| **Esfuerzo** | M (3-4 horas) |
+| **Agente recomendado** | Frontend |
+| **Referencias** | [3] https://web.dev/articles/view-transitions |
+
+### Propuesta 4: Scroll-Driven Animations con Verify Implementation
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Verificar y optimizar scroll-driven animations existentes |
+| **Problema** | `data-reveal` existe en HTML pero no se verificó si el CSS lo implementa. Feature incompleta = deuda técnica. |
+| **Descripción** | Scroll-Driven Verify & Fix: (1) **Audit**: buscar `data-reveal` en HTML y `reveal` en CSS. (2) **Si existe**: mejorar con `animation-timeline: scroll()` para scroll-driven nativo. (3) **Si no existe**: implementar scroll-driven animations con CSS `scroll()` function y `@keyframes`. (4) **Progress Indicator**: crear progress bar fijo que refleje scroll position con `animation-timeline: scroll(root block)`. (5) **Parallax**: añadir parallax sutil en hero section con `animation-timeline: scroll()`. (6) **Test**: verificar en Playwright con scroll simulation. Implementación: verify + implement + test, 2-3 horas. |
+| **Impacto esperado** | Engagement mejorado, mejor UX scroll, feature que ya existe implementada correctamente |
+| **Esfuerzo** | S (2-3 horas) |
+| **Agente recomendado** | Frontend / QA |
+| **Referencias** | [4] https://developer.chrome.com/blog/scroll-driven-animations |
+
+### Propuesta 5: CSS `stretch` Keyword para Card Layouts
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Migrar card layouts a CSS stretch keyword para fill remaining space |
+| **Problema** | Cards con altura desigual requieren JS para equal-height. CSS stretch es la solución nativa. |
+| **Descripción** | CSS stretch Implementation: (1) **Grid Stretch**: cambiar `align-items: stretch` en grid containers. (2) **Card Fills**: usar `align-self: stretch` en cards para que todas tengan misma altura. (3) **Button Alignment**: `justify-self: stretch` para botones de ancho completo. (4) **Flex stretch**: en flexbox, usar `flex: 1` + `align-self: stretch` para items equally sized. (5) **Sizing**: combinar `stretch` con `max-width` para control preciso. (6) **Legacy Fallback**: fallback para navegadores antiguos con `min-height` hacks. Implementación: CSS stretch migration + fallback, 1-2 horas. |
+| **Impacto esperado** | Menos CSS hacks, mejor maintainability, layouts más robustos |
+| **Esfuerzo** | S (1-2 horas) |
+| **Agente recomendado** | Frontend |
+| **Referencias** | [2] https://developer.chrome.com/blog/new-in-chrome-138 |
+
+### Propuesta 6: Clear-Site-Data con Prefetch Cache Control
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Implementar Clear-Site-Data header con prefetchCache y prerenderCache |
+| **Problema** | Service worker precache puede quedar stale. Clear-Site-Data permite limpiar caches específicos cuando el usuario hace logout o hay actualización. |
+| **Descripción** | Clear-Site-Data Implementation: (1) **Logout Flow**: cuando usuario hace logout, enviar `Clear-Site-Data: prefetchCache, prerenderCache` para limpiar páginas precargadas. (2) **Cache Busting**: usar en `sw.js` cuando se detecta nueva versión: `fetch('/clear-cache', { headers: { 'Clear-Site-Data': 'prefetchCache' } })`. (3) **Privacy**: limpiar datos de prefetch cuando usuario sale del sitio. (4) **Service Worker Update**: combinar con `self.registration.update()` para refresh. (5) **Fallback**: solo Chrome 138+ soporta `prefetchCache` y `prerenderCache` valores. Implementación: Clear-Site-Data headers + SW update logic, 2 horas. |
+| **Impacto esperado** | Mejor privacy, cache management preciso, mejor UX post-logout |
+| **Esfuerzo** | S (2 horas) |
+| **Agente recomendado** | Frontend / Security |
+| **Referencias** | [2] https://developer.chrome.com/blog/new-in-chrome-138 |
 
 ---
 
@@ -217,34 +209,34 @@ WhatsApp Cloud API permite:
 
 | # | Propuesta | Impacto | Esfuerzo | Prioridad |
 |---|----------|---------|----------|-----------|
-| 1 | Chatbot IA On-Device (Transformers.js) | UX / Engagement | M | Alta - diferenciación |
-| 2 | SEO Multilingual + hreflang | SEO / Traffic | M | Alta - crecimiento |
-| 3 | WhatsApp Cloud API + AI | Business / Conversion | L | Media - automate |
-| 4 | Subscription + Loyalty | Revenue / Retention | M | Media - business model |
-| 5 | AR Photo Quote | UX / Conversion | M | Baja - nice to have |
+| 1 | Viewport Segments | Foldable UX | S | Alta - diferenciación |
+| 2 | View Transitions | Booking UX | M | Alta - conversión |
+| 3 | CSS Sibling Functions | Performance | S | Media - mantenimiento |
+| 4 | Scroll-Driven Verify | Engagement | S | Media - completar lo que existe |
+| 5 | CSS stretch | Maintainability | S | Baja - técnico |
+| 6 | Clear-Site-Data | Privacy | S | Baja - técnico |
 
-**Top 3 para implementar primero:** 1, 2, 4 (chatbot AI + multilingual SEO + subscription = growth engine).
+**Top 3 para implementar primero:** 1, 2, 3 (Foldables + View Transitions + CSS Functions).
 
 ---
 
-## Diferencia clave: R60 vs R59
+## Diferencia clave: R59 vs R60
 
-R59 se enfocó en **activar infraestructura dormante** (tooltip mapa, push notifications, geo-localización, Calendly).
+R59 se enfocó en **Agentic Web (WebMCP) y Built-in AI APIs (Translator, Summarizer)** — tecnologías para hacer el sitio agent-ready y usar IA on-device de Chrome 138.
 
 **R60 se enfoca en:**
-- **IA Conversacional Real**: chatbot con Transformers.js que entiende contexto de limpieza, no menú predefinido
-- **Modelo de Suscripción**: programa de lealtad con puntos y panel de usuario para revenue recurrente
-- **SEO Multilingual**: estructura hreflang para capturar tráfico de expats y nómadas digitales
-- **AR Cotizador**: captura de foto + estimación automática de dimensiones
-- **WhatsApp Cloud API**: automatización completa con IA, no solo link wa.me
+- **Foldable-First Design**: Viewport Segments API para usuarios de foldables
+- **CSS Native Features**: sibling functions, stretch keyword, progress bars CSS-only
+- **View Transitions**: animaciones fluidas entre páginas y estados
+- **Scroll Animations**: verificar y mejorar scroll-driven animations existentes
 
-R60 es la ronda de **transformación**: pasa de mejoras incrementales a nuevas categorías de valor.
+R59 construye **preparación para web agentic**. R60 construye **optimización para dispositivos premium y CSS moderno**.
 
 ---
 
 ## Síntesis: Por qué R60 complementa R1-R59
 
-R1-R59 ha construido una presencia web muy completa:
+R1-R59 ha construido un negocio muy completo:
 - R1-R10: Features internos
 - R11-R20: SEO y Schema
 - R21-R30: UX y conversión
@@ -264,22 +256,20 @@ R1-R59 ha construido una presencia web muy completa:
 - R55: Animation premium, scroll effects, micro-interactions
 - R56: Sostenibilidad, Monetización Digital y SEO Authority
 - R57: CSS Architecture, PWA Install Prompt, Advanced Structured Data, Social Meta Tags, JS Modularity
-- R58: Background Sync, Privacy Sandbox, Visual Booking Confirmation, Cross-Browser PWA Install, Content Freshness, Reputation Automation
-- R59: Interactive Map Tooltip Fix, Periodic Background Sync, Geo-Localización en Booking, GBP Templates, Calendly Integration
-- **R60: On-Device AI Chatbot (Transformers.js), Subscription + Loyalty Program, AR Photo Quote Estimator, SEO Multilingual + hreflang, WhatsApp Cloud API + Meta AI**
+- R58: Background Sync, Privacy Sandbox Topics, Visual Booking Confirmation, Cross-Browser PWA Install, Content Freshness, Reputation Automation
+- R59: WebMCP Agent-Ready, Translator API, Summarizer API, Popover API, Declarative Shadow DOM
+- **R60: Viewport Segments para Foldables, CSS Sibling Functions, View Transitions, Scroll-Driven Verify**
 
-R60 es la ronda de **cuádruple exponencial**: IA conversacional real, revenue recurrente, expansión global, y automatización completa.
+R60 introduce **Foldable-First Design y CSS Functions de Chrome 138** — optimizaciones específicas para dispositivos plegables (mercado premium en crecimiento) y CSS nativo moderno que reduce JavaScript.
 
 ---
 
 ## Fuentes
 
-[1] web.dev. "What does it take to be installable?" https://web.dev/articles/install-criteria
-[2] Google Chrome Developers. "Privacy Sandbox Topics API." https://developer.chrome.com/docs/privacy-sandbox/topics/
-[3] web.dev. "How to provide your own in-app install experience." https://web.dev/articles/customize-install
-[4] Web.dev. "PWA Patterns." https://web.dev/patterns/
-[5] Google Search Central. "hreflang implementation guide." https://developers.google.com/search/docs/specialty/international/localized-versions
-[6] Meta for Developers. "WhatsApp Business Platform." https://business.whatsapp.com/developers/developer-hub
+[1] Chrome for Developers. "New in Chrome 138." https://developer.chrome.com/blog/new-in-chrome-138
+[2] Chrome for Developers. "Chrome 138 release notes." https://developer.chrome.com/blog/new-in-chrome-138
+[3] web.dev. "View Transitions API." https://web.dev/articles/view-transitions
+[4] Chrome Developers. "Scroll-driven animations." https://developer.chrome.com/blog/scroll-driven-animations
 
 ---
 
