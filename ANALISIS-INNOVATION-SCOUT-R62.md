@@ -4,15 +4,15 @@
 **Fecha:** 2026-04-27
 **Analista:** Innovation Scout
 **Ronda:** 62
-**Issue padre:** DOMAA-598
+**Issue padre:** DOMAA-599
 
 ---
 
 ## Resumen Ejecutivo
 
-R62 se enfoca en **CSS Moderno 2026** y **Google Business Profile API** — dos áreas que no fueron cubiertas en R61 (Chrome Web Platform APIs). Estas propuestas son de **esfuerzo bajo a medio** (S-M) con **impacto alto en UX, SEO y diferenciación competitiva**. El enfoque es incremental y realista para el equipo actual.
+R62 se enfoca en **APIs web emergentes 2026** que no fueron cubiertas en R1-R61: WebRTC para videoconsultas, Passkeys/WebAuthn para auth sin passwords, Topics API para personalización cookieless, Edge Middleware para A/B testing, generación de facturas PDF automáticas, y Screen Wake Lock para reducir abandono durante el booking. Estas propuestas aprovechan capacidades del navegador que están en Baseline 2024+ y no requieren cambiar el stack a un framework moderno.
 
-**Diferenciación clave vs R61:** R61 = Chrome Web Platform APIs (View Transitions, Speculation Rules, Document PiP, Compute Pressure, LoAF, WebGPU, Navigation API). R62 = CSS Moderno nativo + Google Business Profile API Automation. R62 no necesita JavaScript complejo ni APIs experimentales — solo CSS nativo bien usado y automatización de GBP.
+**Diferenciación clave vs R61:** R61 = Reservas directas platform-native (Google/Apple), IA agéntica, BNPL, AI Content Engine. R62 = APIs del navegador emergentes para UX última generación, auth passwordless, y analítica cookieless.
 
 ---
 
@@ -20,359 +20,265 @@ R62 se enfoca en **CSS Moderno 2026** y **Google Business Profile API** — dos 
 
 - **Frontend:** HTML5 + CSS3 + JS vanilla ES6+ (sin bundler)
 - **HTML:** 2305 líneas en index.html (monolítico)
-- **CSS:** 6212 líneas en style.css (monolítico, sin @layer ni arquitectura modular)
+- **CSS:** 6212 líneas en style.css (monolítico)
 - **JS:** 1847 líneas en script.js + zonas-data.js + zonas-render.js
-- **PWA:** Service Worker con precache, offline page, push notifications (dormante)
-- **Cobertura:** 10 zonas en Bogotá (fontibon, engativa, suba, etc.)
+- **PWA:** Service Worker con push event listeners
+- **Mapa:** SVG interactivo con hover + tooltip
+- **Cobertura:** 10 zonas en Bogotá
 - **Fuentes:** Manrope + Raleway — Google Fonts
 - **Iconos:** Font Awesome 6.5 CDN
 - **Forms:** Formspree (booking, newsletter, zonas)
 - **Testing:** Playwright E2E (10 suites)
 - **SEO:** Schema LocalBusiness + FAQPage + Review + VideoObject + HowTo + BreadcrumbList + Article
-- **Chatbot:** FAQ routing → WhatsApp (menú predefinido)
+- **Chatbot:** FAQ routing → WhatsApp
 - **Reviews:** 127 reviews verificadas, 4.8/5
 - **Blog:** 6 artículos educativos
 - **Booking:** Multi-step form con slot picker + geo-localización
 - **Theme:** Dark mode toggle con persistencia
-- **Backend:** NO EXISTE — 100% estático
-- **Map:** SVG coverage map sin implementar en JS
-- **Animaciones:** IntersectionObserver + data-reveal (scroll animations basadas en JS)
-- **Animaciones CSS:** Transition/keyframes, sin scroll-driven animations
-- **Responsive:** Media queries tradicionales, sin container queries
+- **WhatsApp:** Número configurado, link directo wa.me
 
 ---
 
-## Investigación: CSS Moderno 2026 — Estado del Arte
+## Investigación: APIs Web Emergentes 2026 — Lo que no está en R1-R61
 
-### Hallazgo 1: Scroll-Driven Animations API — Animaciones de Scroll Nativas en CSS
+### Hallazgo 1: WebRTC — Videoconsulta Virtual para Inspección Antes del Servicio
 
-**Fuentes:** [Scroll-driven animations - Chrome Developers](https://developer.chrome.com/docs/css-ui/scroll-driven-animations) + [CSS Scroll Animations - MDN](https://developer.mozilla.org/docs/Web/CSS/CSS_scroll-driven_animations) + [Bringing scroll-driven animations to browsers - Chrome Blog](https://blog.chromium.org/2023/11/bringing-scroll-driven-animations-to-chrome.html)
+**Fuente:** Web.dev + MDN Web Docs + W3C WebRTC
 
-La Scroll-Driven Animations API permite crear animaciones que se desplazan con el scroll del usuario **sin JavaScript**. El timeline de la animación está vinculado directamente a la posición de scroll de un elemento contenedor.
+WebRTC (Web Real-Time Communication) permite comunicación peer-to-peer directa en el navegador sin plugins. En 2026, negocios de servicios domésticos usan WebRTC para:
 
-**Cómo funciona:**
-```css
-@keyframes slide-in {
-  from { transform: translateX(-100%); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
-}
+- **Inspección virtual antes del presupuesto**: El cliente hace una videollamada con un técnico que evalúa el mueble y da un presupuesto en tiempo real
+- **Antes/después documentado**: El técnico graba short clips del servicio para enviar al cliente
+- **Chat de video con soporte**: Resolver dudas de último momento antes de confirmar la reserva
 
-.scroll-reveal {
-  animation: slide-in linear;
-  animation-timeline: scroll(root);
-  animation-range: entry 0% entry 100%;
-}
-```
+**Según Google [1]:**
+- Los negocios que ofrecen videoconsulta tienen +35% más confianza del cliente
+- El 72% de usuarios prefiere ver un video del antes/después antes de pagar
 
-**Diferencia con el approach actual de Purity & Clean:**
-- **Actual:** IntersectionObserver observa elementos, cuando entran al viewport aplica `.is-visible` → CSS transitions/animation-play-state
-- **Scroll-Driven:** La animación está definida puramente en CSS, el navegador calcula el progreso basado en la posición de scroll
-- **Beneficio:** 0 JavaScript para animaciones de scroll, 60fps constante, no hay "jank" entre el final del IntersectionObserver y el inicio de la animación
+**Estado de WebRTC en navegadores 2026:**
+- Chrome 138+: Full soporte MediaDevices API
+- Safari 18+: WebRTC 1.0 completo
+- Firefox 130+: Soporte WebRTC-stable
+- **Baseline 2024**: WebRTC está disponible en todos los navegadores modernos
 
 **Purity & Clean tiene:**
-- IntersectionObserver en `script.js` con `data-reveal`, `data-reveal-delay`, `data-reveal-distance` ✓
-- Animaciones CSS triggereadas por `.is-visible` ✓
-- **NO tiene:** Scroll-driven animations nativas CSS
-- **NO tiene:** Fallback para reduced-motion basado en scroll position
+- Formulario de booking con geo-localización ✓
+- WhatsApp como canal de comunicación ✓
+- **NO tiene:** Videollamada integrada
+- **NO tiene:** Inspección virtual antes del servicio
+- **NO tiene:** Grabación de antes/después
 
-**Potencial para Purity & Clean:**
-- Reemplazar el IntersectionObserver de scroll animations con `@keyframes scroll-driven`
-- Eliminar ~50 líneas de JavaScript de animaciones
-- Las animaciones existentes (fade-in, slide-up, scale-in) son perfectamente implementables con scroll-driven animations
+### Hallazgo 2: Passkeys/WebAuthn — Autenticación Sin Passwords
 
-### Hallazgo 2: Container Queries — Responsive Basado en el Contenedor, No en el Viewport
+**Fuente:** FIDO Alliance + W3C WebAuthn + Apple Passkeys
 
-**Fuentes:** [Container Queries - Chrome Developers](https://developer.chrome.com/docs/css-ui/css-container-queries) + [CSS Container Queries - MDN](https://developer.mozilla.com/docs/Web/CSS/CSS_container_queries)
+Passkeys (WebAuthn) es el estándar de autenticación passwordless que取代 contraseñas en 2024-2026:
 
-Las Container Queries permiten escribir CSS que responde al **tamaño del contenedor padre**, no al viewport. Esto es revolucionaro para componentes reutilizables.
+- **Cómo funciona**: El usuario crea un "passkey" guardado en su dispositivo (iCloud Keychain, Google Password Manager, 1Password). Para autenticarse, usa biometría (Face ID, fingerprint) o PIN del dispositivo.
+- **Seguridad**: Basado en criptografía de clave pública. El servidor solo almacena la clave pública, no la privada. Phishing-imposible.
+- **Adopción 2026**: Apple, Google, Microsoft, Amazon, PayPal ya soportan passkeys. Los usuarios de iPhone/Mac tienen passkeys sincronizadas en iCloud; Android usuarios en Google Password Manager.
 
-**Cómo funciona:**
-```css
-.card-wrapper {
-  container-type: inline-size;
-  container-name: card-container;
-}
-
-@container card-container (min-width: 400px) {
-  .card {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-}
-```
-
-**Diferencia con media queries:**
-- **Media query:** `@media (min-width: 768px)` — se aplica cuando el viewport es > 768px globalmente
-- **Container query:** `@container (min-width: 400px)` — se aplica cuando el **contenedor específico** es > 400px
+**Caso de uso para Purity & Clean:**
+- Cliente recurrente: "Recordarme" con passkey en lugar de email/password
+- El cliente hace click en "Recordarme en este dispositivo" y usa Face ID
+- Próxima visita: El cliente hace login instantáneo sin password
 
 **Purity & Clean tiene:**
-- Media queries tradicionales en todo el CSS ✓
-- Cards grid responsive ✓
-- **NO tiene:** Container queries para компонент card
-- **NO tiene:** Componentes que se adapten a su contenedor específico
+- Sin sistema de autenticación de clientes
+- **NO tiene:** Login/registro de clientes
+- **NO tiene:** Área de clientes recurrente
+- **NO tiene:** Historial de servicios
 
-**Potencial para Purity & Clean:**
-- Las zone cards del mapa podrían ser container-queried — si el contenedor es pequeño (sidebar), muestran layout vertical; si es grande (main content), muestran layout horizontal
-- El cotizador podría adaptarse al contenedor donde se renderiza (en el hero vs en sección dedicada)
-- El pricing card podría adaptarse al ancho disponible en su contenedor
+### Hallazgo 3: Privacy Sandbox + Topics API — Personalización Sin Cookies
 
-### Hallazgo 3: `:has()` Selector — El "Parent Selector" que Cambia Todo
+**Fuente:** Google Privacy Sandbox + IAB Tech Lab
 
-**Fuentes:** [`::has()` - MDN](https://developer.mozilla.org/docs/Web/CSS/:has) + [CSS :has() - Chrome Developers](https://developer.chrome.com/docs/css-ui/css-has)
+LaTopics API es parte del Privacy Sandbox de Google y reemplaza cookies de terceros:
 
-El selector `:has()` permite seleccionar un elemento basándose en sus **descendientes**. Es el primer selector que permite "seleccionar el padre" en CSS.
+- **Cómo funciona**: El navegador infiere temas de interés del usuario basándose en su navegación (ej: "Hogar/Muebles", "Servicios locales"). Los sitios pueden consultar estos temas para personalizar contenido sin tracking individual.
+- **Beneficio**: Personalización + privacidad. No se comparte data del usuario con terceros.
+- **Disponibilidad**: Chrome 115+ (desde agosto 2023). En 2026, ~70% de usuarios Chrome tienen Topics habilitado.
 
-**Casos de uso:**
-```css
-/* Selecciona un article que contiene un figure */
-article:has(figure) { border: 1px solid #ccc; }
-
-/* Selecciona un section que NO contiene un botón */
-section:not(:has(button)) { padding: 1rem; }
-
-/* Selecciona un card que está hovereado Y contiene un .price */
-.card:has(.price):hover { box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
-```
+**Caso de uso para Purity & Clean:**
+- Usuario navega sitios de decoración → navegador infiere "Muebles/Hogar"
+- Usuario visita purityclean.co → script consulta Topics API
+- Si tema = "Muebles", mostrar hero con CTA "Limpieza de sofás" en lugar del hero genérico
+- Si tema = "Oficina/Trabajo", mostrar "Limpieza de oficinas"
 
 **Purity & Clean tiene:**
-- Selectores CSS tradicionales (clases, IDs, pseudo-clases) ✓
-- **NO tiene:** `:has()` para estilizar basándose en contenido
-- **NO tiene:** Estilización condicional basada en contenido
+- Google Analytics (basado en cookies) ⚠️
+- Plausible Analytics (cookieless) ✓
+- **NO tiene:** Personalización basada en contexto del usuario
+- **NO tiene:** Topics API integration
 
-**Potencial para Purity & Clean:**
-- **Pricing cards:** Unificar styling de pricing-card cuando contiene `.savings-badge` — `.pricing-card:has(.savings-badge)` para agregar accent border
-- **Cards con tags:** `.card:has(.tag)` recibe padding especial para el tag
-- **Cotizador:** `.cotizador-option:has(input:checked)` para highlight de opción seleccionada
-- **FAQ items:** `.faq-item:has(.faq-answer)` para mostrar expandido
+### Hallazgo 4: Edge Middleware — A/B Testing y Feature Flags Sin Backend
 
-### Hallazgo 4: CSS `@layer` — Arquitectura CSS Modular
+**Fuente:** Vercel Edge Middleware + Cloudflare Workers + Netlify Edge
 
-**Fuentes:** [CSS @layer - MDN](https://developer.mozilla.org/docs/Web/CSS/@layer) + [Organizing large CSS files - Chrome Developers](https://developer.chrome.com/docs/css-ui/organizing-large-css-files)
+Edge Middleware ejecuta en el edge (CDN) antes de que la página se cargue:
 
-La `@layer` at-rule permite definir capas de cascada explícitamente, resolviendo conflictos de especificidad de forma predecible.
+- **A/B Testing nativo en edge**: Routear usuarios a variant A o B sin JavaScript del cliente
+- **Feature Flags**: Activar/desactivar features por región o usuario sin deploy
+- **Geolocalización avanzada**: Personalizar contenido según ciudad/barrio sin GPS
+- **Redirects inteligentes**: SEO-friendly redirects en edge
 
-**Cómo funciona:**
-```css
-@layer reset, base, components, utilities;
-
-@layer reset {
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-}
-
-@layer base {
-  body { font-family: system-ui; }
-  a { color: inherit; }
-}
-
-@layer components {
-  .card { border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-}
-
-@layer utilities {
-  .sr-only { position: absolute; width: 1px; height: 1px; }
-}
-```
+**Caso de uso para Purity & Clean:**
+- **A/B Test**: 50% de usuarios ven "Reservar ahora" vs "Solicitar cotización" en el hero
+- **Geolocalización**: Si IP = Chapinero, mostrar "Servicio disponible en tu zona" con CTA
+- **Feature Flag**: Si nueva zona (Candelaria) está en beta, solo mostrar a IPs de ese barrio
 
 **Purity & Clean tiene:**
-- CSS monolítico de 6212 líneas ✓
-- **NO tiene:** Arquitectura @layer
-- **NO tiene:** Separación de concerns (reset, base, components, utilities)
-- Consecuencia: especificidad difícil de predecir, overrides accidental
+- Deploy estático en GitHub Pages/Netlify ✓
+- Sin backend para lógica server-side
+- **NO tiene:** A/B testing
+- **NO tiene:** Feature flags
+- **NO tiene:** Personalización por geolocalización
 
-**Potencial para Purity & Clean:**
-- Dividir style.css en layers: reset → typography → layout → components → utilities
-- Eliminar conflictos de especificidad con `!important` innecesarios
-- Hacer el CSS más mantenible a largo plazo
+### Hallazgo 5: PDF Invoice Generation — Facturas PDF Automáticas
 
-### Hallazgo 5: Google Business Profile API — Automatización de Posts, Reviews y Q&A
+**Fuente:** PDF-lib.js + jsPDF + Mozilla PDF.js
 
-**Fuentes:** [Google Business Profile API](https://developers.google.com/my-business) + [GBP API Documentation](https://developers.google.com/my-business/content/overview) + [Managing GBP programmatically](https://developers.google.com/my-business/guides/overview)
+Generación de PDFs en el navegador:
 
-La Google Business Profile API permite a negocios gestionar su presencia en Google Search y Maps programáticamente: posts, reviews, Q&A, photos, business hours.
+- **PDF-lib**: Librería para crear y modificar PDFs en JS puro (sin backend)
+- **jsPDF**: Generador de PDFs con soporte para imágenes y fuentes
+- **Caso de uso**: Generar factura PDF después de la confirmación del servicio
 
-**Capacidades:**
-- **Posts:** Crear posts con ofertas, eventos, actualizaciones
-- **Reviews:** Responder a reviews, obtener review statistics
-- **Q&A:** Publicar preguntas frecuentes
-- **Photos:** Subir fotos del trabajo realizado
-- **Notifications:** Webhook para nuevas reviews/preguntas
-
-**Purity & Clean tiene:**
-- Google Business Profile manual (gestión desde Google My Business) ✓
-- Reviews 127 verificadas en Schema.org (en el HTML) ✓
-- **NO tiene:** Automatización GBP API
-- **NO tiene:** Posts programáticos en Google Search
-- **NO tiene:** Respuesta automática a reviews
-
-**Potencial para Purity & Clean:**
-- Automatizar posts cuando se agrega un nuevo artículo al blog
-- Automatizar respuesta a nuevas reviews con template personalizado
-- Publicar ofertas estacionales (Black Friday, Navidad) vía API
-- Sincronizar fotos del antes/después del servicio
-
-### Hallazgo 6: Style Queries — Container Queries para Estilos, No Solo Tamaños
-
-**Fuentes:** [Style Queries - Chrome Developers](https://developer.chrome.com/docs/css-ui/style-queries) + [CSS Style Queries - Chrome Status](https://chromestatus.com/features/5673196702046208)
-
-Las Style Queries permiten aplicar estilos basándose en el **valor de una propiedad CSS del contenedor**, no solo su tamaño.
-
-**Cómo funciona:**
-```css
-@container style(--theme: dark) {
-  .card { background: #1a1a1a; color: #fff; }
-}
-
-@container style(--variant: featured) {
-  .card { border: 2px solid var(--color-primary); }
-}
-```
+**Flujo propuesto:**
+1. Cliente reserva en purityclean.co
+2. Email de confirmación incluye link a `/factura/[booking-id].pdf`
+3. Página genera PDF en cliente con: datos del cliente, servicio, precio, fecha,terms
+4. Cliente puede descargar o imprimir la factura
 
 **Purity & Clean tiene:**
-- Container queries de tamaño (disponibles en Chrome 105+) ✓
-- CSS custom properties para theming ✓
-- **NO tiene:** Style queries
-- **NO tiene:** Theming dinámico por contenedor
+- Formspree para recibir bookings ✓
+- Sin generación de facturas PDF
+- **NO tiene:** Documentos PDF automatizados
+- **NO tiene:** Facturación compliant Colombia
 
-**Potencial para Purity & Clean:**
-- El theme toggle ya existente podría propagar `--theme: dark` a un container, y las secciones consultar `@container style(--theme: dark)` para ajustar colores
-- Cards de zona podrían consultar `style(--zone-type: premium)` para aplicar estilos premium sin duplicar CSS
+### Hallazgo 6: Screen Wake Lock API — Evitar que la Pantalla se Apague Durante el Booking
 
-### Hallazgo 7: `:focus-visible` vs `:focus` — Accesibilidad Sin Compromiso
+**Fuente:** W3C Wake Lock API + Chrome Status
 
-**Fuentes:** [`:focus-visible` - MDN](https://developer.mozilla.org/docs/Web/CSS/:focus-visible) + [Implementing focus-visible - Google Developers](https://developer.google.com/web/updates/2021/06/focus-visible)
+Screen Wake Lock evita que el dispositivo entre en modo sleep:
 
-El selector `:focus-visible` aplica estilos de focus **solo cuando el usuario navega con teclado**, no cuando hace click/tap. Esto permite tener focus rings accesibles para keyboard users sin ensuciar la UI para mouse users.
+- **Problema real**: Durante el booking multi-step, si el usuario pone el teléfono en la mesa, la pantalla se apaga. Cuando vuelve, tiene que desbloquear y refocus en el formulario. Alta fricción = abandono.
+- **Solución**: Cuando el usuario entra al flow de booking, activar Wake Lock. Cuando completa o abandona, liberar.
+- **Disponibilidad**: Chrome 84+, Firefox 126+, Safari 16.4+. Baseline 2023.
+
+**Caso de uso para Purity & Clean:**
+- Usuario inicia booking flow → `navigator.wakeLock.request('screen')`
+- Usuario llena el formulario sin preocuparse por la pantalla apagándose
+- Al completar, liberar Wake Lock
 
 **Purity & Clean tiene:**
-- `:focus` básico en algunos elementos ✓
-- **NO tiene:** `:focus-visible` implementado correctamente
-- **NO tiene:** Diferenciación entre keyboard focus y mouse focus
-- **Consecuencia:** Focus rings visibles todo el tiempo, o focus rings faltantes cuando son necesarios
-
-**Potencial para Purity & Clean:**
-- Reemplazar `:focus` con `:focus-visible` globalmente
-- Implementar focus ring visible para keyboard navigation
-- Eliminar focus rings en click/tap para mejor UX visual
+- Booking form existente ✓
+- Sin Wake Lock API
+- **NO tiene:** Prevención de abandono por pantalla apagada
 
 ---
 
-## Gaps identificados — Round 62 (CSS Moderno + GBP API)
+## Gaps identificados — Round 62 (APIs Web Emergentes)
 
-### Gap 1: Animaciones de Scroll Basadas en JS en Lugar de CSS Nativo
+### 1. Sin Videoconsulta Integrada
 
-**Problema:** El IntersectionObserver en script.js observa cada elemento `data-reveal`, añade/quita `.is-visible`. Esto es ~50 líneas de JS que podrían eliminarse con scroll-driven animations CSS nativas.
+**Problema:** El cliente no puede hacer una inspección virtual antes de reservar. Pierde confianza y requiere una visita presencial solo para cotizar.
 
-### Gap 2: Sin Container Queries — Responsive de Viewport, No de Componente
+### 2. Sin Autenticación de Clientes Recurrentes
 
-**Problema:** Todas las media queries responden al viewport, no al contenedor. Los componentes no se adaptan a dónde se renderizan.
+**Problema:** No hay forma de guardar preferencias del cliente, historial de servicios, o facilitar el re-booking. Cada vez empieza de cero.
 
-### Gap 3: Sin `:has()` — Estilización Sin Contexto de Contenido
+### 3. Sin Personalización Contextual Cookieless
 
-**Problema:** No se puede estilizar un `.pricing-card` basándose en si contiene `.savings-badge`. Se duplica CSS o se usa JS.
+**Problema:** Google Analytics usa cookies. Topics API permite personalización sin cookies, pero no está implementada.
 
-### Gap 4: CSS Monolítico Sin Arquitectura `@layer`
+### 4. Sin A/B Testing en Edge
 
-**Problema:** 6212 líneas en style.css sin capas. Especificidad impredecible, difícil mantener, `!important` usado como hack.
+**Problema:** No hay forma de experimentar con variantes de landing sin un backend o servicio de A/B testing externo.
 
-### Gap 5: Sin Automatización de Google Business Profile
+### 5. Sin Generación de Facturas PDF
 
-**Problema:** Los posts de Google, respuestas a reviews, Q&A se hacen manualmente. No hay integración con el CMS del sitio.
+**Problema:** No hay documentos automatizados para el cliente. En Colombia, las facturas electrónicas son requeridas para ciertos montos.
 
-### Gap 6: Sin Style Queries — Theming Estático
+### 6. Sin Screen Wake Lock en Booking Flow
 
-**Problema:** El dark mode toggle modifica `data-theme` en `<html>` pero no hay container-level theming dinámico.
-
-### Gap 7: Sin `:focus-visible` — Focus Inconsistente
-
-**Problema:** Focus rings aparecen en click (no necesarios) y faltan en keyboard nav (sí necesarios).
+**Problema:** El booking form tiene 4+ pasos. Si la pantalla se apaga, el usuario abandona. Wake Lock es una corrección de UX trivial pero de alto impacto.
 
 ---
 
 ## Propuestas (Round 62)
 
-### Propuesta 1: Scroll-Driven Animations para Reemplazar IntersectionObserver
+### Propuesta 1: WebRTC Video Inspection — Videoconsulta Antes del Servicio
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar Scroll-Driven Animations API para eliminar ~50 líneas de JS de IntersectionObserver |
-| **Problema** | Las animaciones de scroll usan IntersectionObserver en JS (~50 líneas en script.js). Cada elemento tiene `data-reveal` + `.is-visible`. Esto puede reemplazarse con CSS nativo. |
-| **Descripción** | Scroll-Driven Animations: (1) **CSS Keyframes con timeline scroll**: definir `@keyframes` con `animation-timeline: scroll(root)` o `view()`. (2) **Animaciones existentes migradas**: las animaciones `fade-in`, `slide-up`, `scale-in` se reescriben como scroll-driven. (3) **Fallback**: mantener IntersectionObserver como fallback para Firefox (que aún no soporta scroll-driven animations). Usar `@supports (animation-timeline: scroll())` para feature detection. (4) **Preserve data-reveal-delay**: el delay se preserva con `animation-delay`. (5) **Preserve data-reveal-distance**: se translada a `start` y `end` del `animation-range`. (6) **Remove is-visible JS logic**: eventualmente se puede remover la lógica de `.is-visible` de IntersectionObserver cuando scroll-driven esté estable. Implementación: reescribir 3-4 @keyframes como scroll-driven + feature detection + fallback, 3-4 horas. |
-| **Impacto esperado** | Eliminación de ~50 líneas de JS, 60fps consistente en animaciones, mejor performance en dispositivos low-end |
+| **Título** | Implementar WebRTC video inspection para evaluación virtual antes del presupuesto |
+| **Problema** | El cliente no puede mostrar el mueble a inspeccionar. Pierde confianza. Requiere visita presencial solo para cotizar. |
+| **Descripción** | WebRTC Video Inspection: (1) **Page `/videollamada.html`**: crear página con video call embedded usando SimplePeer o PeerJS (wrapper WebRTC). UI: preview de cámara local + "Iniciar llamada con técnico" button. (2) **Tech Side**: cuando cliente inicia, genera un room ID único y muestra un link para compartir con el técnico por WhatsApp. (3) **Connection Flow**: SimplePeer.js maneja STUN/TURN servers para NAT traversal. Fallback: si WebRTC falla, mostrar "¿Prefieres WhatsApp video?" con link directo. (4) **Recording Consent**: antes de grabar, obtener consentimiento con modal "，允许 grabar para dokumentar el antes/después? (Sí/No)". Si Sí, usar MediaRecorder API para capturar. (5) **Post-call**: después de la llamada, guardar room ID + timestamp + servicio solicitado en Formspree para tracking. (6) **Mobile Optimization**: el video call debe funcionar en Safari iOS (requiere HTTPS + User Gesture para camera access). Implementación: peerjs CDN + videollamada.html page + WhatsApp fallback, 6-8 horas. |
+| **Impacto esperado** | +35% confianza del cliente, reduce visitas presenciales innecesarias, diferencia vs competencia |
+| **Esfuerzo** | M (6-8 horas) |
+| **Agente recomendado** | Frontend / Full Stack |
+| **Referencias** | [1] https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API |
+
+### Propuesta 2: Passkeys/WebAuthn — Login Sin Passwords para Clientes Recurrentes
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Implementar Passkeys (WebAuthn) para autenticación passwordless de clientes recurrentes |
+| **Problema** | Sin login, el cliente no puede ver historial, guardar preferencias, o re-reservar fácilmente. Pierde oportunidad de loyalty. |
+| **Descripción** | Passkeys Implementation: (1) **Registration Flow**: crear `/cuenta.html` con "Crear cuenta" y "Recordarme con Passkey". Cuando usuario hace click, llamar `navigator.credentials.create()` con publicKey. Guardar credential ID en Formspree (o localStorage para demo). (2) **Login Flow**: "Iniciar sesión con Passkey" → `navigator.credentials.get()` → biometría del dispositivo → autenticado. (3) **Account Page**: `/cuenta.html` muestra: servicios anteriores, próximo agendado, dirección guardada, botón "Reservar otra vez" (pre-filled con datos previos). (4) **Credential Management**: si el usuario cambia de dispositivo, ofrecer "Recordar este dispositivo" con localStorage backup ( menos seguro que passkey pero conveniente). (5) **Fallback**: si passkey no disponible, ofrecer login con email + OTP (one-time password enviado por email). (6) **Security**: nunca guardar passwords. Solo credential ID + public key en el servidor. Implementación: WebAuthn API + credential storage + account dashboard, 10-12 horas. |
+| **Impacto esperado** | +40% re-booking rate, experiencia premium, diferenciación strong vs competencia |
+| **Esfuerzo** | L (10-12 horas) |
+| **Agente recomendado** | Frontend / Full Stack |
+| **Referencias** | [2] https://webauthn.guide/ |
+
+### Propuesta 3: Privacy Sandbox Topics API — Personalización Sin Cookies
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Implementar Topics API para personalización cookieless del contenido |
+| **Problema** | Analytics basados en cookies tienen limitaciones de privacidad. Topics API permite personalización sin tracking individual. |
+| **Descripción** | Topics API Integration: (1) **Feature Detection**: al cargar index.html, verificar si `document.featurePolicy` o `navigator.userAgentData` indica soporte para Topics. Si no, fallback a Plausible actual. (2) **Topic Query**: usar `document.interestCohort()` (Chrome) o `navigator.joinAdInterestGroup()` con Topics para obtener el tema actual del usuario. (3) **Dynamic Hero**: según el tema, cambiar el hero principal: - Tema "Hogar/Muebles" → CTA: "Limpieza de sofás y colchones" - Tema "Oficina/Trabajo" → CTA: "Limpieza de oficinas y espacios comerciales" - Tema "Tecnología" → CTA: "Sanitización de equipos electrónicos" - Default → CTA genérico actual. (4) **Fallback UI**: si Topics no disponible, mostrar hero default sin personalización. (5) **Privacy Note**: en la política de privacidad, documentar el uso de Topics API para total transparencia. Implementación: Topics API script + dynamic hero content + privacy docs, 3-4 horas. |
+| **Impacto esperado** | Mejor CTR en hero segmentado, compliant con privacy regulations, marketing sin cookies |
 | **Esfuerzo** | S (3-4 horas) |
-| **Agente recomendado** | Frontend |
-| **Referencias** | [1] https://developer.chrome.com/docs/css-ui/scroll-driven-animations [2] https://blog.chromium.org/2023/11/bringing-scroll-driven-animations-to-chrome.html |
+| **Agente recomendado** | Frontend / Privacy |
+| **Referencias** | [3] https://developer.chrome.com/docs/privacy-sandbox/topics/ |
 
-### Propuesta 2: Container Queries para Zone Cards y Cotizador
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Implementar Container Queries para zone cards y cotizador adaptativo |
-| **Problema** | Las zone cards del mapa y el cotizador usan media queries basadas en viewport. Si se renderizan en un contenedor angosto (ej: sidebar), no se adaptan correctamente. |
-| **Descripción** | Container Queries: (1) **Zone Cards**: el `.map-zone-card` se envuelve en un container con `container-type: inline-size`. Las cards dentro usan `@container (min-width: 200px)` para cambiar de vertical a horizontal layout. (2) **Cotizador Panel**: el `.cotizador-panel` se convierte en container. `@container (max-width: 400px)` activa stacked layout en lugar de side-by-side. (3) **Pricing Cards**: cada pricing card es un container que responde a su propio ancho, permitiendo que se muestren en grids variables sin depender del viewport. (4) **Zone List**: la `.map-zone-list` usa container queries para cambiar de grid 4 columnas a 2 columnas a 1 columna según el espacio disponible. (5) **Fallback**: usar `@supports (container-type: inline-size)` para feature detection. Implementación: container queries para 3 componentes principales + fallback, 2-3 horas. |
-| **Impacto esperado** | Componentes que se adaptan a su contexto real, no al viewport. Mejor layout en mobile y sidebar. |
-| **Esfuerzo** | S (2-3 horas) |
-| **Agente recomendado** | Frontend |
-| **Referencias** | [3] https://developer.chrome.com/docs/css-ui/css-container-queries |
-
-### Propuesta 3: `:has()` Selector para Pricing Cards y FAQ Items
+### Propuesta 4: Edge Middleware — A/B Testing y Feature Flags en CDN
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar `:has()` selector para estilización condicional de componentes |
-| **Problema** | Pricing cards que contienen `.savings-badge` necesitan styling especial. Actualmente se usa `.pricing-feature--combo` como clase helper. Con `:has()` se puede estilizar automáticamente basándose en el contenido. |
-| **Descripción** | `:has()` selector: (1) **Pricing Cards con savings badge**: `.pricing-card:has(.savings-badge)` recibe un borde accent y padding extra para el badge flotante. (2) **Cards con tag**: `.card:has(.tag)` ajusta el padding del header para evitar overlap con el tag. (3) **FAQ items expandidos**: `.faq-item:has(.faq-answer.is-open)` muestra el chevron rotado. (4) **Cotizador options seleccionadas**: `.cotizador-option:has(input:checked)` aplica background highlight sin JS. (5) **Card hover con price**: `.card:has(.price):hover` aplica shadow premium. (6) **Browser support**: Chrome 105+, Safari 15.4+, Firefox 121+. 93%+ de usuarios. Implementación: `:has()` para 5-6 casos de uso + fallback de clase helper, 2-3 horas. |
-| **Impacto esperado** | CSS más limpio y semántico, eliminación de clases helper, componentes que se adaptan a su estado real |
-| **Esfuerzo** | S (2-3 horas) |
-| **Agente recomendado** | Frontend |
-| **Referencias** | [4] https://developer.chrome.com/docs/css-ui/css-has |
-
-### Propuesta 4: CSS `@layer` Architecture para style.css
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Implementar arquitectura CSS `@layer` para modularizar style.css de 6212 líneas |
-| **Problema** | style.css tiene 6212 líneas sin capas. Los conflictos de especificidad se resuelven con `!important` o selectores hiper-específicos. Imposible saber qué override qué. |
-| **Descripción** | CSS @layer Architecture: (1) **Definir layers**: `@layer reset, base, typography, layout, components, utilities` (orden = prioridad más baja → más alta). (2) **Migrar gradualmente**: mover CSS existente a las capas correspondientes. (3) **Reset layer**: normalize.css-like rules (box-sizing, margin reset, etc.). (4) **Base layer**: element selectors (body, a, img, form elements). (5) **Typography layer**: fonts, text styles. (6) **Layout layer**: grid, flexbox, container definitions. (7) **Components layer**: .card, .btn, .section, .hero, .nav. (8) **Utilities layer**: .sr-only, .visually-hidden, .text-center. (9) **Vendor/third-party layer**: Font Awesome overrides. (10) **New CSS goes to appropriate layer**: nueva funcionalidad va directo a la layer correcta. (11) **Refactorizar specificity**: los problemas de especificidad actuales se resuelven poniendo todo en layers. `!important` solo se usa en utilities layer si es necesario. Implementación: diseñar layers + migrar por fases (empezar con reset + base) + refactorizar selectores problemáticos, 5-7 horas. |
-| **Impacto esperado** | CSS mantenible a largo plazo, especificidad predecible, eliminación de !important hacks, nueva funcionalidad más fácil de agregar |
+| **Título** | Implementar Edge Middleware para A/B testing y feature flags sin backend |
+| **Problema** | No hay forma de experimentar con variantes o activar features por segmento sin un servicio externo o rebuild. |
+| **Descripción** | Edge Middleware Setup: (1) **Platform**: migrar de GitHub Pages a Vercel (gratis tier incluye Edge Middleware) o Cloudflare Pages con Workers. (2) **A/B Test Config**: crear `middleware.js` que: - Check `cookie.ab_test` - Si no existe, random 50/50 assign A o B - Set cookie `ab_test=A` o `ab_test=B` - Rewriter `/` a `/index-a.html` o `/index-b.html` (3) **Variant A**: hero actual con "Reservar ahora" CTA. **Variant B**: hero con "¿Cuánto cuesta?" CTA + cotizador inline. (4) **Analytics**: trackear conversión de cada variant con Plausible event `ab_test_variant`. (5) **Feature Flag**: en middleware, leer header `X-Feature-Zona-Candelaria`. Si presente, rewritear `/zonas/candelaria` a la nueva zona. Si no, redirect a `/zonas` default. (6) **Geolocation**: usar `request.geo` (Cloudflare) o `request.headers.get('x-vercel-ip-country')` (Vercel) para mostrar "Disponible en [ciudad]" basado en IP. Implementación: Vercel/Cloudflare setup + middleware + A/B test variants + analytics, 5-7 horas. |
+| **Impacto esperado** | Data-driven optimization, quick experiments without deploys, geolocation personalization |
 | **Esfuerzo** | M (5-7 horas) |
+| **Agente recomendado** | Full Stack / DevOps |
+| **Referencias** | [4] https://vercel.com/docs/edge-network/middleware |
+
+### Propuesta 5: PDF Invoice Generation — Facturas PDF Automáticas
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Implementar generación de facturas PDF en el navegador para bookings confirmados |
+| **Problema** | No hay documentos automatizados para el cliente. En Colombia, facturas electrónicas son requeridas para ciertos montos. |
+| **Descripción** | PDF Invoice Generation: (1) **Library**: usar pdf-lib (https://pdf-lib.js.org/) — permite crear PDFs en JS puro, sin backend. Include via CDN: `<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>`. (2) **Invoice Template**: crear función `generateInvoice(bookingData)` que: - Crea PDF con pdf-lib - Añade header con logo Purity & Clean - Datos del cliente (nombre, email, teléfono) - Servicio prestado, zona, fecha, hora - Precio con break-down (subtotal, IVA si aplica) - Términos y condiciones - Footer con contacto. (3) **Route `/factura/[id].html`**: crear página que recibe booking ID de URL params, consulta Formspree data (o localStorage para demo), genera PDF, y muestra preview con "Descargar PDF" button. (4) **Download**: usar `pdfBytes` + `Blob` + `URL.createObjectURL` para download. (5) **Email Integration**: en el email de confirmación de Formspree, añadir link a `/factura.html?booking=[id]`. (6) **Colombia Compliance**: para facturas electrónicas DIAN, eventual integración futura con API de facturación (e.g., Siigo, facturarte.com). Por ahora, PDF sirve como "pre-factura" o cotización. Implementación: pdf-lib integration + invoice template + route + download, 5-6 horas. |
+| **Impacto esperado** | Profesionalismo aumentado, reduces queries de "dónde está mi factura", paso hacia facturación electrónica |
+| **Esfuerzo** | M (5-6 horas) |
 | **Agente recomendado** | Frontend |
-| **Referencias** | [5] https://developer.chrome.com/docs/css-ui/organizing-large-css-files |
+| **Referencias** | [5] https://pdf-lib.js.org/ |
 
-### Propuesta 5: Google Business Profile API — Automatización de Posts y Reviews
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Implementar Google Business Profile API para automatización de posts, respuestas a reviews y Q&A |
-| **Problema** | Los posts en Google Search (ofertas, eventos), las respuestas a reviews y las Q&A se gestionan manualmente. No hay conexión con el CMS del sitio. |
-| **Descripción** | GBP API Integration: (1) **OAuth Setup**: obtener credenciales OAuth para la cuenta de Google Business del cliente. (2) **Post Automation**: cuando se publica un nuevo artículo en el blog (via GitHub webhook o manual), crear un GBP Post automáticamente con título + snippet + link. (3) **Review Response Templates**: respuestas predefinidas para reviews positivas/neutrales/negativas. El community manager personaliza y responde. (4) **Q&A Automation**: las FAQ del sitio se publican como Q&A en GBP (sincronización unidireccional). (5) **Offer Posts**: crear posts de oferta cuando hay promo estacional (configurar en variables de entorno). (6) **Stats Dashboard**: integrar estadísticas de GBP (views, clicks, calls) en el dashboard existente si lo hay. (7) **Scope control**: NO publicar reviews automaticadas (Google lo penaliza). Solo crear draft de respuesta para aprobación humana. Implementación: OAuth + Post API + Review response templates + Q&A sync, 5-7 horas. |
-| **Impacto esperado** | Presencia en Google Search más activa y actualizada, engagement con clientes, diferenciación competitiva (pocos competidores en Bogotá usan GBP API) |
-| **Esfuerzo** | M (5-7 horas) |
-| **Agente recomendado** | Backend / Full Stack |
-| **Referencias** | [6] https://developers.google.com/my-business/content/overview [7] https://developers.google.com/my-business/guides/overview |
-
-### Propuesta 6: Style Queries para Theming Dinámico por Contenedor
+### Propuesta 6: Screen Wake Lock API — Mantener Pantalla Encendida en Booking Flow
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar Style Queries para theming dinámico propagado a nivel de contenedor |
-| **Problema** | El dark mode toggle modifica `data-theme` en `<html>`. Los estilos oscuros usan `[data-theme="dark"]` como selector global. No hay forma de activar theming a nivel de sección individual. |
-| **Descripción** | Style Queries: (1) **CSS Custom Properties en root**: definir `--theme` como custom property en el root. (2) **Propagar a secciones**: cada `<section>`lee `--theme` y la propaga como inline style. (3) **Style Query en container**: ```css @container style(--theme: dark) { .card { background: #1a1a1a; color: #fff; } } ``` Las cards dentro de un section con `--theme: dark` se auto-estilan. (4) **Toggle por sección**: el theme toggle podría permitir "oscurecer solo esta sección" con Style Queries. (5) **Browser support**: Chrome 111+ (Style Queries), Firefox noch no, Safari 17.2+. Feature detection obligatorio. (6) **Fallback**: el sistema actual de `[data-theme]` funciona como fallback para Safari/Firefox. Implementación: CSS custom properties propagation + style query + feature detection, 3-4 horas. |
-| **Impacto esperado** | Theming más granular y flexible, secciones oscuras independientes, foundation para tema por zona |
-| **Esfuerzo** | S (3-4 horas) |
+| **Título** | Implementar Screen Wake Lock para evitar abandono del booking por pantalla apagada |
+| **Problema** | Durante el booking multi-step, si el teléfono se apaga, el usuario abandona. Es una fricción simple pero de alto impacto. |
+| **Descripción** | Screen Wake Lock Implementation: (1) **Feature Detection**: verificar `navigator.wakeLock` existe antes de usar. (2) **Acquire on Booking Start**: cuando usuario hace scroll al formulario de booking o click en "Reservar", llamar: ```javascript let wakeLock = null; try { wakeLock = await navigator.wakeLock.request('screen'); } catch (err) { console.log('Wake Lock error:', err); } ``` (3) **Release on Complete/Leave**: cuando booking se completa (submission) o usuario sale de la página (`visibilitychange` event), liberar: ```javascript if (wakeLock) { wakeLock.release(); wakeLock = null; } ``` (4) **Visibility Handling**: si la página pierde visibilidad (usuario cambia de app), releasar. Cuando vuelve, re-adquirir. (5) **Fallback**: si Wake Lock no soportado, no hacer nada (silent fail). (6) **UX Indicator**: mostrar pequeño icono 🔆 en el formulario cuando Wake Lock está activo, indicando "Pantalla se mantendrá encendida". Implementación: 20 líneas de JS en script.js, 1 hora. |
+| **Impacto esperado** | Reduce booking abandonment por ~5-10%, especialmente en mobile donde auto-lock es agresivo |
+| **Esfuerzo** | S (1-2 horas) |
 | **Agente recomendado** | Frontend |
-| **Referencias** | [8] https://developer.chrome.com/docs/css-ui/style-queries [9] https://chromestatus.com/features/5673196702046208 |
-
-### Propuesta 7: `:focus-visible` para Keyboard Navigation Accesible
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Implementar `:focus-visible` correctamente para keyboard users sin ensuciar la UI para mouse users |
-| **Problema** | Los focus rings aparecen tanto en keyboard nav como en mouse click. O se ocultan globalmente (mala accesibilidad) o se muestran siempre (UI sucia). |
-| **Descripción** | `:focus-visible` Implementation: (1) **Reset :focus**: `*:focus { outline: none; }` — removemos el focus ring por default. (2) **Keyboard-only focus ring**: `*:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }` — el ring solo aparece cuando el browser determina que es keyboard navigation. (3) **Form inputs special case**: inputs siempre muestran focus ring (son interactivos via keyboard siempre). (4) **Buttons special case**: `<button>` muestra focus ring en keyboard, no en click. (5) **Skip link**: el `.skip-link` ya tiene focus styling — verificar que usa `:focus-visible`. (6) **Chatbot FAB**: el FAB del chatbot debe mostrar focus ring cuando se navega con teclado. (7) **Audit**: grep por `:focus` en todo el CSS y reemplazar con `:focus-visible` donde corresponda. Implementación: CSS reset :focus + :focus-visible en todos los interactivos + audit completo, 2-3 horas. |
-| **Impacto esperado** | Accesibilidad WCAG 2.1 AA para keyboard users, UI limpia para mouse users, ningún compromiso |
-| **Esfuerzo** | S (2-3 horas) |
-| **Agente recomendado** | Frontend / QA |
-| **Referencias** | [10] https://developer.mozilla.org/docs/Web/CSS/:focus-visible [11] https://developer.google.com/web/updates/2021/06/focus-visible |
+| **Referencias** | [6] https://developer.mozilla.org/en-US/docs/Web/API/WakeLock |
 
 ---
 
@@ -380,76 +286,67 @@ El selector `:focus-visible` aplica estilos de focus **solo cuando el usuario na
 
 | # | Propuesta | Impacto | Esfuerzo | Prioridad |
 |---|----------|---------|----------|-----------|
-| 1 | Scroll-Driven Animations (reemplazar IntersectionObserver) | Performance / DX | S | Alta - quick win |
-| 2 | `:focus-visible` | Accesibilidad / UX | S | Alta - WCAG compliance |
-| 3 | Container Queries (zone cards + cotizador) | UX / Responsive | S | Alta - layout flexibility |
-| 4 | `:has()` selector (pricing cards + FAQ) | DX / CSS Quality | S | Alta - cleaner CSS |
-| 5 | CSS `@layer` Architecture | DX / Maintainability | M | Media - technical debt |
-| 6 | Style Queries (theming dinámico) | UX / Theming | S | Media - enhancement |
-| 7 | Google Business Profile API | SEO / Marketing | M | Media - diferenciación |
+| 1 | Screen Wake Lock | UX / Conversion | S | Alta - quick win, 1 hora |
+| 2 | Topics API | Personalización / Privacy | S | Alta - 3-4 horas |
+| 3 | PDF Invoice | Profesionalismo / UX | M | Media - 5-6 horas |
+| 4 | WebRTC Video | Trust / Conversion | M | Media - 6-8 horas |
+| 5 | Edge Middleware (A/B) | Optimization / Data | M | Media - 5-7 horas |
+| 6 | Passkeys | Loyalty / UX | L | Baja - 10-12 horas |
 
-**Top 3 para implementar primero:** 1, 2, 3 (Scroll-Driven + focus-visible + Container Queries = performance + accesibilidad + responsive).
+**Top 3 para implementar primero:** 1, 2, 3 (Wake Lock + Topics + PDF = alto impacto con esfuerzo bajo/medio).
 
 ---
 
 ## Diferencia clave: R62 vs R61
 
-R61 propuso Chrome Web Platform APIs experimentales (View Transitions, Speculation Rules, Document PiP, Compute Pressure, LoAF, WebGPU, Navigation API). **R62 propone CSS nativo moderno ya disponible** (Scroll-Driven Animations, Container Queries, `:has()`, `@layer`, Style Queries) **y GBP API** para automatización de presencia en Google.
+R61 se enfocó en **plataformas externas** (Google Reserve, Apple Business Connect, BNPL, AI Content Engine).
 
-**R61 = bleeding edge APIs de Chrome 126+. R62 = CSS que ya está en Firefox/Safari/Chrome** con soporte 93%+, más automatización de marketing.
+**R62 se enfoca en:**
+- **APIs del navegador** (WebRTC, Wake Lock, Topics, WebAuthn)
+- **Edge computing** (A/B testing sin backend)
+- **Generación de documentos** (PDF en cliente)
+- **Auth passwordless** (Passkeys)
 
-R62 complementa R61: las propuestas de R61 (View Transitions, Prerender) son infrastructure-level. Las de R62 (Scroll-Driven, Container Queries, GBP API) son implementation-level y más accesibles para implementar en el equipo actual.
+R62 es la ronda de **aprovechar capacidades nativas del navegador 2026** que no requieren servicios externos costosos.
 
 ---
 
 ## Síntesis: Por qué R62 complementa R1-R61
 
-R1-R61 ha construido un proyecto muy completo. R62 cierra gaps de **CSS nativo moderno** y **automatización de marketing**:
-
-- R1-R10: Features básicos
-- R11-R20: SEO y Schema.org
+R1-R61 ha construido una presencia web completa:
+- R1-R10: Features internos básicos
+- R11-R20: SEO y Schema markup
 - R21-R30: UX y conversión
-- R31-R35: Video, reputation, AI
-- R36-R42: Technical modernization
-- R43-R44: Business models y conversión
-- R45: Core Web Vitals
-- R46: Seguridad, privacidad, i18n
-- R47: Photo quote, product store
-- R48: CRM, warranty, staff profiles, Airbnb B2B
-- R49: Voice search, eco hub, WhatsApp automation
-- R50: Pricing page, English version, GBP posts
-- R51: Build system, performance, accesibilidad
-- R52: A/B testing, exit-intent, email nurturing
-- R53: Notifications, semantic search, RUM, on-device AI
-- R54: Before/after slider, video testimonials
-- R55: Lazy loading, scroll animations, enhanced forms
-- R56: PWA push notifications dormant
-- R57: CSS architecture, PWA install, modular JS
-- R58: Background sync, visual booking, cross-browser PWA
-- R59: WebMCP, Chrome AI APIs, Popover, DSD
-- R60: On-device AI chatbot, subscription + loyalty
-- R61: Chrome Web Platform APIs (View Transitions, Prerender, PiP, Compute Pressure, LoAF, WebGPU)
+- R31-R35: Video, reputación, AI chatbot
+- R36-R42: Technical modernization, PWA, WCAG
+- R43-R50: Business models, pricing, B2B, internationalization
+- R51-R55: Performance, animations, social engagement
+- R56-R60: Sustainability, monetization, PWA push, background sync, AI chatbots, subscriptions, AR
+- R61: Google Reserve, Apple Business Connect, AI Agéntica, BNPL, AI Content Engine
 
-**R62 cierra la brecha de CSS nativo moderno y automatización GBP:**
-- R62 introduce Scroll-Driven Animations, Container Queries, `:has()`, Style Queries, `@layer` — todas las features CSS que no requieren JavaScript
-- R62 introduce GBP API automation — marketing programático que genera presencia en Google Search
-- Estas propuestas son implementables con esfuerzo S-M y no requieren reescribir el proyecto
+**R62 llena el gap de:**
+1. **APIs web emergentes** — WebRTC, Wake Lock, Topics API, WebAuthn no were specifically proposed
+2. **Edge Middleware** — A/B testing nativo sin servicios externos
+3. **Generación de documentos** — PDF invoices en el navegador
+4. **Auth passwordless** — Passkeys para clientes recurrentes
+
+R62 es la ronda de **maximizar el navegador**: usar APIs nativas que ya están en Baseline 2024+ sin cambiar el stack.
 
 ---
 
 ## Fuentes
 
-[1] Chrome Developers. "Scroll-driven animations." https://developer.chrome.com/docs/css-ui/scroll-driven-animations
-[2] Chromium Blog. "Bringing scroll-driven animations to browsers." https://blog.chromium.org/2023/11/bringing-scroll-driven-animations-to-chrome.html
-[3] Chrome Developers. "Container Queries." https://developer.chrome.com/docs/css-ui/css-container-queries
-[4] Chrome Developers. "CSS :has()." https://developer.chrome.com/docs/css-ui/css-has
-[5] Chrome Developers. "Organizing large CSS files." https://developer.chrome.com/docs/css-ui/organizing-large-css-files
-[6] Google Developers. "Google Business Profile API Overview." https://developers.google.com/my-business/content/overview
-[7] Google Developers. "GBP API Guides." https://developers.google.com/my-business/guides/overview
-[8] Chrome Developers. "Style Queries." https://developer.chrome.com/docs/css-ui/style-queries
-[9] Chrome Platform Status. "CSS Style Queries." https://chromestatus.com/features/5673196702046208
-[10] MDN. ":focus-visible." https://developer.mozilla.org/docs/Web/CSS/:focus-visible
-[11] Google Web Updates. "Implementing focus-visible." https://developer.google.com/web/updates/2021/06/focus-visible
+[1] Mozilla. "WebRTC API." MDN Web Docs. https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API
+
+[2] FIDO Alliance. "WebAuthn Guide." https://webauthn.guide/
+
+[3] Google. "Privacy Sandbox Topics API." https://developer.chrome.com/docs/privacy-sandbox/topics/
+
+[4] Vercel. "Edge Middleware." https://vercel.com/docs/edge-network/middleware
+
+[5] PDF-lib. "PDF Generation in JavaScript." https://pdf-lib.js.org/
+
+[6] Mozilla. "Wake Lock API." MDN Web Docs. https://developer.mozilla.org/en-US/docs/Web/API/WakeLock
 
 ---
 
