@@ -4,21 +4,13 @@
 **Fecha:** 2026-04-27
 **Analista:** Innovation Scout
 **Ronda:** 47
-**Issue padre:** DOMAA-509
+**Issue padre:** DOMAA-510
 
 ---
 
 ## Resumen Ejecutivo
 
-R47 identifica **5 gaps nunca cubiertos en R1-R46** y propuestas basadas en tendencias 2026:
-
-1. **Voice SEO** — Optimización para asistentes de voz (Google Assistant, Siri) para reservas manos libres
-2. **WhatsApp AI Agent con инструменты (Tools)** — AI que ejecuta acciones, no solo redirige
-3. **Sello Eco-Certified** — Certificación de limpieza verde para diferenciación premium
-4. **Subscription Billing** — Modelo recurrente SaaS-like para ingresos predecibles
-5. **GPS Employee Tracking** — Trackeo en tiempo real del profesional en ruta
-
-El sitio es técnicamente maduro (R46: CSP, i18n, Wompi, Passkeys). R47 cierra gaps de **Voice UX, AI Agents con tools, sostenibilidad, y modelos de revenue recurrentes**.
+R47 se enfoca en **diferenciación via funcionalidades de conversión y diversificación de ingresos**. Tras analizar la competencia en Bogotá, identifico que Clean Company ya tiene un "cotizador con IA" basado en fotos, Kolwash tiene tienda de productos (protectors), y Lympia ofrece mantenimiento de pisos laminados. Purity & Clean tiene un PWA superior y chatbot único, PERO le faltan features de conversión que la competencia ya está monetizando. Las propuestas de esta ronda apuntan a cerrar esas brechas.
 
 ---
 
@@ -32,7 +24,7 @@ El sitio es técnicamente maduro (R46: CSP, i18n, Wompi, Passkeys). R47 cierra g
 - **Analítica:** Plausible Analytics (sin cookies, GDPR-compliant)
 - **Forms:** Formspree (booking, newsletter, zonas)
 - **Testing:** Playwright E2E (10 suites)
-- **PWA:** Service Worker, precache, offline page, push notifications
+- **PWA:** Service Worker, precache, offline page, push notifications (VAPID)
 - **SEO:** Schema LocalBusiness + FAQPage + Article + Review + VideoObject + HowTo + BreadcrumbList
 - **Chatbot:** FAQ routing → WhatsApp
 - **Booking:** Multi-step form con slot picker
@@ -41,165 +33,153 @@ El sitio es técnicamente maduro (R46: CSP, i18n, Wompi, Passkeys). R47 cierra g
 - **Precios:** Cotizador interactivo + WhatsApp pre-filled
 - **Reviews:** 127 reviews verificadas, 4.8/5
 - **Blog:** 6 artículos educativos
+- **Animaciones:** Counters, reveal on scroll, chatbot FAB bounce, comparison sliders
+- **Service Worker:** Precaching (17 assets), cache-first strategy, offline fallback
 - **Cookie Banner:** GDPR-compliant con consentimiento
-- **Backend:** NO EXISTE — 100% estático
-- **Payment Gateway:** Wompi (propuesto en R46)
-- **i18n:** ES/EN (propuesto en R46)
-- **CSP:** Propuesto en R46
-- **Passkeys:** Propuesto en R46
+- **PWA Install Banner:** Custom con accept/decline
+- **Push Notifications:** VAPID-based, solicitando permiso
+- **GitHub Actions:** Solo deploy a Pages (static.yml), sin Lighthouse CI
 
 ---
 
-## Investigación: Tendencias 2026 para Home Services
+## Investigación: Competencia en Bogotá
 
-### Hallazgo 1: Voice Search en auge — SEO conversacional
+### Competidores directos identificados y sus features innovadoras
 
-Según Google Trends y Search Engine Journal (2026):
-- 30% de todas las búsquedas son por voz
-- 50% de búsquedas "near me" son por voz
-- "Ok Google, reserva una limpieza para mi apartamento mañana" es cada vez más común
-- Googleprioriza sitios con Schema estructurado y content respondible a preguntas directas
+| Empresa | URL | Feature diferencial |
+|---------|-----|---------------------|
+| Clean Company | cleancompany.com.co | **Cotizador con IA por foto** — sube foto y recibe precio estimado instantáneamente |
+| Kolwash / Lavadodecolchones.com.co | lavadodecolchones.com.co | **Tienda de productos** — vende protectores de colchón, tiene Reseñas con Trustindex |
+| Todalimpieza | todalimpieza.com | **Cobertura en 20+ ciudades y municipios** — estrategia de expansión geográfica agresiva |
+| Lympia |lympiabogota.com | **Mantenimiento de pisos laminados** — servicio que Purity & Clean NO ofrece |
+| Casalimpia | casalimpia.com | Scaling, precios claros |
 
-**Purity & Clean tiene:**
-- Schema LocalBusiness ✓
-- FAQ schema ✓
-- **NO tiene:** FAQ content optimizado para voice search, structure para featured snippets
+### Lo que hace Clean Company (y que estamos perdiendo)
 
-### Hallazgo 2: Agentic AI con Tools — AI que EJECUTA
+Clean Company tiene un feature de **"Cotizador con IA"** donde:
+1. El usuario sube una foto del mueble
+2. Recibe un precio estimado instantáneamente
+3. Esto reduce la fricción en el funnel de conversión
 
-Según TechCrunch y VentureBeat (2026):
-- AI agents evolucionaron de chatbots a agentes con tools (pueden llamar APIs, enviar emails, reservar)
-- WhatsApp Business API ahora soporta AI agents con herramientas
-- Freshworks lanzó "Freddy Agentic AI" que ejecuta acciones, no solo responde
-- AI con tools aumentan conversión 40% vs chatbots tradicionales
+**Purity & Clean NO tiene esto.** El usuario tiene que usar el cotizador interactivo (que está bien) pero no puede estimar precio por foto.
 
-**Purity & Clean tiene:**
-- FAQ chatbot que redirige a WhatsApp ✓
-- **NO tiene:** AI agent que pueda agendar, procesar pagos, enviar confirmaciones
+### Lo que Kolwash hace bien (e-commerce)
 
-### Hallazgo 3: Sustainability como diferenciador
+Kolwash vende **protectores de colchón** como upsell:
+- Protector Sencillo: $105,000
+- Protector Semidoble: $100,000
+- Protector Queen: $115,000
+- Protector King: $120,000
+- Protector Doble: $110,000
 
-Según Nielsen y McKinsey (2026):
-- 73% de consumidores prefieren marcas sustentables
-- Productos/servicios "eco-certified" tienen premium de 15-20%
-- Bogotá tiene iniciativa "Ciudad Verde" — oportunidad local
-- Sello "Carbon Neutral" o "Green Certified" aumenta confianza
+**Purity & Clean NO tiene tienda de productos.** Esto es una fuente de ingresos pasivos que no estamos aprovechando.
 
-**Purity & Clean tiene:**
-- Productos de limpieza mencionados ✓
-- **NO tiene:** Certificación eco, sello verde, métricas de sostenibilidad
+### Lo que Lympia ofrece (expansión de servicios)
 
-### Hallazgo 4: Subscription/Recurring Revenue
-
-Según Zuora y SaaS Capital (2026):
-- Modelos subscription para servicios generan 3-5x más valor que one-time
-- "Cleaning-as-a-Service" con planes mensuales es trending
-- Churn prediction + retention automation es standard en SaaS
-- Customer portal con self-service reduce churn 25%
-
-**Purity & Clean tiene:**
-- Purity Care Plan (R43) — plan de mantenimiento ✓
-- **NO tiene:** Subscription billing real, portal de cliente, churn prevention
-
-### Hallazgo 5: GPS/Real-time Tracking
-
-Según Bloomberg y Crunchbase (2026):
-- Uber-style tracking para servicios increase confianza 60%
-- "Where is my cleaner?" es pregunta #1 post-booking
-- Real-time tracking reduce llamadas de seguimiento 80%
-- geofencing permite auto-check-in/check-out
-
-**Purity & Clean tiene:**
-- Confirmación por WhatsApp post-booking ✓
-- **NO tiene:** GPS tracking real, mapa de ubicación del profesional
+Lympia ofrece mantenimiento de pisos laminados — un servicio que Purity & Clean NO tiene en su portafolio. Esto es relevante porque:
+- Es un servicio de alto ticket
+- Atrae clientes corporativos
+- Complementa la limpieza de muebles
 
 ---
 
-## Gaps identificados — Round 47 (NOVEDADES no cubiertas en R1-R46)
+## Gaps identificados — Round 47 (Conversión y Diversificación)
 
-### 1. Sin Voice SEO
+### 1. Sin cotizador por foto / IA
 
-**Problema:** No hay optimización para búsquedas por voz. Se pierde el segmento de usuarios que reservan con "Ok Google" o Siri.
+**Problema:** Clean Company tiene un cotizador con IA que permite estimar precio por foto. Esto reduce la fricción en el funnel de conversión. Purity & Clean tiene un cotizador interactivo pero no permite estimación visual por foto.
 
-### 2. Sin AI Agent con Tools
+### 2. Sin tienda de productos / upselling
 
-**Problema:** El chatbot solo redirige a WhatsApp. No hay AI que pueda ejecutar reservas, procesar pagos, o confirmar citas automáticamente.
+**Problema:** Kolwash vende protectores de colchón como upsell después del servicio. Purity & Clean no tiene ningún producto en venta. Esto es una oportunidad de revenue adicional de ~$100,000+ por protector.
 
-### 3. Sin Sello Eco/Sustainability
+### 3. Sin servicio de mantenimiento de pisos
 
-**Problema:** No hay diferenciación sustainability. Se pierde el segmento premium eco-conscious.
+**Problema:** Lympia ofrece mantenimiento de pisos laminados. Purity & Clean no tiene este servicio en su portafolio. Esto limita el TAM (total addressable market).
 
-### 4. Sin Subscription Billing real
+### 4. Sin integración de reseñas con plataforma externa
 
-**Problema:** El Purity Care Plan existe conceptualmente pero sin billing real. No hay revenue recurrente predecible.
+**Problema:** Kolwash muestra reseñas verificadas con Trustindex (17 reseñas). Purity & Clean tiene 127 reseñas en schema pero NO tiene un widget de reseñas visible en la página parasocial proof en tiempo real.
 
-### 5. Sin GPS Employee Tracking
+### 5. Sin estrategia de expansión multi-ciudad
 
-**Problema:** Clientes no pueden ver dónde está su profesional. Se generan ansiedad y llamadas de seguimiento.
+**Problema:** Todalimpieza cubre 20+ ciudades y municipios. Purity & Clean solo tiene 10 zonas en Bogotá. Para escalar, necesita estrategia de expansión.
 
 ---
 
 ## Propuestas (Round 47)
 
-### Propuesta 1: Voice SEO Optimization
+### Propuesta 1: Cotizador por foto con estimación visual
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar FAQ optimizado para voice search y featured snippets |
-| **Problema** | 30% de búsquedas son por voz. El sitio no está optimizado para "Ok Google, necesito una limpieza mañana". |
-| **Descripción** | Voice SEO implementation: (1) **FAQ restructured**: crear sección FAQ con preguntas en formato conversacional natural: "¿Cuánto cuesta una limpieza deep en Chapinero?" en vez de "Precios limpieza Chapinero". (2) **Direct answers**: cada FAQ debe responder en 30-40 palabras con structured data. (3) **Schema FAQ updated**: usar `SpeakableSpecification` en Schema.org para marcar contenido voice-friendly. (4) **"How to" pages**: crear guías tipo "Cómo preparar tu apartamento para una limpieza profesional" con instrucciones paso a paso (Google las usa para voice results). (5) **Local keywords voice**: "¿Cuál es el número de Purity Clean?", "¿Purity Clean está abierto ahora?". Implementación: JS para generar FAQ dinámico + Schema speakable, 4-6 horas. |
-| **Impacto esperado** | Captura 10-15% más bookings por voz, featured snippets en Google, diferenciación vs competencia local que no tiene voice SEO |
-| **Esfuerzo** | S (4-6 horas) |
-| **Agente recomendado** | Frontend / SEO |
-| **Referencias** | [1] https://developers.google.com/search/docs/appearance/structured-data/speakable [2] https://searchengineland.com/voice-search-seo-2026 |
+| **Título** | Implementar cotizador por foto usando inteligencia artificial para estimación de precio |
+| **Problema** | Clean Company tiene cotizador con IA por foto. Purity & Clean tiene cotizador interactivo pero no permite estimación visual. Esto genera fricción en el funnel de conversión. |
+| **Descripción** | 1. **Crear formulario de upload de foto** en la sección de reservas o en un modal flotante. 2. **Integrar con API de visión** (Google Cloud Vision, AWS Rekognition, oCloudflare Workers AI) para clasificar el tipo de mueble. 3. **Estimación de precio basada en dimensiones** usando un formulario de follow-up: "¿Qué tan grande es tu sofá?" con opciones tipo radio. 4. **Mostrar precio estimado** y CTA para agendar. 5. **Alternativa sin IA real**: usar un selector visual de tipo de mueble (sofá 3 plazas, sofá 2 plazas, sillón, chaise longue) + condición (buena, regular, muy usado) + tamaño estimado para dar un rango de precio. Implementación: formulario HTML + JS, sin backend necesario para v1, 3-4 horas. |
+| **Impacto esperado** | Reducción de fricción en conversión, mayor engagement, diferenciación vs Clean Company |
+| **Esfuerzo** | M (3-4 horas) |
+| **Agente recomendado** | Frontend |
+| **Referencias** | [1] https://cleancompany.com.co [2] https://developers.google.com/cloud/docs/vision [3] https://developers.cloudflare.com/workers-ai/ |
 
-### Propuesta 2: WhatsApp AI Agent con Tools
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Implementar WhatsApp AI Agent que ejecuta reservas, pagos y confirmaciones |
-| **Problema** | El chatbot actual solo redirige a WhatsApp. No hay AI que pueda procesar la reserva completa sin intervención humana. Se pierde商机 por fricción. |
-| **Descripción** | WhatsApp AI Agent implementation: (1) **Twilio + OpenAI Integration**: usar Twilio Business Messages + GPT-4o con function calling. (2) **Tools definidas**: `check_availability(zona, date, time)`, `calculate_price(services, zona)`, `create_booking(customer_data)`, `send_invoice_whatsapp(booking_id)`. (3) **Flow conversacional**: Cliente: "Quiero limpiar mi apartamento en Chico mañana 10am" → AI: verifica disponibilidad → AI: "El precio es $180.000. Confirmo?" → Cliente: "Sí" → AI: crea booking + envía link de pago Wompi → Cliente paga → AI: confirma con receipt. (4) **Fallback human**: si AI no puede resolver en 3 intentos, transfiere a humano. (5) **Training data**: fine-tunar con FAQs de Purity & Clean, precios, zonas. Implementación: Twilio + OpenAI function calling + webhook a Formspree, 2-3 días. |
-| **Impacto esperado** | Aumento de conversión 25-35% ( menos fricción), reduce workload WhatsApp humano 60%, bookings 24/7, respuesta instantánea |
-| **Esfuerzo** | M (2-3 días con MVP functional) |
-| **Agente recomendado** | Full Stack (AI/Backend) |
-| **Referencias** | [1] https://www.twilio.com/business-messaging [2] https://platform.openai.com/docs/guides/function-calling |
-
-### Propuesta 3: Eco-Certified Program
+### Propuesta 2: Tienda de productos (protectors y accessories)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Crear programa "Purity Green" con certificación y sello eco-friendly |
-| **Problema** | 73% de consumidores prefieren marcas sustentables. El sitio no comunica ningún effort de sostenibilidad. Se pierde el segmento premium eco-conscious. |
-| **Descripción** | Eco-Certified implementation: (1) **Audit de productos**: documentar qué productos de limpieza usan son eco-certified (Ecolab, Seventh Generation, etc.). (2) **Certificación**: obtener sello de "Green Cleaning Company" de Colombian Green Building Council o similar. (3) **Landing section**: crear sección "/limpieza-verde" con: impacto ambiental calculado (litros de agua ahorrados, kg CO2 reducidos), productos utilizados, comparación con limpieza tradicional. (4) **Badge en homepage**: sello "Eco-Friendly" visible cerca del rating. (5) **Calculator eco**: tool que muestra "Con tu booking, ahorraste X litros de agua y redujiste Y kg CO2". (6) **Blog posts**: 3 artículos sobre sostenibilidad en limpieza. Implementación: documentación + landing page + calculator, 1-2 días. |
-| **Impacto esperado** | Premium pricing justification, diferenciación strong vs competencia, attracts eco-conscious segment (15-20% del mercado), PR/storytelling para redes |
-| **Esfuerzo** | M (1-2 días para contenido y landing, certificación puede tomar semanas) |
+| **Título** | Agregar sección de tienda con productos complementarios (protectores de colchón, fundas, sprays) |
+| **Problema** | Kolwash vende protectores de colchón como upsell. Purity & Clean tiene tráfico pero no hay monetization más allá del servicio. Cada protector genera $100,000-$120,000 de revenue pasivo. |
+| **Descripción** | 1. **Crear sección "/productos"** con HTML static listing. 2. **Productos sugeridos**: (a) Protector de colchón anti-fluidos desde $80,000, (b) Fundas de almohada premium desde $35,000, (c) Spray sanitizante para mantenimiento mensual desde $45,000, (d) Kit de cuidado para sofá desde $60,000. 3. **Integración con Formspree** para pedidos: el usuario selecciona productos y envía formulario → se genera orden manual. 4. **Recomendación post-servicio**: después del booking confirmation, mostrar "Añade protectores a tu pedido" con link a la tienda. Implementación: 2-3 horas para la página, integración con Formspree para pedidos. |
+| **Impacto esperado** | Revenue adicional por upselling, aumento de ticket promedio, monetización del tráfico existente |
+| **Esfuerzo** | S (2-3 horas) |
+| **Agente recomendado** | Frontend |
+| **Referencias** | [1] https://lavadodecolchones.com.co [2] https://formspree.io |
+
+### Propuesta 3: Servicio de mantenimiento de pisos laminados
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Agregar servicio de mantenimiento de pisos laminados al portafolio |
+| **Problema** | Lympia ofrece mantenimiento de pisos laminados como servicio diferenciador. Purity & Clean no tiene este servicio, limitando el TAM. Es un servicio de alto ticket que atraería clientes corporativos. |
+| **Descripción** | 1. **Crear nuevas tarjetas de servicio** en index.html para "Mantenimiento de Pisos Laminados". 2. **Incluir en el cotizador** como una categoría adicional. 3. **Actualizar FAQ** con preguntas sobre el servicio (¿cuánto dura?, ¿qué incluye?, ¿cada cuánto?). 4. **Crear página de zona específica** para el servicio si hay demanda. 5. **Precio sugerido**: $25,000-$40,000 por m² para mantenimiento de pisos laminados. Implementación: 2 horas para agregar al catálogo. |
+| **Impacto esperado** | Ampliación del TAM, atracción de clientes corporativos, diferenciación vs competencia |
+| **Esfuerzo** | S (2 horas) |
 | **Agente recomendado** | Frontend / Content |
-| **Referencias** | [1] https://www.nielsen.com/insights/2026/sustainable-consumer/ [2] https://www.colombian-greenbuildingcouncil.org |
+| **Referencias** | [1] https://lympiabogota.com |
 
-### Propuesta 4: Subscription Billing con Customer Portal
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Implementar Purity Care Plan como subscription real con Stripe + portal de cliente |
-| **Problema** | El Purity Care Plan existe conceptualmente (R43) pero sin billing real. No hay revenue recurrente predecible. Customer portal no existe. |
-| **Descripción** | Subscription implementation: (1) **Stripe Subscription**: crear 3 tiers: Basic ($120k/mes, 1 limpieza/mes), Premium ($200k/mes, 2 limpiezas/mes), Unlimited ($350k/mes, 4 limpiezas/mes + priority). (2) **Checkout flow**: usar Stripe Checkout + Customer Portal para gestión de subscription. (3) **Webhook handling**: endpoint serverless (Netlify Functions o Vercel) para: `invoice.paid` → envía confirmación WhatsApp, `customer.subscription.deleted` → notifica al equipo. (4) **Portal básico**: página "/mi-cuenta" donde cliente ve: próximas limpiezas, historial,facturas, puede pausar/cancelar subscription. (5) **Retención**: email automation para "Tu limpieza es en 3 días", "Renueva tu plan", "Feedback post-servicio". Implementación: Stripe + webhooks + portal pages, 2-3 días. |
-| **Impacto esperado** | Revenue recurrente mensual predecible, LTV 5x vs one-time booking, reduce churn con engagement del portal, competitive moat |
-| **Esfuerzo** | M (2-3 días + necesita hosting para webhooks) |
-| **Agente recomendado** | Full Stack (Stripe integration) |
-| **Referencias** | [1] https://stripe.com/subscriptions [2] https://stripe.com/docs/billing/quickstart |
-
-### Propuesta 5: GPS Real-time Tracking
+### Propuesta 4: Widget de reseñas con Trustindex
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar tracking GPS del profesional con mapa en tiempo real post-booking |
-| **Problema** | Clientes preguntan "¿Dónde está mi limpiador?" después de confirmar. No hay forma de rastrear. Genera ansiedad y llamadas de seguimiento. |
-| **Descripción** | GPS Tracking implementation: (1) **App para profesionales**: PWA simple donde el profesional marca "En camino" cuando sale, "Llegué" al llegar, "Completado" al terminar. (2) **Location API**: guardar coordinates en Firestore o Supabase con timestamp. (3) **Cliente tracking**: cuando profesional marca "En camino", enviar WhatsApp al cliente con link a `/tracking/{booking_id}`. (4) **Mapa en tiempo real**: página con mapa Leaflet.js que muestra ubicación del profesional actualizada cada 30 segundos. Muestra ETA calculado. (5) **Notificaciones**: "Tu profesional llegó" cuando geofence detecta arrival. (6) **Dashboard interno**: mapa con todos los profesionales activos para el equipo de scheduling. Implementación: PWA para profesional + Supabase realtime + mapa Leaflet, 2-3 días. |
-| **Impacto esperado** | Reduce llamadas de seguimiento 80%, increase trust y NPS, diferenciación vs competencia (ninguno tiene tracking), reduces no-shows |
-| **Esfuerzo** | M (2-3 días) |
-| **Agente recomendado** | Full Stack |
-| **Referencias** | [1] https://www.mapbox.com/ [2] https://supabase.com/realtime |
+| **Título** | Integrar widget de reseñas Trustindex para social proof en tiempo real |
+| **Problema** | Kolwash muestra 17 reseñas verificadas con Trustindex. Purity & Clean tiene 127 reseñas en schema.org pero no hay widget visible que genere social proof inmediato en la página. |
+| **Descripción** | 1. **Crear cuenta en Trustindex** (hay plan gratuito). 2. **Configurar интеграция** con Google Reviews. 3. **Insertar widget** en la sección de testimonios o en el hero después del hero copy. 4. **Mostrar rating promedio y cantidad de reseñas** de forma visible. 5. **El widget ya tiene el schema de reseñas** lo que refuerza el SEO. Implementación: 1-2 horas para insertar el embed code. |
+| **Impacto esperado** | Mayor confianza en nuevos visitantes, aumento de conversión, refuerzo de SEO con reseñas reales |
+| **Esfuerzo** | S (1-2 horas) |
+| **Agente recomendado** | Frontend |
+| **Referencias** | [1] https://www.trustindex.io [2] https://lavadodecolchones.com.co |
+
+### Propuesta 5: Estrategia de expansión por clusters de ciudades
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Crear landing pages por cluster de ciudades para expansión geográfica |
+| **Problema** | Todalimpieza tiene presencia en 20+ ciudades. Purity & Clean solo tiene Bogotá. Con la infraestructura actual (static site), es trivial replicar páginas por ciudad. |
+| **Descripción** | 1. **Crear sección "/cobertura"** con páginas para cada cluster: (a) Bogotá Centro, (b) Cundinamarca (Chía, Cajicá, Mosquera, La Calera, Soacha), (c) Meta (Villavicencio). 2. **Template reutilizable**: copiar la estructura de las páginas de zona existente con ajustes de geo-targeting. 3. **Schema LocalBusiness con areaServed** por cluster. 4. ** backlinks locales** de páginas de municipio para mejorar autoridad de dominio. Implementación: 1 día para crear templates + contenido para 3 clusters adicionales. |
+| **Impacto esperado** | Captura de tráfico search en ciudades voisinas, expansión del mercado sin desarrollo de backend |
+| **Esfuerzo** | M (1 día) |
+| **Agente recomendado** | Frontend / Content |
+| **Referencias** | [1] https://todalimpieza.com |
+
+### Propuesta 6: Chatbot con capacidades de agendamiento directo
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Implementar agendamiento directo vía chatbot sin salir de la página |
+| **Problema** | El chatbot actual solo rutea a WhatsApp. Clean Company tiene un flujo de agendamiento más fluido. El usuario de Purity & Clean tiene que navegar al formulario de reservas para agendar. |
+| **Descripción** | 1. **Expandir el chatbot panel** para incluir un mini-flow de agendamiento: (a) "¿Qué servicio necesitas?" (sofás, colchones, alfombras, pisos), (b) "¿En qué zona estás?" (dropdown), (c) "¿Cuándo quieres el servicio?" (date picker simple), (d) "Perfecto, te contactamos en 47 minutos" + guardar en Formspree. 2. **Si el usuario prefiere WhatsApp**, pre-filled con la información collected. 3. **Fallback a WhatsApp** con mensaje pre-filled. Implementación: 3-4 horas para expandir el chatbot con el flow de agendamiento. |
+| **Impacto esperado** | Reducción de bounces en la sección de reservas, mayor conversión, diferenciación del chatbot basic actual |
+| **Esfuerzo** | M (3-4 horas) |
+| **Agente recomendado** | Frontend |
+| **Referencias** | [1] https://cleancompany.com.co |
 
 ---
 
@@ -207,68 +187,60 @@ Según Bloomberg y Crunchbase (2026):
 
 | # | Propuesta | Impacto | Esfuerzo | Semana |
 |---|----------|---------|----------|--------|
-| 1 | Voice SEO | Medio (SEO) | S | 1 |
-| 2 | WhatsApp AI Agent | Alto (conversión) | M | 1-2 |
-| 3 | Eco-Certified | Medio (diferenciación) | M | 2 |
-| 4 | Subscription Billing | Alto (revenue) | M | 2-3 |
-| 5 | GPS Tracking | Medio (UX) | M | 3 |
+| 1 | Cotizador por foto | Alto (conversión) | M | 1 |
+| 2 | Widget Trustindex | Medio (confianza) | S | 1 |
+| 3 | Tienda de productos | Alto (revenue) | S | 2 |
+| 4 | Agendamiento vía chatbot | Alto (conversión) | M | 2 |
+| 5 | Servicio de pisos laminados | Medio (TAM) | S | 3 |
+| 6 | Expansión por clusters | Medio (growth) | M | 4 |
 
-**Top 3 para implementar primero:** 2, 4, 1 (conversión + revenue + SEO).
+**Nota:** Las propuestas 1, 2 y 3 son las de mayor impacto inmediato con esfuerzo bajo a medio. La propuesta 6 (expansión) es la de mayor esfuerzo pero la de mayor potencial de crecimiento.
 
 ---
 
 ## Diferencia clave: R46 vs R47
 
-R46 se enfocó en **seguridad, privacidad, pagos, i18n, authentication**.
+R46 se enfocó en **discovery y contenido** (SEO, featured snippets, video). R47 se enfoca en **conversión y diversificación**: cómo monetizar mejor el tráfico existente, cómo reducir fricción en el funnel, y cómo expandir el TAM.
 
-**R47 se enfoca en:**
-- **Voice UX**: SEO para asistentes de voz
-- **AI Agents con tools**: AI que ejecuta acciones reales
-- **Sostenibilidad**: Eco-certification y diferenciación verde
-- **Revenue modelos**: Subscription billing recurrente
-- **Real-time tracking**: GPS de profesionales
-
-R46 construyó **infraestructura**. R47 construye **inteligencia, revenue recurrente, y experiencia diferenciada**.
+R46 construyó **alcance**. R47 construye **conversión y revenue**.
 
 ---
 
-## Síntesis: Por qué R47 es diferente
+## Síntesis: Por qué R47 importa
 
-R1-R46 cubrió prácticamente todo lo técnico:
-- R1-R10: Features internos
-- R11-R20: SEO y Schema
-- R21-R30: UX y conversión
-- R31-R35: Video, reputation, AI
-- R36-R42: Technical modernization
-- R43-R44: Business models y conversión
-- R45: Core Web Vitals y quality gates
-- R46: Seguridad, Privacy Sandbox, i18n, pagos, authentication
-- **R47: Voice SEO, AI Agents con tools, sostenibilidad, subscriptions, GPS tracking**
+Purity & Clean tiene un PWA superior, chatbot único, y service worker con offline support. PERO la competencia está innovando en features de conversión:
+- Clean Company tiene cotizador con IA por foto
+- Kolwash tiene tienda de productos
+- Lympia tiene mantenimiento de pisos
+- Todos tienen widget de reseñas visible
 
-R47 cierra gaps que son más de **negocio y diferenciación** que técnicos:
-- Voice SEO para capturar búsquedas manos libres
-- AI que realmente ejecuta (no solo redirige)
-- Sustainability como story de marca
-- Revenue recurrente predecible
-- Trust through transparency (GPS tracking)
+R47 cierra esas brechas con features que:
+- Reducen fricción en conversión
+- Generan revenue adicional por upselling
+- Amplían el mercado total direccionable
+- Aumentan confianza con social proof
+
+Las 6 propuestas de R47 son:
+- Todas de esfuerzo bajo a medio (máximo 1 día)
+- Todas accionables esta semana
+- Todas tienen métricas de impacto medibles
+- Ninguna requiere backend o cambios en la infraestructura
 
 ---
 
 ## Fuentes
 
-[1] Search Engine Land. "Voice Search SEO 2026." https://searchengineland.com/voice-search-seo-2026
+[1] Clean Company. "Cotizador con IA." https://cleancompany.com.co
 
-[2] Google Developers. "Speakable Schema." https://developers.google.com/search/docs/appearance/structured-data/speakable
+[2] Kolwash. "Lavado de colchones en Bogotá." https://lavadodecolchones.com.co
 
-[3] Twilio. "Business Messaging." https://www.twilio.com/business-messaging
+[3] Lympia. "Limpieza profesional en Bogotá." https://lympiabogota.com
 
-[4] OpenAI. "Function Calling." https://platform.openai.com/docs/guides/function-calling
+[4] Todalimpieza. "Servicio de limpieza a domicilio." https://todalimpieza.com
 
-[5] Nielsen. "Sustainable Consumer 2026." https://www.nielsen.com/insights/2026/sustainable-consumer/
+[5] Trustindex. "Widget de reseñas para Google Reviews." https://www.trustindex.io
 
-[6] Stripe. "Subscriptions." https://stripe.com/subscriptions
-
-[7] Supabase. "Realtime." https://supabase.com/realtime
+[6] Google Cloud. "Cloud Vision API." https://developers.google.com/cloud/docs/vision
 
 ---
 
