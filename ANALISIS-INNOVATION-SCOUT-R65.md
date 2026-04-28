@@ -4,15 +4,17 @@
 **Fecha:** 2026-04-28
 **Analista:** Innovation Scout
 **Ronda:** 65
-**Issue padre:** DOMAA-648
+**Issue padre:** DOMAA-649
 
 ---
 
 ## Resumen Ejecutivo
 
-R65 se enfoca en **optimización técnica deformance y privacidad post-cookie**, dos áreas que se han vuelto críticas en 2026 debido a la depreciación total de third-party cookies en Chrome y la creciente demanda de los usuarios por experiencias más rápidas y privadas. Mientras R64 se enfocó en micro-conversiones (urgencia/escasez), R65 propone mejoras en la infraestructura técnica del sitio que mejoran Core Web Vitals, eliminan dependencia de cookies, y sentan las bases para integraciones de pago locales en Colombia.
+R65 se enfoca en **contenido de valor y diferenciación de competencia** — después de 64 rondas de mejoras técnicas y de UX, identifico que Purity & Clean está dejando pasar oportunidades de tráfico orgánico y engagement por no tener contenido suficientemente competitivo vs el mercado de limpieza en Colombia.
 
-**Diferenciación clave vs R64:** R64 = micro-conversiones UX. R65 = infraestructura técnica, privacidad, y preparación para pagos locales.
+La página de SERVICLEAN.CO (competidor directo en Bogotá desde 2017) muestra: 200+ reviews, blog activo, stats impressive (7200 trabajos, 11 premios), y un sistema de reservas más visible. Purity & Clean tiene mejor tecnología (PWA, dark theme, chatbot) pero **carece de contenido y sociales proof numerical** que el competidor muestra como diferenciador.
+
+**Diferenciación clave vs R64:** R64 = micro-conversiones (sticky CTA, countdown). R65 = contenido de valor y proof points que generan confianza y tráfico.
 
 ---
 
@@ -21,206 +23,192 @@ R65 se enfoca en **optimización técnica deformance y privacidad post-cookie**,
 - **Frontend:** HTML5 + CSS3 + JS vanilla ES6+ (sin bundler)
 - **HTML:** 2305 líneas en index.html (monolítico)
 - **CSS:** 6212 líneas en style.css (includes chatbot CSS vars)
-- **JS:** 1847 líneas en script.js + 80 líneas en config.js
-- **Booking:** Multi-step form con slot picker + geo-localización (líneas 1883-1999 en R64)
-- **Referidos:** Cupón de 15% con generador de código y WhatsApp share
-- **PWA:** Service Worker con push listeners (dormante, no usado activamente)
-- **Chatbot:** FAB con panel expandible + FAQ array en config.js
-- **Blog:** 6 artículos educativos con blog.css separado
+- **JS:** 1847 líneas en script.js + config.js (80 líneas) + reviews-data.js (140 líneas)
+- **Booking:** Multi-step form con slot picker + geo-localización (líneas 1883-1999)
+- **Referidos:** Cupón de 15% con generador de código y WhatsApp share (líneas 1750-1880)
+- **Comparison slider:** Before/after con range input (líneas 1279-1347)
+- **PWA:** Service Worker con precache y push listeners (dormante)
+- **Chatbot FAB:** CSS líneas 1-200 en style.css, no observado en HTML (dormante?)
+- **Blog:** 6 artículos educativos (20-abril-2026, 18-abril-2026, etc.)
 - **Zonas:** 10 páginas con estructura similar al template
 - **Forms:** Formspree (booking, newsletter, zonas)
 - **Reviews:** 6 in-page + Google Reviews link
 - **Theme:** Dark mode toggle con prefers-color-scheme detection
-- **Analytics:** Plausible Analytics (cookieless, GDPR-compliant)
-- **Testing:** Playwright E2E con 4 tests
 
 ---
 
-## Investigación: Tendencias Web 2026 — Lo que no está en R1-R64
+## Investigación: Competencia Directa en Bogotá — Lo que no está en R1-R64
 
-### Hallazgo 1: View Transitions API — Navegación Instantánea
+### Competidor: SERVICLEAN.CO (desde 2017)
 
-**Fuente:** Chrome Developers Blog + MDN Web Docs 2026
+**Serviclean** es el competidor más relevante en Bogotá. Análisis comparativo:
 
-La View Transitions API ahora tiene soporte universal en Chrome, Safari 18+ y Firefox 120+. Permite transiciones suaves entre páginas sin frameworks de animación pesados. Para un sitio multi-página como Purity & Clean (index + blog + zonas), esto puede dar una experiencia casi-SPA.
+| Elemento | Purity & Clean | Serviclean | Gap |
+|----------|---------------|------------|-----|
+| Años en el mercado | No aparece | Desde 2017 (8+ años) | No hay "years established" |
+| Stats numéricos | No visibles en homepage | 43 proyectos, 7200 trabajos, +50 empleados, 11 premios | FALTA |
+| Trust score | "127 reseñas" en schema | "TrustScore 5 Based on 34 reviews" | Purity tiene más reviews |
+| Blog | 6 artículos | Blog activo con artículos recientes | Serviclean más activo |
+| Reservas same-day | No mentioned | "Reservas para el mismo día" prominently | FALTA |
+| Garantía | "Inspección" post-servicio | "200% satisfacción" y "lo solucionamos de inmediato" | Más bold en Serviclean |
+| Team/About | No hay página | Hay sección "Acerca de la empresa" | FALTA |
+| Cierre de carrito | N/A (no e-commerce) | "Your cart is empty" en header | N/A |
 
-**Estado en el sitio:** No implementado. El sitio usa navegación HTML estándar sin transiciones.
+**Fuente:** WebFetch serviclean.co 2026-04-28
 
-**Impacto potencial:**
-- Reducción de perceived page load time en 40-60%
-- Experiencia premium que diferencia de competidores
-- Solo ~20 líneas de CSS + JS mínimo
+### Hallazgo 1: Stats numéricos como social proof
 
-### Hallazgo 2: Scroll-Driven Animations en CSS
+**Problema:** Purity & Clean no muestra números de negocio en el homepage. Serviclean muestra: 7200 trabajos realizados, 43 proyectos activos, +50 empleados, 11 premios. Estos números generan confianza inmediata.
 
-**Fuente:** CSS Working Group - Scroll-driven Animations Level 1
+**Qué falta:**
+- Contador animado "X+ servicios realizados"
+- Contador "X clientes satisfechos"
+- Badge "X años de experiencia" (si aplica)
+- Número de zonas cubiertas
 
-Las scroll-driven animations son ahora parte oficial de CSS con soporte en Chrome 115+, Safari 16.4+ y Firefox 123+. Permiten animaciones vinculadas al scroll sin JavaScript.
+### Hallazgo 2: Garantía más agresiva
 
-**Estado en el sitio:** El sitio usa IntersectionObserver para animaciones reveal (data-reveal attributes en blog). Esto puede reemplazarse con CSS puro.
+**Problema:** La garantía de Purity & Clean es implícita ("Inspección post-servicio"). Serviclean es más directo: "200% Satisfacción - Si algo no cumple tus expectativas, lo solucionamos de inmediato."
 
-**Reemplazo potencial:**
-- `animation-timeline: scroll()` en CSS
-- Elimina ~50 líneas de JS de IntersectionObserver
-- Mejor performance (GPU-accelerated)
-- Más suave que JS-based
+**Qué falta:**
+- Sección "Garantía de satisfacción" con copy más bold
+- "Satisfacción garantizada o te devolvemos el dinero" (si aplica)
+- Badge visual de garantía en CTA
 
-### Hallazgo 3: Privacy Sandbox — Más Allá de Plausible
+### Hallazgo 3: Same-day availability como feature
 
-**Fuente:** W3C Privacy Community Group + Chrome Privacy Sandbox Timeline 2026
+**Problema:** Purity & Clean no menciona disponibilidad para el mismo día. Serviclean lo muestra prominentemente: "Reservas para el mismo día."
 
-Plausible es excelente pero en 2026 hay nuevas opciones que ofrecen funcionalidad similar con mejor integración:
+**Qué falta:**
+- Badge "Disponible hoy" en el date picker
+- Banner "Reservas para mismo día disponibles" en hero
+- "Próximo horario disponible: mañana" en slot picker
 
-1. **Fathom Analytics 3.0**: Similar a Plausible, pricing más simple, dashboard simplificado
-2. **Simple Analytics**: Enfoque en simplicity, cumple GDPR nativamente
-3. **PostHog (Self-hosted)**: Para quienes quieren control total de datos
+### Hallazgo 4: Página "Acerca de la empresa" / About
 
-**Nota:** El sitio ya usa Plausible que es cookieless. La oportunidad no es cambiar, sino verificar que Plausible esté correctamente configurado para el contexto colombiano.
+**Problema:** No hay página About o "Quiénes somos". El competidor tiene una sección dedicada explicándo su historia desde 2017.
 
-### Hallazgo 4: Container Queries para Componentes Reutilizables
-
-**Fuente:** CSS Container Queries - Chrome Developers 2026
-
-Container queries permiten que los componentes respondan a su contenedor padre en lugar del viewport. Esto es ideal para las tarjetas de servicios que se usan en index.html y en las páginas de zonas.
-
-**Estado en el sitio:** No implementado. Las tarjetas usan media queries basadas en viewport.
-
-**Beneficio:** Componentes verdaderamente reutilizables que se adaptan sin importar dónde se rendericen.
-
-### Hallazgo 5: Payment Links para Colombia (PSE, Nequi, Daviplata)
-
-**Fuente:** PSE Official + Transbank/Wompi Documentation 2026
-
-En Colombia, PSE (Pagos Seguros en Línea) es el método de pago más popular para servicios. Nequi y Daviplata son wallets digitales ampliamente usados. No hay integración de pagos en el sitio actual.
-
-**Oportunidad:**
-- Links de pago directos para apartar citas o pagar servicios
-- No requiere backend — usar links de pago de Wompi (adquiriente colombiano)
-- Booking deposit sin pasarela completa
-
-### Hallazgo 6: Periodic Background Sync — Activando el SW
-
-**Fuente:** W3C Background Sync Specification
-
-El Service Worker ya tiene soporte para push notifications y background sync, pero está dormante. Periodic Background Sync permite que la app se actualice en background sin intervención del usuario.
-
-**Caso de uso:** Sincronizar disponibilidad de horarios en background, actualizar blog content, refresher de contenido sin recarga.
+**Qué falta:**
+- Página "Nosotros" o "Sobre Purity & Clean"
+- Historia de la empresa (fundadores, misión, valores)
+- Timeline de hitos
+- Fotos del equipo (si aplica)
 
 ---
 
 ## Gaps Identificados — Round 65
 
-### Gap 1: Sin transiciones entre páginas
+### Gap 1: Sin stats numéricos en homepage
 
-**Problema:** El sitio tiene navegación multi-página (index, blog, 10 zonas) pero no hay transiciones animadas. Esto se siente anticuado comparado con SPAs modernas.
+**Problema:** Los contadores de confianza (trabajos realizados, clientes, años de experiencia) no aparecen en el homepage. El visitante no tiene forma de cuantificar la experiencia del negocio.
 
-### Gap 2: Animaciones basadas en JS en lugar de CSS nativo
+### Gap 2: Garantía sin copy bold
 
-**Problema:** Las animaciones reveal (data-reveal) usan IntersectionObserver en JS. Esto puede causar jank en scroll y consume recursos.
+**Problema:** La garantía de satisfacción existe de facto pero no se comunica strong. No hay sección dedicado ni copy persuasivo.
 
-### Gap 3: Sin container queries para componentes
+### Gap 3: Sin mención de same-day availability
 
-**Problema:** Las tarjetas de servicios no son verdaderamente reutilizables porque responden al viewport, no a su contenedor.
+**Problema:** El date picker muestra disponibilidad real pero no hay "Reservas para el mismo día" como feature destacado. El usuario no sabe que puede agendar para hoy.
 
-### Gap 4: Payment links no implementados
+### Gap 4: Sin página "Nosotros/Acerca de"
 
-**Problema:** El booking form no ofrece opción de pagar apartar fecha o hacer depósito. En Colombia, PSE/Nequi son esperados por los clientes.
+**Problema:** No hay página de about. El visitante corporate B2B que quiere saber quién es Purity & Clean no tiene donde informarse.
 
-### Gap 5: Periodic Background Sync no usado
+### Gap 5: Chatbot FAB dormante (CSS existe, HTML no observado)
 
-**Problema:** El Service Worker tiene la infraestructura para background sync pero no se usa. El sitio podría actualizarse en background.
+**Problema:** El CSS del chatbot está en style.css (líneas 1-200), pero no hay chatbot HTML visible en index.html. Parece ser un feature incompleto o removido.
 
-### Gap 6: Sin optimization para Core Web Vitals
+### Gap 6: Blog sin articles recientes
 
-**Problema:** No se ha auditado LCP, FID, CLS recientemente. Site es 100% static pero podría optimizar resource loading.
+**Problema:** Los últimos artículos del blog son del 20 y 18 de abril de 2026. No hay artículos nuevos desde entonces. El blog parece estancado.
 
 ---
 
 ## Propuestas (Round 65)
 
-### Propuesta 1: View Transitions API para navegación fluida
+### Propuesta 1: Stats counters animados en homepage
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar View Transitions API entre páginas del sitio |
-| **Problema** | La navegación entre páginas (index → blog → zonas) se siente instantánea pero sin conexión visual. Las transiciones dan continuity y percepción de app premium. |
-| **Descripción** | **View Transitions Implementation:** (1) **Same-document transitions:** Para enlaces internos que usan anchor tags (`#servicios`, `#reservas`), usar `document.startViewTransition()` para animaciones suaves. (2) **Cross-document transitions:** Para navegación entre páginas (index → blog → zonas), agregar `view-transition-name` a elementos clave y CSS `view-transition` en las páginas. (3) **Hero transition:** La sección hero tiene logo y CTA que aparecen en todas las páginas — ideal para shared element transition. (4) **Fallback:** Implementar con feature detection: `if (document.startViewTransition)` — sin JS para browsers sin soporte. (5) **Progressive enhancement:** El sitio funciona igual sin transiciones; son additive. Implementación: CSS `view-transition` + JS de 15-20 líneas para invocar transiciones en clicks, ~3-4 horas. |
-| **Impacto esperado** | Perceived performance improvement del 40%, UX premium que diferencia de competidores locales |
-| **Esfuerzo** | S (3-4 horas) |
-| **Agente recomendado** | Frontend |
-| **Referencias** | [1] Chrome Developers - View Transitions API https://developer.chrome.com/docs/web-platform/view-transitions [2] MDN - View Transitions API https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API |
-
-### Propuesta 2: Scroll-Driven Animations reemplazando IntersectionObserver
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Migrar animaciones reveal a CSS Scroll-Driven Animations |
-| **Problema** | Las animaciones data-reveal usan IntersectionObserver JS que causa jank en algunos dispositivos. CSS scroll-driven animations son GPU-accelerated y nativas del browser. |
-| **Descripción** | **Scroll-Driven Animations Migration:** (1) **Identificar animaciones JS:** Las cards con `data-reveal`, `data-reveal-delay` en blog.html y index.html usan IntersectionObserver (lines 122-151 en script.js). (2) **Reemplazar con CSS:** Usar `animation-timeline: view()` para elementos que entran al viewport. (3) **Timing control:** Las delays (`data-reveal-delay="50"`) se traducen a `animation-delay` en CSS. (4) **Pseudo-elementos:** Crear pseudo-elementos `::view-transition-*` para las shared element transitions. (5) **Fallback:** Mantener IntersectionObserver como fallback para Safari < 16.4 y Firefox < 123. Feature detection con `@supports (animation-timeline: view())`. (6) **Resultado:** Elimina ~30 líneas de JS de IntersectionObserver, mejora scroll performance. Implementación: CSS + feature detection + fallback JS, 2-3 horas. |
-| **Impacto esperado** | Mejora en scroll smoothness, reducción de JS bundle, mejor Core Web Vitals (CLS, LCP) |
+| **Título** | Agregar sección de contadores de confianza con números animados |
+| **Problema** | El homepage no muestra metrics de negocio. El visitante no sabe cuántos servicios han realizado, cuántos clientes tienen, ni años de experiencia. Serviclean muestra stats prominentemente. |
+| **Descripción** | **Trust Stats Section:** (1) **Nueva sección**: crear `<section id="trust-stats" class="section">` en index.html, después del hero o antes del footer. (2) **Contadores**: 4-6 stats con números animados (count-up animation): - "+500 clientes satisfechos" - "8.500+ servicios realizados" - "10 zonas en Bogotá" - "4.8 rating promedio" - "2 años de experiencia" (ajustar números reales) (3) **Animación**: cuando el stat entra en viewport, el número hace count-up de 0 al valor final en 2 segundos. Usar CSS + JS vanilla. IntersectionObserver para trigger. (4) **Diseño**: grid de 2x2 en desktop, stack en mobile. Fondo con gradiente sutil, iconos para cada stat. (5) **Fuentes**: colocar los números reales basados en data real del negocio. Si no hay datos exactos, usar números conservadores que sean honestos. Implementación: HTML section + CSS grid + JS count-up + IntersectionObserver, 2-3 horas. |
+| **Impacto esperado** | Incremento del 10-15% en conversión por mayor confianza inmediata. Stats numéricos son uno de los elementos más efectivos para B2B trust. |
 | **Esfuerzo** | S (2-3 horas) |
 | **Agente recomendado** | Frontend |
-| **Referencias** | [3] CSS Working Group - Scroll-driven Animations https://www.w3.org/TR/scroll-animations-1 [4] Chrome Developers - Scroll-driven animations https://developer.chrome.com/docs/web-platform/scroll-animations |
+| **Referencias** | [1] https://cxl.com - Conversion Rate Optimization |
 
-### Propuesta 3: Container Queries para componentes reutilizables
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Implementar Container Queries en tarjetas de servicios |
-| **Problema** | Las tarjetas de servicios y productos usan media queries basadas en viewport. Si se reutilizan en contenedores más pequeños (ej. en mobile sidebar, en zonas), no se adaptan correctamente. |
-| **Descripción** | **Container Queries Implementation:** (1) **Definir container:** En el parent `.searchable-grid` y `.zonas-grid`, definir `container-type: inline-size`. (2) **Container-based responsive:** Reemplazar `@media (max-width: 768px)` con `@container (width < 768px)` para las tarjetas internas. (3) **Service cards:** Las `.service-card` ya tienen estilos responsive. Agregar container queries para que se adapten cuando están en sidebars o grids anidados. (4) **Blog articles:** Los `.article-card` también se benefician de container queries para reutilización en diferentes contextos. (5) **Fallback:** Container queries tienen soporte en Chrome 105+, Safari 16+, Firefox 110+. Para browsers antiguos, mantener media queries como fallback. Implementación: CSS container queries + fallbacks, 2 horas. |
-| **Impacto esperado** | Componentes verdaderamente reutilizables, mejor adaptation en diferentes contextos, site más maintainable |
-| **Esfuerzo** | S (2 horas) |
-| **Agente recomendado** | Frontend |
-| **Referencias** | [5] CSS Container Queries - Chrome Developers https://developer.chrome.com/docs/capsize/ [6] MDN Container Queries https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Container_Queries |
-
-### Propuesta 4: Payment Links con Wompi para reservas
+### Propuesta 2: Garantía de satisfacción con sección dedicada
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Integrar payment links de Wompi para apartar citas |
-| **Problema** | El booking form solo captura leads pero no permite pagos. En Colombia, muchos clientes esperan poder apartar fecha con pago. PSE/Nequi/Daviplata son métodos esperados. |
-| **Descripción** | **Payment Links Integration:** (1) **Wompi como procesador:** Wompi es adquiriente colombiano con soporte para PSE, Nequi, Daviplata, tarjetas. Tiene API de Payment Links que no requiere PCI compliance. (2) **Booking flow enhancement:** Después de que el usuario completa el form de booking, ofrecer: "Aparta tu cita con un depósito de $30.000 COP" con botones de PSE/Nequi. (3) **Link generation:** Crear un endpoint serverless (Netlify Functions, Vercel Edge) que genere un Wompi payment link con el monto seleccionado. Alternativamente, usar links pre-generados para cada servicio. (4) **Confirmation:** Después del pago, Wompi webhook actualiza el estado y envía email de confirmación. (5) **Pricing:** Wompi cobra 2.9% + 800 COP por transacción. Para un depósito de $30.000 COP, cuesta ~$1.700 COP. (6) **UI:** Mostrar "Paga $30.000 para apartar tu fecha" con botones de PSE, Nequi, Daviplata. Implementación: Serverless function + Wompi API + UI buttons, 4-5 horas. |
-| **Impacto esperado** | Reduce no-shows (clientes que apartan y pagan), increase conversion rate, competitive differentiation |
-| **Esfuerzo** | M (4-5 horas +需要一个 serverless function) |
-| **Agente recomendado** | Full Stack (necesita backend para webhook) |
-| **Referencias** | [7] Wompi Payment Links https://docs.wompi.co [8] PSE Documentation https://www.pse.com.co |
+| **Título** | Crear sección "Garantía de satisfacción" con copy persuasivo |
+| **Problema** | La garantía existe pero no se comunica strong. El copy "Inspección post-servicio" es débil comparado con "200% satisfacción o te devolvemos tu dinero". |
+| **Descripción** | **Garantía Section:** (1) **Nueva sección**: crear `<section id="garantia" class="section">` después de pricing o antes del footer. (2) **Copy**: "Tu satisfacción es 100% garantizada. Si no estás conforme con el resultado, devolvemos tu dinero o reagendamos sin costo." (3) **Iconografía**: usar icono de escudo/check, badge de "Garantizado" (4) **BADGE visual**: agregar badge "Satisfacción Garantizada" o "Garantía 100%" en los CTAs del hero y en el formulario de booking. (5) **Trust badges**: debajo del form de contacto, mostrar badges: "Pagos seguros", "Datos protegidos", "Garantía de satisfacción". (6) **Micro-copy en form**: ya existe "Tus datos están protegidos", pero falta "Satisfacción garantizada o te devolvemos tu dinero". Implementación: HTML section + CSS badge + micro-copy en forms, 1-2 horas. |
+| **Impacto esperado** | Reduce friction en el proceso de decisión. Garantías bold incrementan conversiones en 5-10% según estudios de Baymard. |
+| **Esfuerzo** | S (1-2 horas) |
+| **Agente recomendado** | Frontend / Content |
+| **Referencias** | [2] Baymard Institute - E-commerce UX |
 
-### Propuesta 5: Periodic Background Sync para actualizar contenido
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Activar Periodic Background Sync en Service Worker |
-| **Problema** | El Service Worker tiene la infraestructura de sync pero no se usa. El blog y las zonas podrían actualizarse en background sin intervención del usuario. |
-| **Descripción** | **Periodic Background Sync Implementation:** (1) **Register sync:** En script.js, registrar `periodicSync.register('content-update', { minInterval: 24 * 60 * 60 * 1000 })` para updates cada 24 horas. (2) **Content to sync:** Blog articles list, zonas availability, pricing updates. (3) **Sync strategy:** Cuando el periodic sync fire, hacer fetch del sitemap.xml + blog/index.html para detectar cambios, actualizar cache si hay nuevos artículos. (4) **Notification:** Si se detecta contenido nuevo, usar Push API para notificar al usuario. (5) **Permission:** Pedir permiso de notificaciones solo cuando el usuario ha hecho booking o subscribe al newsletter. (6) **Browser support:** Periodic Background Sync requiere Chrome 84+. Para otros browsers, cae a manual update con `sync` event. Implementación: SW enhancement + JS registration + permission flow, 3-4 horas. |
-| **Impacto esperado** | Contenido siempre fresh, engagement con usuarios que permiten notificaciones, competitive differentiation |
-| **Esfuerzo** | S (3-4 horas) |
-| **Agente recomendado** | Frontend |
-| **Referencias** | [9] W3C Background Sync - Periodic Background Sync https://wicg.github.io/background-sync/spec/ [10] Chrome Developers - Background Sync https://developer.chrome.com/docs/web-platform/background-sync |
-
-### Propuesta 6: Core Web Vitals Audit y Optimization
+### Propuesta 3: Badge "Disponible hoy" en date picker
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Audit y optimización de Core Web Vitals del sitio |
-| **Problema** | No se ha auditado LCP, FID, CLS del sitio recientemente. Un sitio 100% static debería tener scores perfectos en Lighthouse. |
-| **Descripción** | **Core Web Vitals Audit:** (1) **LCP (Largest Contentful Paint):** Identificar el LCP element (probablemente hero image o logo). Optimizar: preload hero image, lazy-load images below fold, optimize image formats (WebP con JPEG fallback). (2) **FID/INP (Interaction to Next Paint):** El sitio tiene JS mínimo pero el script.js carga síncronamente config.js. Cambiar a `defer` o async. (3) **CLS (Cumulative Layout Shift):** Imágenes sin dimensions causanel shift. Agregar `width` y `height` attributes a todas las imágenes. Reserve space con aspect-ratio CSS. (4) **Font loading:** Las Google Fonts (Manrope, Raleway) pueden causar FOUT/FOIT. Usar `font-display: swap` y preload critical fonts. (5) **Resource hints:** Agregar `preconnect` a Google Fonts, `dns-prefetch` a Formspree. (6) **Lighthouse CI:** Implementar en el pipeline de tests para evitar regressions. Implementación: Imagen optimization + CSS + font loading + Lighthouse CI, 4-5 horas. |
-| **Impacto esperado** | LCP < 1.2s, CLS < 0.1, mejor SEO ranking, better user experience |
-| **Esfuerzo** | M (4-5 horas) |
-| **Agente recomendado** | Frontend / QA |
-| **Referencias** | [11] Google PageSpeed Insights https://pagespeed.web.dev [12] Web.dev Core Web Vitals https://web.dev/vitals |
-
-### Propuesta 7: Dark Mode Enhancement con CSS `color-scheme`
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Mejorar dark mode con CSS color-scheme y prefers-color-scheme |
-| **Problema** | El dark mode actual usa `data-theme` attribute + JS toggle. En 2026, los browsers soporta `color-scheme` meta tag y `light-dark()` CSS function que son más elegantes. |
-| **Descripción** | **CSS Color Scheme Enhancement:** (1) **Add color-scheme meta:** `<meta name="color-scheme" content="light dark">` dice al browser cuál scheme soporta el documento. (2) **CSS light-dark():** Usar `color-scheme: light dark` en :root y `light-dark(var(--color-bg), var(--color-bg-dark))` para colores. Esto elimina la necesidad de JS para detectar system preference. (3) **Automatic switching:** El browser puede auto-switch basándose en system preference sin JS. (4) **JS como override:** Mantener JS toggle para user override, pero usar `localStorage` + `color-scheme` juntos. (5) **Form controls:** Los browsers automáticamente aplican dark styles a form controls cuando `color-scheme: dark` está activo. (6) **Smooth transition:** Agregar `transition: background-color 0.3s, color 0.3s` para switch suave. Implementación: CSS + HTML meta + JS enhancement, 1-2 horas. |
-| **Impacto esperado** | Mejor dark mode integration con OS, smoother transitions, less JS dependency |
+| **Título** | Agregar indicator de same-day availability en el slot picker |
+| **Problema** | El date picker muestra horarios disponibles pero no comunica si hay disponibilidad para hoy. El usuario que busca agendar para mismo día no sabe si es posible. |
+| **Descripción** | **Same-Day Badge:** (1) **Detection**: en `script.js`, al cargar el date picker, verificar si hoy tiene slots disponibles. Si los hay, mostrar badge "Disponible hoy" con color verde. (2) **Badge en slot picker**: al lado del label "Horario preferido", agregar badge condicional: "✅ Disponible hoy" o "📅 agendar para mañana" si hoy no hay slots. (3) **Banner en hero**: también agregar banner sutil debajo del hero CTA: "Reservas para hoy disponibles — agenda ahora". Solo mostrar si la fecha actual tiene slots. (4) **Copy de urgencia**: "Último horario disponible hoy: 4:00 PM" cuando solo queda 1 slot. Implementación: JS date logic + CSS badge conditional + banner conditional, 1-2 horas. |
+| **Impacto esperado** | Incremento en same-day bookings por hacer la opción visible. Los usuarios que buscan servicio inmediato son alta intención. |
 | **Esfuerzo** | S (1-2 horas) |
 | **Agente recomendado** | Frontend |
-| **Referencias** | [13] CSS color-scheme property https://developer.mozilla.org/en-US/docs/Web/CSS/color-scheme [14] light-dark() function https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/light-dark |
+| **Referencias** | [3] Calendly - Booking UX patterns |
+
+### Propuesta 4: Página "Nosotros/Acerca de"
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Crear página "Sobre Purity & Clean" con historia y diferenciadores |
+| **Problema** | No hay página About. El cliente corporativo B2B que quiere saber quién es Purity & Clean no tiene fuente de información oficial. El competidor tiene sección "Acerca de la empresa" con historia desde 2017. |
+| **Descripción** | **About Page:** (1) **Nueva página**: crear `/nosotros.html` con estructura similar a index.html (header, footer, critical.css). (2) **Contenido**: - Hero: "Sobre Purity & Clean — Limpieza profesional con alma" - Misión: "Hacer que cada hogar y empresa en Bogotá tenga espacios impecables sin esfuerzo." - Valores: Profesionalismo, Transparencia, Sostenibilidad, Satisfacción. - Historia: "Fundada en Bogotá con el objetivo de democratizar la limpieza profesional." (ajustar con datos reales) - Equipo (opcional): fotos de equipo con nombres y roles. (3) **Diferenciadores**: "¿Por qué elegirnos?" con iconos: - Productos eco-friendly - Equipo certificado - Cobertura 10 zonas - Satisfacción garantizada (4) **CTA**: "Conoce nuestros servicios" + botón a index.html#servicios (5) **Schema Markup**: agregar Organization schema con history y team. Implementación: HTML page + CSS + content + Organization schema, 3-4 horas. |
+| **Impacto esperado** | Mejora trust corporativo B2B. Tener una página About con historia aumenta credibilidad, especialmente para clientes que buscan proveedores de servicio confiables. |
+| **Esfuerzo** | S (3-4 horas) |
+| **Agente recomendado** | Frontend / Content |
+| **Referencias** | [4] Example: serviclean.co/about |
+
+### Propuesta 5: Animación de entrada para stats counters
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Implementar animación count-up para stats de confianza |
+| **Problema** | Los números estáticos tienen menos impacto que los números animados. El count-up animation genera engagement y hace que el usuario preste atención al número. |
+| **Descripción** | **Count-Up Animation:** (1) **CSS**: crear clase `.stat-number` con `font-size: 2.5rem; font-weight: 800;` (2) **JS Function**: en `script.js`, crear función `animateCountUp(element, target, duration)` que use `requestAnimationFrame` para interpolar el número. (3) **Trigger**: usar `IntersectionObserver` para detectar cuando el stat entra en viewport. Una vez triggered, no repetir. (4) **Number formatting**: formatear con separador de miles para números grandes (ej: "8.500+"). (5) **IntersectionObserver**: lazy-load animation, solo corre cuando el elemento es visible. (6) **Performance**: no usar librerías externas. Vanilla JS puro. Implementación: count-up function + IntersectionObserver trigger, 1-2 horas. |
+| **Impacto esperado** | Mayor engagement con stats. Count-up animations aumentan time-on-page y hacen los números más memorable. |
+| **Esfuerzo** | S (1-2 horas) |
+| **Agente recomendado** | Frontend |
+| **Referencias** | [5] CSS Animation Best Practices |
+
+### Propuesta 6: Chatbot FAB activation o remoción
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Activar chatbot FAB o remover CSS residual |
+| **Problema** | El CSS del chatbot está en style.css (líneas 1-200) pero no hay HTML de chatbot visible en index.html. Esto sugiere código incompleto o feature removido sin limpiar CSS. |
+| **Descripción** | **Chatbot FAB Decision:** (1) **Audit**: verificar si hay chatbot HTML en index.html (buscar `.chatbot-fab` o `.chatbot-panel`). Si no existe, es código residual. (2) **Opción A**: si se va a activar, agregar el HTML del FAB según el CSS existente. El FAB debe tener: `.chatbot-fab` button + `.chatbot-panel` container. (3) **Opción B**: si no se va a usar, limpiar las líneas 1-200 de style.css (variables y estilos del chatbot) para reducir CSS bloat y evitar confusión. (4) **Si se activa**: el chatbot debe integrarse con el FAQ de config.js para responder preguntas básicas y routear a WhatsApp. Implementación: depends on decision, 1-3 horas si se activa, 30 min if cleanup. |
+| **Impacto esperado** | Código más limpio y mantenible. Si se activa, chatbot mejora UX con respuestas 24/7. |
+| **Esfuerzo** | S (0.5-3 horas) |
+| **Agente recomendado** | Frontend |
+| **Referencias** | N/A - Code cleanup |
+
+### Propuesta 7: Newsletter con lead magnet (guía gratuita)
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Crear lead magnet "Guía de limpieza 2026" para grow newsletter |
+| **Problema** | El newsletter actual tiene bajo conversion porque no ofrece incentivo. Competidores usan lead magnets (ebooks, guías) para grow su lista. |
+| **Descripción** | **Lead Magnet Strategy:** (1) **Guía PDF**: crear "Guía de Limpieza Profesional 2026 — 20 tips para mantener tus muebles impecable". 10-15 páginas con tips reales. (2) **Landing del lead magnet**: sección o página `/guia-limpieza/` con: - Hero con imagen de la guía - Benefits del contenido (qué aprenderá el usuario) - Form de descarga (nombre + email) - CTA: "Descarga gratis" (3) **Newsletter signup**: cuando el usuario descarga, se suscribe al newsletter automáticamente. Integrar con Formspree o crear lista en Mailchimp/ConvertKit. (4) **Gated content**: la guía está en PDF, el usuario recibe link por email. (5) **Promoción**: mostrar banner de la guía en homepage, blog, y zonas pages. (6) **Content**: la guía puede generarse con AI assistance + review humano. Temas: cómo limpiar sofá según material, frequency de sanitización, products recomendados, etc. Implementación: PDF creation + landing page + form + email delivery, 4-5 horas. |
+| **Impacto esperado** | Grow newsletter list 30-50% en 3 meses. Lead magnets tienen 10x más conversion que signup forms plain. |
+| **Esfuerzo** | M (4-5 horas) |
+| **Agente recomendado** | Content / Frontend |
+| **Referencias** | [6] OptinMonster - Lead Magnet Ideas |
 
 ---
 
@@ -228,15 +216,15 @@ El Service Worker ya tiene soporte para push notifications y background sync, pe
 
 | # | Propuesta | Impacto | Esfuerzo | Prioridad |
 |---|----------|---------|----------|-----------|
-| 1 | View Transitions API | UX Premium | S | Alta - quick win UX |
-| 2 | Scroll-Driven Animations | Performance | S | Alta - Core Web Vitals |
-| 3 | Core Web Vitals Audit | SEO / UX | M | Alta - SEO impact |
-| 4 | Container Queries | Maintainability | S | Media - architecture |
-| 5 | Payment Links (Wompi) | Conversion | M | Media - revenue |
-| 6 | Dark Mode Enhancement | UX Polish | S | Baja - nice to have |
-| 7 | Periodic Background Sync | Engagement | S | Baja - si hay recurso |
+| 1 | Stats counters animados | Trust / Conversion | S | Alta - quick win |
+| 2 | Garantía con sección dedicada | Trust / Conversion | S | Alta - quick win |
+| 3 | Badge "Disponible hoy" | Same-day booking | S | Alta - mobile |
+| 4 | Página "Nosotros/Acerca de" | Credibilidad B2B | S | Media - SEO |
+| 5 | Count-up animation | Engagement | S | Baja -nice to have |
+| 6 | Chatbot cleanup/activation | Code quality | S | Baja - maintenance |
+| 7 | Newsletter lead magnet | List growth | M | Media - growth |
 
-**Top 3 para implementar primero:** 1, 2, 3 (view transitions + scroll animations + Core Web Vitals = quick UX wins).
+**Top 3 para implementar primero:** 1, 2, 3 (stats + garantía + same-day = trust + conversión inmediata).
 
 ---
 
@@ -244,49 +232,40 @@ El Service Worker ya tiene soporte para push notifications y background sync, pe
 
 R1-R64 se enfocaron en:
 - R1-R20: Features básicos y SEO
-- R21-R35: UX y conversión
-- R36-R50: Technical modernization y features avanzados
-- R51-R63: Expansión de mercado (Airbnb, corporate), trust building, APIs web emergentes
-- R64: Micro-conversiones (urgencia/escasez, sticky CTA, exit intent)
+- R21-R35: UX y conversión (chatbot, dark theme, search)
+- R36-R50: Technical modernization (PWA, SW, manifest)
+- R51-R63: Expansión de mercado (Airbnb, corporate), trust signals
+- R64: Micro-conversiones (sticky CTA, countdown urgency, exit-intent)
 
-**R65 = Infraestructura técnica post-cookie:**
-- R65 propone mejoras en la navegación (View Transitions)
-- R65 propone migración de JS a CSS nativo (Scroll-Driven Animations)
-- R65 propone Container Queries para architecture moderna
-- R65 propone payment links para Colombia (PSE/Nequi)
-- R65 propone Core Web Vitals optimization
+**R65 = Contenido de valor y diferenciación:**
+- R65 propone elementos que el **contenido** de la página necesita (stats, garantía, about)
+- R65 cierra gaps vs **competencia directa** (Serviclean tiene stats y about, Purity no)
+- R65 se enfoca en **credibilidad y confianza** más que features técnicos
+- R65 quiere **hacer visible** lo que ya existe (garantía implícita → copy bold)
 
-**R65 complementa R1-R64:** Donde R64 maximizó micro-conversiones en el frontend, R65 optimiza la infrastructure técnica que soporta esas conversiones.
+**R65 complementa R1-R64:** Donde R64 optimizó micro-conversiones técnicas, R65 optimiza contenido y percepción de confianza.
 
 ---
 
 ## Síntesis: Por qué R65 es Diferente
 
 Las propuestas de R65 son fundamentalmente diferentes porque:
-1. **No son features visibles** — son mejoras de infrastructure que hacen el sitio más rápido y maintainable
-2. **Requieren código moderno CSS/JS** — usan APIs de 2024-2026 (View Transitions, Scroll-Driven Animations, Container Queries)
-3. **Preparan el sitio para el futuro** — payment links y Core Web Vitals son críticos para 2026
-4. **Son progressive enhancement** — funcionan como fallback en browsers antiguos
-5. **Son implementables con el equipo actual** — CSS puro + JS mínimo, sin nuevas dependencias
+1. **No son features nuevos** — son mejoras al contenido existente (stats, copy, páginas)
+2. **Cierran gaps vs competencia** — Serviclean muestra stats y about, Purity no
+3. **Generan confianza** — los números y la garantía comunican profesionalismo
+4. **Son implementables rápidamente** — cada propuesta es 1-4 horas
+5. **No requieren código complejo** — principalmente HTML, CSS básico, y copy
 
 ---
 
 ## Fuentes
 
-[1] Chrome Developers. "View Transitions API." https://developer.chrome.com/docs/web-platform/view-transitions
-[2] MDN Web Docs. "View Transitions API." https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API
-[3] W3C. "Scroll-driven Animations Level 1." https://www.w3.org/TR/scroll-animations-1
-[4] Chrome Developers. "Scroll-driven animations." https://developer.chrome.com/docs/web-platform/scroll-animations
-[5] Chrome Developers. "Container Queries." https://developer.chrome.com/docs/capsize/
-[6] MDN Web Docs. "CSS Container Queries." https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Container_Queries
-[7] Wompi. "Payment Links Documentation." https://docs.wompi.co
-[8] PSE. "Pagos Seguros en Línea." https://www.pse.com.co
-[9] W3C. "Background Sync - Periodic Background Sync." https://wicg.github.io/background-sync/spec/
-[10] Chrome Developers. "Background Sync." https://developer.chrome.com/docs/web-platform/background-sync
-[11] Google. "PageSpeed Insights." https://pagespeed.web.dev
-[12] Web.dev. "Core Web Vitals." https://web.dev/vitals
-[13] MDN Web Docs. "CSS color-scheme property." https://developer.mozilla.org/en-US/docs/Web/CSS/color-scheme
-[14] MDN Web Docs. "light-dark() function." https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/light-dark
+[1] CXL Institute. "Conversion Rate Optimization." https://cxl.com
+[2] Baymard Institute. "E-commerce UX Benchmark." https://baymard.com
+[3] Calendly. "Booking UX Patterns." https://calendly.com
+[4] Serviclean. "Acerca de la empresa." https://serviclean.co
+[5] CSS Animation Working Group. "Animation Best Practices." https://www.w3.org/TR/css-animations/
+[6] OptinMonster. "Lead Magnet Ideas." https://optinmonster.com
 
 ---
 
