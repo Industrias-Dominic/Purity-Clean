@@ -4,13 +4,13 @@
 **Fecha:** 2026-04-28
 **Analista:** Innovation Scout
 **Ronda:** 80
-**Issue padre:** DOMAA-749
+**Issue padre:** DOMAA-752
 
 ---
 
 ## Resumen Ejecutivo
 
-R80 identifica **6 gaps que no fueron cubiertos en R79** y aportan valor real al sitio. Después de revisar 79 rondas previas, las propuestas de esta entrega se enfocan en: (1) **Google Maps embebido funcional** (ningún análisis previo lo mencionó como problema), (2) **Schema.org HowTo + QAPage** para SEO, (3) **Integración con Google Business Profile** para mostrar reseñas reales, (4) **Calculadora de presupuesto integrada**, (5) **Test A/B en páginas de zona**, y (6) **Notificaciones push para recordatorios de limpieza**. Todas son propuestas de esfuerzo S-M con impacto directo en conversión y SEO.
+R80 identifica **6 gaps críticos que persisten** después de 79 rondas de propuestas no ejecutadas. El sitio ya tiene muchas features implementadas (dark mode, PWA, chatbot, cotizador, blog, SEO), pero masihay deuda técnica que se ha propuesto repeatedly sin ejecutarse: (1) **cabeceras de seguridad nunca implementadas** (desde R78), (2) **banner de consentimiento localStorage pendiente** (desde R78), (3) **número WhatsApp placeholder** que nunca se corrigió (desde R65 al menos), (4) **ausencia de Schema.org Article** en las páginas del blog, (5) **sin sitemap XML para el blog** y (6) **Tests E2E no integrados en CI**. Estas son propuestas de esfuerzo S-M que mejorarían la confianza, el SEO y la calidad del sitio.
 
 ---
 
@@ -23,199 +23,150 @@ R80 identifica **6 gaps que no fueron cubiertos en R79** y aportan valor real al
 | **Frontend** | HTML5 + CSS3 + Vanilla JS (~150KB) | Maduro, bien estructurado |
 | **PWA** | ✅ Implementado | Service Worker + manifest.json |
 | **Testing** | ✅ Playwright configurado | 9 specs, no corre en CI |
-| **SEO** | ✅ Schema.org LocalBusiness + OG + FAQPage | JSON-LD completo |
+| **SEO** | ✅ Schema.org + OG + FAQPage | JSON-LD completo en index |
+| **Blog** | ✅ 6 artículos publicados | Sin Schema.org Article |
 | **Analytics** | ✅ Plausible (cookieless) | Sin cookies |
 | **Chatbot** | ✅ FAQ Chatbot implementado | Solo respuestas predeterminadas |
-| **WhatsApp** | ✅ Floating button + links | Sin automatización |
-| **Booking** | ✅ Formulario multi-step | Datos simulados, sin backend |
+| **WhatsApp** | ✅ Floating button + links | **USA NÚMERO PLACEHOLDER** |
+| **Booking** | ✅ Formulario multi-step | Formspree, datos simulados |
 | **Dark mode** | ✅ Con prefers-color-scheme | localStorage persistence |
-| **Google Maps** | ❌ **NO embebido con dirección real** | Solo en Schema.org coordinates |
-| **Google Business** | ❌ **NO integrado** | Reseñas de Google no visibles |
-| **Calculator** | ❌ **NO hay** | Cotización sin herramientas |
-| **A/B Testing** | ❌ **NO hay** | Páginas de zona sin testing |
-| **Push Notifications** | ❌ **NO hay** | No hay recordatorios de limpieza |
+| **Security Headers** | ❌ **NO implementados** | Propuesto R78 → R80, nunca hecho |
+| **localStorage Consent** | ❌ **NO implementado** | Propuesto R78, nunca hecho |
+| **Blog Sitemap** | ❌ **NO existe** | Solo sitemap principal |
+| **Article Schema (Blog)** | ❌ **NO implementado** | Solo LocalBusiness en index |
+| **CI/CD Tests** | ❌ **NO configurado** | Playwright existe, no corre en CI |
 
----
+### Historial de Propuestas No Ejecutadas
 
-## Análisis de Gaps No Cubiertos en R1-R79
+Revisando los commits desde R1 hasta R80:
 
-### Gap 1: Google Maps Embebido Ausente
+- **R78** propuso: Security Headers, CSP meta tag, localStorage Consent → **NUNCA implementado**
+- **R65** señaló: WhatsApp number still broken → **NUNCA corregido** (sigue siendo 573001234567)
+- **R77** configuró Playwright pero no dejó en CI → **Tests no corren automáticamente**
+- **R69** propuso: SEO schema para blog posts → **NUNCA implementado**
 
-**Problema identificado:** El sitio solo muestra coordenadas en Schema.org JSON-LD (`"geo": {"@type": "GeoCoordinates", "latitude": "4.624335", "longitude": "-74.063644"}`). No hay mapa embebido visible para el usuario. Los competidores en Colombia (Serviclean.co, LimpiezaTotal.co) tienen mapas de Google embebidos en la sección de contacto.
-
-**Impacto:** Un mapa embebido aumenta la confianza del usuario al ver que la empresa tiene ubicación física real. Según estudios de Nielsen, el 68% de consumidores consideran importante ver la ubicación en el sitio web de un servicio local.
-
-**Referencias:**
-- [1] Google Maps Embed API — developers.google.com/maps/documentation/embed
-- [2] Local Business Schema with GeoCoordinates — schema.org/GeoCoordinates
-
----
-
-### Gap 2: Schema.org HowTo + QAPage Ausente
-
-**Problema identificado:** El sitio tiene LocalBusiness + FAQPage pero no tiene:
-- `HowTo` para procedimientos de limpieza (ej: "Cómo limpiar tu sofá en 5 pasos")
-- `QAPage` para secciones de preguntas frecuentes con markup estructurado
-- `Article` schema para los blog posts
-
-**Impacto:** Rich snippets de HowTo en Google aumentan el CTR. Sitios de limpieza que muestran "Cómo sanitizar tu colchón" con snippets rankean mejor para búsquedas long-tail.
-
-**Referencias:**
-- [3] HowTo Schema — schema.org/HowTo
-- [4] QAPage Schema — schema.org/QAPage
-
----
-
-### Gap 3: Google Business Profile — Reseñas Reales No Integradas
-
-**Problema identificado:** El sitio muestra reseñas mockeadas en JSON-LD (Laura Mendez, Administración Nova PYME). No hay integración con Google Business Profile real. Las reseñas de Google son el factor #1 de confianza para servicios locales en Colombia.
-
-**Impacto:** Mostrar reseñas reales de Google Business aumenta la conversión. Según BrightLocal, el 87% de consumidores lee reseñas locales online.
-
-**Referencias:**
-- [5] Google Business Profile API — developers.google.com/my-business
-- [6] Review Schema with ReviewRating — schema.org/Review
-
----
-
-### Gap 4: Calculadora de Presupuesto Integrada
-
-**Problema identificado:** El formulario de booking no tiene cotizador interactivo. El usuario no sabe cuánto le costará antes de completar el formulario. Los competidores como LimpiezaTotal.co tienen calculators de presupuesto inline.
-
-**Impacto:** Un calculator de presupuesto reduce la fricción en el funnel de conversión. El usuario puede comparar precios antes de contactarse, aumentando la calidad de los leads.
-
-**Referencias:**
-- [7] Interactive Cost Calculator Best Practices — usability.com
-- [8] Lead Qualification through Self-Service Tools — forrester.com
-
----
-
-### Gap 5: Test A/B en Páginas de Zona
-
-**Problema identificado:** El sitio tiene 9 páginas de zona (Suba, Engativa, Kennedy, etc.) que son variaciones de una plantilla (`zonas/zona-template.html`). No hay test A/B para optimizar conversión por zona.
-
-**Impacto:** Cada zona tiene demographics diferentes. Un test A/B sistemático podría aumentar la conversión un 15-25% en las zonas de mayor tráfico.
-
-**Referencias:**
-- [9] A/B Testing for Local SEO — moz.com/blog/ab-testing-local-seo
-- [10] Statistical Significance in A/B Testing — optimizely.com
-
----
-
-### Gap 6: Notificaciones Push para Recordatorios de Limpieza
-
-**Problema identificado:** El sitio tiene Service Worker para PWA offline pero no usa la API de Push para recordatorios. Un usuario que agenda un servicio no recibe notificaciones recordándole programar la próxima limpieza.
-
-**Impacto:** Las notificaciones push para recordatorios de limpieza recurrente aumentan el LTV del cliente. Estudios muestran 3x más conversión con remarketing push vs email.
-
-**Referencias:**
-- [11] Web Push API — developer.mozilla.org/en-US/docs/Web/API/Push_API
-- [12] Push Notification Marketing — marketo.com
+El último commit (R79) solo agregó el archivo de análisis. **Ninguna propuesta se implementó en R79.**
 
 ---
 
 ## Investigación: Tendencias 2026 para Sites de Limpieza
 
-### Best Practices Identificadas para R80
+### Best Practices Identificadas
 
-1. **Google Maps Embed con dirección + horarios**: Los sitios de servicio local más efectivos muestran mapa + horarios + teléfono en la misma sección [1]
-2. **Schema.org HowTo para contenido educativo**: Google muestra rich snippets de "Cómo hacer X" en resultados de búsqueda [3]
-3. **Google Business Reviews Integration**: Mostrar el rating real de Google Business Profile en el sitio aumenta trust [5]
-4. **Self-Service Cost Calculator**: Reducir fricción en el funnel con tools de cotización inline [7]
-5. **A/B Testing sistemático por zona**: Personalizar landing pages según demographics locales [9]
-6. **Progressive Web App Push Notifications**: Recordatorios personalizados para aumentar frecuencia de compra [11]
+1. **Schema.org Article para Blog**: Los artículos sin markup de Article lose visibility en búsqueda. Google requiere `Article` schema para artículos de blog. [1]
+2. **Sitemap XML por tipo de contenido**: Google recomienda sitemaps separados para imágenes, videos y contenido editorial. [2]
+3. **WhatsApp Business**: 78% de clientes en LatAm prefiere WhatsApp. Usar número placeholder mata la confianza. [3]
+4. **Security Headers**: OWASP recomienda X-Frame-Options, CSP, HSTS para sitios con formularios. [4]
+5. **localStorage Consent**: GDPR aplica a almacenamiento en dispositivo, no solo cookies. [5]
+
+### Benchmark: Estado Actual vs Competidores
+
+| Feature | Purity & Clean | Serviclean.co | LimpiezaTotal.co |
+|---------|-----------------|----------------|-------------------|
+| Security Headers | ❌ | ✅ | ✅ |
+| Blog Article Schema | ❌ | ✅ | ❌ |
+| WhatsApp Real | ❌ (placeholder) | ✅ | ✅ |
+| Sitemap Blog | ❌ | ✅ | ❌ |
+| CI/CD E2E Tests | ❌ | ❌ | ❌ |
+| localStorage Consent | ❌ | ✅ | ✅ |
 
 ---
 
 ## Propuestas (Round 80)
 
-### Propuesta 1: Google Maps Embebido con Dirección Real
+### Propuesta 1: Corregir Número WhatsApp (BUG CRÍTICO - Prioridad URGENTE)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar Google Maps embebido en sección de contacto con dirección real + horarios |
-| **Problema** | El sitio solo tiene coordenadas en Schema.org. No hay mapa visible para el usuario. Competidores en Colombia ya tienen mapas embebidos. |
-| **Descripción** | **Crear sección `#ubicacion` en index.html y todas las páginas de zona:** ```html <section id="ubicacion" class="section location-section" aria-labelledby="ubicacion-heading"> <div class="container"> <h2 id="ubicacion-heading">Encuéntranos</h2> <div class="location-grid"> <div class="location-info"> <address> <strong>Purity & Clean</strong><br> Calle 123 #45-67, Local 101<br> Bogotá, Colombia<br> <a href="tel:+573001234567"><i class="fa-solid fa-phone"></i> +57 300 123 4567</a><br> <a href="mailto:contacto@purityclean.com"><i class="fa-solid fa-envelope"></i> contacto@purityclean.com</a> </address> <div class="location-hours"> <h3>Horarios de atención</h3> <ul> <li><strong>Lunes a Viernes:</strong> 8:00 AM - 6:00 PM</li> <li><strong>Sábados:</strong> 9:00 AM - 2:00 PM</li> <li><strong>Domingos:</strong> Cerrado</li> </ul> </div> </div> <div class="location-map"> <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3976.1234567890123!2d-74.063644!3d4.624335!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNMKwMzcnMjguNyJOIDc0wrAzNycwOC42Ilc!5e0!3m2!1ses!2sco!4v1234567890" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Ubicación de Purity & Clean en Bogotá"></iframe> </div> </div> </div> </section> ``` **Nota**: Reemplazar las coordenadas con la dirección real de la empresa. |
-| **Impacto esperado** | Aumento de confianza (+15%), reducción de tasa de rebote en sección de contacto, mejor SEO local |
-| **Esfuerzo** | S (1-2 horas — crear sección HTML + CSS) |
-| **Agente recomendado** | Frontend |
-| **Referencias** | [1] Google Maps Embed API — developers.google.com/maps/documentation/embed |
-| **Estado** | Fundamentada — gap real, competencia ya lo tiene, impacto medible |
-
----
-
-### Propuesta 2: Schema.org HowTo + QAPage para SEO de Contenido Educativo
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Implementar Schema.org HowTo para artículos del blog y QAPage para sección FAQ |
-| **Problema** | El sitio tiene FAQPage schema pero no tiene HowTo para artículos educativos ni QAPage para la sección de preguntas. Esto limita los rich snippets en Google. |
-| **Descripción** | **Para artículos de blog (ej: "Cómo limpiar tu sofá"):** ```html <script type="application/ld+json"> { "@context": "https://schema.org", "@type": "HowTo", "name": "Cómo limpiar tu sofá en casa - Guía paso a paso", "description": "Aprende a limpiar tu sofá sin dañar la tela. Paso a paso con productos caseros y profesionales.", "image": "https://purityclean.com/images/limpieza-sofa-fb.jpg", "step": [ { "@type": "HowToStep", "name": "Aspirar el sofá", "text": "Usa la manguera de tu aspiradora con el accesorio de tapicería para quitar polvo y migas.", "image": "https://purityclean.com/images/paso-1-aspirar.jpg" }, { "@type": "HowToStep", "name": "Identificar el tipo de tela", "text": "Revisa la etiqueta del sofá: W (lavable con agua), S (solo solvente), W+S (ambos).", "image": "https://purityclean.com/images/paso-2-etiqueta.jpg" }, { "@type": "HowToStep", "name": "Limpiar con solución adecuada", "text": "Aplica la solución de limpieza en un paño, no directamente en el sofá. Prueba primero en zona oculta.", "image": "https://purityclean.com/images/paso-3-limpiar.jpg" }, { "@type": "HowToStep", "name": "Secar completamente", "text": "Deja secar al aire, sin sol directo. Usa ventilador si hay prisa.", "image": "https://purityclean.com/images/paso-4-secar.jpg" } ] } </script> ``` **Para sección FAQ del sitio principal:** ```html <script type="application/ld+json"> { "@context": "https://schema.org", "@type": "QAPage", "mainEntity": [ { "@type": "Question", "name": "¿Cuánto cuesta limpiar un sofá?", "acceptedAnswer": { "@type": "Answer", "text": "Los precios van desde $80.000 COP para sofás de 3 puestos hasta $200.000 COP para juegos de sala modular. El precio depende del tamaño, tela y nivel de suciedad.", "upvoteCount": 45 }, { "@type": "Question", "name": "¿Cuánto tiempo tarda la limpieza?", "acceptedAnswer": { "@type": "Answer", "text": "El servicio de limpieza de sofá toma entre 1.5 y 3 horas dependiendo del tamaño. El secado completo es de 4-6 horas.", "upvoteCount": 32 } } ] } </script> ``` |
-| **Impacto esperado** | Rich snippets en Google para búsquedas de "cómo limpiar X", aumento de CTR, mejor ranking para artículos de blog |
-| **Esfuerzo** | S (2-3 horas — JSON-LD para 3-4 artículos + FAQ) |
-| **Agente recomendado** | SEO / Content |
-| **Referencias** | [3] HowTo Schema — schema.org/HowTo [4] QAPage Schema — schema.org/QAPage |
-| **Estado** | Fundamentada — mejora SEO, no requiere cambios en UI |
-
----
-
-### Propuesta 3: Integración con Google Business Profile para Reseñas Reales
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Integrar Google Business Profile para mostrar rating y reseñas reales en el sitio |
-| **Problema** | El sitio muestra reseñas mockeadas en JSON-LD. Los usuarios que buscan en Google ven el rating real de Google Business pero al entrar al sitio ven reviews diferentes. Esta inconsistencia reduce trust. |
-| **Descripción** | **Opción A — Integración directa (requiere cuenta de Google Business verificada):** ```html <!-- Google Business Profile Reviews --> <div class="google-reviews-section" aria-label="Reseñas de Google"> <div class="reviews-header"> <img src="/images/google-logo.svg" alt="Google" class="google-logo" width="30" height="30"> <div class="rating-summary"> <span class="rating-number">4.8</span> <div class="stars" aria-label "4.8 de 5 estrellas"> ★★★★★ </div> <span class="review-count">basado en 127 reseñas de Google</span> </div> </div> <div class="reviews-grid" id="google-reviews-container"> <!-- Reviews cargadas via Google Places API --> </div> <a href="https://g.page/purity-clean/review" target="_blank" rel="noopener" class="btn btn-outline"> Ver todas las reseñas en Google </a> </div> ``` **Opción B — Mostrar badge estático + link (más simple):** ```html <div class="google-rating-badge"> <img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_92x30dp.png" alt="Google" width="30"> <span>4.8/5</span> <span>(127 reseñas)</span> <a href="https://g.page/purity-clean/review" target="_blank">Escribir reseña</a> </div> ``` **API Key requerida**: Google Places API para fetching dinámico de reviews. Alternativa sin API: usar el badge estático con link al Google Business Profile. |
-| **Impacto esperado** | Aumento de confianza, reducción de fricción en decisión de compra, mejor SEO local |
-| **Esfuerzo** | M (4-6 horas — Google Places API + badge o 1 hora con badge estático) |
+| **Título** | Reemplazar número WhatsApp placeholder con número real del cliente |
+| **Problema** | **El sitio usa `wa.me/573001234567` en múltiples lugares** (footer, botones del cotizador, floating button, formulario de reservas). Este número aparece en al menos 5 ubicaciones. Si R65 lo reportó como broken y R79 volvió a mencionarlo, esto indica un bug que nadie ha corregido. Usar un número placeholder en un sitio de producción erosiona la confianza del cliente. |
+| **Descripción** | **Reemplazar `573001234567` por el número real en:** 1. `index.html` — floating WhatsApp button y enlaces del footer 2. `index.html#reservas` — botón del formulario de reservas 3. `index.html#cotizador` — botón del cotizador 4. `js/config.js` — `WHATSAPP_NUMBER` constant 5. `zonas/*/index.html` — todos los archivos de zonas 6. `blog/index.html` — botón del footer **Formato correcto哥伦比亚:** Prefijo +57, número de 10 dígitos. El enlace debe ser `https://wa.me/57XXXXXXXXXX` donde las X son el número real. |
+| **Impacto esperado** | Conversión directa +15-20% (clientes que quieren confirmar por WhatsApp no pueden hacerlo), credibilidad del sitio |
+| **Esfuerzo** | S (15 min — buscar y reemplazar en todos los archivos) |
 | **Agente recomendado** | Full Stack |
-| **Referencias** | [5] Google Business Profile API — developers.google.com/my-business [6] Review Schema — schema.org/Review |
-| **Estado** | Fundamentada — inconsistencia detectada, competencia ya lo tiene |
+| **Referencias** | [6] WhatsApp Click to Chat — FAQ whatsapp.com |
+| **Estado** | Bug crítico — propuesta desde R65, nunca corregido |
 
 ---
 
-### Propuesta 4: Calculadora de Presupuesto Interactiva
+### Propuesta 2: Implementar Security Headers via _headers File (DESDE R78 - NO IMPLEMENTADO)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar calculator de presupuesto inline para que usuarios cotizen antes de contactar |
-| **Problema** | El formulario de booking no permite cotizar sin completar todos los campos. Los usuarios abandonan el funnel porque no saben el precio aproximado. Competidores tienen calculators inline. |
-| **Descripción** | **Crear sección `#cotizador` en index.html:** ```html <section id="cotizador" class="section calculator-section" aria-labelledby="cotizador-heading"> <div class="container"> <h2 id="cotizador-heading">Cotiza tu limpieza</h2> <p class="calculator-subtitle">Selecciona el servicio y el tamaño para ver una estimación</p> <form id="cost-calculator" class="calculator-form"> <div class="calculator-grid"> <div class="form-group"> <label for="service-type">Tipo de servicio</label> <select id="service-type" name="service" required> <option value="">Seleccionar...</option> <option value="sofa">Limpieza de sofá</option> <option value="colchon">Sanitización de colchón</option> <option value="alfombra">Limpieza de alfombra</option> <option value="sillas">Limpieza de sillas ergonómicas</option> </select> </div> <div class="form-group"> <option value="">Seleccionar...</option> <option value="small">Pequeño ( hasta 2 puestos)</option> <option value="medium">Mediano (3-4 puestos)</option> <option value="large">Grande (5+ puestos)</option> <option value="sectional">Modular / Seccional</option> </div> <div class="form-group"> <label for="service-type">Tamaño</label> <select id="size" name="size" required> </select> </div> <div class="form-group"> <label for="urgency">¿Qué tan pronto necesitas?</label> <select id="urgency" name="urgency"> <option value="normal">Programar en 1-2 semanas</option> <option value="urgent">En 24-48 horas (+20%)</option> <option value="asap">Lo antes posible (+35%)</option> </select> </div> </div> <div class="calculator-result" id="calculator-result" hidden> <div class="result-label">Estimación aproximada:</div> <div class="result-price" id="estimated-price">$120.000 - $180.000 COP</div> <p class="result-note">*Precio final confirmado por nuestro equipo. Incluyeproducts y mano de obra.</p> <a href="#reservas" class="btn btn-primary">Agendar ahora</a> </div> </form> </div> </section> ``` **JS:** ```javascript const PRICES = { sofa: { small: 80000, medium: 120000, large: 180000, sectional: 250000 }, colchon: { single: 60000, double: 90000, queen: 130000, king: 160000 }, alfombra: { small: 50000, medium: 90000, large: 140000 }, sillas: { individual: 15000, pack4: 50000, pack8: 90000 } }; const URGENCY_MULTIPLIER = { normal: 1, urgent: 1.2, asap: 1.35 }; document.getElementById('cost-calculator')?.addEventListener('change', ({ target }) => { const service = document.getElementById('service-type')?.value; const size = document.getElementById('size')?.value; const urgency = document.getElementById('urgency')?.value; if (service && size && urgency) { const base = PRICES[service]?.[size] || 0; const multiplier = URGENCY_MULTIPLIER[urgency] || 1; const min = Math.round(base * multiplier); const max = Math.round(base * multiplier * 1.3); document.getElementById('estimated-price').textContent = `$${min.toLocaleString('es-CO')} - $${max.toLocaleString('es-CO')} COP`; document.getElementById('calculator-result').removeAttribute('hidden'); } }); ``` |
-| **Impacto esperado** | Aumento de leads calificados (usuarios saben qué esperar), reducción de abandonos en el booking |
-| **Esfuerzo** | S (2-3 horas — HTML + CSS + JS + precios hardcodeados) |
+| **Título** | Implementar security headers via _headers file para Netlify/Vercel/Cloudflare Pages |
+| **Problema** | **R78 propuso implementar security headers pero nunca se ejecutó.** El sitio es vulnerable a XSS, clickjacking y MIME sniffing. Sin CSP, cualquier script inyectado puede ejecutarse. |
+| **Descripción** | **Crear archivo `_headers` en la raíz del repo** (funciona en Netlify/Vercel/Cloudflare Pages): ```
+# Security Headers /*
+X-Frame-Options: DENY
+X-Content-Type-Options: nosniff
+Referrer-Policy: strict-origin-when-cross-origin
+Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://plausible.io https://cdnjs.cloudflare.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://plausible.io https://formspree.io; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://formspree.io; upgrade-insecure-requests
+``` **Alternativa para GitHub Pages**: Crear `_config.yml` para Jekyll con las mismas directivas. |
+| **Impacto esperado** | Mitigación XSS, compliance OWASP, mejor security posture para formularios con datos de clientes |
+| **Esfuerzo** | S (15 min — archivo _headers) |
+| **Agente recomendado** | Full Stack / DevOps |
+| **Referencias** | [4] Security Headers Quick Reference — web.dev [7] Netlify Headers — docs.netlify.com |
+| **Estado** | Fundamentada — propuesto R78 → R80, nunca implementado |
+
+---
+
+### Propuesta 3: Banner de Consentimiento localStorage (DESDE R78 - NO IMPLEMENTADO)
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Implementar banner de consentimiento para localStorage (GDPR/Ley 1581) |
+| **Problema** | **R78 propuso esto pero nunca se implementó.** El sitio guarda la preferencia de tema en `localStorage.setItem("theme", ...)` sin informar al usuario. |
+| **Descripción** | **Añadir al `<body>` de todos los HTML:** ```html <div id="storage-consent-banner" class="storage-banner" role="dialog" aria-label="Aviso de almacenamiento local" hidden> <div class="storage-banner-content"> <i class="fa-solid fa-cookie" aria-hidden="true"></i> <p>Utilizamos <strong>almacenamiento local</strong> (localStorage) para guardar tu preferencia de tema (oscuro/claro) y mejorar tu experiencia. <a href="/politica-privacidad.html">Más información</a></p> <div class="storage-banner-actions"> <button id="accept-storage" class="btn btn-sm">Aceptar</button> <button id="decline-storage" class="btn btn-sm btn-outline">Solo necesario</button> </div> </div> </div> ``` **CSS mínimo:** ```css .storage-banner { position: fixed; bottom: 0; left: 0; right: 0; background: var(--color-surface); border-top: 2px solid var(--color-primary); padding: 1rem; z-index: 9999; } .storage-banner[hidden] { display: none; } ``` **JS:** ```javascript (function() { if (!localStorage.getItem('storage-consent')) { const banner = document.getElementById('storage-consent-banner'); if (banner) banner.removeAttribute('hidden'); } document.getElementById('accept-storage')?.addEventListener('click', () => { localStorage.setItem('storage-consent', 'accepted'); document.getElementById('storage-consent-banner').setAttribute('hidden', ''); }); document.getElementById('decline-storage')?.addEventListener('click', () => { localStorage.setItem('storage-consent', 'declined'); document.getElementById('storage-consent-banner').setAttribute('hidden', ''); }); })(); ``` |
+| **Impacto esperado** | Compliance legal (GDPR/Ley 1581), transparencia para el usuario |
+| **Esfuerzo** | S (1 hora — HTML/CSS/JS) |
 | **Agente recomendado** | Frontend |
-| **Referencias** | [7] Interactive Cost Calculator — usability.com [8] Lead Qualification Tools — forrester.com |
-| **Estado** | Fundamentada — gap en funnel de conversión, competidores lo tienen |
+| **Referencias** | [5] GDPR Consent Guidance — ico.org.uk |
+| **Estado** | Fundamentada — propuesto R78 → R80, nunca implementado |
 
 ---
 
-### Propuesta 5: Framework de Test A/B Sistemático para Páginas de Zona
+### Propuesta 4: Schema.org Article para Páginas del Blog (SEO)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar test A/B en páginas de zona para optimizar conversión por demographics |
-| **Problema** | Las 9 páginas de zona (Suba, Engativa, Kennedy, etc.) son copias de una plantilla sin testeo. Cada zona tiene demographics diferentes y podría necesitar variaciones en CTAs, colores o mensajes. |
-| **Descripción** | **Implementación con vanilla JS (sin biblioteca externa):** ```html <!-- En cada página de zona, definir variante --> <meta name="ab-test-variant" content="A"> ``` **Script de test A/B:** ```javascript (function() { const VARIANTS = { A: { ctaText: 'Agenda tu limpieza en [ZONA]', heroBg: '#f8f9fa' }, B: { ctaText: 'Cotiza gratis en [ZONA]', heroBg: '#fff0f0' }, C: { ctaText: 'Limpieza profesional cerca de ti', heroBg: '#f0f9ff' } }; const STORAGE_KEY = 'purity-ab-test'; function getVariant() { const stored = localStorage.getItem(STORAGE_KEY); if (stored) return stored; const variants = Object.keys(VARIANTS); const chosen = variants[Math.floor(Math.random() * variants.length)]; localStorage.setItem(STORAGE_KEY, chosen); return chosen; } function applyVariant(variant) { const config = VARIANTS[variant]; if (!config) return; document.querySelectorAll('.cta-primary').forEach(el => { el.textContent = config.ctaText; }); document.querySelector('.hero')?.style.setProperty('background-color', config.heroBg); } const variant = getVariant(); applyVariant(variant); // Tracking de conversión window.addEventListener('click', ({ target }) => { if (target.matches('.cta-primary')) { fetch('/api/ab-track', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ variant, action: 'cta_click', page: location.pathname, timestamp: Date.now() }) }); } }); })(); ``` **Variantes sugeridas para test inicial en zona Chapinero:** - **A**: "Agenda tu limpieza en Chapinero" (control) - **B**: "Cotiza gratis en Chapinero" (foco en precio) - **C**: "Limpieza profesional cerca de ti" (foco en ubicación) **Métricas a.trackear:** - CTR de CTA principal - Form submissions por variante - Tiempo en página |
-| **Impacto esperado** | Mejora estimada 15-25% en conversión en zonas de alto tráfico, data-Driven decision making |
-| **Esfuerzo** | M (3-4 horas — script de test + analytics) |
-| **Agente recomendado** | Full Stack / Analytics |
-| **Referencias** | [9] A/B Testing for Local SEO — moz.com [10] Statistical Significance — optimizely.com |
-| **Estado** | Fundamentada — optimización basada en data, no especulación |
+| **Título** | Añadir Schema.org Article JSON-LD a las 6 páginas de artículos del blog |
+| **Problema** | **El blog tiene 6 artículos publicados pero ninguna página tiene Schema.org `Article`.** Google no puede identificar correctamente el contenido como artículo estructurado. Esto afecta la visibilidad en search results (rich snippets). |
+| **Descripción** | **Añadir en el `<head>` de cada archivo en `blog/articulos/*.html`:** ```html <script type="application/ld+json"> { "@context": "https://schema.org", "@type": "Article", "headline": "Título del artículo", "description": "Descripción del artículo", "image": "https://purityclean.com/images/articulos/nombre-articulo.jpg", " author": { "@type": "Organization", "name": "Purity & Clean", "url": "https://purityclean.com" }, "publisher": { "@type": "Organization", "name": "Purity & Clean", "logo": { "@type": "ImageObject", "url": "https://purityclean.com/images/og-image.svg" } }, "datePublished": "2024-XX-XX", "dateModified": "2024-XX-XX", "mainEntityOfPage": { "@type": "WebPage", "@id": "https://purityclean.com/blog/articulos/nombre-articulo.html" } } </script> ``` **Los 6 artículos existentes:** 1. `como-limpiar-tu-sofa.html` 2. `5-tips-mantenimiento-alfombras.html` 3. `guia-sanitizacion-colchones.html` 4. `limpiar-sillas-oficina-bogota.html` 5. `cada-cuanto-sanitizar-colchon-colombia.html` 6. `senales-empresa-necesita-limpieza-profesional.html` |
+| **Impacto esperado** | Mejor SEO, rich snippets en Google, aumentan CTR en search results |
+| **Esfuerzo** | S (2 horas — replicar JSON-LD en cada página, ajustar fechas) |
+| **Agente recomendado** | Frontend / SEO |
+| **Referencias** | [1] Article Schema — schema.org [8] Structured Data for SEO — developer.google.com |
+| **Estado** | Fundamentada — gap real detectado, mejora de SEO |
 
 ---
 
-### Propuesta 6: Notificaciones Push PWA para Recordatorios de Limpieza
+### Propuesta 5: Crear Sitemap XML para Blog
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar sistema de notificaciones push para recordatorios de limpieza recurrente |
-| **Problema** | El sitio tiene PWA instalado pero no usa la Web Push API. Los usuarios que agendaron un servicio no reciben recordatorios para programmer su próxima limpieza. Esto reduce el LTV del cliente. |
-| **Descripción** | **Flujo propuesto:** 1. **Permiso de notifications**: Al agendar, preguntar si quiere recibir recordatorios. 2. **Recordatorio 30 días después**: "Tu última limpieza fue hace 30 días. ¿Listo para programmer la próxima?" 3. **Offer dinámico**: "Descuento de 10% si programas esta semana." **Implementación:** ```javascript // En js/script.js — luego de submit exitoso del formulario if ('Notification' in window && Notification.permission === 'default') { const consentBanner = document.createElement('div'); consentBanner.className = 'notification-consent'; consentBanner.innerHTML = ` <p>¿Quieres recibir recordatorios para programmer tu próxima limpieza?</p> <button id="enable-notifications">Sí, quiero recordatorios</button> <button id="skip-notifications">No, gracias</button> `; document.body.appendChild(consentBanner); document.getElementById('enable-notifications')?.addEventListener('click', async () => { const permission = await Notification.requestPermission(); if (permission === 'granted') { localStorage.setItem('push-consent', 'granted'); localStorage.setItem('last-booking-date', Date.now().toString()); consentBanner.remove(); } }); document.getElementById('skip-notifications')?.addEventListener('click', () => { localStorage.setItem('push-consent', 'declined'); consentBanner.remove(); }); } // Service Worker — sw.js — para scheduling local // (Para push real se requiere server-side, esto es fallback con setTimeout) self.addEventListener('message', ({ data }) => { if (data.type === 'SCHEDULE_REMINDER') { const { daysUntilReminder, title, body } = data; const reminderTime = Date.now() + (daysUntilReminder * 24 * 60 * 60 * 1000); // Store in IndexedDB for persistence setTimeout(() => { self.registration.showNotification(title, { body, icon: '/images/icon-192.png', badge: '/images/badge-72.png', tag: 'reminder', requireInteraction: true }); }, reminderTime - Date.now()); } }); ``` **Nota**: Push real con server-side scheduling requiere Firebase Cloud Messaging o similar. Esta implementación usa setTimeout que funciona solo si el Service Worker está activo. |
-| **Impacto esperado** | Aumento de frecuencia de compra (estimado 2-3x más reservas recurrentes), mejor LTV |
-| **Esfuerzo** | M (4-5 horas — Service Worker + UI consent + scheduling) |
-| **Agente recomendado** | Full Stack |
-| **Referencias** | [11] Web Push API — developer.mozilla.org/en-US/docs/Web/API/Push_API [12] Push Marketing — marketo.com |
-| **Estado** | Fundamentada — PWA ya existe, es extenderlo. Mejora LTV. |
+| **Título** | Crear blog/sitemap.xml con las 6 páginas de artículos y blog/index.html |
+| **Problema** | **No existe `blog/sitemap.xml`** — el sitemap principal solo tiene `index.html`, `blog/index.html` y las páginas de zonas. Google no descubre los artículos del blog con la misma eficiencia que el contenido principal. |
+| **Descripción** | **Crear archivo `blog/sitemap.xml`:** ```xml <?xml version="1.0" encoding="UTF-8"?> <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"> <url> <loc>https://purityclean.com/blog/</loc> <lastmod>2024-XX-XX</lastmod> <changefreq>weekly</changefreq> <priority>0.8</priority> </url> <url> <loc>https://purityclean.com/blog/articulos/como-limpiar-tu-sofa.html</loc> <lastmod>2024-XX-XX</lastmod> <changefreq>monthly</changefreq> <priority>0.6</priority> </url> <!-- Repetir para los otros 5 artículos --> </urlset> ``` **En `blog/index.html`**, añadir referencia al sitemap: ```html <link rel="sitemap" type="application/xml" title="Blog Sitemap" href="/blog/sitemap.xml"> ``` |
+| **Impacto esperado** | Mejor indexación de artículos del blog, más tráfico orgánico |
+| **Esfuerzo** | S (30 min — crear sitemap.xml) |
+| **Agente recomendado** | Frontend / SEO |
+| **Referencias** | [2] Sitemap XML best practices — developers.google.com |
+| **Estado** | Fundamentada — gap real detectado, mejora de SEO |
+
+---
+
+### Propuesta 6: Integrar Playwright Tests en CI/CD Pipeline
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Configurar GitHub Actions para ejecutar Playwright en cada push/PR |
+| **Problema** | **Los 9 specs de Playwright existen pero nunca se ejecutan automáticamente.** R77 configuró Playwright y R78 mencionó "Tests configured, not in CI". Sin CI, el código puede romperse sin que nadie se entere. |
+| **Descripción** | **Crear `.github/workflows/e2e-tests.yml`:** ```yaml name: E2E Tests on: [push, pull_request] jobs: test: runs-on: ubuntu-latest steps: - uses: actions/checkout@v4 - uses: actions/setup-node@v4 with: node-version: '20' - run: npm ci - run: npx playwright install --with-deps - run: npm test ``` **Requisitos:** 1. El `package.json` ya tiene `test: playwright test` 2. Los specs están en `tests/e2e/` 3. `playwright.config.js` existe y está configurado **Beneficio**: Cada PR/commit ejecuta los tests automáticamente, detectando regresiones antes de hacer merge. |
+| **Impacto esperado** | Quality assurance, detección temprana de regresiones, mejor DX para devs |
+| **Esfuerzo** | M (2-3 horas — crear workflow file + ajustar config si es necesario) |
+| **Agente recomendado** | Full Stack / DevOps |
+| **Referencias** | [9] Playwright GitHub Actions — playwright.dev |
+| **Estado** | Fundamentada — configuración existe, solo falta automatización |
 
 ---
 
@@ -223,42 +174,39 @@ R80 identifica **6 gaps que no fueron cubiertos en R79** y aportan valor real al
 
 | # | Propuesta | Impacto | Esfuerzo | Prioridad | Estado |
 |---|-----------|---------|----------|-----------|--------|
-| 1 | Google Maps Embebido | Trust +15%, SEO local | S (1-2h) | **Alta** | Nueva, gap real |
-| 2 | Schema.org HowTo + QAPage | SEO, rich snippets | S (2-3h) | **Alta** | Nueva, gap técnico |
-| 3 | Calculadora de Presupuesto | Conversión +lead quality | S (2-3h) | **Alta** | Nueva, gap funnel |
-| 4 | Google Business Reviews | Trust +conversión | M (4-6h) | **Alta** | Nueva, inconsistencia |
-| 5 | Test A/B Framework | Conversión +data | M (3-4h) | **Media** | Nueva, optimización |
-| 6 | Push Notifications PWA | LTV +recurrencia | M (4-5h) | **Media** | Nueva, extensión PWA |
+| 1 | Corregir número WhatsApp | **URGENTE - Confianza** | S (15min) | **Crítica** | Bug desde R65, nunca corregido |
+| 2 | Security Headers | Seguridad crítica | S (15min) | **Alta** | Propuesto R78 → R80 |
+| 3 | localStorage Consent Banner | Legal compliance | S (1h) | **Alta** | Propuesto R78 → R80 |
+| 4 | Blog Article Schema | SEO + visibilidad | S (2h) | **Alta** | Nueva, gap real |
+| 5 | Blog Sitemap XML | SEO + indexación | S (30min) | **Media** | Nueva, gap real |
+| 6 | CI/CD Playwright Tests | Quality assurance | M (2-3h) | **Media** | Config existe, no en CI |
 
 ---
 
 ## R80 en el Contexto de R1-R79
 
-R80 se diferencia de R79 en enfocarse en gaps que no fueron detectados previamente. R79 propuso 5 cosas y todas eran "nunca implementadas" de R78. R80 aporta:
+R80 se enfoca en **cerrar bugs críticos y gaps de SEO que llevan muchas rondas sin ejecutarse**, más propuestas nuevas.
 
-| Dimensión | R78 | R79 | R80 |
-|-----------|-----|-----|-----|
-| **Tipo** | Security + Performance | Ejecución pendiente + Nuevas | **Gap detection + Nuevas propuestas** |
-| **Foco** | Protección + Velocidad | Cerrar deuda + Diferenciación | **SEO + Conversión + LTV** |
-| **Complejidad** | S a M | S a M | **S a M** |
-| **Novedad** | Re-proponer R78 | Re-proponer + nuevas | **100% nuevas** |
-| **Implementado?** | NO (R78) | NO (R79) | - |
+| Dimensión | R62-R73 | R74-R76 | R77 | R78 | R79 | R80 |
+|-----------|---------|---------|-----|-----|-----|-----|
+| **Tipo** | Features UX/Contenido | Investigación competitiva | CI/CD Testing | Security + Performance | Chrome Built-in AI | **Bug fixes + SEO + CI** |
+| **Foco** | Producto y usuario | Gap competitivo | Quality assurance | Protección + Velocidad | AI APIs | **Cerrar deuda + SEO** |
+| **Complejidad** | S a L | S a M | S a M | S a M | S a M | **S a M** |
+| **Implementado?** | Parcialmente | Desconocido | Configurado, no en CI | **NO** | **NO** | - |
 
 ---
 
 ## Fuentes
 
-[1] Google Maps Embed API. https://developers.google.com/maps/documentation/embed
-[3] HowTo Schema. https://schema.org/HowTo
-[4] QAPage Schema. https://schema.org/QAPage
-[5] Google Business Profile API. https://developers.google.com/my-business
-[6] Review Schema. https://schema.org/Review
-[7] Interactive Cost Calculator Best Practices. https://www.usability.com
-[8] Lead Qualification through Self-Service Tools. https://www.forrester.com
-[9] A/B Testing for Local SEO. https://www.moz.com/blog/ab-testing-local-seo
-[10] Statistical Significance in A/B Testing. https://www.optimizely.com
-[11] Web Push API. https://developer.mozilla.org/en-US/docs/Web/API/Push_API
-[12] Push Notification Marketing. https://www.marketo.com
+[1] Article Schema — schema.org. https://schema.org/Article
+[2] Sitemap XML best practices — developers.google.com. https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-submit
+[3] WhatsApp Business Statistics LatAm — business.whatsapp.com
+[4] Security Headers Quick Reference — web.dev. https://web.dev/articles/security-headers
+[5] GDPR Consent Guidance — ico.org.uk. https://ico.org.uk/for-organisations/guide-to-data-protection/
+[6] WhatsApp Click to Chat FAQ — whatsapp.com. https://faq.whatsapp.com/591339899867715/
+[7] Netlify Custom Headers — docs.netlify.com. https://docs.netlify.com/routing-and-access-controls/headers
+[8] Structured Data for SEO — developer.google.com. https://developers.google.com/search/docs/appearance/structured-data
+[9] Playwright GitHub Actions — playwright.dev. https://playwright.dev/docs/ci
 
 ---
 
