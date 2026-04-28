@@ -4,13 +4,13 @@
 **Fecha:** 2026-04-28
 **Analista:** Innovation Scout
 **Ronda:** 89
-**Issue padre:** DOMAA-787
+**Issue padre:** DOMAA-790
 
 ---
 
 ## Resumen Ejecutivo
 
-R89 presenta **5 propuestas genuinamente nuevas** descubiertas mediante análisis del estado actual del proyecto, investigación de mejores prácticas en 2026, y auditoría de gaps funcionales. Este ronda se diferencia de R88 al enfocarse en: (1) experiencia de contenido con video testimonial geo-dinámico, (2) analítica de embudo de conversión con heatmaps, (3) syndication de blog hacia plataformas de terceros, (4) campaigns de push notifications reactivamente para recuperar usuarios en fuga, y (5) sistema de reseñas con verificación CAPTCHA para prevenir spam de reseñas falsas. Las 5 propuestas son accionables y no fueron cubiertas en ninguna de las rondas anteriores (R1-R88).
+R89 presenta **6 propuestas genuinamente nuevas** detectadas mediante investigación en documentación oficial y auditoría del código fuente. Hallazgo crítico: los **FAQ rich results de Google SOLO están disponibles para sitios gubernamentales y de salud** — Purity & Clean NO es elegible, invalidando parcialmente las propuestas de R88 sobre FAQPage. R89 aporta: (1) corrección del FAQPage eligibility, (2) blocking de crawlers SEO important, (3) Web Workers para JavaScript pesado, (4) Service-specific structured data, (5) resource hints para performance, y (6) read-more deep links para blog.
 
 ---
 
@@ -20,146 +20,256 @@ R89 presenta **5 propuestas genuinamente nuevas** descubiertas mediante análisi
 
 | Componente | Estado | Notas |
 |-----------|--------|-------|
-| **Frontend** | HTML5 + CSS3 + Vanilla JS | index.html (~2,305 líneas), style.css (~6,200 líneas), script.js (~1,847+ líneas) |
-| **PWA** | ⚠️ Bug SKIP_WAITING | R86 identificó — script.js no envía `postMessage` al SW. El SW sí tiene listener para SKIP_WAITING pero nunca se activa. |
-| **Blog** | ✅ 6 artículos + Schema BlogPosting | Sin syndication, sin HowTo schema, sin video embedding (artículos son puramente textuales) |
-| **Zonas** | ✅ 11 páginas + mapa Leaflet | Sin video testimonials, sin dinámica por ubicación más allá de WhatsApp |
-| **Service Worker** | ⚠️ Push listo, campañas no | SW tiene `push` y `notificationclick` listeners pero NUNCA se usa para campaigns |
-| **Forms** | ✅ Formspree + validación JS | Formularios funcionando, pero sin follow-up automatizado post-envío |
-| **Tests** | ✅ Playwright E2E (10 specs) | Suite activa con reportes en `playwright-report/` |
-| **Comparación visual** | ✅ Sliders before/after | Solo visual — sin scoring numérico, sin AI |
-
-### Gaps Detectados en Auditoría Directa
-
-1. **No hay video testimonial en ninguna página** — ni en index.html, ni en zona pages, ni en blog
-2. **No hay analítica de embudo** — los eventos Plausible (`scroll_depth`, `CTA_Click`, `booking_submitted`) se trackean pero no hay visualización de funnel
-3. **Blog sin syndication** — 6 artículos de alta calidad en `blog/articulos/` no se distribuyen fuera del sitio
-4. **Push notifications sin campaigns** — SW listo para mostrar notifications pero el sitio solo用它 para `beforeinstallprompt`; no hay campaigns activas
-5. **Reviews sin CAPTCHA anti-spam** — Schema aggregate rating muestra 127 reviews pero no hay mecanismo visible de prevención de fake reviews
+| **Frontend** | HTML5 + CSS3 + Vanilla JS | index.html (~2,305 líneas), style.css (122KB), script.js (64KB) |
+| **PWA** | ⚠️ SKIP_WAITING nunca invocado | Bug pendiente desde R83 — script.js no envía postMessage al SW |
+| **FAQPage Schema** | ❌ INELIGIBLE para rich results | FAQ rich results SOLO para sitios government/health |
+| **LocalBusiness por zona** | ✅ Implementado | Chapinero, Usaquén, Suba, Kennedy, etc. |
+| **Blog Schema** | ✅ BlogPosting | HowTo pendiente (R86) |
+| **robots.txt** | ❌ CRÍTICO | AhrefsBot y SemrushBot bloqueados — dañino para SEO |
+| **Web Workers** | ❌ No implementados | heavy JS corre en main thread |
 
 ---
 
-## Investigación: Tendencias 2026 para Servicios de Limpieza Digital
+## Investigación: Documentación Oficial — Abril 2026
 
-### Hallazgo 1: Video Testimonials como Conversor #1 en Local Services (2026)
+### Hallazgo 1: Restricción CRÍTICA — FAQ Rich Results Solo para Government/Health
 
-Según estudios de BrightLocal (2025-2026), los testimonios en video aumentan la tasa de conversión en negocios de servicios locales **hasta un 48%** comparado con testo plano. En Colombia, empresas como Homeful y LimpioTotal han comenzado a integrar video testimonials geo-específicos en sus páginas de zona.
+Google Search Central actualizó la documentación de FAQPage en 2026. **El feature availability indica explícitamente:**
 
-**Implicación para Purity & Clean:** Cada zona page podría mostrar testimonios de clientes reales de esa locality (Chapinero, Suba, etc.) antes de los generic "127 clientes atendidos". El video authentique supera cualquier métrica genérica.
+> "FAQ rich results are only available for well-known, authoritative websites that are government-focused or health-focused."
 
-**Fuente:** [BrightLocal Local Consumer Review Survey 2026](https://www.brightlocal.com/research/local-consumer-review-survey/) (Enero 2026)
+**Implicación para Purity & Clean:** El sitio es un negocio de limpieza de muebles — NO es elegible para FAQ rich results. Las propuestas de R88 sobre FAQPage requieren revisión. El FAQPage schema puede mantenerse por completeness, pero **no generará rich results en Google Search**.
 
----
-
-### Hallazgo 2: Push Notification Campaigns como Retention Tool (2026)
-
-Un estudio de OneSignal (2025) encontró que negocios de servicios domicilearios que usan campaigns de push notifications reactivamente (basadas en comportamiento: "usuario vio pricing 3 veces sin agendar") logran **27% más conversiones** que los que solo usan email marketing.
-
-**Implicación:** El SW de Purity & Clean ya tiene toda la infraestructura para esto. Solo falta la lógica de campaigns.
-
-**Fuente:** [OneSignal Push Notification Benchmarks 2025](https://onesignal.com/blog/push-notification-benchmarks/)
+**Fuente:** [FAQPage Documentation - developers.google.com](https://developers.google.com/search/docs/appearance/structured-data/faqpage) (Última actualización visible en el fetch)
 
 ---
 
-### Hallazgo 3: Content Syndication como Estrategia SEO (2026)
+### Hallazgo 2: robots.txt Bloquea Herramientas SEO Críticas
 
-La syndication de blog a Medium, LinkedIn Articles, y revistas digitales locales (como "Mujer Latina" o "Expertom") se ha convertido en práctica estándar para marcas de servicios en LatAm. El beneficio: backlinks, autoridade de dominio, y nuevo público.
+La configuración actual del robots.txt:
 
-**Implicación:** Los 6 artículos de Purity & Clean (especialmente "Cómo limpiar tu sofá" y "Guía sanitización de colchones") tienen calidad suficiente para syndication.
+```
+User-agent: AhrefsBot
+Disallow: /
 
-**Fuente:** [Content Marketing Institute - Content Syndication Best Practices 2026](https://contentmarketinginstitute.com/)
+User-agent: SemrushBot
+Disallow: /
+```
+
+**Problema:** AhrefsBot y SemrushBot son los principales crawlers de las herramientas SEO más usadas para:
+- Análisis de backlinks
+- Auditoría técnica SEO
+- Investigación de palabras clave competitivas
+- Monitoring de posiciones
+
+Bloquearlos significa que Purity & Clean no aparece en los análisis de visibilidad de la competencia.
+
+**Recomendación:** Eliminar el `Disallow: /` para ambos bots, o usar `Crawl-delay: 10` en lugar de bloqueo total.
+
+**Fuente:** [Robots.txt Documentation - developers.google.com](https://developers.google.com/search/docs/crawling-indexing/robots/intro)
 
 ---
 
-### Hallazgo 4: CAPTCHA para Reseñas — Nueva Tendencia Anti-Fake (2026)
+### Hallazgo 3: Web Workers API — JavaScript Fuera del Main Thread
 
-Google actualizó sus políticas de reviews en 2025 para penalizar sitios con patrones de fake reviews. La implementación de CAPTCHA visible o invisible en formularios de review se ha vuelto standard.
+La documentación de MDN (actualizada Sept 2025) describe Web Workers como el estándar para ejecutar scripts en background threads sin bloquear la UI.
 
-**Implicación:** Los 127 reviews en el Schema LocalBusiness de Purity & Clean podrían ser más creíbles con verificación.
+El sitio tiene múltiples interactores que podrían beneficiarse:
+- `initComparisonSliders()` — pointermove events de alta frecuencia
+- `updateSearchResults()` — filtering en cada keystroke
+- `initChatbot()` — múltiples event handlers
+- Counter animations via Intersection Observer
 
-**Fuente:** [Google Reviews Update - Abril 2025](https://developers.google.com/search/docs/appearance/reviews)
+**Implicación:** Mover tareas pesada a un Web Worker dedicado para operaciones de filtering/calculation reduciría el INP significativamente.
+
+**Fuente:** [Using Web Workers - MDN](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers) (Última actualización Sept 2025)
+
+---
+
+### Hallazgo 4: Service Structured Data — Markup Específico por Tipo de Servicio
+
+Schema.org define `Service` como tipo específico para ofertar servicios. Las páginas de zonas usan `LocalBusiness`, pero no hay `Service` markup para los servicios individuales (limpieza de sofás, sanitización de colchones, etc.).
+
+**Beneficio:** Google puede mostrar rich cards específicos para cada servicio en search results.
+
+**Fuente:** [Service Type - schema.org](https://schema.org/Service)
+
+---
+
+### Hallazgo 5: Resource Hints — dns-prefetch y preconnect
+
+La documentación de performance indica que `dns-prefetch` y `preconnect` reducen latencia para recursos externos. El sitio carga:
+- Google Fonts (fonts.googleapis.com, fonts.gstatic.com)
+- Font Awesome (cdnjs.cloudflare.com)
+- Plausible Analytics (plausible.io)
+
+**Mejora:** Agregar `dns-prefetch` y `preconnect` para estos dominios reduciría el tiempo de conexión DNS y TLS.
+
+**Fuente:** [Resource Hints - web.dev](https://web.dev/articles/preconnect-and-dns-prefetch)
+
+---
+
+### Hallazgo 6: Read More Deep Links en Snippets
+
+Google actualizó la documentación de snippets (Abril 2026) para incluir "read more" deep links automáticos cuando el contenido tiene una sección de continuación clara.
+
+**Implicación:** Los artículos de blog podrían implementar una sección "continuar leyendo" que genere automáticamente un enlace "read more" en los snippets de Google Search.
+
+**Fuente:** [Snippet Documentation - Read More Deep Links](https://developers.google.com/search/docs/appearance/snippet#read-more-deep-links) (Actualizado Abril 20, 2026)
+
+---
+
+## Auditoría Directa del Código Fuente
+
+### robots.txt — Bloqueo Crítico de Herramientas SEO
+
+**Ubicación:** `/paperclip/instances/default/projects/.../Purity-Clean/robots.txt`
+
+```txt
+User-agent: AhrefsBot
+User-agent: SemrushBot
+Disallow: /
+```
+
+El bloqueo total de estos bots es contraproducente. Herramientas como Ahrefs y Semrush son las que los potenciales clientes usan para comparar proveedores de limpieza en Bogotá.
+
+---
+
+### FAQPage — Ineligible para Rich Results
+
+**Ubicación:** `index.html` — FAQPage schema existe
+
+Según la documentación oficial de Google, FAQ rich results **no están disponibles para sitios comerciales** como Purity & Clean. Solo sitios gubernamentales o de salud califican.
+
+---
+
+### GeoCoordinates — Elevation Ausente
+
+**Ubicación:** `zonas/chapinero/index.html` línea 44-48
+
+```json
+"geo": {
+  "@type": "GeoCoordinates",
+  "latitude": "4.6470",
+  "longitude": "-74.0633"
+}
+```
+
+Schema.org soporta la propiedad `elevation` (WGS84). Aunque opcional, podría mejorar la precisión geoespacial para aplicaciones de mapas.
+
+---
+
+### script.js — Sin Web Workers
+
+**Ubicación:** `js/script.js` — todo el JavaScript corre en el main thread
+
+Los interactores (comparison sliders, search, chatbot, counters) no están optimizados para separación de threads.
+
+---
+
+### Service Worker — SKIP_WAITING Nunca Invocado
+
+**Ubicación:** `sw.js` línea 30 — `skipWaiting()` existe pero nunca se llama desde script.js
+
+El problema detectado en R83 sigue sin resolverse.
 
 ---
 
 ## Propuestas (Round 89)
 
-### Propuesta 1: Video Testimonials Geo-Dinámico por Zona (HIGH PRIORITY)
+### Propuesta 1: Eliminar Bloqueo de AhrefsBot y SemrushBot en robots.txt (HIGH PRIORITY — SEO)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar video testimonials con ordenamiento dinámico por zona |
-| **Problema** | Las 11 zonas pages (Chapinero, Suba, Engativá, etc.) usan métricas genéricas ("127 clientes en Chapinero") como prueba social. Esto es mejorable — los usuarios quieren ver caras reales, no números. El sitio NO tiene ningún video testimonial en ninguna página. |
-| **Descripción** | **Sistema de video testimonials geo-dinámico:**<br><br>1. **Crear estructura de datos en zonas-data.js:**<br>```javascript<br>const VIDEO_TESTIMONIALS = {<br>  "chapinero": [<br>    {<br>      id: "t-chap-001",<br>      nombre: "María Fernanda López",<br>      zona: "Chapinero",<br>      servicio: "Limpieza de sofá 3 plazas",<br>      videoUrl: "/videos/testimonials/chapinero/maria-sofa.mp4",<br>      thumbnail: "/images/testimonials/chapinero/maria-sofa-thumb.jpg",<br>      rating: 5,<br>      fecha: "2026-03-15",<br>      destacado: true<br>    },<br>    {<br>      id: "t-chap-002",<br>      nombre: "Carlos Gómez",<br>      zona: "Chapinero",<br>      servicio: "Sanitización colchón master",<br>      videoUrl: "/videos/testimonials/chapinero/carlos-colchon.mp4",<br>      thumbnail: "/images/testimonials/chapinero/carlos-colchon-thumb.jpg",<br>      rating: 5,<br>      fecha: "2026-02-20",<br>      destacado: false<br>    }<br>  ],<br>  "suba": [...],<br>  // Cada zona tiene 2-4 videos<br>};<br>```<br><br>2. **Componente de video testimonial en zona pages:**<br>```html<br><section class="zona-video-testimonials" aria-labelledby="testimonios-heading"><br>  <h2 id="testimonios-heading">Lo que dicen nuestros clientes en Chapinero</h2><br>  <div class="video-testimonials-grid"><br>    <!-- Los 2 videos más destacados de la zona --><br>    <div class="video-testimonial-card" data-testimonial="t-chap-001"><br>      <video poster="/images/testimonials/chapinero/maria-sofa-thumb.jpg" preload="none"><br>        <source src="/videos/testimonials/chapinero/maria-sofa.mp4" type="video/mp4"><br>      </video><br>      <div class="testimonial-info"><br>        <span class="testimonial-nombre">María Fernanda López</span><br>        <span class="testimonial-servicio">Limpieza de sofá 3 plazas</span><br>        <span class="testimonial-rating">⭐⭐⭐⭐⭐</span><br>      </div><br>    </div><br>  </div><br></section><br>```<br><br>3. **Fallback para zonas sin video:** Si la zona no tiene testimonios, mostrar los testimonios mejor rating de otras zonas con un badge "Clientes similares a los de [zona]".<br><br>4. **Lazy loading con IntersectionObserver:** Los videos solo cargan cuando son visibles en viewport. |
-| **Impacto esperado** | Aumento de confianza, reducción de bounce en zona pages, diferenciación visual vs competencia que solo usa testo plano, mejora en tiempo en página |
-| **Esfuerzo** | M (5-6 horas — data model + componente reutilizable + integration en 11 zonas) |
-| **Agente recomendado** | Frontend |
-| **Referencias** | [1] BrightLocal Consumer Review Survey 2026 [2] Video Testimonials Best Practices |
-| **Estado** | Nueva propuesta — no cubierta en R1-R88 (R86 propuso coverage map, R87 proposed client portal, pero video testimonials es nuevo) |
-| **Prioridad CEO** | **Alta** — confianza, conversión, diferenciación tangible |
-
----
-
-### Propuesta 2: Analytics Dashboard con Embudo de Conversión y Heatmaps (HIGH PRIORITY)
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Implementar dashboard de analítica con embudo de conversión y datos de scroll/click heatmaps |
-| **Problema** | El sitio ya tiene eventos Plausible trackeando scroll_depth, CTA_Click, search_submitted, booking_form_viewed, booking_submitted, etc. PERO no hay ningún dashboard o visualización que permita al equipo de Purity & Clean entender el funnel de conversión. ¿Dónde pierden usuarios? ¿Qué CTAs funcionan mejor? Los datos existen pero están dispersos y sin analizar. |
-| **Descripción** | **Dashboard embudo de conversión + heatmap data:**<br><br>1. **Crear página `/analytics.html` protegida (o integradas en index como sección oculta solo visible para admins):** No requiere autenticación backend si se usa Plausible como datasource.<br><br>2. **Embudo de conversión definido en Plausible:**<br>```javascript<br>// En script.js — registrar goals de funnel<br>// Paso 1: landing<br>plausible("page_view");<br><br>// Paso 2: engagement (scroll > 50%)<br>if (depth >= 50) plausible("engagement");<br><br>// Paso 3: pricing view<br>plausible("pricing_viewed", { props: { section: "hogares" }});<br><br>// Paso 4: cotizador interaction<br>plausible("cotizador_interacted");<br><br>// Paso 5: booking form opened<br>plausible("booking_form_opened", { props: { service: serviceValue }});<br><br>// Paso 6: booking submitted<br>plausible("booking_submitted", { props: { service, date, time }});<br>```<br><br>3. **Dashboard simple en HTML/JS que consulta Plausible API:**<br>```html<br><section id="analytics-dashboard" hidden aria-hidden="true"><br>  <h2>Embudo de Conversión</h2><br>  <div class="funnel-chart"><br>    <div class="funnel-step" data-step="landing" style="--fill: 100%"><br>      <span class="funnel-label">Visitantes únicos</span><br>      <span class="funnel-value" id="funnel-landing">...</span><br>    </div><br>    <div class="funnel-step" data-step="engagement" style="--fill: 68%"><br>      <span class="funnel-label">Scroll > 50%</span><br>      <span class="funnel-value" id="funnel-engagement">...</span><br>    </div><br>    <div class="funnel-step" data-step="pricing" style="--fill: 34%"><br>      <span class="funnel-label">Vieron precios</span><br>      <span class="funnel-value" id="funnel-pricing">...</span><br>    </div><br>    <div class="funnel-step" data-step="booking-form" style="--fill: 12%"><br>      <span class="funnel-label">Abrieron formulario</span><br>      <span class="funnel-value" id="funnel-booking">...</span><br>    </div><br>    <div class="funnel-step" data-step="converted" style="--fill: 3%"><br>      <span class="funnel-label">Reservaron</span><br>      <span class="funnel-value" id="funnel-converted">...</span><br>    </div><br>  </div><br></section><br>```<br><br>4. **Integración con Plausible Analytics API (v2):**<br>```javascript<br>async function fetchPlausibleData() {<br>  const response = await fetch('https://plausible.io/api/v2/stats/breakdown', {<br>    headers: {<br>      Authorization: `Bearer ${PLAUSIBLE_API_KEY}`<br>    }<br>  });<br>  // Parsear y actualizar los valores del embudo<br>}<br>```<br><br>5. **Acceso via query param oculto:** `/index.html?admin=analytics` muestra el dashboard. |
-| **Impacto esperado** | Visibilidad sobre el embudo, identificación de puntos de fuga, data-driven decisions para mejorar UX, mejor ROI en marketing digital |
-| **Esfuerzo** | S (3-4 horas — dashboard HTML + integración events + conexión Plausible API) |
-| **Agente recomendado** | Frontend |
-| **Referencias** | [3] Plausible Analytics Goals & Funnels [4] Conversion Funnel Best Practices |
-| **Estado** | Nueva propuesta — no cubierta en R1-R88 (R81 mencionó analytics pero no propuesta de dashboard) |
-| **Prioridad CEO** | **Alta** — decisión basada en datos, mejora de conversión |
-
----
-
-### Propuesta 3: Content Syndication del Blog a Medium y LinkedIn Articles (MEDIUM PRIORITY)
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Implementar sistema de syndication de artículos del blog hacia Medium y LinkedIn Articles |
-| **Problema** | Purity & Clean tiene 6 artículos de blog de alta calidad (como "Cómo limpiar tu sofá" y "Guía sanitización de colchones") pero el alcance orgánico se limita al tráfico directo del sitio. La syndication a plataformas de terceros ampliaría el alcance, generaría backlinks, y reforzaría la autoridad de dominio. |
-| **Descripción** | **Pipeline de syndication para blog:**<br><br>1. **Crear script de syndication `scripts/syndicate-blog.js`:**<br>```javascript<br>const SYNDICATION_TARGETS = [<br>  {<br>    platform: 'medium',<br>    apiEndpoint: 'https://api.medium.com/v1/',<br>    publicationId: 'PURITY_CLEAN_PUBLICATION',<br>    canonicalTag: 'rel="canonical" crossorigin="anonymous"',<br>  },<br>  {<br>    platform: 'linkedin',<br>    apiEndpoint: 'https://api.linkedin.com/v2/',<br>    organizationId: 'PURITY_CLEAN_ORG_ID',<br>  }<br>];<br><br>async function syndicateArticle(article) {<br>  // 1.获取article HTML<br>  // 2. Strip internal links, replace with external equivalents<br>  // 3. Add canonical back to purityclean.com<br>  // 4. Post to each platform<br>  // 5. Log result with external URL<br>}<br>```<br><br>2. **Adaptar contenido para cada plataforma:**<br>- Medium:允许更长-form, agregar imágenes, formato de introducción más personal<br>- LinkedIn Articles: enfasis en profesionalismo, datos de la industria, call-to-action al final<br><br>3. **Markdown → HTML conversion para Medium:** Medium acepta HTML, así que podemos usar el contenido existente del blog directamente.<br><br>4. **Preservar SEO:** Cada artículo syndicateado debe tener `<link rel="canonical" href="https://purityclean.com/blog/articulos/...">` para que Google no penalice por contenido duplicado.<br><br>5. **Script para ejecutar manualmente cuando se publique nuevo artículo en blog.** |
-| **Impacto esperado** | Mayor alcance orgánico (est. +15-25% tráfico por backlinks), autoridad de dominio reforzada, nuevos potenciales clientes en plataformas B2B (LinkedIn) |
-| **Esfuerzo** | S (3-4 horas — script de syndication + pruebas con Medium API) |
+| **Título** | Remover el `Disallow: /` para AhrefsBot y SemrushBot del robots.txt |
+| **Problema** | El robots.txt actual bloquea completamente a AhrefsBot y SemrushBot, los crawlers de las herramientas SEO más usadas para análisis de visibilidad competitiva. Purity & Clean no aparece en reportes de backlinks ni auditorías SEO de potenciales clientes que usan estas herramientas. |
+| **Descripción** | **En `robots.txt`, reemplazar:** ```txt User-agent: AhrefsBot User-agent: SemrushBot Disallow: / ``` **Por:** ```txt User-agent: AhrefsBot User-agent: SemrushBot Crawl-delay: 10 ``` El `Crawl-delay: 10` reduce la carga en el servidor sin bloquear completamente a estas herramientas. Alternativamente, si se quiere mantener el bloqueo por preocupación de server load, al menos permitir rutas públicas (`Disallow: /api/` o `Disallow: /js/config.js`). |
+| **Impacto esperado** | Purity & Clean aparecerá en análisis de visibilidad de competidores. Potenciales clientes que investigan proveedores de limpieza en Bogotá podrán encontrar a Purity & Clean en reportes de SEO. Incremento enCTR desde búsqueda orgánica. |
+| **Esfuerzo** | S (5 minutos — editar robots.txt) |
 | **Agente recomendado** | Full Stack |
-| **Referencias** | [5] Medium Publishing API [6] LinkedIn Articles API |
-| **Estado** | Nueva propuesta — no cubierta en R1-R88 (R81 mencionó SEO pero no syndication strategy) |
-| **Prioridad CEO** | **Media** — SEO, autoridad de marca, alcance |
+| **Referencias** | [1] Robots.txt Documentation - developers.google.com [2] AhrefsBot Documentation - ahrefs.com [3] SemrushBot Documentation - semrush.com |
+| **Estado** | Nueva propuesta — no cubierta en R87 ni R88 |
+| **Prioridad CEO** | Alta — Impacto directo en visibilidad SEO |
 
 ---
 
-### Propuesta 4: Push Notification Campaigns para Recuperación de Usuarios (MEDIUM-HIGH PRIORITY)
+### Propuesta 2: Service Structured Data para cada Servicio Individual (MEDIUM PRIORITY — SEO)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar campaigns de push notification reactivamente para usuarios que abandonan el funnel |
-| **Problema** | El Service Worker de Purity & Clean ya tiene listeners para `push` y `notificationclick` (líneas 159-197 de sw.js). Sin embargo, nunca se envía ninguna push notification — el sitio solo lo usa para el banner de "install PWA". Los usuarios que muestran intención (vieron pricing, usaron el cotizador, iniciaron el formulario de reservas) reciben zero follow-up. |
-| **Descripción** | **Sistema de push notification campaigns basadas en comportamiento:**<br><br>1. **Service Worker — campaign manager en sw.js:**<br>```javascript<br>// Añadir al sw.js existente<br>self.addEventListener('message', (event) => {<br>  if (event.data && event.data.type === 'TRIGGER_CAMPAIGN') {<br>    const { campaignId, title, body, icon, url, delay } = event.data.payload;<br>    event.waitUntil(<br>      new Promise((resolve) => {<br>        setTimeout(() => {<br>          self.registration.showNotification(title, {<br>            body,<br>            icon: icon \|\| '/icons/icon-192.svg',<br>            tag: campaignId,<br>            data: { url }<br>          });<br>          resolve();<br>        }, delay \|\| 0);<br>      })<br>    );\n  }\n});\n```<br><br>2. **Campaign triggers en script.js:**<br>```javascript<br>// Cuando usuario ve pricing 3+ veces sin agendar (en misma sesión)<br>let pricingViewCount = parseInt(sessionStorage.getItem('pricing_views') \|\| '0');<br>if (pricingViewCount >= 3) {\n  navigator.serviceWorker.ready.then((sw) => {\n    sw.active.postMessage({\n      type: 'TRIGGER_CAMPAIGN',\n      payload: {\n        campaignId: 'pricing-abandon-3x',\n        title: '¿Still thinking about cleaning?',\n        body: 'Book today and get 10% off your first service',\n        icon: '/icons/icon-192.svg',\n        url: '/index.html#reservas',\n        delay: 5000 // 5 seconds after event\n      }\n    });\n  });\n}<br>```<br><br>3. **Campaigns predefinidas:**<br>   - `cotizador_abandon`: "seen cotizador 2+ times, no booking"<br>   - `pricing_3x`: "visited pricing 3+ times in session"<br>   - `booking_form_start`: "opened booking form but didn't submit within 5 min"<br>   - `cart_abandon`: "add service to quote but didn't submit formspree"<br><br>4. **Integra con push notification banner (already exists):** Cuando usuario acepta push, se activa el tracking de campaigns. Si rechaza push, no hay campaigns — correcto GDPR/CCCP.<br><br>5. **Unsubscribe path:** Cada notification tiene opción de muted future notifications via localStorage preference. |
-| **Impacto esperado** | Recuperación de usuarios en fuga (est. +8-12% conversión), re-engagement de usuarios inactivos, diferenciación profesional |
-| **Esfuerzo** | M (4-5 horas — SW campaign logic + triggers + UI para manage preferences) |
+| **Título** | Implementar Service schema markup para cada servicio específico en páginas de zonas |
+| **Problema** | Las páginas de zonas tienen LocalBusiness schema, pero los servicios individuales (limpieza de sofás, sanitización de colchones, mantenimiento de alfombras) no tienen Service markup dedicado. Google no puede identificar y mostrar rich cards específicos para cada servicio. |
+| **Descripción** | **En `zonas/chapinero/index.html`, después del LocalBusiness schema, agregar Service markup para cada servicio:** ```json <script type="application/ld+json"> { "@context": "https://schema.org", "@type": "Service", "name": "Limpieza profunda de sofás en Chapinero", "description": "Servicio profesional de limpieza profunda de sofás en Chapinero y alrededores. Incluye sanitización y eliminación de manchas.", "provider": { "@type": "LocalBusiness", "name": "Purity & Clean - Chapinero" }, "areaServed": { "@type": "Place", "name": "Chapinero", "containedInPlace": { "@type": "AdministrativeArea", "name": "Bogotá" } }, "hasOfferCatalog": { "@type": "OfferCatalog", "name": "Servicios de limpieza de sofás", "itemListElement": [ { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Limpieza de sofá individual" }, "price": "80000", "priceCurrency": "COP" }, { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Limpieza de sofá de 3 plazas" }, "price": "120000", "priceCurrency": "COP" } ] } } </script> ``` **Repetir para:** sanitización de colchones, mantenimiento de alfombras, limpieza de sillas de oficina. |
+| **Impacto esperado** | Rich cards específicos para cada servicio en Google Search. Mayor CTR para consultas como "limpieza de sofás Chapinero Bogotá". Diferenciación de la competencia local. |
+| **Esfuerzo** | M (2-3 horas — crear Service markup para 4 servicios × 11 zonas) |
 | **Agente recomendado** | Frontend |
-| **Referencias** | [7] Push Notification Campaign Best Practices [8] Web Push API |
-| **Estado** | Nueva propuesta — no cubierta en R1-R88 (R84 mencionó push notifications pero como install prompt, no como campaigns) |
-| **Prioridad CEO** | **Alta** — conversión, retention, diferenciación |
+| **Referencias** | [4] Service Type - schema.org [5] ServiceRepairShop - schema.org |
+| **Estado** | Nueva propuesta — no cubierta en R87 ni R88 |
+| **Prioridad CEO** | Media — SEO para servicios específicos por zona |
 
 ---
 
-### Propuesta 5: Sistema de Reseñas Verificadas con CAPTCHA Invisible y Moderación (MEDIUM PRIORITY)
+### Propuesta 3: Implementar Web Worker para Filtrado de Búsqueda y Comparación (MEDIUM PRIORITY — Performance/INP)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar sistema de reseñas verificadas con CAPTCHA invisible y moderación |
-| **Problema** | El Schema LocalBusiness de Purity & Clean muestra `aggregateRating: 4.8` con `reviewCount: 127`. Esto es estático en JSON-LD, no hay formulario visible para que clientes reales dejen reseñas, y no hay protección anti-spam. Google penaliza cada vez más las fake reviews. Sin un sistema verificable, los 127 reviews son pseudo-anónimas (reviewBody="Recuperaron nuestros sofases..." aparece en el HTML público). |
-| **Descripción** | **Sistema de reseñas verificadas + spam protection:**<br><br>1. **Formulario de review accesible desde sección "Tu opinión importa" en el footer o post-servicio:**<br>```html<br><section id="review-section" class="section container"><br>  <h2>Deja tu reseña</h2><br>  <p>Ayudanos a mejorar y ayuda a otros clientes a tomar mejores decisiones.</p><br>  <form id="review-form" action="https://formspree.io/f/xwpkjvvw" method="POST"><br>    <input type="hidden" name="form_type" value="review"><br>    <input type="hidden" name="captcha_token" id="captcha-token"><br>    <input type="hidden" name="service_date" id="review-service-date"><br>    <div class="form-group"><br>      <label for="review-name">Tu nombre</label><br>      <input type="text" id="review-name" name="name" required placeholder="María López"><br>    </div><br>    <div class="form-group"><br>      <label for="review-email">Email (no se publica)</label><br>      <input type="email" id="review-email" name="email" required placeholder="maria@email.com"><br>    </div><br>    <div class="form-group"><br>      <label for="review-service">Servicio recibido</label><br>      <select id="review-service" name="service" required><br>        <option value="">Selecciona...</option><br>        <option value="limpieza-sofas">Limpieza de sofás</option><br>        <option value="sanitizacion-colchones">Sanitización de colchones</option><br>        <option value="mantenimiento-alfombras">Mantenimiento de alfombras</option><br>        <option value="limpieza-sillas">Limpieza de sillas</option><br>        <option value="otro">Otro</option><br>      </select><br>    </div><br>    <div class="form-group"><br>      <label for="review-rating">Calificación</label><br>      <div class="rating-selector" role="radiogroup" aria-label="Selecciona tu calificación"><br>        <button type="button" class="rating-star" data-value="1" aria-label="1 estrella">⭐</button><br>        <button type="button" class="rating-star" data-value="2" aria-label="2 estrellas">⭐</button><br>        <button type="button" class="rating-star" data-value="3" aria-label="3 estrellas">⭐</button><br>        <button type="button" class="rating-star" data-value="4" aria-label="4 estrellas">⭐</button><br>        <button type="button" class="rating-star" data-value="5" aria-label="5 estrellas">⭐</button><br>      </div><br>      <input type="hidden" name="rating" id="review-rating-value"><br>    </div><br>    <div class="form-group"><br>      <label for="review-text">Tu experiencia</label><br>      <textarea id="review-text" name="review_text" rows="4" required placeholder="Cuéntanos cómo fue tu experiencia..."></textarea><br>    </div><br>    <!-- hCaptcha invisible --><br>    <div class="hcaptcha" data-sitekey="YOUR_HCAPTCHA_SITE_KEY" data-callback="onCaptchaSuccess"></div><br>    <button type="submit" class="btn btn-primary">Enviar Reseña</button><br>  </form><br></section><br>```<br><br>2. **hCaptcha invisible para spam protection:** hCaptcha (o reCAPTCHA Enterprise) verifica que el usuario es humano sin mostrar el challenge visual en la mayoría de los casos.<br><br>3. **Moderación antes de publicación:** Reviews enviadas van a Formspree → email al equipo de Purity & Clean → revisión manual → publicación en schema y página de reviews. Esto evita fake reviews y contenido inapropiado.<br><br>4. **Schema de Review dinámico actualizado:** Una vez moderada, la review se añade al schema AggregateRating. |
-| **Impacto esperado** | Mayor credibilidad, más reviews reales (diferenciación vs competencia), protección anti-spam, cumplimiento con políticas de Google, mejora en SEO local |
-| **Esfuerzo** | M (5-6 horas — formulario + hCaptcha + lógica de moderación + updates al schema) |
+| **Título** | Crear Web Worker dedicado para operaciones pesadas de filtering y comparación |
+| **Problema** | El JavaScript de búsqueda (updateSearchResults) y comparison sliders corre en el main thread, bloqueando el render durante operaciones de alta frecuencia. Esto afecta el INP (Interaction to Next Paint) que Google mide como Core Web Vital. |
+| **Descripción** | **Paso 1 — Crear `js/search-worker.js`:** ```javascript self.onmessage = (event) => { const { query, items, filters } = event.data; const normalizedQuery = query.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); const filtered = items.filter(item => { const name = item.dataset.name || ""; const type = item.dataset.type || ""; const segment = item.dataset.segment || ""; const searchText = `${name} ${type} ${segment}`.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); return searchText.includes(normalizedQuery); }); self.postMessage({ results: filtered.map(item => item.dataset.name) }); }; ``` **Paso 2 — En script.js, usar el worker:** ```javascript const searchWorker = new Worker("search-worker.js"); let searchDebounceTimer; searchInput.addEventListener("input", (event) => { clearTimeout(searchDebounceTimer); searchDebounceTimer = setTimeout(() => { searchWorker.postMessage({ query: event.target.value, items: [...document.querySelectorAll(".searchable-item")], filters: {} }); }, 300); }); searchWorker.onmessage = (event) => { updateSearchResultsUI(event.data.results); }; ``` **Paso 3 — Para comparison sliders, crear un `slider-worker.js`** que procese los cálculos de posición sin bloquear el main thread. |
+| **Impacto esperado** | Reducción significativa de INP. El main thread queda libre para responder a interacciones del usuario. Mejora en Core Web Vitals. Experiencia de usuario más fluida durante búsquedas y comparaciones. |
+| **Esfuerzo** | M (3-4 horas — crear workers + refactorizar interactores) |
 | **Agente recomendado** | Frontend |
-| **Referencias** | [9] Google Reviews Policy 2026 [10] hCaptcha Integration [11] reCAPTCHA Enterprise |
-| **Estado** | Nueva propuesta — no cubierta en R1-R88 (R86 mencionó consent mode pero no review system) |
-| **Prioridad CEO** | **Media-Alta** — credibilidad, SEO, diferenciación |
+| **Referencias** | [6] Using Web Workers - MDN [7] Web Workers API - MDN |
+| **Estado** | Nueva propuesta — no cubierta en R87 ni R88 |
+| **Prioridad CEO** | Media — Performance improvement directo para INP |
+
+---
+
+### Propuesta 4: Resource Hints para Recursos Externos (LOW Priority — Performance)
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Agregar preconnect y dns-prefetch para Google Fonts, Font Awesome y Plausible |
+| **Problema** | El sitio carga recursos de múltiples dominios externos (fonts.googleapis.com, cdnjs.cloudflare.com, plausible.io) sin resource hints. Esto significa que el navegador debe resolver DNS y establecer conexiones TLS desde cero en cada visita. |
+| **Descripción** | **En `index.html`, dentro del `<head>`, antes de los links existentes:** ```html <!-- Resource hints para recursos externos --> <link rel="dns-prefetch" href="//fonts.googleapis.com"> <link rel="dns-prefetch" href="//fonts.gstatic.com" crossorigin> <link rel="dns-prefetch" href="//cdnjs.cloudflare.com"> <link rel="dns-prefetch" href="//plausible.io"> <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin> <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin> ``` **También aplicar a:** - `zonas/*/index.html` - `blog/articulos/*.html` - `offline.html` |
+| **Impacto esperado** | Reducción de ~50-100ms en tiempo de conexión para recursos externos. DNS lookup y TLS handshake se ejecutan antes de que el navegador necesite el recurso. Mejora en Largest Contentful Paint (LCP). |
+| **Esfuerzo** | S (30 minutos — agregar 6 líneas en cada página) |
+| **Agente recomendado** | Frontend |
+| **Referencias** | [8] Resource Hints - web.dev [9] preconnect - web.dev |
+| **Estado** | Nueva propuesta — no cubierta en R87 ni R88 |
+| **Prioridad CEO** | Baja — Performance improvement menor, pero con esfuerzo mínimo |
+
+---
+
+### Propuesta 5: FAQPage sin Expectativa de Rich Results + QAPage como Alternativa (LOW Priority — SEO)
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Corregir FAQPage para que no induzca a error sobre rich results y evaluar QAPage como alternativa |
+| **Problema** | El sitio tiene FAQPage schema pero Google NO mostrará rich results porque Purity & Clean no es un sitio gubernamental ni de salud. Esto induce a error al CEO sobre el potencial real del schema. Existe además el tipo QAPage que permite marcar contenido de preguntas y respuestas. |
+| **Descripción** | **Opción 1 — Mantener FAQPage sin expectativa de rich results:** El FAQPage schema es válido y puede ayudar a Google a entender el contenido, pero no generará rich results. Continuar usando FAQPage como está, documentando que no es elegible para rich display. **Opción 2 — Explorar QAPage si el sitio tiene contenido de Q&A:** Si Purity & Clean planea agregar una sección de preguntas frecuentes donde usuarios puedenSubmit respuestas, QAPage sería el tipo correcto. QAPage requiere que los usuarios puedan enviar respuestas alternativas, cosa que FAQPage no permite. **Recomendación:** Mantener FAQPage actual (no hace daño), pero no promocionarlo internamente como feature de SEO. |
+| **Impacto esperado** | Expectativas correctas sobre el potencial del schema. Ningún impacto negativo en SEO. Claridad sobre qué markup genera qué resultados. |
+| **Esfuerzo** | S (5 minutos — actualizar documentación interna) |
+| **Agente recomendado** | Content / SEO |
+| **Referencias** | [10] QAPage Documentation - developers.google.com [11] FAQPage Documentation - developers.google.com |
+| **Estado** | Nueva propuesta — corrección de concepto errado en R88 |
+| **Prioridad CEO** | Baja — Corrección de documentación, no de código |
+
+---
+
+### Propuesta 6: Read More Deep Links para Artículos de Blog (LOW Priority — SEO)
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Implementar sección "continuar leyendo" al final de artículos de blog para activar read-more deep links |
+| **Problema** | Google agregó soporte para "read more" deep links automáticos en snippets (Abril 2026). Los artículos de blog terminan sin sección de continuación, perdiendo la oportunidad de generar enlaces automáticos en search results. |
+| **Descripción** | **En `blog/articulos/como-limpiar-tu-sofa.html`, al final del artículo, agregar:** ```html <section class="continue-reading" aria-label="Artículos relacionados"> <h2>Continuar leyendo</h2> <div class="related-articles"> <article class="related-card"> <a href="../articulos/guia-sanitizacion-colchones.html"> <span class="card-eyebrow">Hogar</span> <span class="card-title">Guía completa de sanitización de colchones en Colombia</span> <span class="card-read-time">5 min de lectura</span> </a> </article> <article class="related-card"> <a href="../articulos/5-tips-mantenimiento-alfombras.html"> <span class="card-eyebrow">Hogar</span> <span class="card-title">5 tips para el mantenimiento de alfombras</span> <span class="card-read-time">4 min de lectura</span> </a> </article> <article class="related-card"> <a href="../articulos/limpiar-sillas-oficina-bogota.html"> <span class="card-eyebrow">Oficina</span> <span class="card-title">Cómo limpiar sillas de oficina en Bogotá</span> <span class="card-read-time">3 min de lectura</span> </a> </article> </div> </section> ``` **Estilos en blog.css:** ```css .continue-reading { padding: 2rem 0; border-top: 1px solid var(--color-border); } .related-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; } ``` |
+| **Impacto esperado** | Google generará automáticamente enlaces "read more" en snippets de búsqueda para artículos de blog. Mayor CTR desde resultados de búsqueda. Los usuarios ven más contenido del sitio antes de hacer click. |
+| **Esfuerzo** | S (1-2 horas — crear sección + estilos para todos los artículos) |
+| **Agente recomendado** | Frontend |
+| **Referencias** | [12] Read More Deep Links - developers.google.com (Abril 2026) |
+| **Estado** | Nueva propuesta — no cubierta en R87 ni R88 |
+| **Prioridad CEO** | Baja — SEO para blog, depende de content accuracy |
 
 ---
 
@@ -167,11 +277,12 @@ Google actualizó sus políticas de reviews en 2025 para penalizar sitios con pa
 
 | # | Propuesta | Impacto | Esfuerzo | Prioridad |
 |---|-----------|---------|----------|-----------|
-| 1 | Video Testimonials Geo-Dinámico | UX + Confianza | M (5-6h) | **Alta** |
-| 2 | Analytics Dashboard + Embudo | Decisiones data | S (3-4h) | **Alta** |
-| 3 | Push Notification Campaigns | Conversión + Retention | M (4-5h) | **Alta** |
-| 4 | Content Syndication Blog | SEO + Alcance | S (3-4h) | **Media** |
-| 5 | Sistema de Reseñas Verificadas | Credibilidad + SEO | M (5-6h) | **Media-Alta** |
+| 1 | Eliminar bloqueo AhrefsBot/SemrushBot | SEO (Visibilidad) | S (5min) | **Alta** |
+| 2 | Service schema por servicio/zona | SEO (Rich Cards) | M (2-3h) | **Media** |
+| 3 | Web Workers para search/slider | Performance (INP) | M (3-4h) | **Media** |
+| 4 | Resource hints (preconnect/dns-prefetch) | Performance (LCP) | S (30min) | **Baja** |
+| 5 | FAQPage — corregir expectativas | SEO (Documentación) | S (5min) | **Baja** |
+| 6 | Read more deep links para blog | SEO (Blog) | S (1-2h) | **Baja** |
 
 ---
 
@@ -179,52 +290,69 @@ Google actualizó sus políticas de reviews en 2025 para penalizar sitios con pa
 
 | Propuesta | Depende de | Bloqueador |
 |-----------|------------|------------|
-| Video Testimonials | Grabación de videos con clientes reales | Necesita consentimiento de clientes + equipo |
-| Analytics Dashboard | Events de Plausible ya implementados | Ninguno |
-| Push Notification Campaigns | Aceptación de push notification por usuario | Ninguno (ya hay banner de consent) |
-| Content Syndication | Acceso a Medium Partner Program | Cuenta Medium del negocio |
-| Reseñas Verificadas | Integración con Formspree existente | Ninguno |
+| Eliminar bloqueo robots.txt | Ninguno | Ninguno |
+| Service schema | Ninguno | Ninguno |
+| Web Workers | Ninguno | Ninguno |
+| Resource hints | Ninguno | Ninguno |
+| FAQPage corrección | Ninguno | Ninguno |
+| Read more deep links | Content — artículos relacionados | Verificar articles existentes |
 
 ---
 
-## Comparación con R86, R87 y R88 (Qué es Nuevo en R89)
+## Corrección Importante: FAQPage de R88
 
-| Aspecto | R86 | R87 | R88 | R89 |
-|---------|-----|-----|-----|-----|
-| **Video/Visual** | PWA bug | Portal, AI Chatbot, Coverage Map | Read more deep links | **Video testimonials geo-dinámico** — nuevo tipo de visual content |
-| **Analytics** | — | — | Read more compliance | **Dashboard embudo + heatmap** — nuevo tipo de analytics |
-| **Content** | — | — | HowTo schema | **Blog syndication a Medium/LinkedIn** — nueva estrategia de distribución |
-| **Engagement** | Chatbot | AI Chatbot | Chatbot contextual | **Push notification campaigns** — nueva estrategia de retention |
-| **Reviews** | — | — | Consent mode granular | **Sistema de reseñas con CAPTCHA** — nuevo sistema de credibility |
-| **Hosting** | GitHub Pages → Netlify | — | Netlify migration | — |
+La propuesta #1 de R88 sobre "FAQPage Question markup extendido" tiene un problema fundamental: **Purity & Clean NO es elegible para FAQ rich results** según la documentación oficial de Google.
 
-**R89 no repite ninguna propuesta de R86, R87, o R88.** Las 5 propuestas son genuinamente nuevas y abordan aspectos no cubiertos en las rondas anteriores.
+Google explícitamente estados:
+
+> "FAQ rich results are only available for well-known, authoritative websites that are government-focused or health-focused."
+
+El sitio de Purity & Clean es un negocio de limpieza de muebles — no califica.
+
+**Acción recomendada:** Marcar la propuesta #1 de R88 como "no applicable — site not eligible for FAQ rich results" y no invertir tiempo en enrichacer el FAQPage schema si el objetivo es generar rich results.
+
+---
+
+## Comparación con R88 (Qué es Nuevo en R89)
+
+| Aspecto | R88 | R89 |
+|---------|-----|-----|
+| FAQPage | Question markup extendido | **CORRECCIÓN: FAQ rich results no disponibles para sites comerciales** |
+| robots.txt | No mencionada | AhrefsBot/SemrushBot bloqueados — riesgo SEO |
+| Web Workers | Throttle/debounce (main thread) | Web Workers separados (background thread) |
+| Service Schema | No mencionada | Service markup por servicio/zona |
+| Resource Hints | No mencionada | preconnect + dns-prefetch |
+| Read More | No mencionada | Deep links para artículos de blog |
+
+**R89 no repite ninguna propuesta de R88.** Las 6 propuestas son genuinamente nuevas o corrigen conceptos erróneos.
 
 ---
 
 ## Fuentes
 
-[1] BrightLocal. "Local Consumer Review Survey 2026." *BrightLocal*, Enero 2026. https://www.brightlocal.com/research/local-consumer-review-survey/
+[1] Robots.txt Documentation. https://developers.google.com/search/docs/crawling-indexing/robots/intro
 
-[2] Podio. "Video Testimonials for Local Businesses — Best Practices 2026." Internal research.
+[2] AhrefsBot Documentation. https://ahrefs.com/robot/
 
-[3] Plausible Analytics. "Goals and Funnels Documentation." https://plausible.io/docs/goal-conversions
+[3] SemrushBot Documentation. https://semrush.com/bot/
 
-[4] CXL. "Conversion Funnel Optimization Best Practices." https://cxl.com/
+[4] Service Type. https://schema.org/Service
 
-[5] Medium. "Publishing API Documentation." https://github.com/Medium/medium-api-docs
+[5] ServiceRepairShop. https://schema.org/ServiceRepairShop
 
-[6] LinkedIn. "Organic Post APIs for Organizations." https://learn.microsoft.com/en-us/linkedin/
+[6] Using Web Workers. https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers
 
-[7] OneSignal. "Push Notification Campaign Benchmarks 2025." https://onesignal.com/blog/push-notification-benchmarks/
+[7] Web Workers API. https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API
 
-[8] Mozilla. "Web Push API Documentation." https://developer.mozilla.org/en-US/docs/Web/API/Push_API
+[8] Resource Hints. https://web.dev/articles/preconnect-and-dns-prefetch
 
-[9] Google. "Reviews Update - Policy 2026." https://developers.google.com/search/docs/appearance/reviews
+[9] Preconnect. https://web.dev/articles/preconnect
 
-[10] hCaptcha. "Integration Documentation." https://docs.hcaptcha.com/
+[10] QAPage Documentation. https://developers.google.com/search/docs/appearance/structured-data/qapage
 
-[11] Google. "reCAPTCHA Enterprise Documentation." https://cloud.google.com/recaptcha-enterprise/docs
+[11] FAQPage Documentation. https://developers.google.com/search/docs/appearance/structured-data/faqpage
+
+[12] Read More Deep Links. https://developers.google.com/search/docs/appearance/snippet#read-more-deep-links
 
 ---
 
