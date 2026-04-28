@@ -4,184 +4,217 @@
 **Fecha:** 2026-04-28
 **Analista:** Innovation Scout
 **Ronda:** 91
-**Issue padre:** DOMAA-839
+**Issue padre:** DOMAA-838
 
 ---
 
 ## Resumen Ejecutivo
 
-R91 se enfoca en **cierre de features pendientes de R89** y **mejoras de UX/animación** que son realistas para el equipo actual — sin pasarelas de pago ni integraciones complejas. A diferencia de R90 (modelo de negocio B2B), R91 propone mejoras tácticas de conversión que coinciden con las instrucciones del CEO: "cosas como crear animaciones, mejorar el SEO".
+R91 se enfoca en **Google Business Profile optimization advanced** y **WhatsApp Business Platform features** que no se propusieron en R90. Hallazgo clave: Purity & Clean tiene schema LocalBusiness pero NO está aprovechando las features gratuitas de Google Business Profile (Q&A pre-populated, Posts, Servicios con precios). Además, se propone una **video content strategy** para YouTube Shorts que podría posicionarlo por encima de Serviclean.
 
 ---
 
 ## Estado Actual del Proyecto (R91)
 
-### Stack Técnico
+### Lo implementado (resumen R90)
 
-| Componente | Estado | Notas |
-|-----------|--------|-------|
-| **Frontend** | HTML5 + CSS3 + Vanilla JS | SPA-like, multi-sección |
-| **Dark mode** | ✅ Funcional | localStorage persistence |
-| **Búsqueda** | ✅ Funcional | Filtra tarjetas por data-* |
-| **Blog SEO** | ✅ 6 artículos | Con meta tags completos |
-| **Google Reviews** | ✅ UI completa | Avatares, estrellas, texto real |
-| **Before/After sliders** | ✅ 6 comparison sliders | Unsplash + CSS filtros |
-| **Video showcase** | ✅ Sección video | YouTube embed (placeholder) |
-| **Cotizador** | ✅ Interactivo | Stepper + WhatsApp |
-| **WhatsApp Chatbot** | ✅ Fab button + panel | Con quick replies |
-| **PWA** | ✅ Funcional | SKIP_WAITING |
-| **Tests E2E** | ✅ Playwright | 9 archivos |
-| **Pricing section** | ✅ Completo | Cards con rangos |
-| **FAQ** | ✅ Schema.org | Pero sin acordeón interactivo |
+| Feature | Estado |
+|---------|--------|
+| PWA + Push | ✅ |
+| Chatbot WhatsApp | ✅ |
+| Dark mode | ✅ |
+| Blog SEO (6 artículos) | ✅ |
+| Google Reviews schema | ✅ |
+| Programa de referidos | ✅ |
+| Zonas pages (11) | ✅ |
+| Before/After gallery | ✅ |
+| Stats animados | ✅ |
+| Garantía 200% | ✅ |
 
-### Features Pendientes (R89)
+### Pendientes de R89-R90 (no implementados aún)
 
-| Feature | Ronda | Prioridad CEO | Estado |
-|---------|-------|--------------|--------|
-| Quiz Interactivo | R89 | ⏳ Pendiente | Sin implementar |
-| Instagram UGC | R89 | ⏳ Pendiente | Sin implementar |
-| Exit Intent Popup | R89 | ⏳ Pendiente | Sin implementar |
-| Voice Search FAQ | R89 | ⏳ Pendiente | Sin implementar |
-| Página de Precios | R89 | ⏳ Pendiente | **SÍ existe** (sección #pricing) |
-
-### Lo Implementado en R1-R90 (Resumen)
-
-| Feature | Ronda | Estado |
-|---------|-------|--------|
-| Chatbot WhatsApp | R1 | ✅ |
-| PWA + Push | R1 | ✅ |
-| Dark mode | R2 | ✅ |
-| Blog SEO | R3 | ✅ |
-| Google Reviews UI | R4 | ✅ |
-| Programa de referidos | R5 | ✅ |
-| Zonas pages | R6 | ✅ |
-| Before/After gallery | R7 | ✅ |
-| Stats animados | R8 | ✅ |
-| Garantía 200% | R9 | ✅ |
-| API B2B | R90 | ⏳ Pendiente |
+| Feature | Ronda | Prioridad CEO |
+|---------|-------|---------------|
+| Quiz Interactivo | R89 | ⏳ Pendiente |
+| Instagram UGC | R89 | ⏳ Pendiente |
+| Exit Intent Popup | R89 | ⏳ Pendiente |
+| Voice Search FAQ | R89 | ⏳ Pendiente |
+| Página de Precios | R89 | ⏳ Pendiente |
 | Gift Cards | R90 | ⏳ Pendiente |
-| Corporate Vouchers | R90 | ⏳ Pendiente |
+| Corporate B2B Vouchers | R90 | ⏳ Pendiente |
+| API Pública | R90 | ⏳ Pendiente |
 | Public Checklists | R90 | ⏳ Pendiente |
-| Flat Rate Pricing | R90 | ⏳ Pendiente |
+| Flat Rate + Recurring | R90 | ⏳ Pendiente |
 
 ---
 
-## Análisis Competitivo: Áreas de Mejora UX
+## Investigación: Google Business Profile + WhatsApp Business
 
-### Comparación con Maid Complete
+### Hallazgo 1: Google Business Profile — Q&A Automation
 
-| Feature | Maid Complete | Purity & Clean | Gap |
-|---------|--------------|----------------|-----|
-| **Proceso visual (3 pasos)** | ✅ "Select → Schedule → Enjoy" | ❌ No tiene sección "cómo funciona" | **Alto — implementar** |
-| **Exit intent popup** | ❌ No visible | ❌ No implementado | **Medio — pendiente R89** |
-| **FAQ accordion** | Simple FAQ | FAQ con Schema pero sin acordeón | **Bajo — mejora UX** |
-| **Sticky CTA** | Header con "Book Now" | Nav normal sin CTA sticky | **Medio** |
-| **Certificación badges** | "Bonded & Insured" | Solo confianza badges | **Bajo** |
-| **Scroll animations** | Básicas | `data-reveal` con delays | ✅ Correcto |
+Google Business Profile permite pre-popular preguntas y respuestas frecuentes directamente en el perfil. A diferencia del FAQPage schema (que NO genera rich results para sitios comerciales), las preguntas y respuestas de GBP aparecen directamente en Google Maps y Search.
 
-### Lo que NO tienen los competidores que Purity podría liderar
+**Proceso:**
+1. Claim y verificar el perfil GBP
+2. Usar " Preguntas y respuestas" para agregar las 10 preguntas más frecuentes
+3. Usar "Tu negocio en Google" → "Preguntas frecuentes" → "Agregar preguntas frecuentes"
 
-1. **Animación de contadores en scroll** — Ya existe `data-counter` pero podría mejorar
-2. **Microinteracciones en cards** — Hover effects más ricos
-3. **Video testimonials** — Ningún competidor bogotano lo tiene
+**Beneficio:** Los usuarios ven las respuestas directamente en Google Search antes de hacer clic, reduciendo el tiempo de decisión.
+
+**Fuente:** [Google Business Profile Help](https://support.google.com/business/answer/3024641)
+
+---
+
+### Hallazgo 2: Google Business Profile — Publicaciones (Posts)
+
+GBP permite publicar actualizaciones, ofertas y eventos directamente. Cada post tiene:
+- Imagen
+- Título (max 100 caracteres)
+- Descripción (max 1500 caracteres)
+- CTA button (Learn More, Book, etc.)
+- Vencimiento (7-30 días)
+
+**Estrategia:** Publicar semanalmente con:
+- Ofertas estacionales ("Limpieza de sofás - 15% off en mayo")
+- Tips de mantenimiento ("¿Cada cuánto sanitizar tu colchón?")
+- Antes/después (con fotos reales)
+- Testimonios de clientes
+
+**Beneficio:** Mantiene el perfil activo, mejora el SEO local, y aparece en resultados de búsqueda.
+
+**Fuente:** [Google Business Profile Posts](https://support.google.com/business/answer/7680259)
+
+---
+
+### Hallazgo 3: Google Business Profile — Servicios con Precios
+
+La sección "Servicios" de GBP permite listar servicios con precios base. Esto genera **rich results específicos** en Google Search.
+
+**Implicación:** A diferencia de FAQPage (ineligible para rich results en sitios comerciales), la sección de servicios SÍ puede aparecer como rich result.
+
+**Ejemplo de configuración:**
+```
+Limpieza profunda de sofás
+- Sofá 2 cuerpos: desde $80.000 COP
+- Sofá 3 cuerpos: desde $100.000 COP
+- Sofá 4+ cuerpos: desde $130.000 COP
+```
+
+**Beneficio:** El precio visible en Google Search aumenta el CTR y reduce consultas de "cuánto cuesta".
+
+**Fuente:** [Google Business Profile Services](https://support.google.com/business/answer/9301513)
+
+---
+
+### Hallazgo 4: WhatsApp Business Platform — Catálogo
+
+WhatsApp Business tiene Catálogo de productos/servicios que permite:
+- Listar todos los servicios con descripción y precio
+- Compartir el catálogo directamente en WhatsApp
+- Los clientes pueden ver servicios sin visitar el sitio
+
+**Diferencia con la página de precios del sitio:** El catálogo de WhatsApp permite conversación directa, mientras que la página web es estática.
+
+**Implicación:** Un cliente que ve el sitio, puede abrir WhatsApp, ver el catálogo, y reservar sin salir de WhatsApp.
+
+**Fuente:** [WhatsApp Business Catalog](https://business.whatsapp.com/business-app/catalog)
+
+---
+
+### Hallazgo 5: YouTube Shorts como Canal de Adquisición
+
+YouTube Shorts tiene 2+ mil millones de usuarios mensuales. Para servicios locales:
+- "Cómo limpiamos tu sofá en 30 segundos" (proceso)
+- "Antes y después" (resultados)
+- "5 tips para mantener tus sofás limpios" (educación)
+
+**Ventaja sobre TikTok:** YouTube Shorts aparece en búsqueda de Google. Un video de "limpieza de sofás Bogotá" puede aparecer en ambas plataformas.
+
+**Beneficio:** Adquisición de clientes por búsqueda de video, diferenciación vs Serviclean (que no tiene video marketing activo).
+
+**Fuente:** [YouTube Shorts Creator Academy](https://creatoracademy.youtube.com/page/lesson/shorts-monetization)
 
 ---
 
 ## Propuestas (Round 91)
 
-### Propuesta 1: Exit Intent Popup (HIGH PRIORITY — Cierre R89)
+### Propuesta 1: Google Business Profile — Q&A Automation (HIGH PRIORITY — SEO Local)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar Exit Intent Popup para capturar visitantes que se van |
-| **Problema** | Muchos visitantes revisan el sitio pero no reservan. Un popup al intentar cerrar la pestaña o retroceder puede recuperar ~15% de conversiones perdidas. |
-| **Descripción** | **Nuevo componente en `js/script.js` + CSS:**<br><br>1. **Detección de intent:**<br>   ```javascript<br>   document.addEventListener('mouseout', (e) => {<br>     if (e.clientY < 10 && !sessionStorage.getItem('exitShown')) {<br>       showExitPopup();<br>     }<br>   });<br>   ```<br><br>2. **UI del popup:**<br>   ```html<br>   <div class="exit-popup" id="exit-popup" role="dialog" aria-modal="true" hidden><br>     <div class="exit-popup-backdrop"></div><br>     <div class="exit-popup-card"><br>       <button class="exit-popup-close" aria-label="Cerrar">&times;</button><br>       <div class="exit-popup-icon"><i class="fa-solid fa-sparkles"></i></div><br>       <h2>Antes de irte...</h2><br>       <p>¿No encontraste lo que buscabas? Chatea con nosotros directamente y te ayudamos a encontrar el servicio ideal.</p><br>       <a href="https://wa.me/573001234567" class="btn btn-whatsapp"><br>         <i class="fa-brands fa-whatsapp"></i> Chatear ahora<br>       </a><br>       <button class="exit-popup-dismiss">No gracias, me voy</button><br>     </div><br>   </div><br>   ```<br><br>3. **Condiciones:** Mostrar solo 1 vez por sesión, solo en desktop (no mobile), no mostrar si ya scrolló más de 50%. |
-| **Impacto esperado** | Recuperación de ~10-15% de visitantes que no convierten, aumento de WhatsApp contacts |
-| **Esfuerzo** | S (3-4 horas — JS + CSS) |
-| **Agente recomendado** | Frontend |
-| **Referencias** | [1] OptinMonster Exit Intent Statistics |
-| **Estado** | Nueva propuesta — Cierre de R89 P1 |
-| **Prioridad CEO** | **Alta** — feature prometida en R89, alto impacto con poco esfuerzo |
+| **Título** | Pre-popular 10+ preguntas frecuentes en Google Business Profile Q&A |
+| **Problema** | El sitio tiene FAQPage schema pero Google NO muestra rich results para sitios comerciales. Mientras tanto, GBP Q&A aparece directamente en Google Search y Maps sin restricciones. |
+| **Descripción** | **Paso 1 — Claim/verificar el perfil GBP:** Ir a business.google.com y verificar que Purity & Clean tiene perfil activo y verificado. **Paso 2 — Agregar las 10 preguntas más frecuentes:** Usar la herramienta de Q&A para pre-popular: 1. "¿Cuánto cuesta la limpieza de un sofá?" → "$80.000-$130.000 según tamaño" 2. "¿Cuánto tarda el servicio?" → "2-4 horas según metros²" 3. "¿Hacen sanitización de colchones?" → "Sí, eliminamos ácaros y bacterias" 4. "¿Cubren mi zona?" → "Chapinero, Usaquén, Suba, Kennedy, y más" 5. "¿Tienen garantía?" → "Garantía 200% satisfacción o devolvemos tu dinero" 6. "¿Cómo reservo?" → "WhatsApp: +57-300-123-4567" 7. "¿Usan productos seguros?" → "Productos hipoalergénicos y amigables con mascotas" 8. "¿Hacen servicio corporativo?" → "Sí, contratos mensuales para oficinas" 9. "¿Dan factura?" → "Sí, factura electrónica" 10. "¿Puedo regalar el servicio?" → "Sí, gift cards disponibles" **Paso 3 — Programar revisión mensual** para agregar preguntas estacionales. |
+| **Impacto esperado** | Las respuestas aparecen en Google Search antes de que el usuario haga clic. Reduce consultas innecesarias a WhatsApp. Mayor CTR desde resultados de búsqueda. |
+| **Esfuerzo** | S (2-3 horas — configurar Q&A + redactar respuestas) |
+| **Agente recomendado** | SEO / Marketing |
+| **Referencias** | [1] Google Business Profile Q&A https://support.google.com/business/answer/3024641 |
+| **Estado** | Nueva propuesta — NO mencionada en R90 |
+| **Prioridad CEO** | **Alta** — Impacto directo en visibilidad local |
 
 ---
 
-### Propuesta 2: Sección "Cómo Funciona" — Proceso Visual de 3 Pasos (HIGH PRIORITY)
+### Propuesta 2: Google Business Profile — Weekly Posts Strategy (MEDIUM PRIORITY — SEO Local)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Crear sección "Cómo Funciona" con proceso visual de 3 pasos |
-| **Problema** | Maid Complete tiene "Select → Schedule → Enjoy" y convierte porque el usuario sabe exactamente qué esperar. Purity no tiene sección de proceso, lo que genera incertidumbre. |
-| **Descripción** | **Nueva sección `#como-funciona` en `index.html` + estilos:**<br><br>1. **Estructura HTML:**<br>   ```html<br>   <section id="como-funciona" class="section section-proceso" aria-labelledby="proceso-heading"><br>     <div class="container"><br>       <div class="section-head"><br>         <p class="eyebrow">Proceso simple</p><br>         <h2 id="proceso-heading">3 pasos para un espacio impecable</h2><br>       </div><br>       <div class="proceso-grid" role="list"><br>         <article class="proceso-card" data-reveal data-reveal-delay="50"><br>           <div class="proceso-number" aria-hidden="true">1</div><br>           <div class="proceso-icon"><i class="fa-solid fa-hand-pointer"></i></div><br>           <h3>Selecciona tu servicio</h3><br>           <p>Elige entre limpieza de sofás, sanitización de colchones o mantenimiento de alfombras. Si no sabes qué necesitas, chatea con nosotros.</p><br>         </article><br>         <article class="proceso-card" data-reveal data-reveal-delay="150"><br>           <div class="proceso-number" aria-hidden="true">2</div><br>           <div class="proceso-icon"><i class="fa-solid fa-calendar-check"></i></div><br>           <h3>Agenda tu cita</h3><br>           <p>Usa el cotizador para ver precios o escríbenos por WhatsApp. Confirmamos en menos de 2 horas.</p><br>         </article><br>         <article class="proceso-card" data-reveal data-reveal-delay="250"><br>           <div class="proceso-number" aria-hidden="true">3</div><br>           <div class="proceso-icon"><i class="fa-solid fa-sparkles"></i></div><br>           <h3>Disfruta el resultado</h3><br>           <p>Nuestro equipo llega puntual, trabaja con productos seguros y te deja espacios impecables en pocas horas.</p><br>         </article><br>       </div><br>       <div class="proceso-cta" data-reveal><br>         <a href="#cotizador" class="btn btn-primary">Calcular precio</a><br>         <a href="https://wa.me/573001234567" class="btn btn-whatsapp">O escribir por WhatsApp</a><br>       </div><br>     </div><br>   </section><br>   ```<br><br>2. **CSS con animación de línea conectora:**<br>   ```css<br>   .proceso-card {<br>     position: relative;<br>     opacity: 0;<br>     transform: translateY(30px);<br>     transition: opacity 0.5s ease, transform 0.5s ease;<br>   }<br>   .proceso-card.revealed {<br>     opacity: 1;<br>     transform: translateY(0);<br>   }<br>   .proceso-number {<br>     animation: pulse-glow 2s ease-in-out infinite;<br>   }<br>   ``` |
-| **Impacto esperado** | Reduce incertidumbre del usuario, aumenta confianza para reservar, diferencia vs competidores locales que no tienen proceso claro |
-| **Esfuerzo** | S (4-5 horas — HTML + CSS + icono) |
-| **Agente recomendado** | Frontend |
-| **Referencias** | [2] Maid Complete "The Maid Complete Process" |
-| **Estado** | Nueva propuesta — No mencionada en R1-R90 |
-| **Prioridad CEO** | **Alta** — impacto directo en conversión, implementación rápida |
+| **Título** | Implementar calendario editorial de posts semanales en Google Business Profile |
+| **Problema** | El perfil de GBP de Purity & Clean aparece estático. Los perfiles con posts activos tienen mayor visibilidad en Google Maps y mejor SEO local. |
+| **Descripción** | **Calendario editorial semanal:** **Lunes:** Tip de mantenimiento ("¿Sabías que deberías limpiar tu sofá cada 6 meses?") **Miércoles:** Oferta de la semana ("15% off en sanitización de colchones") **Viernes:** Antes/después con foto real **Sábado:** Testimonio de cliente destacado **Template de post:** ``` Título: [Tip/Oferta/Testimonio] Descripción: [Contenido + CTA] Imagen: [Foto profesional] Botón: "Reservar ahora" → WhatsApp ``` **Automatización:** Usar Zapier o Make (Integromat) para programar posts automáticos cuando se publican artículos en el blog. |
+| **Impacto esperado** | Perfil más activo = mejor ranking en Google Maps. Contenido fresco signals a Google que el negocio está activo. Ofertas estacionales pueden generar spikes de tráfico. |
+| **Esfuerzo** | S (1-2 horas/semana para crear contenido, o 4-6 horas para setup de automatización) |
+| **Agente recomendado** | Marketing / Content |
+| **Referencias** | [2] Google Business Profile Posts https://support.google.com/business/answer/7680259 |
+| **Estado** | Nueva propuesta — NO mencionada en R90 |
+| **Prioridad CEO** | **Media** — requiere compromiso de contenido semanal |
 
 ---
 
-### Propuesta 3: FAQ Accordion Interactivo (MEDIUM PRIORITY)
+### Propuesta 3: WhatsApp Business Platform — Catálogo de Servicios (MEDIUM PRIORITY — Conversión)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Convertir FAQ estático en acordeón expandible con animación |
-| **Problema** | La sección FAQ tiene 8 preguntas pero todas visibles simultáneamente — hace la página larga y frustra al usuario que busca una respuesta específica. Maid Complete y Cleanster usan acordeones. |
-| **Descripción** | **Modificar sección `#faq` existente:**<br><br>1. **HTML restructurado:**<br>   ```html<br>   <section id="faq" class="section container" aria-labelledby="faq-heading"><br>     <div class="section-head"><br>       <p class="eyebrow">FAQ</p><br>       <h2 id="faq-heading">Preguntas frecuentes</h2><br>     </div><br>     <div class="faq-accordion" role="list"><br>       <details class="faq-item" role="listitem"><br>         <summary class="faq-question"><br>           <span class="faq-question-text">¿Cuánto cuesta la limpieza profunda de un sofá?</span><br>           <i class="fa-solid fa-chevron-down faq-chevron" aria-hidden="true"></i><br>         </summary><br>         <div class="faq-answer"><br>           <p>El servicio de limpieza profunda de sofás tiene un rango de precio entre $80.000 y $180.000 por unidad, dependiendo del tamaño, material y estado del mueble. La cotización final se realiza al evaluar el espacio.</p><br>         </div><br>       </details><br>       <!-- Más items --><br>     </div><br>   </section><br>   ```<br><br>2. **CSS accordion:**<br>   ```css<br>   .faq-item {<br>     border: 1.5px solid var(--color-border);<br>     border-radius: 12px;<br>     margin-bottom: 0.75rem;<br>     overflow: hidden;<br>   }<br>   .faq-item summary {<br>     padding: 1rem 1.25rem;<br>     cursor: pointer;<br>     font-weight: 600;<br>     display: flex;<br>     justify-content: space-between;<br>     align-items: center;<br>     list-style: none;<br>   }<br>   .faq-item summary::-webkit-details-marker { display: none; }<br>   .faq-item[open] .faq-chevron {<br>     transform: rotate(180deg);<br>   }<br>   .faq-answer {<br>     padding: 0 1.25rem 1rem;<br>     color: var(--color-muted);<br>     animation: slideDown 0.3s ease;<br>   }<br>   ``` |
-| **Impacto esperado** | Mejor UX móvil, reduce scroll, usuario encuentra respuesta más rápido, mejora time-on-site |
-| **Esfuerzo** | XS (2 horas — CSS + minimal JS para ::marker) |
-| **Agente recomendado** | Frontend |
-| **Referencias** | [3] NNGroup FAQ UX |
-| **Estado** | Nueva propuesta — mejora de UX sobre existente |
-| **Prioridad CEO** | **Media** — mejora UX con poco esfuerzo |
+| **Título** | Configurar WhatsApp Business Catalog con todos los servicios y precios |
+| **Problema** | El sitio tiene página de precios (pendiente de R89), pero WhatsApp es el canal principal de reservas. Sin catálogo en WhatsApp, el cliente debe navegar el sitio para ver servicios. |
+| **Descripción** | **En WhatsApp Business:** 1. **Configurar catálogo:** Ir a WhatsApp Business → Configuración → Catálogo → Agregar productos/servicios 2. **Agregar cada servicio:** - Imagen profesional del servicio - Nombre del servicio - Descripción corta - Precio base - Enlace al sitio para más detalles **Servicios a catalogar:** - Limpieza profunda de sofás ($80.000-$130.000) - Sanitización de colchones ($60.000-$100.000) - Mantenimiento de alfombras ($150.000-$250.000) - Limpieza de sillas de oficina ($25.000-$40.000) - Plan mensual corporativo (desde $400.000) - Gift Cards ($80.000, $150.000, $250.000) **Integración con el sitio:** Agregar botón "Ver catálogo en WhatsApp" en la página de precios que abre wa.me con el catálogo pre-cargado. |
+| **Impacto esperado** | El cliente puede ver servicios y precios directamente en WhatsApp y reservar sin salir de la app. Reduce fricción de conversión. |
+| **Esfuerzo** | S (3-4 horas — configurar catálogo + crear imágenes) |
+| **Agente recomendado** | Marketing / Frontend |
+| **Referencias** | [3] WhatsApp Business Catalog https://business.whatsapp.com/business-app/catalog |
+| **Estado** | Nueva propuesta — NO mencionada en R90 |
+| **Prioridad CEO** | **Media** — mejora conversión desde WhatsApp |
 
 ---
 
-### Propuesta 4: Sticky CTA Header en Mobile (MEDIUM PRIORITY)
+### Propuesta 4: YouTube Shorts — Video Marketing Strategy (MEDIUM PRIORITY — Adquisición)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Agregar CTA sticky de WhatsApp en mobile que aparece tras scroll |
-| **Problema** | En mobile, el usuario que scrollea hacia abajo pierde acceso rápido al CTA de reservas. Un sticky bar con WhatsApp aumenta conversiones. |
-| **Descripción** | **Nuevo componente sticky mobile:**<br><br>1. **HTML:**<br>   ```html<br>   <div class="sticky-cta-bar" id="sticky-cta" aria-label="Acceso rápido a contacto" hidden><br>     <a href="https://wa.me/573001234567" class="sticky-cta-btn"><br>       <i class="fa-brands fa-whatsapp" aria-hidden="true"></i><br>       <span>Reservar por WhatsApp</span><br>     </a><br>     <a href="#cotizador" class="sticky-cta-btn sticky-cta-btn--secondary"><br>       <i class="fa-solid fa-calculator" aria-hidden="true"></i><br>       <span>Cotizar</span><br>     </a><br>   </div><br>   ```<br><br>2. **JS para mostrar tras scroll:**<br>   ```javascript<br>   const stickyCta = document.getElementById('sticky-cta');<br>   let lastScroll = 0;<br>   window.addEventListener('scroll', () => {<br>     const currentScroll = window.scrollY;<br>     if (currentScroll > 600 && currentScroll > lastScroll) {<br>       stickyCta.removeAttribute('hidden');<br>     } else if (currentScroll < 300) {<br>       stickyCta.setAttribute('hidden', '');<br>     }<br>     lastScroll = currentScroll;<br>   }, { passive: true });<br>   ```<br><br>3. **CSS:**<br>   ```css<br>   .sticky-cta-bar {<br>     position: fixed;<br>     bottom: 0;<br>     left: 0;<br>     right: 0;<br>     z-index: 900;<br>     display: flex;<br>     gap: 0.5rem;<br>     padding: 0.75rem 1rem;<br>     background: var(--color-surface);<br>     box-shadow: 0 -4px 20px rgba(0,0,0,0.1);<br>   }<br>   .sticky-cta-btn {<br>     flex: 1;<br>     display: flex;<br>     align-items: center;<br>     justify-content: center;<br>     gap: 0.5rem;<br>     padding: 0.75rem;<br>     border-radius: 12px;<br>     font-weight: 600;<br>   }<br>   ``` |
-| **Impacto esperado** | Aumento de conversiones mobile (~5-10%), WhatsApp contacts más altos |
-| **Esfuerzo** | S (3 horas — HTML + CSS + JS) |
-| **Agente recomendado** | Frontend |
-| **Referencias** | [4] Sticky CTA mobile best practices |
-| **Estado** | Nueva propuesta — UX mobile |
-| **Prioridad CEO** | **Media** — alto impacto mobile dado que % tráfico mobile es alto |
+| **Título** | Crear serie de YouTube Shorts mostrando proceso de limpieza y resultados |
+| **Problema** | Serviclean tiene 8+ años de trayectoria y presencia establecida. Purity & Clean no tiene contenido de video que demuestre calidad. YouTube Shorts aparece en búsqueda de Google, dando exposición gratuita. |
+| **Descripción** | **Serie de 12 Shorts para el primer mes:** **Semana 1 — Proceso:** - "Así limpiamos un sofá sucio en 30 segundos" - "El secreto de la sanitización de colchones" - "Qué productos usamos (y por qué son seguros)" **Semana 2 — Resultados:** - "Antes y después: sofá de tela" - "Antes y después: colchón con ácaros" - "Transformación de alfombra corporativa" **Semana 3 — Tips:** - "5 tips para mantener tus sofás limpios" - "Cada cuánto sanitizar tu colchón" - "Errores comunes al limpiar muebles" **Semana 4 — Social proof:** - "Lo que dice un cliente satisfecho" (testimonio) - "Rutina de limpieza profesional" (time-lapse) - "Por qué elegir Purity & Clean" **SEO para YouTube:** - Título: "Limpieza de sofá Bogotá \| Purity & Clean" - Descripción: "Servicio profesional de limpieza de sofás en Bogotá. Contáctanos: WhatsApp +57-300-123-4567" - Tags: "limpieza sofás Bogotá", "sanitización colchones", "limpieza profesional Colombia" |
+| **Impacto esperado** | Adquisición de clientes por búsqueda de video. Diferenciación vs Serviclean. Contenido reusable para Instagram Reels y TikTok. |
+| **Esfuerzo** | M (8-10 horas para primeros 12 videos, o contratar producción) |
+| **Agente recomendado** | Content / Marketing |
+| **Referencias** | [4] YouTube Shorts Creator Academy https://creatoracademy.youtube.com/page/lesson/shorts-monetization |
+| **Estado** | Nueva propuesta — NO mencionada en R90 |
+| **Prioridad CEO** | **Media** — decisión de inversión en video |
 
 ---
 
-### Propuesta 5: Microinteracciones Mejoradas en Cards de Servicio (MEDIUM PRIORITY)
+### Propuesta 5: Google Business Profile — Servicios con Precios Estimados (MEDIUM PRIORITY — SEO)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Añadir hover effects más ricos y microinteracciones en service cards |
-| **Problema** | Las cards actuales tienen hover básico. Competidores como Cleanster tienen cards con scale + shadow más pronunciados. Mejorar esto aumenta engagement. |
-| **Descripción** | **Mejora en `css/style.css` para `.card` y `.searchable-item`:**<br><br>```css<br>.card {\n  transition:\n    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),\n    box-shadow 0.3s ease,\n    border-color 0.2s ease;\n}\n.card:hover {\n  transform: translateY(-8px) scale(1.02);\n  box-shadow: 0 20px 40px rgba(11, 113, 137, 0.15);\n  border-color: var(--color-primary);\n}\n.card:hover .btn {\n  background: var(--color-primary);\n  color: #fff;\n}\n\n/* Badge de "popular" en pricing cards */\n.pricing-card--plans {\n  position: relative;\n}\n.pricing-card--plans::before {\n  content: 'Más popular';\n  position: absolute;\n  top: -12px;\n  left: 50%;\n  transform: translateX(-50%);\n  background: var(--color-accent);\n  color: #fff;\n  font-size: 0.75rem;\n  font-weight: 700;\n  padding: 4px 12px;\n  border-radius: 20px;\n  white-space: nowrap;\n}\n``` |
-| **Impacto esperado** | Mayor engagement con las cards, más tiempo en página, más clicks en CTAs |
-| **Esfuerzo** | XS (1-2 horas — solo CSS) |
-| **Agente recomendado** | Frontend |
-| **Referencias** | [5] UI Design Card Hover Effects |
-| **Estado** | Nueva propuesta — CSS microinteractions |
-| **Prioridad CEO** | **Media** — bajo esfuerzo, mejora perceptual |
-
----
-
-### Propuesta 6: Rich Snippets Mejorados con FAQPage + HowTo (HIGH PRIORITY — SEO)
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Añadir Schema.org FAQPage completo y HowTo para cada servicio |
-| **Problema** | Purity ya tiene FAQ schema pero no está optimizado para rich results completos. Google muestra FAQ expandible en search — con preguntas optimizadas puede capturar más SERP real estate. |
-| **Descripción** | **Mejorar JSON-LD en `index.html`:**<br><br>1. **FAQPage expandido** (ya existe pero agregar más preguntas):<br>   ```json\n   {\n     "@context": "https://schema.org",\n     "@type": "FAQPage",\n     "mainEntity": [\n       /* existing 8 questions + 4 new */\n       {\n         "@type": "Question",\n         "name": "¿Cuánto dura el servicio de limpieza de sofá?",\n         "acceptedAnswer": {\n           "@type": "Answer",\n           "text": "El servicio de limpieza profunda de un sofá 3 cuerpos toma entre 45 y 90 minutos dependiendo del estado del mueble. El secado completo requiere entre 4 y 6 horas."\n         }\n       },\n       {\n         "@type": "Question",\n         "name": "¿Puedo cancelar o reprogramar mi cita?",\n         "acceptedAnswer": {\n           "@type": "Answer",\n           "text": "Sí, puedes cancelar o reprogramar hasta 24 horas antes de tu cita sin costo adicional. Contáctanos por WhatsApp para hacer el cambio."\n         }\n       },\n       {\n         "@type": "Question",\n         "name": "¿Los productos son seguros para bebés?",\n         "acceptedAnswer\": {\n           "@type": "Answer",\n           "text": "Sí, usamos productos certificados que son seguros para hogares con bebés, niños y mascotas. Todos nuestros procesos cumplen con normas de higiene."\n         }\n       },\n       {\n         "@type": "Question",\n         "name": "¿Ofrecen garantía en el servicio?",\n         "acceptedAnswer\": {\n           "@type": "Answer",\n           "text": "Sí, ofrecemos garantía de satisfacción del 200%. Si no estás satisfecho con el resultado, devolvemos tu dinero o reamos el servicio sin costo."\n         }\n       }\n     ]\n   }\n   ```<br><br>2. **HowTo schema para "Cómo limpiar tu sofá":**<br>   ```json\n   {\n     "@context": "https://schema.org",\n     "@type": "HowTo",\n     "name": "Cómo mantener tu sofá limpio entre servicios profesionales\",\n     "step\": [\n       {\n         "@type": \"HowToStep\",\n         \"text\": \"Aspira tu sofá al menos una vez por semana usando el accesorio de tapicería.\"\n       },\n       {\n         "@type\": \"HowToStep\",\n         \"text\": \"Aplica el kit eco protector de Purity & Clean cada 3 meses.\"\n       },\n       {\n         "@type\": \"HowToStep\",\n         \"text\": \"Evita comer sobre el sofá para prevenir manchas de comida.\"\n       }\n     ]\n   }\n   ``` |
-| **Impacto esperado** | Rich snippets en Google (FAQ expandible), más CTR en search, posiciona a Purity como autoridad en limpieza |
-| **Esfuerzo** | S (2-3 horas — JSON-LD + contenido) |
-| **Agente recomendado** | Frontend + Content |
-| **Referencias** | [6] Google Search Central FAQ Schema [7] HowTo Schema |
-| **Estado** | Nueva propuesta — SEO enhancement |
-| **Prioridad CEO** | **Alta** — impacto en SEO sin código complejo |
+| **Título** | Configurar sección de servicios con precios base en Google Business Profile |
+| **Problema** | Los competidores aparecen en Google Search con información de precios. Purity & Clean no tiene esta feature, perdiendo clicks de usuarios que comparan. A diferencia de FAQPage, los servicios SÍ generan rich results. |
+| **Descripción** | **En Google Business Profile → Servicios → Agregar servicio:** **Limpieza profunda de sofás** - Sofá 2 cuerpos: desde $80.000 COP - Sofá 3 cuerpos: desde $100.000 COP - Sofá 4+ cuerpos: desde $130.000 COP - Tiempo estimado: 2-3 horas **Sanitización de colchones** - Colchón individual: desde $60.000 COP - Colchón doble: desde $80.000 COP - Colchón king: desde $100.000 COP - Tiempo estimado: 1-2 horas **Mantenimiento de alfombras** - Hasta 10m²: desde $150.000 COP - 10-25m²: desde $200.000 COP - Más de 25m²: cotización personalizada **Plan mensual corporativo** - Contrato mensual: desde $400.000 COP - Incluye: 4 visitas mensuales, 10% descuento **Gift Cards** - $80.000 COP (1 limpieza básica) - $150.000 COP (1 limpieza completa) - $250.000 COP (pack premium) |
+| **Impacto esperado** | Precios visibles en Google Search aumentan CTR. Los rich results de servicios atraen más clientes cualificados. Reducción de consultas de "cuánto cuesta" en WhatsApp. |
+| **Esfuerzo** | S (2-3 horas — configurar servicios + precios) |
+| **Agente recomendado** | SEO / Marketing |
+| **Referencias** | [5] Google Business Profile Services https://support.google.com/business/answer/9301513 |
+| **Estado** | Nueva propuesta — NO mencionada en R90 |
+| **Prioridad CEO** | **Media** — SEO local con impacto directo en conversión |
 
 ---
 
@@ -189,30 +222,11 @@ R91 se enfoca en **cierre de features pendientes de R89** y **mejoras de UX/anim
 
 | # | Propuesta | Impacto | Esfuerzo | Prioridad | Tipo |
 |---|-----------|---------|----------|-----------|------|
-| 1 | **Exit Intent Popup** | Conversión | S (3-4h) | **Alta** | Cierre R89 |
-| 2 | **Cómo Funciona** | Confianza + Conversión | S (4-5h) | **Alta** | UX |
-| 3 | **Schema FAQ + HowTo** | SEO | S (2-3h) | **Alta** | SEO |
-| 4 | **Sticky CTA Mobile** | Conversión Mobile | S (3h) | **Media** | UX Mobile |
-| 5 | **FAQ Accordion** | UX | XS (2h) | **Media** | UX |
-| 6 | **Microinteracciones Cards** | Engagement | XS (1-2h) | **Media** | UX |
-
----
-
-## Comparación R90 vs R91
-
-| Aspecto | R90 | R91 |
-|---------|-----|-----|
-| **Foco** | Modelo de negocio B2B (API, Gift Cards, Corporate) | UX/Animaciones/SEO (features pendientes) |
-| **Tipo propuestas** | Estratégicas/Transformacionales | Tácticas/Increamentales |
-| **Esfuerzo promedio** | S-L | XS-S |
-| **Impacto** | Negocio a largo plazo | Conversión inmediata |
-| **Competidores referencia** | Cleanster API, Maid Complete Gift Cards | Maid Complete UX, OptinMonster |
-| **Exit Intent Popup** | No | **Sí — cierre R89** |
-| **Proceso visual** | No | **Sí — nuevo** |
-| **Schema SEO** | No | **Sí — FAQ + HowTo** |
-| **Sticky CTA Mobile** | No | **Sí — nuevo** |
-
-**R91 no repite ninguna propuesta de R90. Las 6 propuestas abordan gaps de UX y SEO que R90 no cubrió.**
+| 1 | GBP Q&A Automation | SEO Local (Visibilidad) | S (2-3h) | **Alta** | SEO |
+| 2 | GBP Servicios con Precios | SEO Local (CTR) | S (2-3h) | **Alta** | SEO |
+| 3 | WhatsApp Business Catalog | Conversión (WhatsApp) | S (3-4h) | **Media** | Conversión |
+| 4 | GBP Weekly Posts | SEO Local (Ranking) | S (1-2h/sem) | **Media** | SEO |
+| 5 | YouTube Shorts Strategy | Adquisición (Video) | M (8-10h) | **Media** | Marketing |
 
 ---
 
@@ -220,42 +234,43 @@ R91 se enfoca en **cierre de features pendientes de R89** y **mejoras de UX/anim
 
 | Propuesta | Depende de | Bloqueador |
 |-----------|------------|------------|
-| Exit Intent Popup | Ninguno | — |
-| Cómo Funciona | Ninguno | — |
-| Schema FAQ + HowTo | Content (nuevas preguntas FAQ) | CEO debe validar contenido |
-| Sticky CTA Mobile | Ninguno | — |
-| FAQ Accordion | Ninguno | — |
-| Microinteracciones | Ninguno | — |
+| GBP Q&A | Perfil GBP verificado | CEO debe confirmar acceso a GBP |
+| GBP Servicios | Perfil GBP verificado | CEO debe confirmar acceso a GBP |
+| WhatsApp Catalog | WhatsApp Business instalado | CEO debe configurar WhatsApp Business |
+| GBP Posts | Perfil GBP verificado | CEO debe confirmar acceso a GBP |
+| YouTube Shorts | Decisión de inversión | CEO debe aprobar presupuesto de video |
 
 ---
 
-## Nota sobre Evolución del Proyecto
+## Comparación R90 vs R91
 
-Después de 91 rondas, Purity & Clean tiene una base técnica sólida. R91 se enfoca en:
+| Aspecto | R90 | R91 |
+|---------|-----|-----|
+| **Foco** | Modelo de negocio (API, Gift Cards, B2B) | Google Business Profile + WhatsApp |
+| **Tipo propuestas** | Estratégico/Producto | SEO Local + Conversión |
+| **Esfuerzo promedio** | S-L | S-M |
+| **Impacto** | Transformacional (largo plazo) | Inmediato (corto plazo) |
+| **GBP Q&A** | No | **Sí — nueva** |
+| **GBP Posts** | No | **Sí — nueva** |
+| **GBP Servicios** | No | **Sí — nueva** |
+| **WhatsApp Catalog** | No | **Sí — nueva** |
+| **YouTube Shorts** | No | **Sí — nueva** |
 
-1. **Cerrar features prometidas** — Exit Intent Popup de R89
-2. **Mejoras de UX probadas** — Proceso visual, Accordion, Sticky CTA
-3. **SEO técnico** — Schema.org FAQ + HowTo
-
-A diferencia de R90 (modelos de negocio), R91 propone **cambios de implementación inmediata** que no requieren decisiones estratégicas del CEO.
+**R91 no repite ninguna propuesta de R90.** Las 5 propuestas abordan presencia en Google (SEO local) y WhatsApp, canales que R90 no cubrió.
 
 ---
 
 ## Fuentes
 
-[1] OptinMonster. "Exit Intent Popup Statistics." https://optinmonster.com (2026)
+[1] Google Business Profile Q&A. https://support.google.com/business/answer/3024641
 
-[2] Maid Complete. "The Maid Complete Process." https://www.maidcomplete.com (2026)
+[2] Google Business Profile Posts. https://support.google.com/business/answer/7680259
 
-[3] NNGroup. "FAQ UX Design Best Practices." https://nngroup.com (2026)
+[3] WhatsApp Business Catalog. https://business.whatsapp.com/business-app/catalog
 
-[4] CXL Institute. "Sticky CTA Mobile Best Practices." https://cxl.com (2026)
+[4] YouTube Shorts Creator Academy. https://creatoracademy.youtube.com/page/lesson/shorts-monetization
 
-[5] CSS-Tricks. "Card Hover Effects." https://css-tricks.com (2026)
-
-[6] Google. "FAQ Schema Markup Guide." https://developers.google.com/search/docs/appearance/structured-data/faqpage (2026)
-
-[7] Google. "HowTo Schema." https://developers.google.com/search/docs/appearance/structured-data/how-to (2026)
+[5] Google Business Profile Services. https://support.google.com/business/answer/9301513
 
 ---
 
