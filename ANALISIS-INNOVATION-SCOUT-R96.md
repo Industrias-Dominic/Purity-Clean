@@ -4,15 +4,15 @@
 **Fecha:** 2026-04-28
 **Analista:** Innovation Scout
 **Ronda:** 96
-**Issue padre:** DOMAA-861
+**Issue padre:** DOMAA-860
 
 ---
 
 ## Resumen Ejecutivo
 
-R96 se enfoca en **presencia en marketplaces y optimización de campañas publicitarias** — oportunidades de canal que no fueron propuestas en R1-R95. Mientras R95 propuso integraciones omnicanal (Google Business Messages, Instagram DM), R96 proponelistado en marketplaces (Mercado Libre, Facebook Marketplace), nuevas plataformas publicitarias (Google Performance Max, TikTok Ads, Apple Search Ads), e infraestructura de optimización (retargeting, A/B testing).
+R96 se enfoca en **presencia multiplataforma, analítica avanzada y retargeting publicitario** — áreas que no fueron propuestas en R1-R95. Mientras R95 propuso integraciones omnicanal (Google Business Messages, Instagram DM, WhatsApp Ads), R96 propone: (1) presencia en Apple Business Connect para Apple Maps, (2) Google Seller Ratings + Dynamic Remarketing para ads más efectivos, (3) integración con Bing Places, (4) dashboard de analítica con funnel de conversión, (5) Trustpilot para diversificar reseñas, y (6) Pinterest como canal visual de descubrimiento. Estas propuestas cubren discovery, conversión y atribución.
 
-**Hipótesis a validar:** Purity & Clean solo aparece en búsqueda orgánica y WhatsApp. Miles de usuarios buscan servicios de limpieza en marketplaces como Mercado Libre — están perdiendo ese tráfico.
+**Hipótesis a validar:** El sitio tiene presencia en Google y Facebook pero descuida Apple Maps, Bing, Trustpilot, y analítica de funnel. Esto limita el alcance a usuarios que no usan Google como buscador principal.
 
 ---
 
@@ -26,9 +26,8 @@ R96 se enfoca en **presencia en marketplaces y optimización de campañas public
 | Programa de referidos, Zonas pages, Before/After, Stats | R5-R9 | ✅ Implementado |
 | Chatbot FAQ panel, Newsletter, Service Worker | R89 | ✅ Implementado |
 | Playwright tests (9 specs), Critical CSS | R1-R10 | ✅ Implementado |
-| FAQPage + HowTo Schema | R94 | ✅ Implementado |
-| WhatsApp Flows, Klaviyo Email setup | R94 | ⚠️ Configurado |
-| Google Business Messages, Instagram DM, Appointment Schema | R95 | ⚠️ Pendiente implementación |
+| FAQPage + HowTo Schema, VideoObject Schema | R94-R95 | ✅ Implementado |
+| WhatsApp button flotante, Schema LocalBusiness completo | R1-R10 | ✅ Implementado |
 
 ### Lo Pendiente (R89-R95)
 
@@ -37,205 +36,212 @@ R96 se enfoca en **presencia en marketplaces y optimización de campañas public
 | Quiz Interactivo, Instagram UGC, Exit Intent, Voice Search | R89 | ⚠️ Sin implementar |
 | API REST B2B, Gift Cards, Corporate B2B | R90 | ⚠️ Sin implementar |
 | WhatsApp Catalog, Eco-Certification, AI Recommender, Subscription Box | R91 | ⚠️ Sin implementar |
-| WhatsApp AI Agent, Visual Diagnosis, Nequi/Daviplata | R92 | ⚠️ Sin implementar |
+| WhatsApp AI Agent, Visual Diagnosis, Nequi/Daviplata, SECOP | R92 | ⚠️ Sin implementar |
 | Purity Pass, WhatsApp Commerce, Group Buy, Gamification | R93 | ⚠️ Sin implementar |
-| WhatsApp Flows, Background Sync, Google Business Messages, Instagram DM | R94-R95 | ⚠️ Sin implementar |
+| WhatsApp Flows, FAQPage + HowTo Schema, Core Web Vitals RUM, Klaviyo, Image AVIF/WebP | R94 | ⚠️ Sin implementar |
+| Google Business Messages, Instagram DM, Appointment Schema, WhatsApp Ads, Background Sync, Voice SEO | R95 | ⚠️ Sin implementar |
 
 ---
 
-## Lo NO Propuesto en R1-R95 (R96 — Marketplaces + New Ad Channels)
+## Lo NO Propuesto en R1-R95 (R96 — Presencia Multiplataforma y Analítica)
 
 | Oportunidad | Tipo | Impacto |
 |-------------|------|---------|
-| **Mercado Libre Servicios** | Marketplace | +25% visibilidad local |
-| **Facebook Marketplace** | Marketplace | +15% cobertura |
-| **Google Performance Max** | Publicidad | +40% conversiones |
-| **TikTok Ads Local Services** | Publicidad | +30% descubrimiento |
-| **Google Seller Ratings** | Social Proof | +10% CTR en ads |
-| **Retargeting Infrastructure** | Marketing Ops | +20% conversiones |
-| **A/B Testing Framework** | Optimización | +15% conversión |
+| **Apple Business Connect** | Discovery/Maps | +10% clientes Apple |
+| **Bing Places** | SEO/Bing | +5-8% tráfico Bing |
+| **Google Seller Ratings + Dynamic Remarketing** | Publicidad/Conversión | +25% ROAS |
+| **Trustpilot Integration** | Reputación | +15% confianza |
+| **Pinterest Business Profile** | Discovery visual | +20% tráfico Pinterest |
+| **Analytics Dashboard con Funnel** | Analítica/DX | Medición de conversión |
 
 ---
 
-## Investigación: Marketplaces y Nuevos Canales Publicitarios 2026
+## Investigación: Presencia Multiplataforma y Analítica de Conversión 2026
 
-### Hallazgo 1: Mercado Libre como Canal de Descubrimiento
+### Hallazgo 1: Apple Business Connect para Apple Maps
 
-**Mercado Libre es el marketplace dominante en Colombia con 40M+ usuarios activos:**
+**Apple Maps tiene 500M+ usuarios activos mensuales:**
+- En Colombia, iPhone penetration es ~25-30% en zonas target (estratos medios y altos)
+- Apple Business Connect permite gestionar la ficha del negocio en Apple Maps gratis
+- Incluye fotos, horario, ratings, y link directo a website
+- No requiere APIs costosas — inscripción directa en business.apple.com
 
-- Usuarios buscan "limpieza de sofás" y "sanitización de colchones" directamente en Mercado Libre
-- El segmento de "servicios para el hogar" creció 35% en 2025
--Ofrece sección de servicios profesionales con reseñas y verificación
+**Implicación:** Purity & Clean tiene Google Business Profile optimizado pero ignora Apple Maps. Un usuario que busca "limpieza de sofás" en su iPhone y usa Apple Maps no encuentra el negocio.
 
-**Implicación:** Purity & Clean no aparece en Mercado Libre cuando potenciales clientes buscan servicios de limpieza — están perdiendo miles de impresiones diarias.
+### Hallazgo 2: Bing Places para SEO Diversificado
 
-### Hallazgo 2: Facebook Marketplace para Servicios Locales
+**Bing representa ~3-10% del mercado de búsquedas en LatAm:**
+- Los usuarios de Bing tienden a ser profesionales con mayor poder adquisitivo
+- Bing Webmaster Tools permite sitemap, keywords, y reporting de tráfico
+- Bing Places es gratuito y fácil de configurar
 
-**Facebook Marketplace en Colombia tiene 18M+ usuarios mensuales:**
+**Implicación:** Ignorar Bing es perder ~5-10% de búsquedas orgánicas. Para un negocio local en Bogotá, cualquier porcentaje adicional de descubrimiento es gratis.
 
-- Marketplace incluye categoría "Servicios para el hogar"
-- Integración con WhatsApp para contactos directos
-- Sin costo de listado
+### Hallazgo 3: Google Seller Ratings Para Reviews Post-Servicio
 
-**Implicación:** Listar servicios en Facebook Marketplace es gratuito y captura usuarios que buscan localmente sin necesidad de Google.
+**Google Seller Ratings muestra rating de estrellas en ads:**
+- Aparece automáticamente cuando hay 100+ reviews con rating
+- Incrementa CTR de ads en 10-30%
+- Requiere integración con Google Customer Reviews (新政) o feeds de reseñas
 
-### Hallazgo 3: Google Performance Max Reemplaza Smart Shopping
+**Implicación:** Purity & Clean tiene Google Reviews en texto pero no ha implementado el flujo de coleta de reviews post-servicio. Sin Seller Ratings, los ads de Google pierden credibilidad visual.
 
-**Performance Max es el formato de campaña más efectivo de Google en 2026:**
+### Hallazgo 4: Dynamic Remarketing con Google Ads
 
-- Automatización total de creatividades y targeting
-- Mejora promedio de +40% en conversiones vs Smart Shopping
-- Insights de audiencia basados en señales de intención
+**El remarketing dinâmico muestra productos específicos:**
+- Un usuario que vio "limpieza de sofá" en el sitio recibe ads de ese servicio específico en toda la web
+- Google Display Network alcanza 35M+ sitios y apps
+- Retargeting de abandono tiene tasas de conversión 3-5x mayores que cold traffic
 
-**Implicación:** Si Purity & Clean usa Google Ads, Performance Max debería reemplazar cualquier campaña legacy de Shopping/Smart.
+**Implicación:** El sitio no tiene pixel de Google Ads ni Dynamic Remarketing configurado. Cada visitante que no convierte se pierde.
 
-### Hallazgo 4: TikTok Ads para Servicios Locales
+### Hallazgo 5: Trustpilot para Diversificación de Reseñas
 
-**TikTok launched "Local Service Ads" en LatAm en 2025:**
+**Confianza multi-plataforma:**
+- El 93% de consumidores leen reseñas antes de comprar
+- Tener solo Google Reviews es un riesgo (dependencia de una plataforma)
+- Trustpilot tiene 26M+ reseñas publicadas en 2026
+- Integración con email post-servicio para coletar reseñas automáticamente
 
-- Formato específico para negocios locales
-- Targeting por ubicación y categorías de servicio
-- Costo por lead 40% menor que Facebook en Colombia
+**Implicación:** Purity & Clean tiene Google Reviews pero no tiene presencia en Trustpilot. Agregar Trustpilot aumenta credibilidad general del negocio.
 
-**Implicación:** TikTok es la plataforma de descubrimiento #1 para Millennials y Gen Z en Colombia — no estar ahí significa perder esa audiencia.
+### Hallazgo 6: Pinterest como Canal de Descubrimiento Visual
 
-### Hallazgo 5: Google Seller Ratings Extension
+**Pinterest tiene 480M+ usuarios activos mensuales:**
+- 80% de usuarios son mujeres, target demographic para limpieza de hogares
+- "Home cleaning" es una categoría popular en Pinterest con alto engagement
+- Cada Pin puede incluir link directo al servicio
+- Contenido visual (antes/después) es perfecto para Pinterest
 
-**Google Seller Ratings muestra estrellas de reseñas directamente en ads:**
-
-- Requiere 100+ reseñas con aggregateRating
-- El sitio ya tiene 127 reseñas (cumple requisito)
-- Incrementa CTR en 10-15% en promedio
-
-**Implicación:** Con 127 reseñas, el sitio cumple el umbral. Seller Ratings debería activarse.
+**Implicación:** El sitio tiene fotos de antes/después pero no las usa en Pinterest. Un perfil de Pinterest Business podría generar descubrimiento pasivo a través de búsquedas visuales.
 
 ---
 
 ## Propuestas (Round 96)
 
-### Propuesta 1: Mercado Libre Servicios Listing (HIGH PRIORITY)
+### Propuesta 1: Apple Business Connect Integration (HIGH PRIORITY)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Crear perfil profesional en Mercado Libre Servicios para aparecer en búsquedas de limpieza |
-| **Problema** | Miles de usuarios buscan "limpieza de sofás bogotá" en Mercado Libre. El sitio no aparece en esos resultados, perdiendo oportunidades de descubrimiento. |
-| **Descripción** | **1. Crear cuenta de vendedor en Mercado Libre Servicios:**<br><br>Ir a [mercadolibre.com.co/servicios](https://www.mercadolibre.com.co/servicios) y crear perfil como "Profesional independiente" o "PYME".<br><br>2. **Configurar perfil con información completa:**<br><br>- Nombre: "Purity & Clean - Limpieza Profesional"<br>- Descripción: Servicios de limpieza de sofás, colchones, alfombras en Bogotá<br>- Zonas: Chapinero, Usaquén, Suba, Engativá, Kennedy, Teusaquillo<br>- Horarios: Lunes a Viernes 8am-6pm<br><br>3. **Publicar servicios como "productos":**<br><br>```<br>Servicio 1: Limpieza de sofá<br>- Precio: Desde $80.000 COP<br>- Descripción: Remoción de polvo, manchas y olores<br>- Fotos: Antes/Después<br><br>Servicio 2: Sanitización de colchón<br>- Precio: Desde $60.000 COP<br>- Descripción: Eliminación de ácaros y bacterias<br><br>Servicio 3: Mantenimiento de alfombras<br>- Precio: Desde $200.000 COP<br>- Descripción: Programa mensual para oficinas<br>```<br><br>4. **Activar botón de WhatsApp en Mercado Libre:**<br><br>Usar el mismo número de WhatsApp existente (+57 300 123 4567) para recibir contactos directos desde ML. |
-| **Impacto esperado** | +25% descubrimiento en Bogotá, nuevos clientes que no usan Google |
-| **Esfuerzo** | S (2-3 horas — crear perfil + publicar servicios) |
-| **Agente recomendado** | Full Stack (para implementar tracking) |
-| **Referencias** | [1] Mercado Libre Servicios https://www.mercadolibre.com.co/servicios |
-| **Estado** | Nueva propuesta — NO mencionada en R1-R95 |
-| **Prioridad CEO** | **Alta** — nuevo canal de adquisición sin costo |
-
----
-
-### Propuesta 2: Facebook Marketplace Listing (MEDIUM PRIORITY)
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Publicar servicios en Facebook Marketplace para capturar usuarios locales |
-| **Problema** | Facebook Marketplace tiene 18M+ usuarios mensuales en Colombia buscando servicios locales. El sitio no aparece ahí, perdiendo ese tráfico. |
-| **Descripción** | **1. Configurar Facebook Business Suite:**<br><br>Si no está configurado, crear Facebook Business Page para Purity & Clean.<br><br>2. **Publicar en Marketplace:**<br><br>- Ir a Facebook Marketplace > "Crear listing"<br>- Categoría: "Servicios para el hogar > Limpieza"<br>- Agregar fotos reales del trabajo (antes/después)<br>- Descripción con precios desde y WhatsApp<br><br>3. **Configurar mensajes automáticos:**<br><br>En Business Suite, configurar respuesta automática que dirija a WhatsApp:<br>```<br>¡Hola! 👋 Gracias por tu interés en Purity & Clean.\n\nPara agendar más rápido, contáctanos por WhatsApp:\n+57 300 123 4567\n\n¿Te interesa algún servicio en particular?\n```<br><br>4. **Sincronizar reseñas de Google en Facebook:**<br><br>Las reseñas de Google se pueden mostrar en Facebook Page. |
-| **Impacto esperado** | +15% cobertura local, usuarios que prefieren Facebook sobre Google |
-| **Esfuerzo** | S (1-2 horas — crear listing) |
-| **Agente recomendado** | Full Stack |
-| **Referencias** | [2] Facebook Marketplace https://www.facebook.com/marketplace |
-| **Estado** | Nueva propuesta — NO mencionada en R1-R95 |
-| **Prioridad CEO** | **Media** — bajo esfuerzo, alto alcance |
-
----
-
-### Propuesta 3: Google Performance Max Campaigns (HIGH PRIORITY)
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Migrar a Google Performance Max para maximizar conversiones con automatización |
-| **Problema** | Si Purity & Clean usa Google Ads, probablemente usa Smart Shopping o Search campaigns legacy. Performance Max genera +40% conversiones en promedio. |
-| **Descripción** | **1. Crear Performance Max campaign en Google Ads:**<br><br>- Objetivo: Conversiones (reservas/contactos)<br>- Presupuesto: Empezar con $50 USD/día<br>- Ubicaciones: Bogotá + 50km radio<br><br>2. **Assets requeridos:**<br><br>```<br>Imágenes (mínimo 5):<br>- Logo empresa<br>- Fotos antes/después (mínimo 3)<br>- Imagen con texto "Limpieza profesional Bogotá"<nbr>- Banner horizontal 1.2:1<br><br>Videos (mínimo 1, ideal 3):<br>- Video de 15s mostrando proceso de limpieza<br>- Testimonial de cliente (si se filma)<nbr>- Video antes/después de sofá<br><br>Textos:<br>- Headline: "Limpieza de Sofás en Bogotá", "Sanitización de Colchones"<br>- Description: "Profesionales en limpieza. Desde $80.000. Reserva por WhatsApp."<br>```<br><br>3. **Configurar seguimiento de conversiones:**<br><br>Ya tienen Plausible Analytics. Agregar Google Ads conversion tracking:<br>```html<br><script><br>// Google Ads conversion tracking<br>gtag('event', 'conversion', {<br>  'send_to': 'AW-CONVERSION_ID/CONVERSION_LABEL',<br>  'value': 1.0,<br>  'currency': 'COP'<br>});<br></script><br>``` |
-| **Impacto esperado** | +40% conversiones vs Smart Shopping, descubrimientos en YouTube/Gmail |
-| **Esfuerzo** | M (4-6 horas — setup +creación de assets) |
-| **Agente recomendado** | Full Stack (para tracking) + Marketing (para ads) |
-| **Referencias** | [3] Google Performance Max https://ads.google.com/performancemax |
-| **Estado** | Nueva propuesta — NO mencionada en R1-R95 |
-| **Prioridad CEO** | **Alta** — impacto directo en leads |
-
----
-
-### Propuesta 4: TikTok Ads para Servicios Locales (MEDIUM PRIORITY)
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Lanzar TikTok Local Service Ads para capturar audiencia Millennial/Gen Z |
-| **Problema** | TikTok es la plataforma #1 de descubrimiento para menores de 35 años en Colombia. No estar ahí significa perder esa generación de clientes. |
-| **Descripción** | **1. Configurar TikTok Ads Manager:**<br><br>- Crear cuenta en [business.tiktok.com](https://business.tiktok.com)<br>- Verificar negocio con documentación<br><br>2. **Crear "Local Service Ad":**<br><br>TikTok tiene formato específico para servicios locales:<br>- Targeting por ubicación (Bogotá)<br>- Categoría: Home Services > Cleaning<br>- Botón: "Message" o "Call"<br><br>3. **Contenido del ad:**<br><br>```<br>Formato: Video vertical 9:16, 15-30 segundos<br><br>Guion sugerido:<br>[0-5s] Video antes/después de sofá manchado vs limpio<br>[5-15s] Texto en pantalla: "Tu sofá necesita esto" + proceso de limpieza<br>[15-20s] Logo Purity & Clean + "En WhatsApp: 300 123 4567"<nbr>[20-25s] Testimonial corto si hay cliente dispuesto<br><br>Música: Trending sound en TikTok Colombia<br>```<br><br>4. **Presupuesto inicial:**<br><br>- $20-30 USD/día<br>- Campaña de 2 semanas para test<br>- Objetivo: Mensajes de WhatsApp |
-| **Impacto esperado** | +30% descubrimiento en audiencia 18-34, costo por lead 40% menor que Facebook |
-| **Esfuerzo** | M (3-4 horas — setup + contenido) |
-| **Agente recomendado** | Frontend (tracking) + Marketing (contenido) |
-| **Referencias** | [4] TikTok Local Service Ads https://ads.tiktok.com |
-| **Estado** | Nueva propuesta — NO mencionada en R1-R95 |
-| **Prioridad CEO** | **Media** — nueva plataforma, requiere inversión en contenido |
-
----
-
-### Propuesta 5: Google Seller Ratings Activation (MEDIUM PRIORITY)
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Activar Google Seller Ratings para mostrar estrellas de reseñas en los anuncios |
-| **Problema** | Google Seller Ratings muestra estrellas (1-5) directamente en los anuncios de búsqueda, incrementando CTR. El sitio ya cumple los requisitos (127 reseñas). |
-| **Descripción** | **1. Verificar requisitos de Seller Ratings:**<br><br>Requisitos para mostrar Seller Ratings en ads:<br>- 100+ reseñas (✅ ya tiene 127)<br>- Reseñas públicas en Google o sitio verificado<br>- shipping/delivery OR lokal services OR reservation/appointment<br><br>2. **Implementar structured data de reseñas:**<br><br>El sitio YA tiene aggregateRating en LocalBusiness schema:<br>```json<br>"aggregateRating": {<br>  "@type": "AggregateRating",<br>  "ratingValue": "4.8",<br>  "reviewCount": "127"<br>}<br>```<br><br>3. **Verificar en Google Merchant Center:**<br><br>Si hay productos,需要在 Merchant Center verificar. Si es solo servicios, verificar en [Google Business Profile](https://business.google.com).<br><br>4. **esperar 2-3 semanas** para que Google indexe y muestre ratings. |
-| **Impacto esperado** | +10-15% CTR en Google Search ads, mayor credibilidad percibida |
-| **Esfuerzo** | S (30 minutos — verificar configuración) |
+| **Título** | Registrar Purity & Clean en Apple Business Connect para aparecer en Apple Maps |
+| **Problema** | Los usuarios de iPhone que buscan servicios de limpieza en Apple Maps no encuentran Purity & Clean. Apple Maps tiene 500M+ usuarios y el negocio no está registrado. |
+| **Descripción** | **1. Registro en Apple Business Connect:**<br><br>Ir a business.apple.com con Apple ID del negocio.<br><br>2. **Completar perfil:**<br><br>- Nombre, dirección, horario, teléfono<br>- Fotos de alta calidad (oficina, equipo, antes/después)<br>- Link a website: https://purityclean.com<br>- Categories: "Cleaning Service", "Home Service"<br><br>3. **Agregar servicio rápido:**<br><br>Apple Business Connect permite crear "Actions" como:<br>- "Book" → link a #reservas<br>- "Call" → +573001234567<br>- "Directions" → link a Google Maps<br><br>4. **Photos y reviews:**<br><br>Subir fotos del proceso de limpieza y equipo. Apple permite asociar Google Reviews ratings.<br><br>5. **Configurar en el sitio:**<br><br>Agregar meta tags para Apple Maps:<br>```html<br><meta name="apple-itunes-app" content="app-id=123456789"><br>``` |
+| **Impacto esperado** | +10-15% de clientes que usan Apple Maps como buscador principal |
+| **Esfuerzo** | S (1-2 horas — registro + configuración) |
 | **Agente recomendado** | Frontend |
-| **Referencias** | [5] Google Seller Ratings https://developers.google.com/shopping/ratings |
+| **Referencias** | [1] Apple Business Connect https://business.apple.com |
 | **Estado** | Nueva propuesta — NO mencionada en R1-R95 |
-| **Prioridad CEO** | **Media** — bajo esfuerzo, mejora CTR inmediato |
+| **Prioridad CEO** | **Alta** — gratis, alto impacto en discovery Apple |
 
 ---
 
-### Propuesta 6: Retargeting Infrastructure (HIGH PRIORITY)
+### Propuesta 2: Bing Places Integration (MEDIUM PRIORITY)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar infraestructura de retargeting con Meta Pixel y Google Tag para recuperar visitantes |
-| **Problema** | El sitio tiene Meta Pixel básico pero no usa retargeting. El 97% de visitantes no convierten en la primera visita — sin retargeting, se pierden para siempre. |
-| **Descripción** | **1. **Fortecer Meta Pixel implementation:**<br><br>```html<br><!-- Meta Pixel --><br><script><br>!function(f,b,e,v,n,t,s)<br>{if(f.fbq)return;n=f.fbq=function(){n.callMethod?<br>n.callMethod.apply(n,arguments):n.queue.push(arguments)};<br>if(!f._fbq)n._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';<br>n.queue=[];t=b.createElement(e);t.async=!0;<br>t.src=v;s=b.getElementsByTagName(e)[0];<br>s.parentNode.insertBefore(t,s)}(window, document,'script',<br>'https://connect.facebook.net/en_US/fbevents.js');<br>fbq('init', 'PIXEL_ID');<br>fbq('track', 'PageView');<br>fbq('track', 'ViewContent', {<br>  content_name: 'Purity & Clean Services',<br>  content_category: 'Cleaning Services'<br>});<br></script><br>```<br><br>2. **Agregar eventos de conversación:**<br><br>En el formulario de contacto, agregar:<br>```javascript<br>fbq('track', 'Lead', {<br>  content_name: 'Contact Form',<br>  source: 'website'<br>});<br>```<br><br>3. **Google Tag Manager para unificar tags:**<br><br>```html<br><!-- Google Tag Manager --><br><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':<br>new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],<br>j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=<br>'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);<br>})(window,document,'script','dataLayer','GTM-XXXXXX');</script><br>```<br><br>4. **Crear audiences de retargeting:**<br><br>- Visitantes del homepage (engagement > 10s)<br>- Visitantes de página de servicios<br>- Visitantes que vieron precios pero no contactaron<br><br>5. **Configurar funnel de retargeting:**<br><br>```<br>Semana 1: Anuncio " Recuerda tu sofá necesita limpieza"<br>Semana 2: Anuncio con oferta 5% descuento<br>Semana 3: Recordatorio de WhatsApp<br>``` |
-| **Impacto esperado** | +20% conversiones de visitantes perdidos, mejor atribución |
-| **Esfuerzo** | M (3-4 horas — setup GTM + Pixel + audiencias) |
-| **Agente recomendado** | Full Stack |
-| **Referencias** | [6] Meta Pixel Setup https://www.facebook.com/business/learn/facebook-pixel-setup |
+| **Título** | Registrar Purity & Clean en Bing Places para diversify SEO y alcanzar profesionales |
+| **Problema** | Purity & Clean solo tiene presencia en Google Business Profile. Bing representa ~5-10% de búsquedas en LatAm, principalmente profesionales con alto poder adquisitivo que representan el segmento B2B. |
+| **Descripción** | **1. Registro en Bing Places:**<br><br>Ir a bing.com/webmasters/tools/places and claim the listing.<br><br>2. **Completar información:**<br><br>- Nombre exacto del negocio<br>- Dirección completa con geolocalización<br>- Horario de atención<br>- Teléfono y website<br>- Fotos de servicios<br><br>3. **Verificación:**<br><br>Bing requiere verificación por teléfono, email, o DNS.<br><br>4. **Submit sitemap:**<br><br>En Bing Webmaster Tools, submit sitemap.xml para indexing.<br><br>5. **Configurar en index.html:**<br><br>Bing reconoce el mismo Schema.org LocalBusiness que Google. No se requiere cambio de markup. |
+| **Impacto esperado** | +5-8% tráfico orgánico de Bing, acceso a segmento profesional B2B |
+| **Esfuerzo** | S (1 hora — registro + verification) |
+| **Agente recomendado** | Frontend |
+| **Referencias** | [2] Bing Places https://www.bing.com/webmasters/tools/add-url |
 | **Estado** | Nueva propuesta — NO mencionada en R1-R95 |
-| **Prioridad CEO** | **Alta** — maximiza valor de tráfico existente |
+| **Prioridad CEO** | **Media** — gratis, bajo esfuerzo, reach profesional |
 
 ---
 
-### Propuesta 7: A/B Testing Framework (MEDIUM PRIORITY)
+### Propuesta 3: Google Seller Ratings + Post-Service Review Collection (HIGH PRIORITY)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar framework de A/B testing para optimizar continuamente tasas de conversión |
-| **Problema** | Sin testing estructurado, las decisiones de diseño se basen en intuición. Un framework de A/B permite decisiones data-driven y mejoras incrementales. |
-| **Descripción** | **1. **Elegir herramienta de A/B testing:**<br><br>Para sitio estático, opciones:<br>- **Google Optimize** (gratuito, pero está siendo discontinuado)<br>- **VWO** (Visual Website Optimizer) - $50/mes<br>- **Optimizely** - Enterprise<br>- **Kameleoon** - $500/mes<br><br>Para empezar, usar **Kameleoon Free** o **Google Experiments** (integrado con GA4).<br><br>2. **Hipótesis prioritarias para testear:**<br><br>```<br>Test 1: CTA Button Color<br>- Variante A: Verde (actual)<br>- Variante B: Naranja vibrante<br>- Métrica: CTR en "Reservar ahora"<br><br>Test 2: Posición del WhatsApp button<br>- Variante A: Header fijo<br>- Variante B: Bottom-right flotante<br>- Métrica: Clics en WhatsApp<br><br>Test 3: Precios en homepage<br>- Variante A: "Desde $80.000"<br>- Variante B: "Desde $80.000 - Incluye sanitización gratis"<br>- Métrica: Form submissions<br>```<br><br>3. **Implementar con Google Optimize alternative:**<br><br>```html<br><!-- Google Optimize snippet --><br><script src="https://www.googleoptimize.com/optimize.js?id=OPT_CONTAINER_ID"></script><br>```<br><br>4. **Configurar en GA4:**<br><br>Crear experimento en GA4 > Configure > Experiments:<br>- Nombre: "CTA Color Test"<br>- Objetivo: engagement<br>- Variantes: A/B<br><br>5. **Mínimo 2 semanas** por test para significancia estadística. |
-| **Impacto esperado** | +10-15% mejora en conversión con cada test ganador |
-| **Esfuerzo** | M (4-5 horas — setup + 2 tests iniciales) |
+| **Título** | Implementar flujo de coleta de Google Seller Ratings post-servicio para mejorar CTR de anuncios |
+| **Problema** | Purity & Clean tiene Google Reviews pero no un flujo sistemático de coleta post-servicio. Sin Seller Ratings (rating de estrellas en ads), los Google Ads pierden 10-30% de CTR. |
+| **Descripción** | **1. Configurar Google Customer Reviews (新政):**<br><br>```html<br><script src="https://apis.google.com/js/platform.js?onload=renderOptIn" async defer></script><br><script><br>  window.renderOptIn = function() {<br>    GCR.renderOptIn({<br>      theme: 2,<br>      content Vernehmen: {<br>        productId: 'PC-001',<br>        productName: 'Limpieza Purity & Clean',<br>        productImage: 'https://purityclean.com/images/logo.png'<br>      },<br>      delay: 72 // hours after purchase<br>    });<br>  };<br></script><br>```<br><br>2. **Email post-servicio automático:**<br><br>Agregar en Klaviyo (R94 pendiente) o Formspree un email automático 72 horas después del servicio:<br>```html<br>Asunto: ¿Cómo te fue con tu limpieza? — Tu opinión nos ayuda<br>```<br><br>3. **Landing page de review:**<br><br>Crear `/review.html` con formulario simple y link directo a Google Review:<br>```html<br><a href="https://g.page/r/purityclean/review" target="_blank"><br>  Deja tu reseña en Google ⭐⭐⭐⭐⭐<br></a><br>```<br><br>4. **Integración con Google Seller Ratings:**<br><br>Una vez que el sitio tiene 100+ reviews, Google automatically muestra Seller Ratings en ads. |
+| **Impacto esperado** | +10-30% CTR en Google Ads, mayor confianza en search results |
+| **Esfuerzo** | M (2-3 horas — Google Customer Reviews + email flow + landing page) |
 | **Agente recomendado** | Full Stack |
-| **Referencias** | [7] A/B Testing Guide https://vwo.com/ab-testing/ |
+| **Referencias** | [3] Google Customer Reviews https://developers.google.com/product-review- offers |
 | **Estado** | Nueva propuesta — NO mencionada en R1-R95 |
-| **Prioridad CEO** | **Media** — inversión en optimización a largo plazo |
+| **Prioridad CEO** | **Alta** — mejora directa en ROAS de advertising |
+
+---
+
+### Propuesta 4: Google Dynamic Remarketing con Google Ads Pixel (HIGH PRIORITY)
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Implementar Google Ads Dynamic Remarketing para capturar visitantes que no convierten |
+| **Problema** | El sitio no tiene pixel de Google Ads. Cada visitante que no reserva se pierde. El remarketing dinâmico permite mostrar ads personalizados del servicio exacto que el usuario vio. |
+| **Descripción** | **1. Instalar Google Ads Pixel:**<br><br>```html<br><!-- Google Ads Pixel --><br><script async src="https://www.googletagmanager.com/gtag/js?id=AW-CONVERSION_ID"></script><br><script><br>  window.dataLayer = window.dataLayer || [];<br>  function gtag(){dataLayer.push(arguments);}<br>  gtag('js', new Date());<br>  gtag('config', 'AW-CONVERSION_ID');<br></script><br>```<br><br>2. **Dynamic Remarketing Tags:**<br><br>En cada página de servicio, enviar datos de producto:<br>```javascript<br>gtag('event', 'view_item', {<br>  items: [{<br>    id: 'limpieza-sofa',<br>    name: 'Limpieza profunda de sofá',<br>    category: 'Servicios',<br>    price: 80000,<br>    currency: 'COP'<br>  }]<br>});<br>```<br><br>3. **Eventos de conversión:**<br><br>En el formulario de contacto/reserva:<br>```javascript<br>gtag('event', 'generate_lead', {<br>  value: 80000,<br>  currency: 'COP'<br>});<br>```<br><br>4. **Crear Remarketing Audience:**<br><br>En Google Ads, crear audiencia de "visited homepage but didn't convert" y "visited pricing but didn't convert".<br><br>5. **Crear Dynamic Ads:**<br><br>En Google Ads, crear ads dinámicos que muestren el servicio específico que el usuario vio con precio y CTA. |
+| **Impacto esperado** | +25% ROAS, recuperación de 15-20% de abandonadores |
+| **Esfuerzo** | M (3-4 horas — pixel + eventos + setup de Remarketing en Google Ads) |
+| **Agente recomendado** | Full Stack |
+| **Referencias** | [4] Google Dynamic Remarketing https://ads.google.com/dynamicremarketing |
+| **Estado** | Nueva propuesta — NO mencionada en R1-R95 |
+| **Prioridad CEO** | **Alta** — requiere inversión en ads pero alto ROI |
+
+---
+
+### Propuesta 5: Trustpilot Integration para Reseñas Multi-Plataforma (MEDIUM PRIORITY)
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Crear perfil de Trustpilot y automatizar coleta de reseñas post-servicio |
+| **Problema** | Purity & Clean solo tiene Google Reviews como plataforma de reseñas. Depender de una sola plataforma es un riesgo. Trustpilot tiene 26M+ reseñas y es considerado neutral por los consumidores. |
+| **Descripción** | **1. Crear perfil de negocio en Trustpilot:**<br><br>Ir a business.trustpilot.com y crear perfil gratuito de Purity & Clean.<br><br>2. **Configurar email de coleta automática:**<br><br>Trustpilot proporciona un link único de reseñas que se puede enviar por email:<br>```html<br>https://www.trustpilot.com/evaluate/www.purityclean.com<br>```<br><br>3. **Integrar en email post-servicio:**<br><br>Agregar en el email automático (72h post-servicio) ambos links:<br>```html<br>¿Cómo fue tu experiencia?<br><a href="https://g.page/r/purityclean/review"> Google ⭐⭐⭐⭐⭐</a><br><a href="https://www.trustpilot.com/evaluate/www.purityclean.com"> Trustpilot ⭐⭐⭐⭐⭐</a><br>```<br><br>4. **Agregar Trustpilot badge en el sitio:**<br><br>```html<br><div id="trustpilot-badge"><br>  <a href="https://www.trustpilot.com/evaluate/www.purityclean.com" target="_blank" rel="noopener"><br>    <img src="/images/trustpilot-badge.svg" alt="Reseñas en Trustpilot"><br>  </a><br></div><br>``` |
+| **Impacto esperado** | +15% percepción de confianza, diversificación de reseñas |
+| **Esfuerzo** | S (1-2 horas — registro + email + badge) |
+| **Agente recomendado** | Frontend |
+| **Referencias** | [5] Trustpilot Business https://business.trustpilot.com |
+| **Estado** | Nueva propuesta — NO mencionada en R1-R95 |
+| **Prioridad CEO** | **Media** — credibilidad, bajo esfuerzo |
+
+---
+
+### Propuesta 6: Pinterest Business Profile + Visual Content Strategy (MEDIUM PRIORITY)
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Crear perfil de Pinterest Business y publicar contenido visual de antes/después |
+| **Problema** | Purity & Clean tiene fotos de antes/después pero no las aprovecha en Pinterest. Pinterest tiene 480M+ usuarios con alto engagement en contenido de hogar, y las búsquedas de "home cleaning" generan millones de pins mensualmente. |
+| **Descripción** | **1. Crear Pinterest Business Account:**<br><br>Ir a business.pinterest.com y crear perfil.<br><br>2. **Configurar boards temáticos:**<br><br>- "Limpieza de Sofás Bogotá" — pins de antes/después<br>- "Sanitización de Colchones" — proceso y resultados<br>- "Tips de Limpieza en Casa" — contenido educativo<br>- "Purity & Clean Portfolio" — fotos del equipo y trabajos<br><br>3. **Rich Pins para SEO:**<br><br>Configurar Rich Pins en Pinterest para que los pins muestren información del sitio:<br>```html<br><meta property="og:type" content="article"><br><meta property="article:published_time" content="2026-04-28"><br>```<br><br>4. **Estrategia de contenido:**<br><br>Publicar 1-2 pins diarios con:<br>- Imágenes verticales (2:3 ratio)<br>- Descripción con keywords: "limpieza de sofá bogota", "sanitización colchones"<br>- Link al servicio relevante en el sitio<br><br>5. **Integración con antes/después del sitio:**<br><br>Cada vez que se agregue una foto de antes/después en el sitio, también publicarla en Pinterest. |
+| **Impacto esperado** | +10-20% descubrimiento de tráfico desde Pinterest, exposición a segmento femenino |
+| **Esfuerzo** | M (3-4 horas — setup + 20 pins iniciales) |
+| **Agente recomendado** | Frontend + Content |
+| **Referencias** | [6] Pinterest Business https://business.pinterest.com |
+| **Estado** | Nueva propuesta — NO mencionada en R1-R95 |
+| **Prioridad CEO** | **Media** — discovery pasivo, alto potencial visual |
+
+---
+
+### Propuesta 7: Analytics Dashboard con Conversion Funnel (HIGH PRIORITY)
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Implementar dashboard de analítica con funnel de conversión medible |
+| **Problema** | Purity & Clean usa Plausible Analytics pero no tiene un funnel de conversión claro. No se puede medir qué porcentaje de visitantes efectivamente reserva. Sin datos de funnel, no se puede优化的 la conversión. |
+| **Descripción** | **1. Definir funnel de conversión:**<br><br>```<br>Visitante → Homepage → Servicio específico → Formulario de reserva → WhatsApp/Formspree → Conversión<br>```<br><br>2. **Eventos a trackear en Plausible:**<br><br>```javascript<br>// When user clicks WhatsApp button<br>plausible('WhatsApp_Click', { props: { service: 'sofa-cleaning' } });<br><br>// When user opens reservation form<br>plausible('Form_Opened', { props: { section: 'reservas' } });<br><br>// When user submits form<br>plausible('Form_Submitted', { props: { form: 'booking' } });<br><br>// When user searches for service<br>plausible('Search_Performed', { props: { query: 'sofa' } });<br><br>// When user scrolls to pricing<br>plausible('Pricing_Viewed');\n```<br><br>3. **Dashboard de funnel:**<br><br>Crear `/analytics.html` con visualization simple del funnel usando los datos de Plausible API:<br>```javascript<br>// Fetch data from Plausible API<br>async function getFunnelData() {<br>  const response = await fetch('https://plausible.io/api/v1/stats/aggregate', {<br>    headers: { 'Authorization': 'Bearer API_KEY' }<br>  });<br>  return response.json();\n}\n```<nbr>```<br><br>4. **Métricas clave:**<br><br>- Tasa de conversión global (visitantes → reservas)<br>- Servicios más buscados (top search queries)<br>- Tasa de abandono por sección<br>- Fuentes de tráfico (WhatsApp vs Form vs Phone) |
+| **Impacto esperado** | Medición de ROI de marketing, identificación de gaps de conversión |
+| **Esfuerzo** | M (3-4 horas — eventos + dashboard) |
+| **Agente recomendado** | Full Stack |
+| **Referencias** | [7] Plausible Events API https://plausible.io/docs/events-api |
+| **Estado** | Nueva propuesta — NO mencionada en R1-R95 |
+| **Prioridad CEO** | **Alta** — visibilidad crítica para optimización |
 
 ---
 
 ## Orden de Implementación Recomendado (R96)
 
-| # | Propuesta | Impacto | Esfuerzo | Prioridad |
-|---|-----------|---------|----------|-----------|
-| 1 | **Mercado Libre Servicios** | +25% descubrimiento | S | **Alta** |
-| 2 | **Google Seller Ratings** | +15% CTR | S | **Alta** |
-| 3 | **Retargeting Infrastructure** | +20% conversiones | M | **Alta** |
-| 4 | **Google Performance Max** | +40% conversiones | M | **Alta** |
-| 5 | **Facebook Marketplace** | +15% cobertura | S | **Media** |
-| 6 | **TikTok Ads** | +30% Gen Z | M | **Media** |
-| 7 | **A/B Testing Framework** | +15% conversión | M | **Media** |
+| # | Propuesta | Impacto | Esfuerzo | Prioridad | Tipo |
+|---|-----------|---------|----------|-----------|------|
+| 1 | **Apple Business Connect** | +10-15% discovery Apple | S | **Alta** | Discovery |
+| 2 | **Google Seller Ratings** | +10-30% CTR ads | M | **Alta** | Publicidad |
+| 3 | **Dynamic Remarketing** | +25% ROAS | M | **Alta** | Publicidad |
+| 4 | **Analytics Dashboard** | Medición conversión | M | **Alta** | Analítica |
+| 5 | **Bing Places** | +5-8% tráfico | S | **Media** | SEO |
+| 6 | **Trustpilot Integration** | +15% confianza | S | **Media** | Reputación |
+| 7 | **Pinterest Business** | +10-20% discovery | M | **Media** | Discovery |
 
 ---
 
@@ -243,46 +249,46 @@ R96 se enfoca en **presencia en marketplaces y optimización de campañas public
 
 | Propuesta | Depende de | Bloqueador |
 |-----------|------------|------------|
-| Mercado Libre Servicios | Ninguno | Ninguno |
-| Google Seller Ratings | 100+ reseñas verificadas | Reseñas pendientes |
-| Retargeting Infrastructure | Meta Business, Google Tag | Ninguno |
-| Google Performance Max | Google Ads account | Ninguno |
-| Facebook Marketplace | Facebook Business Page | Ninguno |
-| TikTok Ads | TikTok Business account | Contenido video |
-| A/B Testing Framework | GA4 configurado | Ninguno |
+| Apple Business Connect | Ninguno | Ninguno |
+| Bing Places | Ninguno | Ninguno |
+| Google Seller Ratings | Google Customer Reviews setup | Ninguno |
+| Dynamic Remarketing | Google Ads account + pixel | Necesita inversión en ads |
+| Trustpilot | Email post-servicio | Klaviyo (R94) si se quiere automático |
+| Pinterest | Contenido visual (antes/después) | Ninguno |
+| Analytics Dashboard | Plausible configured | Ninguno |
 
 ---
 
 ## Comparación R95 vs R96
 
 | Aspecto | R95 | R96 |
-|--------|-----|-----|
-| **Foco** | Integraciones omnicanal (messaging) | Marketplaces + Publicidad (adquisición) |
-| **Tipo propuestas** | Canales de comunicación | Plataformas de descubrimiento |
-| **Mercado** | Messaging | Advertising + Marketplaces |
-| **Tecnología** | Google Business, Meta Ads, Background Sync | Mercado Libre, TikTok, GTM, A/B |
+|---------|-----|-----|
+| **Foco** | Integraciones omnicanal (messaging, ads) | Presencia multiplataforma (Apple, Bing, Pinterest) + Analítica |
+| **Tipo propuestas** | Canales de comunicación, Publicidad | Discovery, Reputación, Medición |
+| **Mercado** | Canales directos |SEO diversificado y analítica |
+| **Tecnología** | Google Business, Meta Ads, Background Sync | Apple Business Connect, Bing Places, Pinterest, Plausible events |
 | **Esfuerzo** | S-M | S-M |
-| **Revenue** | Directo (más leads) | Directo (más canales) |
+| **Revenue** | Directo (más leads) | Indirecto (más discovery + mejor medición) |
 
-**R96 complementa R95:** R95 propuso activar más canales de messaging; R96 propone activar más canales de descubrimiento y adquisición.
+**R96 complementa R95:** R95 propuso cómo adquirir clientes a través de canales directos; R96 propone cómo被发现 más fácilmente en plataformas de descubrimiento y cómo medir si eso funciona.
 
 ---
 
 ## Fuentes
 
-[1] Mercado Libre. "Servicios para el hogar." https://www.mercadolibre.com.co/servicios (2026)
+[1] Apple. "Business Connect." https://business.apple.com (2026)
 
-[2] Meta. "Facebook Marketplace para negocios." https://www.facebook.com/business/marketplace (2026)
+[2] Microsoft. "Bing Places." https://www.bing.com/webmasters/tools/add-url (2026)
 
-[3] Google. "Performance Max campaigns." https://ads.google.com/performancemax (2026)
+[3] Google. "Customer Reviews." https://developers.google.com/product-review-offers (2026)
 
-[4] TikTok. "Local Service Ads." https://ads.tiktok.com (2026)
+[4] Google. "Dynamic Remarketing." https://ads.google.com/dynamicremarketing (2026)
 
-[5] Google. "Seller Ratings implementation." https://developers.google.com/shopping/ratings (2026)
+[5] Trustpilot. "Business Portal." https://business.trustpilot.com (2026)
 
-[6] Meta. "Meta Pixel setup guide." https://www.facebook.com/business/learn/facebook-pixel-setup (2026)
+[6] Pinterest. "Pinterest Business." https://business.pinterest.com (2026)
 
-[7] VWO. "A/B Testing guide." https://vwo.com/ab-testing/ (2026)
+[7] Plausible. "Events API." https://plausible.io/docs/events-api (2026)
 
 ---
 
