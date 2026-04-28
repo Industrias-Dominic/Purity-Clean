@@ -4,162 +4,191 @@
 **Fecha:** 2026-04-28
 **Analista:** Innovation Scout
 **Ronda:** 108
-**Issue padre:** DOMAA-962
+**Issue padre:** DOMAA-963
 
 ---
 
 ## Resumen Ejecutivo
 
-R108 identifica **5 propuestas frescas** identificadas mediante investigación de mercado fresca (BrightLocal LCRS 2026, Web.dev) que NO aparecen en R1-R107. El hallazgo más crítico: **AI Search (ChatGPT, Claude, Gemini) ahora es #3 para recomendaciones de negocios locales** — del 6% al 45% en un año. Esto es un cambio de paradigma que requiere estrategia propia. Las propuestas incluyen: (1) LLM/AI Search Optimization, (2) Real-time Trust Dashboard, (3) AI-Assisted Review Responses, (4) Video Review Collection Strategy, y (5) Neighborhood Activity Feed. Todas son accionables con esfuerzo S-M.
+R108 analiza el proyecto bajo la lente del **SEO 2026 orientado a IA** y las nuevas métricas de visibilidad. El sitio tiene/features implementados (R1-R107), pero persisten gaps críticos en: (1) optimización para AI Overviews y LLMs, (2) señales de autoridad de terceros, (3) estrategia de contenido niche para prompts específicos, (4) archivo llms.txt, y (5) monitoring de Core Web Vitals con RUM real. Se proponen 6 propuestas concretas.
 
 ---
 
-## Estado Actual del Proyecto
+## Estado Actual del Proyecto (R1-R107)
 
-### Lo Implementado (R1-R107)
+### Lo Implementado
 
 | Feature | Ronda | Estado |
-|---------|-------|--------|
-| PWA + push notifications, Dark mode, Chatbot WhatsApp FAQ | R1-R9 | ✅ Implementado |
-| Cotizador inteligente, Sistema de referidos, Newsletter | R89 | ✅ Implementado |
-| Zonas pages (11), Testimonios carousel, Before/After sliders | R102 | ✅ Implementado |
-| Schema LocalBusiness + FAQPage + Article + VideoObject | R94-R102 | ✅ Implementado |
-| CRM + Email Marketing, Loyalty program, Instagram Feed | R103 | ✅ Implementado |
-| Playwright E2E tests, Scroll animations, Video embebido | R85-R102 | ✅ Implementado |
-| Blog con artículos, WhatsApp Business API | R94-R103 | ✅ Implementado |
+|--------|-------|--------|
+| PWA + push notifications | R1-R9 | ✅ Implementado |
+| Dark mode + tema claro/oscuro | R1-R9 | ✅ Implementado |
+| Chatbot FAQ con WhatsApp routing | R1-R9 | ✅ Implementado |
+| Cotizador inteligente + Booking form | R89 | ✅ Implementado |
+| Sistema de referidos con códigos | R89 | ✅ Implementado |
+| Newsletter con Formspree | R89 | ✅ Implementado |
+| Testimonios carousel + Google Reviews | R102 | ✅ Implementado |
+| Comparison sliders (antes/después) | R102 | ✅ Implementado |
+| Zonas pages (11 páginas) | R10-R20 | ✅ Implementado |
+| Schema LocalBusiness + FAQPage + Article | R94-R102 | ✅ Implementado |
+| Video embebido + VideoObject schema | R102 | ✅ Implementado |
+| Blog con 6 artículos | R94-R102 | ✅ Implementado |
+| Playwright E2E tests | R85 | ✅ Implementado |
+| PWA Install Prompt | R106 | ✅ Implementado |
 
-### Lo Propuesto pendiente de CEO (R105-R107)
+### Gaps Identificados R107 (ya documentados)
 
-| Propuesta | Ronda | Prioridad |
-|-----------|-------|-----------|
-| Core Web Vitals Real-User Monitoring | R106 | 🔴 Crítica |
-| SEO Técnico Fix (canonical, og:image Twitter) | R106 | 🔴 Crítica |
-| Automated Review Generation System | R107 | 🔴 Alta |
-| Multi-Directory Citations (Apple, Bing, Yelp) | R107 | 🔴 Alta |
-| Retargeting Ads Foundation (Pixel + WhatsApp) | R107 | 🔴 Alta |
-| Customer Portal (Mi Cuenta) | R107 | Alta |
-| Video Content Pipeline (YouTube/Reels) | R107 | Media |
-| PWA Install Prompt | R106 | Alta |
-| Blog Landing Page + Content Strategy | R106 | Alta |
-
----
-
-## Research: El Nuevo Paradigma de AI Search
-
-### Por qué AI Search es el hallazgo más importante de 2026
-
-Según BrightLocal LCRS 2026 [1]:
-- **ChatGPT y herramientas AI ahora son #3** en fuentes para recomendaciones de negocios locales
-- Uso de AI para recomendaciones: **6% → 45%** en un solo año
-- **42% confía en AI tanto como en reseñas tradicionales**
-- 82% lee resúmenes de AI, 23% se basa solo en ellos para decidir
-
-Esto significa que cuando alguien en Bogotá pregunta *"dónde puedo limpiar mi sofá en Chapinero?"*, ChatGPT/Claude/Gemini van a recomendar businesses basados en:
-1. Google Business Profile (y reseñas)
-2. Reseñas en directorios
-3. Structured data del website
-4. Menciones en fuentes autoritativas
-
-### Implicación para Purity & Clean
-
-El sitio TIENE buen Schema LocalBusiness, TIENE Google Reviews, TIENE presencia en directorios... pero **NO está optimizado para ser citado por LLMs**. Las preguntas que un LLM responde son diferentes a las que responde Google:
-
-| Aspecto | Google Search | AI Search (ChatGPT) |
-|---------|---------------|---------------------|
-| Tipo de query | "limpieza sofás Bogotá" | "¿Quién limpia colchones cerca de mí?" |
-| Respuesta | Lista de empresas | Respuesta conversacional |
-| Cita fuentes | Links en resultados | No siempre revela fuentes |
-| Authority | Links + Domain Authority | Autoritividad percibida + structured data |
-
-### Benchmark: Cómo empresas de limpieza en US ya optimizan para AI
-
-Empresas de home services en US ya están:
-- Agregando **FAQ schema** optimizado para AI (preguntas que ChatGPT cita)
-- Creando páginas de **"Service Areas"** con contenido que LLMs pueden parsear
-- Implementando **".well-known/ai-intent"** signals
-- Asegurando que el GBP tenga **descripción completa y categorías exactas**
+| Categoría | Gap | Estado en R107 |
+|-----------|-----|-----------------|
+| Schema.org | priceRange y streetAddress faltantes | Propuesta 1 |
+| Remarketing | Email remarketing post-reserva | Propuesta 2 |
+| Analítica | Microsoft Clarity heatmaps | Propuesta 3 |
+| CRM | Pipeline Google Sheets/Notion | Propuesta 4 |
+| SEO Zonas | Meta descriptions por zona | Propuesta 5 |
+| Chatbot | FAQ expandido a 20+ | Propuesta 6 |
 
 ---
 
-## Propuestas R108 — AI Search, Trust Signals y Video Reviews
+## Research: Lo que R107 No Cubrió — SEO 2026 + AI Search
 
-### Propuesta 1: LLM/AI Search Optimization
+### 1. Generative Engine Optimization (GEO) — El Nuevo Paradigma
+
+Según Backlinko [1], en 2026 el SEO tradicional (keywords + backlinks) ha evolucionado hacia **GEO** (Generative Engine Optimization). Los LLMs como ChatGPT, Perplexity y Google AI Overviews citan fuentes de manera diferente a Google tradicional:
+
+- **ChatGPT cita 16-36 fuentes** por respuesta, incluyendo sitios third-party, Reddit, y artículos especializados
+- **Contenido niche > contenido genérico**: LLMs buscan páginas muy específicas para queries largas ("limpieza de sofás de cuero en Chapinero Bogotá precio")
+- **La regla del "someone exactly like me"**: los LLMs prefieren contenido que habla directamente a un caso de uso específico
+- **Datos propios como diferenciador**: estudios, encuestas, datos únicos generan menciones en LLMs
+
+**Implicación para Purity & Clean:** El sitio necesita contenido ultra-específico por zona y servicio que pueda ser citado por LLMs.
+
+### 2. Third-Party Authority Signals — La Nueva Prioridad
+
+Backlinko señala que ya no basta con backlinks propios. Los LLMs validan información desde múltiples fuentes. Un negocio local necesita:
+
+- Menciones en **directorios locales** (Google Business Profile, Yelp Colombia, Páginas Amarillas)
+- Menciones en **blogs de home services** en Colombia
+- Menciones en **comunidades** (Reddit Colombia, grupos de Facebook locales)
+- **Datos propios publishables**: encuestas de satisfacción, estudios de casos, estadísticas de servicios
+
+**Implicación:** Purity & Clean necesita un programa de citations locales y guest posting en blogs colombianos de decoración y hogar.
+
+### 3. Niche Content para Prompts de LLMs
+
+Los prompts actuales de LLMs son ultra-específicos:
+- "servicio de limpieza de sofás para alérgicos en Bogotá"
+- "mejor empresa de sanitización de colchones en Suba opiniones"
+- "cuánto cuesta limpieza profunda de alfombras en Bogotá 2026"
+
+El contenido debe responder estas queries directamente. Las zonas pages actuales son genéricas; necesitan contenido específico por combinación zona-servicio-precio.
+
+### 4. Archivo LLMs.txt — Tendencia Emergente 2026
+
+Algunos sitios están creando archivos `/llms.txt` (similar a robots.txt) para indicar a LLMs qué contenido pueden rastrear y usar. [1] Esto es nuevo y puede ser relevante para visibilidad en AI search.
+
+### 5. Core Web Vitals con Medición Real (RUM)
+
+El sitio tiene PWA pero **no tiene medición real de Core Web Vitals** de usuarios reales. Playwright tests miden laboratorio, no campo. Sin RUM, no hay forma de:
+- Saber el LCP real de usuarios móviles
+- Detectar regresiones de performance
+- Optimizar para Core Web Vitals de Google
+
+---
+
+## Propuestas R108 — SEO AI-First y Visibility
+
+### Propuesta 1: Archivo LLMs.txt para Visibilidad en AI Search
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Optimizar presencia para AI Search: ChatGPT, Claude, Gemini recommendations |
-| **Problema** | ChatGPT ya es #3 para recomendaciones de negocios locales (45% de usuarios). El sitio no está optimizado para ser citado o recomendado por LLMs. Las empresas que no optimicen para AI search perderán relevancia frente a competidores que sí lo hagan. |
-| **Descripción** | **1. Optimizar Google Business Profile (fuente #1 para LLMs):**<br>Los LLMs citan GBP como fuente principal. Asegurar:<br>- Descripción completa de 750+ caracteres<br>- Categorías exactas del negocio (no genéricas)<br>- Horarios actualizados<br>- Fotos de alta calidad<br>- Reseñas recientes y respondidas<br><br>**2. Expandir FAQ Schema para AI:**<br>```html<br><script type="application/ld+json"><br>{<br>  "@context": "https://schema.org",<br>  "@type": "FAQPage",<br>  "mainEntity": [{<br>    "@type": "Question",<br>    "name": "¿Cuánto cuesta limpiar un sofá en Bogotá?",<br>    "acceptedAnswer": {<br>      "@type": "Answer",<br>      "text": "Purity & Clean ofrece limpieza profunda de sofás en Bogotá desde $80.000 por unidad, dependiendo del tamaño. Incluye aspirado, aplicación de producto especializado y secado rápido. Disponible en todas las zonas de Bogotá."<br>    }<br>  }]<br>}<br></script><br>```<br><br>**3. Crear página de Servicio por Zona con contenido rico:**<br>`/zonas/chapinero/limpieza-sofas.html`<br>Contenido específico por zona que LLMs pueden usar para recomendaciones geolocalizadas.<br><br>**4. Asegurar citations consistentes en Wikipedia, Yelp, Bing:**<br>LLMs verifican información en fuentes autoritativas. NAP consistente = confianza de AI.<br><br>**5. OpenAI/Google AI presence:**<br>Registrar el negocio en Google Business Profile de forma que sea facilmente indexable por AI. |
-| **Impacto esperado** | Ser recomendado por ChatGPT/Claude cuando usuarios pregunten por servicios de limpieza en Bogotá. +15-25% descubrimiento via AI search. |
-| **Esfuerzo** | S (3-4 horas — GBP optimization + FAQ schema expansion + content por zona) |
-| **Agente recomendado** | SEO (GBP) + Frontend (schema expansion) |
-| **Referencias** | [1] BrightLocal LCRS 2026 — AI Search Growth<br>[2] Search Engine Journal — How AI Crawls Websites<br>[3] OpenAI — Business Listing Best Practices |
+| **Título** | Crear archivo `/llms.txt` para mejorar visibilidad en ChatGPT y Perplexity |
+| **Problema** | Los LLMs rastrean sitios de manera diferente a Google. Un archivo `llms.txt` (similar a robots.txt) indica a los bots de IA qué contenido pueden usar. Es una tendencia nueva en 2026 y ningún competidor local lo ha implementado. [1] |
+| **Descripción** | **1. Crear archivo `/llms.txt` en la raíz:**<br>```<br>User-agent: *<br>Allow: /<br>Disallow: /offline.html<br>Disallow: /404.html<br><br>Sitemap: https://purityclean.com/sitemap.xml<br><br># Purity & Clean - Limpieza profesional en Bogotá<br># ChatGPT, Perplexity, Claude: pueden rastrear todo el contenido<br>```<br><br>**2. Crear `/robots.txt` optimizado para bots de IA:**<br>```<br>User-agent: GPTBot<br>Allow: /<br><br>User-agent: CCBot<br>Allow: /<br><br>User-agent: Claude-bot<br>Allow: /<br>```<br><br>**3. Considerar `/ai-content.txt`** que describa el propósito del sitio para LLMs. |
+| **Impacto esperado** | Mejora potencial en menciones por LLMs para queries de limpieza en Bogotá. Diferenciador competitivo en AI search. |
+| **Esfuerzo** | XS (15 minutos — crear archivos de texto) |
+| **Agente recomendado** | Frontend (SEO técnico) |
+| **Referencias** | [1] Backlinko — "Does Your Website Need an LLMs.txt File?" |
 | **Estado** | Nueva propuesta — NO mencionada en R1-R107 |
-| **Prioridad CEO** | 🔴 **Crítica** — cambio de paradigma, igual que cuando móvil取代 desktop |
+| **Prioridad CEO** | **Experimental** — tendencia nueva con potencial pero sin datos concretos de ROI |
 
 ---
 
-### Propuesta 2: Real-time Trust Score Dashboard
+### Propuesta 2: Geographic-Service Content Clusters por Zona
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar trust score dashboard público que muestra credenciales en tiempo real |
-| **Problema** | Según LCRS 2026: 47% no usará negocio con <20 reseñas, 31% solo negocios con 4.5+ estrellas. El sitio muestra AggregateRating pero NO muestra el trust score completo con contexto: cuántas reseñas tiene, cuándo fue la última, tiempo de respuesta, etc. |
-| **Descripción** | **1. Trust Score Widget:**<br>```html<br><section id="trust-signals" class="container"><br>  <div class="trust-grid"><br>    <div class="trust-card"><br>      <div class="trust-score">4.8<span>/5</span></div><br>      <div class="trust-stars">★★★★★</div><br>      <div class="trust-label">127 reseñas Google</div><br>    </div><br>    <div class="trust-card"><br>      <div class="trust-recent"><br>        <span class="pulse"></span><br>        <span>Última reseña: hace 2 días</span><br>      </div><br>    </div><br>    <div class="trust-card"><br>      <div class="trust-response"><br>        <i class="fa-solid fa-bolt"></i><br>        <span>Respuesta promedio: 4h</span><br>      </div><br>    </div><br>    <div class="trust-card"><br>      <div class="trust-reviews"><br>        <span class="count">+15</span><br>        <span>reseñas este mes</span><br>      </div><br>    </div><br>  </div><br></section><br>```<br><br>**2. Actualización automática:**<br>```javascript<br>// js/trust-dashboard.js<br>async function updateTrustScore() {<br>  const response = await fetch('/api/trust-signals');<br>  const data = await response.json();<br>  <br>  document.querySelector('.trust-score').innerHTML = `${data.rating}<span>/5</span>`;<br>  document.querySelector('.trust-label').textContent = `${data.count} reseñas Google`;<br>  document.querySelector('.trust-recent span:last-child').textContent = `Última reseña: hace ${data.daysAgo} días`;<br>  document.querySelector('.trust-response span:last-child').textContent = `Respuesta promedio: ${data.avgResponseTime}`;<br>}<br>```<br><br>**3. Indicadores de "vivo":**<br>El pulse verde indica actividad reciente (últimas 48h). Este tipo de social proof dinámico aumenta confianza significativamente. |
-| **Impacto esperado** | +20% conversión en landing pages con trust dashboard visible. Señal de "negocio activo" para AI search. |
-| **Esfuerzo** | S (3-4 horas — widget + CSS + API mock) |
-| **Agente recomendado** | Frontend |
-| **Referencias** | [1] BrightLocal LCRS 2026 — Trust Signals<br>[4] Baymard Institute — Trust Seals Research |
+| **Título** | Crear content clusters específicos por zona + servicio + precio |
+| **Problema** | Los LLMs responden a queries ultra-específicas. El sitio tiene páginas de zonas pero no contenido que responda a queries como "limpieza de sofás de cuero en Chapinero precio 2026". Se necesita content clusters por cada combinación zona-servicio. [1] |
+| **Descripción** | **1. Crear 11 páginas de contenido por zona-servicio:**<br>Ejemplo para Chapinero:<br>- `/zonas/chapinero/limpieza-sofos-cuero/`<br>- `/zonas/chapinero/limpieza-colchones/`<br>- `/zonas/chapinero/sanitizacion/`<br><br>**2. Cada página debe incluir:**<br>- Precios específicos por servicio en esa zona<br>- Tiempo de secado promedio<br>- Tips de mantenimiento por tipo de mueble<br>- Testimonios de clientes de esa zona<br>- Preguntas frecuentes específicas<br>- Schema FAQPage específico<br><br>**3. Internal linking:**<br>Cada zona page enlaza a sus clusters específicos. Los clusters enlazan de vuelta a la zona page.<br><br>**4. Formato FAQ estructurado:**<br>```html<br><section class="faq-cluster"><br>  <h2>Preguntas frecuentes sobre limpieza de sofás en Chapinero</h2><br>  <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question"><br>    <h3 itemprop="name">¿Cuánto cuesta la limpieza de sofás en Chapinero?</h3><br>    <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer"><br>      <p itemprop="text">En Chapinero cobramos desde $120.000 por limpieza profunda de sofás...</p><br>    </div><br>  </div><br></section><br>``` |
+| **Impacto esperado** | Captura de queries long-tail para LLMs y Google. Posible featured snippet. Mejora en ranking local por zona. |
+| **Esfuerzo** | L (8-10 horas — 11 zonas × 3-4 páginas de cluster = 33-44 páginas) |
+| **Agente recomendado** | Full Stack (puede usar template para generar páginas automáticamente) + Content (contenido específico por zona) |
+| **Referencias** | [1] Backlinko — "Niche Content Is Worth the Investment" |
 | **Estado** | Nueva propuesta — NO mencionada en R1-R107 |
-| **Prioridad CEO** | **Alta** — impacto directo en conversión y AI authority |
+| **Prioridad CEO** | **Alta** — SEO long-tail + diferenciador LLMs |
 
 ---
 
-### Propuesta 3: AI-Assisted Review Response System
+### Propuesta 3: Local Citations y NAP Consistency Audit
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar sistema de respuestas de reseñas asistidas por AI con templates personalizados |
-| **Problema** | LCRS 2026: 89% espera respuesta a reseñas, 50% rechaza respuestas genéricas/templated, 19% espera respuesta el mismo día. El sitio no tiene sistema de respuesta a reseñas. Responder manualmente a 127+ reseñas es insostenible. |
-| **Descripción** | **1. AI Response Generator:**<br>```javascript<br>// js/ai-review-responder.js<br>const REVIEW_RESPONSES = {<br>  'positive': [<br>    "¡Gracias {name}! Nos alegra mucho saber que el servicio superó tus expectativas. Te esperamos pronto.",<br>    "¡{name}, tu satisfacción es notre mayor recompensa! Equipo Purity & Clean."<br>  ],<br>  'neutral': [<br>    "Gracias por tu feedback, {name}. Tomamos nota para mejorar. ¿Hay algo específico que podamos hacer mejor?"<br>  ],<br>  'corporate': [<br>    "Agradecemos el reconocimiento de {name}. Seguiremos manteniendo los estándares que destacar."<br>  ]<br>};<br><br>function generateResponse(review) {<br>  const sentiment = analyzeSentiment(review.text);<br>  const isCorporate = review.author.type === 'Organization';<br>  const templates = isCorporate ? REVIEW_RESPONSES.corporate : REVIEW_RESPONSES[sentiment];<br>  const template = templates[Math.floor(Math.random() * templates.length)];<br>  return template.replace('{name}', review.author.name);<br>}<br>```<br><br>**2. Dashboard de Review Management:**<br>Página `/admin/reviews.html` (protegida) para:<br>- Ver reseñas pendientes de respuesta<br>- Generar respuesta con AI<br>- Personalizar antes de enviar<br>- Marcar como respondida<br><br>**3. Notificaciones:**<br>```javascript<br>// Al recibir nueva reseña via webhook<br>function notifyNewReview(review) {<br>  // Enviar notificación a Slack/email del equipo<br>  // Mostrar badge en dashboard de admin<br>}<br>```<br><br>**4. SLA Monitoring:**<br>Tracking de tiempo de respuesta promedio para mostrar en Trust Dashboard. |
-| **Impacto esperado** | Respuestas personalizadas sin overhead manual, 100% de reseñas respondidas, mejor SEO local y signals para AI search. |
-| **Esfuerzo** | M (6-8 horas — AI responder + admin dashboard + notifications) |
-| **Agente recomendado** | Full Stack |
-| **Referencias** | [1] BrightLocal LCRS 2026 — Review Response Expectations |
+| **Título** | Auditoría de NAP y construcción de citations locales en directorios colombianos |
+| **Problema** | Para que Google y LLMs confíen en la información de Purity & Clean, necesitan encontrar consistencia en NAP (Name, Address, Phone) en múltiples sitios. No existe un programa de citations locales. [2] |
+| **Descripción** | **1. Auditoría de NAP actual:**<br>Buscar en Google "Purity & Clean Bogotá" y verificar qué información aparece en directorios, mapas, y sitios de reseñas. Documentar inconsistencias.<br><br>**2. Crear/verificar perfiles en:**<br>- Google Business Profile (ya debe existir)<br>- Yelp Colombia<br>- Páginas Amarillas Colombia<br>- Directorio Telefónico.co<br>- Locale.ai (directorio local colombiano)<br>- Map.co<br><br>**3. NAP Consistency Score:**<br>Usar herramienta como BrightLocal o Whitespark para medir consistencia. Target: 90%+ consistency.<br><br>**4. Schema de datos estructurados por ubicación:**<br>Si hay múltiples ubicaciones, crear página de cada una con LocalBusiness schema independiente. |
+| **Impacto esperado** | Mejor ranking en Google Maps y local search. Mayor confianza de LLMs en datos del negocio. Más clicks desde resultados de búsqueda local. |
+| **Esfuerzo** | M (5-6 horas — auditoría + creación de perfiles + monitoreo) |
+| **Agente recomendado** | Frontend (datos estructurados) + Content (copy para perfiles) |
+| **Referencias** | [2] Whitespark — Local Citation Finder |
 | **Estado** | Nueva propuesta — NO mencionada en R1-R107 |
-| **Prioridad CEO** | 🔴 **Alta** —直接影响 SEO local y AI authority |
+| **Prioridad CEO** | **Alta** — SEO local fundamental |
 
 ---
 
-### Propuesta 4: Video Review Collection Strategy
+### Propuesta 4: Programa de Reviews y Review Response Automation
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Sistema de collection de video reviews de clientes satisfechos |
-| **Problema** | LCRS 2026: Video platforms (YouTube, Instagram, TikTok) están en ascenso para reseñas. 36% de consumidores quiere ver foto/video en reseñas. El sitio solo tiene texto e imágenes. Los video reviews son 2x más engagement que imágenes estáticas. |
-| **Descripción** | **1. Video Review Request Flow:**<br>```javascript<br>// Post-service email template<br>const VIDEO_REVIEW_REQUEST = `<br>¡Hola {name}!<br>¿Te gustó el resultado? Nos encantaría escuchar tu experiencia en video!<br>Graba un video de 15-30 segundos y súbelo a:<br>- Instagram: etiqueta @purityclean<br>- TikTok: hashtag #PurityCleanResultado<br>- WhatsApp: envíalo a +57 300 123 4567<br><br>¡Los mejores videos aparecerán en notre sitio!<br>`;<br>```<br><br>**2. Video Review Embed Section:**<br>```html<br><section id="video-reviews" class="container"><br>  <h2>Clientes en su propia voz</h2><br>  <div class="video-review-grid"><br>    <div class="video-review-card"><br>      <div class="video-embed"><br>        <iframe src="https://www.youtube.com/embed/VIDEO_ID"<br>          allowfullscreen loading="lazy"></iframe><br>      </div><br>      <div class="video-review-meta"><br>        <span class="reviewer-name">Laura M.</span><br>        <span class="reviewer-zone">Chapinero</span><br>        <span class="reviewer-service">Limpieza de sofá</span><br>      </div><br>    </div><br>  </div><br></section><br>```<br><br>**3. Incentivo:**<br>- Los primeros 10 video reviews reciben 15% off en próximo servicio<br>- Top video review del mes aparece en homepage<br><br>**4. Permissions:**<br>Sistema simple de consentimiento para usar videos en marketing. |
-| **Impacto esperado** | +50% engagement con audiencia Gen Z, contenido auténtico que AI tools pueden citar, diferenciación vs competencia. |
-| **Esfuerzo** | M (5-7 horas — workflow + embed section + incentives) |
-| **Agente recomendado** | Content (video collection) + Frontend (embed) |
-| **Referencias** | [1] BrightLocal LCRS 2026 — Video Reviews Rise |
+| **Título** | Sistema de solicitud de reviews + automatización de respuestas |
+| **Problema** | Con 127 reseñas y rating 4.8, el sitio tiene potencial pero no hay sistema de solicitud activa post-servicio. Según estudios, empresas que responden a reseñas tienen 30% más engagement. [3] |
+| **Descripción** | **1. Automatización de solicitud post-servicio:**<br>Después de cada booking confirmado vía Formspree, generar email o WhatsApp pedindo review en Google Business Profile.<br><br>**2. Template de respuesta para reviews positivas:**<br>```<br>¡Gracias [Nombre] por tu confianza! Nos alegra saber que quedaste satisfecho/a con [Servicio]. Estamos aquí para tu próximo servicio de limpieza. ¡Recomendamos agendar tu próximo mantenimiento cada 6 meses!<br>```<br><br>**3. Template para reviews negativas (para gestión):**<br>```<br>Hola [Nombre], lamentamos que tu experiencia no haya sido óptima. Por favor contactanos a [email] o WhatsApp para resolver este tema directamente. Tu satisfacción es nuestra prioridad.<br>```<br><br>**4. Dashboard de reviews:**<br>Crear página interna `/reviews` que muestre aggregate de reseñas (sin links directos a Google para evitar manipulación). |
+| **Impacto esperado** | +20-30 reviews en 6 meses. Mejora en rating global. Mayor confianza de usuarios y LLMs. |
+| **Esfuerzo** | S (3-4 horas — templates + automatización Zapier + dashboard) |
+| **Agente recomendado** | Full Stack (Zapier/Formspree) + Content (templates) |
+| **Referencias** | [3] BrightLocal — Review Management Statistics 2025 |
 | **Estado** | Nueva propuesta — NO mencionada en R1-R107 |
-| **Prioridad CEO** | **Media** — engagement y diferenciación, menor urgencia que Propuestas 1-3 |
+| **Prioridad CEO** | **Alta** — Reputation management |
 
 ---
 
-### Propuesta 5: Neighborhood Activity Feed
+### Propuesta 5: Core Web Vitals Real User Monitoring (RUM)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Feed de actividad reciente por barrio — social proof geolocalizado |
-| **Problema** | El 73% de búsquedas de servicios incluyen la localidad. Mostrar actividad reciente de clientes del MISMO BARRIO donde está el usuario aumenta significativamente la conversión. El sitio no tiene ningún tipo de social proof geolocalizado. |
-| **Descripción** | **1. Activity Feed Component:**<br>```html<br><section id="neighborhood-activity" class="container"><br>  <div class="activity-header"><br>    <h2>En tu zona</h2><br>    <span class="zone-name">Chapinero</span>\n  </div>\n  <div class="activity-feed">\n    <div class="activity-item">\n      <span class="activity-icon">✅</span>\n      <span class="activity-text">Limpieza de sofá completada en <strong>Chapinero</strong></span>\n      <span class="activity-time">Hace 2 horas</span>\n    </div>\n    <div class="activity-item">\n      <span class="activity-icon">⭐</span>\n      <span class="activity-text">Nueva reseña de <strong>María F.</strong> — Chapinero</span>\n      <span class="activity-time">Ayer</span>\n    </div>\n    <div class="activity-item">\n      <span class="activity-icon">📅</span>\n      <span class="activity-text"><strong>5 reservas</strong> esta semana en Suba</span>\n      <span class="activity-time">Esta semana</span>\n    </div>\n  </div>\n</section>\n```<br><br>**2. Geolocation Detection:**<br>```javascript<br>// js/neighborhood-feed.js\nasync function loadNeighborhoodActivity() {\n  const zone = await detectUserZone(); // From IP or browser geolocation\n  const response = await fetch(`/api/activity?zone=${zone}`);\n  const activities = await response.json();\n  renderActivityFeed(activities);\n}\n```<br><br>**3. Data Structure (localStorage模拟 backend):**<br>```javascript\nconst activityData = {\n  'chapinero': [\n    { type: 'booking', text: 'Limpieza de sofá completada', time: '2h ago' },\n    { type: 'review', reviewer: 'María F.', zone: 'Chapinero', time: '1d ago' }\n  ]\n};\n```<br><br>**4. Fallback:**<br>Si no hay datos para la zona del usuario, mostrar actividad general de Bogotá. |
-| **Impacto esperado** | +15-20% conversión en páginas de zona, fuerte social proof geolocalizado, diferenciación de competencia. |
-| **Esfuerzo** | S (3-4 horas — component + geolocation + mock data) |
-| **Agente recomendado** | Frontend |
-| **Referencias** | [5] Think with Google — Local Social Proof |
+| **Título** | Implementar medición Real User Monitoring de Core Web Vitals |
+| **Problema** | El sitio usa Playwright para tests E2E pero no mide Core Web Vitals de usuarios reales (RUM). Sin RUM, no se puede saber el LCP, FID, o CLS real de usuarios móviles en Bogotá. Google usa datos de campo (CrUX) para ranking. [4] |
+| **Descripción** | **1. Integrar web-vitals library:**<br>```html<br><script type="module"><br>import {onCLS, onFID, onLCP, onFCP, onTTFB} from 'https://unpkg.com/web-vitals?module';<br><br>function sendToAnalytics({name, delta, id}) {<br>  plausible('web_vitals', {<br>    props: {metric: name, value: delta, id: id}<br>  });<br>}<br><br>onCLS(sendToAnalytics);<br>onFID(sendToAnalytics);<br>onLCP(sendToAnalytics);<br>onFCP(sendToAnalytics);<br>onTTFB(sendToAnalytics);<br></script><br>```<br><br>**2. Dashboard en Plausible:**<br>Crear custom event `web_vitals` con propiedades metric, value, id. Ver dashboard en Plausible.<br><br>**3. Alertas de regresión:**<br>Configurar alerta cuando LCP > 4s, FID > 300ms, o CLS > 0.1 en móvil.<br><br>**4. Integración con Google Search Console:**<br>Configurar GSC para recibir datos de CrUX por URL. |
+| **Impacto esperado** | Visibilidad de performance real. Detección de regresiones antes de que afetcten SEO. Mejora en Core Web Vitals reportados en Google Search Console. |
+| **Esfuerzo** | S (2-3 horas — web-vitals + Plausible events + dashboard) |
+| **Agente recomendado** | Frontend (analytics) |
+| **Referencias** | [4] Google — Web Vitals Measurement Overview |
 | **Estado** | Nueva propuesta — NO mencionada en R1-R107 |
-| **Prioridad CEO** | **Alta** — impacto directo en conversión por zona |
+| **Prioridad CEO** | **Media** — SEO performance |
+
+---
+
+### Propuesta 6: Guest Posting en Blogs Colombianos de Hogar y Decoración
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Programa de guest posting en blogs venezolanos/colombianos de hogar |
+| **Problema** | Para ganar third-party authority signals (señal #1 de SEO 2026), Purity & Clean necesita ser mencionado en sitios third-party. Blogs de decoración y hogar en Colombia son el target ideal. [1] |
+| **Descripción** | **1. Investigación de blogs objetivo:**<br>Buscar blogs colombianos de decoración, hogar, y vida sana con audiencia en Bogotá. Ejemplos:<br>- decorabogota.com<br>- hogar封闭.com ( verificar)<br>- blog.acomer.com.co<br>- revistacerca.co<br><br>**2. Outreach con contenido valioso:**<br>- Artículo: "Guía completa: cómo cuidar tus sofás en Bogotá" (con link a Purity & Clean)<br>- Artículo: "5 errores que dañan tus colchones" (con link)<br>- Estudio propio: "Estado de la higiene de colchones en Bogotá - Estudio 2026" (dato publishable)<br><br>**3. Guest posting template:**<br>```<br>Hola [Blog], somos Purity & Clean, empresa de limpieza profesional en Bogotá. Queremos contribuir con un artículo para sus lectores sobre [tema]. Tenemos datos únicos de [X] servicios realizados en Bogotá que podemos compartir. ¿Interesado?<br>```<br><br>**4. Tracking de backlinks:**<br>Usar Ahrefs o Semrush para monitorear nuevos backlinks desde estos blogs. |
+| **Impacto esperado** | +5-10 backlinks de sitios relevantes en Colombia. Mayor autoridad de dominio. Más menciones en LLMs cuando busquen "empresa de limpieza Bogotá". |
+| **Esfuerzo** | M (6-8 horas outreach + contenido + seguimiento) |
+| **Agente recomendado** | Content (artículos guest) + CEO (outreach inicial) |
+| **Referencias** | [1] Backlinko — "Third-Party Signals Are an SEO Priority" |
+| **Estado** | Nueva propuesta — NO mencionada en R1-R107 |
+| **Prioridad CEO** | **Estratégica** — construcción de autoridad a 6-12 meses |
 
 ---
 
@@ -167,47 +196,35 @@ Empresas de home services en US ya están:
 
 | # | Propuesta | Impacto | Esfuerzo | Prioridad |
 |---|-----------|---------|----------|-----------|
-| 1 | **LLM/AI Search Optimization** | Descubrimiento via ChatGPT/Claude | S | 🔴 **Crítica** |
-| 2 | **Real-time Trust Score Dashboard** | +20% conversión | S | **Alta** |
-| 3 | **AI-Assisted Review Response** | 100% respuestas + SEO | M | 🔴 **Alta** |
-| 4 | **Video Review Collection** | +50% engagement Gen Z | M | Media |
-| 5 | **Neighborhood Activity Feed** | +15-20% conversión zona | S | **Alta** |
-
----
-
-## Dependencias y Precedentes
-
-| Propuesta R108 | Depende de | Notas |
-|----------------|------------|-------|
-| LLM/AI Search Optimization | GBP existente, Schema existente | Expande optimizaciones de R106-R107 |
-| Real-time Trust Dashboard | Ninguna | Componente nuevo, puede implementarse independientemente |
-| AI-Assisted Review Response | R107 Review Generation | Amplía el sistema propuesto en R107 |
-| Video Review Collection | R107 Video Pipeline | Continúa trabajo de video de R107 |
-| Neighborhood Activity Feed | Zonas pages existentes | Usa infraestructura de zonas (R102) |
+| 1 | **LLMs.txt + robots.txt para IA** | Visibility AI search | XS | Experimental |
+| 2 | **Geographic-Service Content Clusters** | SEO long-tail + LLM citations | L | **Alta** |
+| 3 | **Local Citations + NAP Audit** | SEO local + confianza LLM | M | **Alta** |
+| 4 | **Review Management Automation** | Reputation + engagement | S | **Alta** |
+| 5 | **Core Web Vitals RUM** | SEO performance | S | Media |
+| 6 | **Guest Posting Program** | Third-party authority | M | Estratégica |
 
 ---
 
 ## Orden de Implementación Sugerido
 
-1. **Propuesta 1** (Crítica, esfuerzo S) — Semana 1 — AI Search es cambio de paradigma
-2. **Propuesta 2** (Alta, esfuerzo S) — Semana 1-2 — Dashboard rápido de implementar
-3. **Propuesta 3** (Alta, esfuerzo M) — Semana 2-3 — Requiere desarrollo de admin
-4. **Propuesta 5** (Alta, esfuerzo S) — Semana 2 — Aprovecha zonas existentes
-5. **Propuesta 4** (Media, esfuerzo M) — Semana 3-4 — Content-heavy, puede esperar
+1. **Propuesta 1** (XS, Experimental) — Semana 1 (quick win)
+2. **Propuesta 5** (S, Media) — Semana 1 (en paralelo - analytics)
+3. **Propuesta 4** (S, Alta) — Semana 2 (reputation)
+4. **Propuesta 3** (M, Alta) — Semana 2-3 (citations)
+5. **Propuesta 2** (L, Alta) — Semana 4+ (content clusters)
+6. **Propuesta 6** (M, Estratégica) — Mes 2 (outreach)
 
 ---
 
 ## Fuentes
 
-[1] BrightLocal. "Local Consumer Review Survey 2026." https://www.brightlocal.com/research/local-consumer-review-survey/
+[1] Backlinko. "5 Crucial SEO Trends in 2026 (and How to Adapt)." https://backlinko.com/seo-this-year
 
-[2] Search Engine Journal. "How AI Crawlers Index Websites." https://www.searchenginejournal.com/
+[2] Whitespark. "Local Citation Finder." https://whitespark.ca/local-citation-finder/
 
-[3] OpenAI. "Business Listing Best Practices for AI." https://openai.com/
+[3] BrightLocal. "Review Management Statistics 2025." https://brightlocal.com/research/review-management-statistics/
 
-[4] Baymard Institute. "E-commerce Trust Seals Research." https://baymard.com/
-
-[5] Think with Google. "Local Social Proof in 2026." https://thinkwithgoogle.com/
+[4] Google. "Web Vitals Measurement Overview." https://developers.google.com/web/vitals/measurement-overview
 
 ---
 
