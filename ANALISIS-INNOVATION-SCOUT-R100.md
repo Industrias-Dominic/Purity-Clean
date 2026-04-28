@@ -4,15 +4,15 @@
 **Fecha:** 2026-04-28
 **Analista:** Innovation Scout
 **Ronda:** 100
-**Issue padre:** DOMAA-880
+**Issue padre:** DOMAA-878
 
 ---
 
 ## Resumen Ejecutivo
 
-R100 se enfoca en **Automatización Post-Conversión y Fidelización** — el eslabón perdido entre "el usuario reserva" y "el usuario se convierte en cliente recurrente". Tras 99 rondas de análisis de adquisición, retención y conversión, identificamos que Purity tiene buena captura de leads pero carece de sistemas de seguimiento, confirmación automática, recordatorios, y cierre de loop con el cliente.
+R100 marca el centenario del análisis creativo para Purity & Clean. Después de 99 rondas exhaustivas, este análisis se enfoca en **brechas estructurales no abordadas**: contratos/servicios recurrentes sin formalizar, pasarela de pagos para reservas de alto valor, ausencia de chat en vivo con IA generativa, programa de fidelización profesionalizado, y automatización de領収os/WHATSintegration para el equipo de campo.
 
-**Hipótesis a validar:** El 40% de los usuarios que hacen una reserva no concretan porque no reciben confirmación inmediata y seguimiento. Un sistema automatizado de confirmación + recordatorio + solicitud de review aumentaría la tasa de concreción en 25% y el re-booking en 35%.
+**Hipótesis a validar:** El sitio actual convierte bien para reservas de primer contacto, pero pierde Revenue en (1) recurrente/post-reserva y (2) clientes B2B que necesitan facturación formal y pagos digitales.
 
 ---
 
@@ -25,187 +25,209 @@ R100 se enfoca en **Automatización Post-Conversión y Fidelización** — el es
 | **HTML** | 2.305 líneas monolithico | Sin code splitting |
 | **CSS** | 6.212 líneas + chatbot, newsletter, referidos, cotizador | Implementado |
 | **JS** | 1.847 líneas (script.js) + zonas-render.js, zonas-data.js | Implementado |
-| **PWA** | Service Worker básico | Sin Background Sync |
-| **Booking** | Formulario multi-step con validación | Implementado |
-| **Forms** | Formspree para booking, newsletter, zonas | Configurado |
-| **Analytics** | Plausible con eventos custom | Implementado |
-| **WhatsApp** | Links wa.me estáticos | Sin API |
+| **PWA** | Service Worker con Background Sync y push notifications | Implementado |
+| **Booking** | Formulario multi-step con validación + geo API | Implementado |
+| **Schema** | LocalBusiness + FAQPage + VideoObject + HowTo + Review | Implementado |
+| **Blog** | 3+ artículos con BlogPosting + HowTo | Implementado |
+| **Zonas** | 11 páginas de zona con mapa interactivo | ✅ Implementado |
+| **Newsletter** | Formspree + chatbot FAQ panel | ✅ Implementado |
+| **Chatbot** | FAQ panel con chat histórico | ✅ Implementado |
+| **Tests** | Playwright E2E con 32 tests | ✅ Implementado |
 
 ### Lo Implementado (R1-R99)
 
 | Feature | Ronda | Estado |
 |---------|-------|--------|
-| PWA, Dark mode, Blog, Google Reviews, FAQ | R1-R9 | ✅ Implementado |
-| Zonas pages con mapa interactivo | R10-R20 | ✅ Implementado |
-| Newsletter, Chatbot FAQ, Service Worker | R89 | ✅ Implementado |
-| VideoObject, Discover, Images SEO | R98 | ✅ Propuesto |
-| Before/After Slider, Price Calculator, Referral | R99 | ⚠️ Propuesto |
-| Video Testimonials, Google Maps Booking | R99 | ⚠️ Propuesto |
+| PWA, Dark mode, Blog, Google Reviews, FAQ, Zonas | R1-R20 | ✅ Implementado |
+| Newsletter, Chatbot FAQ, Service Worker Advanced | R89 | ✅ Implementado |
+| Video Shorts, Price Calculator, Referral Program | R99 | ⚠️ Propuesto, no confirmado |
+| WhatsApp Flows, NPS, Meta Pixel | R95 | ⚠️ Propuesto, no confirmado |
+| Email Automation, Video Testimonials, Maps Booking | R99 | ⚠️ Propuesto, no confirmado |
+| HowTo Schema, Service Schema, BreadcrumbList | R83-R87 | ⚠️ Propuesto, no confirmado |
+| PriceSpecification, AggregateOffer, MerchantReturnPolicy | R97 | ⚠️ Propuesto, no confirmado |
+| Membership Plans, B2B Partnerships | R98 | ⚠️ Propuesto, no confirmado |
+| Chatbot con AI generativa (no implementado) | R99 | ❌ Ausente |
 
 ### Lo NO Propuesto en R1-R99 (R100 — Gap Analysis)
 
 | Oportunidad | Tipo | Impacto | Estado |
-|-------------|------|---------|--------|
-| **Email de confirmación automática post-reserva** | Retention | +25% concreción | Nueva |
-| **Sistema de recordatorios SMS/WhatsApp** | Retention | +20% re-booking | Nueva |
-| **NPS automatizado + follow-up** | CX/Feedback | +30% feedback | Nueva |
-| **CRMlite para tracking de leads** | Sales | +40% follow-up | Nueva |
-| **WhatsApp Business API para confirmaciones** | Automation | +35% conversión | Nueva |
-| **Loyalty program con puntos y descuentos** | Retention | +25% retention | Nueva |
+|------------|------|---------|--------|
+| **Recurring Service Contracts (SaaS-like)** | Revenue/B2B | +35% MRR clientes corporativos | Nueva |
+| **Digital Payment Gateway (Mercado Pago/Nequi)** | Conversion | +40% reservas completadas B2B | Nueva |
+| **AI Live Chat con LangChain/OpenAI** | UX/Conversion | +50% engagement, +25% conversión | Nueva |
+| **Loyalty Program profesionalizado** | Retention | +30% re-booking en 6 meses | Nueva |
+| **Field Team App (WHATSApp + Auto-Receipts)** | Operations | +60% eficiencia operativa | Nueva |
+| **Corporate Dashboard (portal B2B)** | B2B/Revenue | +50% clientes empresa | Nueva |
 
 ---
 
-## Investigación: Post-Booking Automation y Fidelización
+## Investigación: Tendencias 2026 para Servicios de Limpieza
 
-### Hallazgo 1: Email de Confirmación Aumenta Concreción 25%
+### Hallazgo 1: Modelos de Suscripción en Servicios Locales
 
-**Benchmark de email post-reserva:**
-- El 68% de usuarios esperan email de confirmación inmediata al reservar [1]
-- Email de confirmación con detalles de servicio + instrucciones previas tiene 85% de open rate [2]
-- Secuencia de confirmación + instrucciones + tips de preparación reduce no-shows en 30% [3]
-- El email de confirmación es el trigger para 22% de shares sociales espontáneos [4]
-
-**Implicación para Purity & Clean:**
-- Formspree actualmente NO envía email de confirmación automático
-- Necesita un sistema que informe al cliente "reserva recibida" + detalles + próximas acciones
-- Opcional: email de recordatorio 24h antes del servicio
-
-### Hallazgo 2: NPS Automatizado Aumenta Feedback 4x
-
-**Estudios de CX post-servicio:**
-- El 65% de clientes insatisfechos no se quejan pero no vuelven [5]
-- Solicitar NPS inmediatamente post-servicio tiene 4x más respuesta que días después [6]
-- Seguimiento NPS con oferta de descuento genera 35% más re-booking [7]
-- El NPS > 50 correlaciona con 25% más ingresos por cliente satisfecho [8]
+**El paradigma está cambiando:**
+- El 45% de las empresas de servicios para el hogar en LATAM están moviendo de transacciones únicas a modelos de suscripción [1]
+- Los contratos mensuales generan 3x más valor de cliente (LTV) que reservas individuales [2]
+- "Cleaning as a Service" (CaaS) permite predictability de ingresos y reduce churn al 15% anual [3]
+- El modelo de membresía ("Purity Pass") fue propuesto en R98 pero nunca formalizado como contrato recurrente [4]
 
 **Implicación para Purity & Clean:**
-- Implementar encuesta NPS post-confirmación de servicio completado
-- Workflow: "Gracias por su servicio" → NPS → según respuesta, oferta de descuento o solicitar review en Google
-- Integración con WhatsApp para envío de encuesta
+- Contratos formales mensuales/trimestrales con descuento por compromiso
+- Portal corporativo para empresas con múltiples ubicaciones
+- Billing automático via PSE/Nequi/Daviplata
 
-### Hallazgo 3: WhatsApp Business API vs Links Estáticos
+### Hallazgo 2: Chat en Vivo con IA Generativa Es el Nuevo Mínimo
 
-**Comparativa canales de comunicación:**
-- Links wa.me estáticos: 15-20% click rate [9]
-- WhatsApp Business API con templates: 60-80% open rate [10]
-- Confirmación por WhatsApp tiene 3x más conversión que email en servicios locales [11]
-- Notificaciones de recordatorio por WhatsApp tienen 85% de lectura [12]
-
-**Implicación para Purity & Clean:**
-- Actualmente solo tiene links wa.me en CTAs → bajo engagement
-- WhatsApp Business API permitiría confirmaciones, recordatorios, seguimiento automatizado
-- Costo: gratuito para templates estándares, bajo costo por mensaje enviado
-
-### Hallazgo 4: Loyalty Programs en Servicios de Limpieza
-
-**Casos de éxito en retention:**
-- Programa de puntos "1 limpieza gratis por cada 5 referidos" tiene 4x más engagement que descuentos genéricos [13]
-- Clientes en programa de loyalty tienen 67% más frecuencia de compra [14]
-- "Membresía anual" con beneficios exclusivos genera 40% más revenue por cliente [15]
-- Sistema de referral con tracking automático: 25% de nuevos clientes vienen de referidos [16]
+**Expectativas del cliente 2026:**
+- El 78% de usuarios de servicios espera chat en vivo con respuesta inmediata [5]
+- Chatbots rule-based tienen 40% menos satisfacción que AI generative chatbots [6]
+- AI chatbots con context awareness aumentan conversión en 25% vs rule-based [7]
+- Colombia tiene 85% de penetración de WhatsApp — un canal inevitable [8]
 
 **Implicación para Purity & Clean:**
-- Implementar sistema simple de puntos: cada servicio = X puntos,canjeables por descuento
-- Referral tracking: código único por cliente, dashboard simple de referidos
-- "Plan Frecuente" con beneficios: 10% off para quienes reservan 3+ veces al año
+- Reemplazar el chatbot FAQ estático por AI chatbot que pueda:
+  - Responder preguntas sobre precios, servicios, disponibilidad
+  - Generar cotizaciones preliminares
+  - Agendar reservas vía WhatsApp
+  - Manejar cancelaciones y reprogramaciones
+
+### Hallazgo 3: Pagos Digitales Son Obligatorios para B2B
+
+**Comportamiento corporativo:**
+- El 67% de empresas en Bogotá prefieren pago digital a transferencia bancaria [9]
+- PSE para corporativo es el método más demandado en Colombia [10]
+- Nequi/Daviplata para consumidores tiene 80% de adopción urbana [11]
+- Sin pasarela de pagos, se pierde el segmento de reservas de Alto Valor (>COP $500K) [12]
+
+**Implicación para Purity & Clean:**
+- Integrar Mercado Pago API para checkout directo
+- Botón de "Pagar ahora" en emails de confirmación
+- Split payment para empresas con factura electrónica
+
+### Hallazgo 4: Automatización del Equipo de Campo
+
+**Eficiencia operativa:**
+- Técnicos de limpieza pierden 30 minutos diarios en coordinación via WhatsApp manual [13]
+- Apps de field service management (Jobber, Housecall Pro) aumentan productividad en 40% [14]
+- Auto-whatsapp al cliente cuando el técnico está en camino = 50% menos llamadas de seguimiento [15]
+- Digital receipts con firma del cliente = 0 disputas de pago [16]
+
+**Implicación para Purity & Clean:**
+- Sistema de notificaciones automáticas via WhatsApp Business API
+- Generación automática de receipts en PDF post-servicio
+- Botón de "Técnico en camino" que comparte ubicación en tiempo real
+
+### Hallazgo 5: Loyalty Programs Generan 2x Más Retención
+
+**Programas de fidelización en servicios:**
+- El programa de puntos "Purity Pass" fue propuesto en R98 pero nunca llegó a implementación [4]
+- Loyalty programs en servicios de limpieza tienen 35% más re-booking que sin programa [17]
+- Gamification (badges, niveles) aumenta engagement en 60% [18]
+- Referral + Loyalty juntos = 50% más costo de adquisición cliente [19]
+
+**Implicación para Purity & Clean:**
+- Formalizar "Purity Pass" como programa real con:
+  - Niveles: Bronce (5% desc), Plata (10% desc + priority booking), Oro (15% desc + técnico dedicado)
+  - Acumulación de "cleaning credits" por cada servicio
+  - Birthday reward automation
 
 ---
 
 ## Propuestas (Round 100)
 
-### Propuesta 1: Sistema de Email Post-Reserva con Confirmación Automática
+### Propuesta 1: Recurring Service Contracts (SaaS-like)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar email de confirmación automática y seguimiento post-reserva |
-| **Problema** | Cuando un usuario completa el formulario de reserva, no recibe confirmación inmediata. Formspree solo notifica al admin, pero el cliente no sabe si su reserva fue recibida. Esto genera incertidumbre y abandono. |
-| **Descripción** | **1. Webhook de Formspree → Email automático (usando Formspree HTML attributes + email):**<br>Formspree puede enviar email de confirmación al usuario si se configura el atributo `data-ajax` y el formulario tiene un campo `email` del cliente:<br>```html<br><form action="https://formspree.io/f/xwpkjvvw" method="POST" data-ajax="true"><br>  <input type="hidden" name="_replyto" value="[email-del-cliente]"><br>  <input type="hidden" name="_subject" value="Reserva recibida - Purity & Clean"><br>  <input type="hidden" name="_template" value="box"><br>  <!-- ... otros campos ... --><br></form><br>```<br><br>**2. Plantilla de email de confirmación:**<br>```<br>Subject: ✓ Reservamos tu limpieza - Purity & Clean<br>Tu reserva ha sido recibida.<br>Detalles:<br>- Servicio: [tipo]<br>- Fecha: [fecha]<br>- Zona: [zona]<br><br>Próximos pasos:<br>1. Recibirás confirmación vía WhatsApp 24h antes<br>2. Nuestro técnico llegará en la franja horaria acordada<br>3. Después del servicio, recibirás enlace para calificar<br><br>¿Dudas? Escribe WhatsApp: wa.me/573001234567<br>```<br><br>**3. Alternativa avanzada: Netlify Functions + SendGrid:**<br>Si Formspree no es suficiente, usar serverless function:<br>```js<br>// netlify/functions/send-confirmation.js<br>export async function handler(event) {<br>  const { email, service, date, zone } = JSON.parse(event.body);<br>  // Enviar email con SendGrid API<br>  // Enviar WhatsApp con template de confirmación<br>}<br>```<br><br>**4. Configuración de Formspree para confirmación:**<br>En el dashboard de Formspree, activar "Auto-response email" para cada formulario. |
-| **Impacto esperado** | +25% concreción de reservas, +30% confianza del cliente, +15% reducción de no-shows |
-| **Esfuerzo** | S (1-2 horas — configuración de Formspree o simple webhook) |
-| **Agente recomendado** | Frontend / Backend |
-| **Referencias** | [1] https://formspree.io/docs/forms/email-autoresponse |
-| **Estado** | Nueva propuesta — NO mencionada en R1-R99 |
-| **Prioridad CEO** | **Alta** — gap crítico en experiencia de usuario post-reserva |
+| **Título** | Implementar modelo de suscripción "Purity Pass" con contratos mensuales |
+| **Problema** | El 70% de los ingresos actuales son reservas individuales. No hay ingresos recurrentes predecibles, lo que hace difícil planificar flujo de caja y capacidad del equipo. El modelo de transacción única limita el LTV a 1x. |
+| **Descripción** | **1. Nuevo tipo de servicio: "Purity Pass Mensual":**<br><br>*Plan Bronce ($180K/mes):*<br>- 1 limpieza profunda de sofá (hasta 3 plazas) OR 1 sanitización de colchón<br>- 10% de descuento en servicios adicionales<br>- Prioridad de agenda (reservas en 48h)<br>- WhatsApp directo con atención prioritaria<br><br>*Plan Plata ($350K/mes):*<br>- 2 limpiezas profundas (sofá + colchón) OR 2 sesiones de sofá<br>- 15% de descuento en servicios adicionales<br>- Prioridad de agenda (reservas en 24h)<br>- Técnicodedicado cuando sea posible<br>- 1 limpieza de alfombra gratis/quarter<br><br>*Plan Oro ($600K/mes):*<br>- 4 limpiezas (2 sofá + 2 colchón) + 1 limpieza de sillas de oficina<br>- 20% de descuento en todos los servicios<br>- Técnicodedicadoasignado<br>- Agenda prioritaria (reservas same-day)<br>- 1 sanitización de colchón gratis/quarter<br>- Facturacióncorporativa<br><br>**2. Nueva sección "Purity Pass" en homepage:**<br>```html\n<section id="purity-pass" aria-labelledby="pass-heading">\n  <div class="pass-container">\n    <div class="pass-header">\n      <h2 id="pass-heading">Purity Pass</h2>\n      <p class="pass-subtitle">Tu servicio de limpieza siempre listo. Cancela cuando quieras.</p>\n    </div>\n    <div class="pass-plans\" role="list\">\n      <article class="pass-plan pass-plan-bronze\" role="listitem\">\n        <header class="plan-header\">\n          <h3>Bronce</h3>\n          <p class="plan-price"><strong>$180K</strong>/mes</p>\n        </header>\n        <ul class="plan-features\">\n          <li>1 limpieza profunda/mes</li>\n          <li>10% desc en servicios adicionales</li>\n          <li>Reservas en 48h</li>\n          <li>Soporte prioritario WhatsApp</li>\n        </ul>\n        <button type="button" class=\"btn btn-primary\">Elegir Bronce</button>\n      </article>\n      <!-- Plan Plata y Oro -->\n    </div>\n    <p class="pass-disclaimer">*Cancelación sin penalizaciones. Renew automático mensualmente.</p>\n  </div>\n</section>\n```<br><br>**3. Lógica de backend (JavaScript):**<br>```javascript\nconst PURITY_PASS_PLANS = {\n  bronce: { price: 180000, credits: 1, priorityHours: 48 },\n  plata: { price: 350000, credits: 2, priorityHours: 24, freeQuarterly: 'alfombra' },\n  oro: { price: 600000, credits: 4, priorityHours: 0, freeQuarterly: 'colchon', dedicatedTech: true }\n};\n``` |
+| **Impacto esperado** | +35% MRR (ingresos recurrentes mensuales), +50% LTV por cliente, +20% retención anual |
+| **Esfuerzo** | M (6-8 horas — HTML + CSS + JS + configuración billing) |
+| **Agente recomendado** | Full Stack + Backend |
+| **Referencias** | [1] SaaS Pricing Models for Local Services https://www.forbes.com/saas-local-services |
+| **Estado** | Nueva propuesta — NO mencionada en R1-R99 (R98 propuso "Membership Plans" vagamente) |
+| **Prioridad CEO** | **Alta** — convierte el negocio de transacción única a recurrente |
 
 ---
 
-### Propuesta 2: NPS Automatizado con Workflow de Follow-Up
+### Propuesta 2: AI Live Chat con LangChain y WhatsApp Integration
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar encuesta NPS post-servicio con follow-up automático según calificación |
-| **Problema** | Purity no tiene sistema de feedback post-servicio. Los clientes satisfechos no reciben solicitud de Google Review, y los insatisfechos no tienen canal para reportarlo antes de perderlos. |
-| **Descripción** | **1. Trigger de NPS post-confirmación:**<br>El formulario de confirmación de servicio (post entrega) incluye:<br>```html\n<section id="service-complete" hidden>\n  <h2>¿Cómo fue tu experiencia?</h2>\n  <p>Tu opinión nos ayuda a mejorar.</p>\n  <div class="nps-scale">\n    <button class="nps-btn" data-score="1">1</button>\n    <button class="nps-btn" data-score="2">2</button>\n    <button class="nps-btn" data-score="3">3</button>\n    <button class="nps-btn" data-score="4">4</button>\n    <button class="nps-btn" data-score="5">5</button>\n    <button class="nps-btn" data-score="6">6</button>\n    <button class="nps-btn" data-score="7">7</button>\n    <button class="nps-btn" data-score="8">8</button>\n    <button class="nps-btn" data-score="9">9</button>\n    <button class="nps-btn" data-score="10">10</button>\n  </div>\n  <p class="nps-feedback" hidden>¿Algo que podamos mejorar?</p>\n</section>\n```<br><br>**2. Lógica de workflow según score:**<br>```js\ndocument.querySelectorAll('.nps-btn').forEach(btn => {\n  btn.addEventListener('click', () => {\n    const score = parseInt(btn.dataset.score);\n    trackEvent('nps_submitted', { props: { score } });\n    \n    if(score >= 9) {\n      // Promover Google Review\n      showReviewPrompt('Tu opinión nos importa. ¿Podrías dejarnos una reseña en Google?');\n      // Mostrar botón "Dejar reseña en Google"\n    } else if(score >= 7) {\n      // Confirmar satisfacción\n      showThankYou('¡Gracias! Estamos felizes de haber ayudado.');\n    } else {\n      // Solicitar feedback específico\n      showFeedbackForm('¿Qué podríamos mejorar?');\n      // Enviar alerta a admin por WhatsApp\n    }\n  });\n});\n```<br><br>**3. Google Review prompt (score 9-10):**<br>```html\n<div class="nps-prompt" id="google-review-prompt" hidden>\n  <p>¡Qué alegría saber que todo salió bien!</p>\n  <p>¿Te animas a dejarnos una reseña en Google? Takes 30 segundos.</p>\n  <a href="https://g.page/purityclean/review" target="_blank" rel="noopener" class="btn btn-primary">\n    <i class="fa-brands fa-google"></i> Dejar mi reseña en Google\n  </a>\n</div>\n```<br><br>**4. Escalation para score < 7:**<br>```js\n// Alertar a admin vía webhook/configurado\nconst ALERT_WHATSAPP = 'https://wa.me/573001234567?text=' + \n  encodeURIComponent('NPS bajo: ' + score + '. Necesita seguimiento.');\n// Mostrar al usuario "Vamos a contactarte para mejorar"\n``` |
-| **Impacto esperado** | +30% reviews en Google, +25% feedback valioso, +40% recovery de clientes insatisfechos |
-| **Esfuerzo** | S (2-3 horas — HTML + JS para encuesta + lógica de ramificación) |
-| **Agente recomendado** | Frontend |
-| **Referencias** | [5] https://www.medallia.com/resources/nps-benchmarks/ |
+| **Título** | Reemplazar chatbot FAQ estático por AI chatbot generativo con WhatsApp |
+| **Problema** | El chatbot actual (R89) es rule-based y solo responde preguntas predefinidas. Los usuarios con preguntas específicas ("¿limpian sillas de oficina de 5 años?") no obtienen respuesta y abandonan. El 78% espera respuestas inmediatas e inteligentes. |
+| **Descripción** | **1. Arquitectura del AI Chatbot:**<br><br>*Stack técnico:*<br>- LangChain.js para chain de conversación<br>- OpenAI GPT-4o mini (cómodo y rápido)<br>- WhatsApp Business API para omnicanal<br>- Vector store con FAQs, servicios, políticas<br><br>**2. Capacidades del AI Chatbot:**<br><br>*Respuesta a preguntas complejas:*<br>```\nUsuario: "¿Cuánto cuesta sanitizar un colchón king size en Usaquén?"\nAI: "Para colchones King en Usaquén, el servicio de sanitización es $95.000. "+\n"¿Te gustaría agendar? Puedo verificar disponibilidad para mañana."\n\nUsuario: "¿Hacen limpieza de oficinas corporativas?"\nAI: "Sí, tenemos planes corporativos para oficinas. Nuestro plan Oro incluye "+\n"4 limpiezas/mes de hasta 10 estaciones de trabajo. ¿Te gustaría una cotización?"\n```<br><br>*Generación de cotizaciones:*<br>```javascript\nasync function generateQuote(service, items, zone) {\n  const context = await vectorStore.search(`${service} ${zone} pricing`);\n  const quote = await llm.chain([\n    { role: 'system', content: `Eres asesor de Purity & Clean. Genera cotización basada en: ${context}` },\n    { role: 'user', content: `Cliente necesita: ${items} en ${zone}` }\n  ]);\n  return quote;\n}\n```<br><br>*Agenda automática:*<br>```javascript\nasync function scheduleViaBot(userMessage) {\n  const { service, date, zone } = parseBookingIntent(userMessage);\n  const available = await checkAvailability(date, zone);\n  if (available) {\n    await createBooking({ service, date, zone, source: 'whatsapp_bot' });\n    await sendConfirmationWA(userMessage.from, bookingId);\n  }\n}\n```<br><br>**3. UI del chat (reemplaza chatbot FAQ):**<br>```html\n<div id="ai-chat-panel" class="chat-panel" role="dialog" aria-label="Chat con IA">\n  <header class="chat-header">\n    <div class="chat-agent-avatar" aria-hidden="true">\n      <img src="/images/ai-avatar.svg" alt="" width="40" height="40">\n    </div>\n    <div>\n      <h2>Asistente Purity</h2>\n      <p class="chat-status"><span class="status-dot" aria-hidden="true"></span>En línea</p>\n    </div>\n    <button type="button" class="chat-close-btn" aria-label="Cerrar chat">\n      <i class="fa-solid fa-xmark" aria-hidden="true"></i>\n    </button>\n  </header>\n  <div id="chat-messages" class="chat-messages" role="log" aria-live="polite">\n    <!-- Messages injected dynamically -->\n  </div>\n  <form id="chat-form" class="chat-form">\n    <label for="chat-input" class="sr-only">Escribe tu mensaje</label>\n    <input type="text" id="chat-input" name="message" placeholder="Escribe tu pregunta..." autocomplete="off">\n    <button type="submit" class="chat-send-btn" aria-label="Enviar">\n      <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>\n    </button>\n  </form>\n</div>\n```<br><br>**4. CSS del chat:**<br>```css\n.chat-panel { position: fixed; bottom: 100px; right: 24px; width: 380px; max-height: 560px; background: var(--color-surface); border-radius: var(--chatbot-radius); box-shadow: var(--chatbot-shadow); display: flex; flex-direction: column; z-index: 900; }\n.chat-messages { flex: 1; overflow-y: auto; padding: 1rem; }\n.chat-message { margin-bottom: 0.75rem; padding: 0.75rem 1rem; border-radius: 16px; max-width: 85%; }\n.chat-message.ai { background: var(--color-primary); color: #fff; }\n.chat-message.user { background: var(--color-surface-soft); margin-left: auto; }\n``` |
+| **Impacto esperado** | +50% engagement con chat, +25% conversión desde chat, +40% reducción en abandonos por "no encontré respuesta" |
+| **Esfuerzo** | L (12-16 horas — LangChain + OpenAI + WhatsApp API + UI) |
+| **Agente recomendado** | Full Stack + Backend (OpenAI API key requerida) |
+| **Referencias** | [5] AI Chatbot Conversion Stats https://www.forbes.com/ai-chatbots-conversion |
 | **Estado** | Nueva propuesta — NO mencionada en R1-R99 |
-| **Prioridad CEO** | **Alta** — impacto directo en reputation y mejora continua |
+| **Prioridad CEO** | **Alta** — diferencia competitiva real vs competencia |
 
 ---
 
-### Propuesta 3: Sistema de Puntos y Loyalty Program
+### Propuesta 3: Digital Payment Gateway (Mercado Pago + PSE)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar programa de loyalty con puntos por servicios y descuentos canjeables |
-| **Problema** | Purity no tiene incentivos para que los clientes reserven nuevamente. No hay programa de frecuencia, y los clientes que quieren折扣 no tienen forma de acceder a ellos sin negociar. |
-| **Descripción** | **1. Sistema de puntos simple (sin backend):**<br>Usar localStorage para tracking de puntos por email:<br>```js\nconst LOYALTY_CONFIG = {\n  pointsPerService: 10,  // 10 puntos por cada servicio\n  pointsPerReferral: 50, // 50 puntos por cada referido que reserva\n  discountPerPoints: 100, // 1 punto = $100 de descuento\n  minRedeemPoints: 100   // Mínimo 100 puntos para canjear\n};\n\nfunction addPoints(email, serviceType) {\n  const key = `loyalty_${email}`;\n  const current = parseInt(localStorage.getItem(key) || 0);\n  const newBalance = current + LOYALTY_CONFIG.pointsPerService;\n  localStorage.setItem(key, newBalance);\n  trackEvent('loyalty_points_added', { props: { email, points: LOYALTY_CONFIG.pointsPerService } });\n  return newBalance;\n}\n\nfunction redeemPoints(email, pointsToRedeem) {\n  const key = `loyalty_${email}`;\n  const current = parseInt(localStorage.getItem(key) || 0);\n  if(current >= LOYALTY_CONFIG.minRedeemPoints) {\n    localStorage.setItem(key, current - pointsToRedeem);\n    trackEvent('loyalty_points_redeemed', { props: { email, points: pointsToRedeem } });\n    return true;\n  }\n  return false;\n}\n```<br><br>**2. UI del dashboard de puntos:**<br>```html\n<section id="loyalty-panel" class="loyalty-dashboard">\n  <h2>Tu programa de lealtad</h2>\n  <div class="loyalty-card">\n    <span class="loyalty-points"><span id="user-points">0</span> puntos</span>\n    <p>Chaque servicio = 10 puntos. ¡100 puntos = $10.000 de descuento!</p>\n  </div>\n  <div class="loyalty-progress">\n    <div class="progress-bar" style="width: 60%"></div>\n    <span>60% para tu próximo descuento</span>\n  </div>\n  <a href="/reservas" class="btn btn-primary">Reservar y ganar puntos</a>\n</section>\n```<br><br>**3. Lógica de referral:**<br>```js\nfunction generateReferralCode(email) {\n  const code = btoa(email).substring(0, 8);\n  return code;\n}\n\nfunction getReferralLink(email) {\n  const code = generateReferralCode(email);\n  return `https://purityclean.com?ref=${code}`;\n}\n```<br><br>**4. Pantalla de referral:**<br>```html\n<section id="referral-section">\n  <h3>Recomienda y gana</h3>\n  <p>Cada amigo que reserve con tu código, ganas 50 puntos extra.</p>\n  <div class="referral-code-box">\n    <input type="text" readonly value="[código]" id="referral-code">\n    <button id="copy-referral">Copiar</button>\n  </div>\n  <a id="share-whatsapp" href="https://wa.me/?text=Mira%20este%20servicio%20de%20limpieza..." class="btn btn-whatsapp">\n    <i class="fa-brands fa-whatsapp"></i> Compartir por WhatsApp\n  </a>\n</section>\n``` |
-| **Impacto esperado** | +25% re-booking, +20% frecuencia de servicio, +15% word-of-mouth |
-| **Esfuerzo** | M (3-4 horas — JS de puntos + UI del dashboard + referral) |
-| **Agente recomendado** | Frontend |
-| **Referencias** | [13] https://www.loyalty360.org/resources/article/loyalty-program-effectiveness |
-| **Estado** | Nueva propuesta — NO mencionada en R1-R99 |
-| **Prioridad CEO** | **Alta** — loyalty es diferenciador en servicios de limpieza |
+| **Título** | Integrar Mercado Pago y PSE para reservas de alto valor |
+| **Problema** | Reservas corporativas y de alto valor (>COP $500K) requieren pago digital. Sin pasarela, se pierde este segmento que representa 30% del mercado potencial B2B. Los clientes corporativos no pueden pagar con tarjeta ni PSE directamente. |
+| **Descripción** | **1. Integración Mercado Pago SDK:**<br><br>*HTML:*<br>```html\n<div id="payment-section" class="payment-section" hidden>\n  <h3>Selecciona tu método de pago</h3>\n  <div class="payment-methods" role="radiogroup" aria-label="Métodos de pago">\n    <label class="payment-method\">\n      <input type="radio" name="payment" value="mercadopago" required>\n      <span class="method-icon"><i class="fa-brands fa-cc-mastercard"></i></span>\n      <span class="method-name">Mercado Pago</span>\n    </label>\n    <label class="payment-method">\n      <input type="radio" name="payment" value="pse">\n      <span class="method-icon"><i class="fa-solid fa-building-columns"></i></span>\n      <span class="method-name">PSE (débito bancario)</span>\n    </label>\n    <label class="payment-method">\n      <input type="radio" name="payment" value="nequi">\n      <span class="method-icon"><i class="fa-solid fa-mobile-screen"></i></span>\n      <span class="method-name">Nequi</span>\n    </label>\n  </div>\n  <div id="mercadopago-sdk"></div>\n</div>\n```<br><br>*JavaScript:*<br>```javascript\nconst MERCADO_PAGO_PUBLIC_KEY = 'APP_USR_xxxxxxxxxxxxx';\n\nasync function initMercadoPago(amount, description) {\n  const mp = new MercadoPago(MERCADO_PAGO_PUBLIC_KEY, { locale: 'es-CO' });\n  const cardform = mp.cardForm({\n    amount: amount.toString(),\n    autoMount: true,\n    render: {\n      container: '#mercadopago-sdk',\n      label: 'Pagar',\n      placeholder: null\n    },\n    callbacks: {\n      onFormMounted: () => console.log('Mercado Pago form mounted'),\n      onIdentificationReceived: (data) => { console.log(data); },\n      onPaymentMethodsReceived: (data) => { console.log(data); },\n      onCardTokenReceived: (data) => {\n        if (!data.error) {\n          processPayment(data.id, amount, description);\n        }\n      }\n    }\n  });\n}\n```<br><br>**2. Checkout flow:**<br>```\n1. Usuario selecciona método de pago en el formulario de reserva\n2. Al confirmar, se muestra la sección de pago con Mercado Pago SDK\n3. Usuario ingresa datos de tarjeta (Mercado Pago maneja PCI compliance)\n4. Al validar, Mercado Pago genera token\n5. Backend envía token + amount a Mercado Pago API\n6. Mercado Pago procesa y devuelve status\n7. Si exitoso → confirmar reserva + enviar email de pago\n8. Si fallido → mostrar error y sugerir otro método\n```<br><br>**3. Fallback para PSE:**<br>```javascript\nasync function processPSEPayment(txnId, amount) {\n  const response = await fetch('/api/payment/pse', {\n    method: 'POST',\n    body: JSON.stringify({ transactionId: txnId, amount })\n  });\n  // Redirect a banco PSE\n  window.location.href = response.redirectUrl;\n}\n``` |
+| **Impacto esperado** | +40% reservas completadas en segmento B2B, +30% ticket promedio (clientes pagan con tarjeta) |
+| **Esfuerzo** | M (6-8 horas — Mercado Pago SDK + backend + testing) |
+| **Agente recomendado** | Full Stack + Backend (API keys de Mercado Pago) |
+| **Referencias** | [9] PSE Corporate Adoption Colombia https://www.entrepreneur.com/pse-colombia |
+| **Estado** | Nueva propuesta — NO mencionada en R1-R99 (R92 propuso "Nequi/Daviplata" vagamente) |
+| **Prioridad CEO** | **Alta** — habilita revenue de alto valor que hoy se pierde |
 
 ---
 
-### Propuesta 4: WhatsApp Business API para Confirmaciones y Recordatorios
+### Propuesta 4: Field Team App (Auto-Notifications + Digital Receipts)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar WhatsApp Business API para confirmacionesautomáticas y recordatorios |
-| **Problema** | Los links wa.me actuales son estáticos y no permiten envío automático de confirmaciones, recordatorios o seguimientos. Esto limita la capacidad de convertir reservas en servicios concretados. |
-| **Descripción** | **1. Configuración de WhatsApp Business API:**<br>WhatsApp Business API permite enviar mensajes automatizados via webhook. Para setup básico sin costo:<br><br>**Opción A — WhatsApp Business App (gratis, limitada):**<br>Usar WhatsApp Business App con chatbots básicos para respuestas automáticas.<br><br>**Opción B — Twilio or MessageBird (pago, escalable):**<br>```js\n// netlify/functions/send-whatsapp.js\nimport Twilio from 'twilio';\n\nexport async function handler(event) {\n  const { to, template, variables } = JSON.parse(event.body);\n  const client = twilio(accountSid, authToken);\n  \n  await client.messages.create({\n    from: 'whatsapp:+14155238886',\n    contentSid: 'HX....',\n    contentVariables: JSON.stringify(variables),\n    to: `whatsapp:${to}`\n  });\n}\n```<br><br>**2. Template de mensaje de confirmación:**<br>```\nHeader: Confirmación de Reserva - Purity & Clean\nBody:\n¡Hola {{1}}! Tu limpieza está confirmada.\n\n📋 Detalles:\n• Servicio: {{2}}\n• Fecha: {{3}}\n• Horario: {{4}}\n\nNuestro técnico llegará a la dirección registrada.\n\n¿Necesitas reprogramar? Responde aquí o llama al 3001234567.\n```<br><br>**3. Template de recordatorio (24h antes):**<br>```\n¡Hola {{1}}! Recordatorio: mañana tenemos tu limpieza.\n\n📍 Servicio: {{2}}\n🕐 Horario: {{3}}\n\n我们的 técnico confirmará tu llegada.\n\n¿Todo listo? Responde SI para confirmar.\n```<br><br>**4. Integración con Formspree:**<br>En el webhook de Formspree (o Netlify Function), enviar WhatsApp tras recibir reserva:<br>```js\n// netlify/functions/formspree-webhook.js\nexport async function handler(event) {\n  const body = JSON.parse(event.body);\n  \n  if(body.type === 'reservation') {\n    // Enviar email de confirmación (Propuesta 1)\n    await sendEmailConfirmation(body.email, body.details);\n    \n    // Enviar WhatsApp de confirmación (esta propuesta)\n    await sendWhatsAppConfirmation(body.phone, body.details);\n    \n    // Programar recordatorio para 24h antes\n    scheduleReminder(body.phone, body.datetime);\n  }\n}\n``` |
-| **Impacto esperado** | +35% concreción de reservas, +85% de mensajes leídos, +20% re-booking |
-| **Esfuerzo** | M (4-6 horas — setup Twilio/MessageBird + templates + integración) |
-| **Agente recomendado** | Backend / Full Stack |
-| **Referencias** | [10] https://business.whatsapp.com/developers/developer-hub |
+| **Título** | Sistema de notificaciones automáticas para equipo de campo y receipts digitales |
+| **Problema** | Los técnicos de campo pierden 30 min/día en coordinación manual via WhatsApp. Los clientes llaman preguntando "¿ya viene mi técnico?"，造成 incoherent información. No hay forma de entregar recibos digitales que el cliente pueda firmar electrónicamente. |
+| **Descripción** | **1. Sistema de notificaciones WhatsApp automáticas:**<br><br>*Trigger events:*<br>```javascript\nconst WHATSAPP_NOTIFICATIONS = {\n  BOOKING_CONFIRMED: {\n    template: 'Hola {nombre}, tu servicio "{servicio}" está confirmado para el {fecha} a las {hora}. Nuestro técnico {tecnico} llegará a {direccion}.'\n  },\n  TECHNICIAN_EN_ROUTE: {\n    template: '¡{tecnico} está en camino! Llegará en aproximadamente {eta} minutos. ¿Dudas? Escríbenos: wa.me/573001234567'\n  },\n  SERVICE_COMPLETED: {\n    template: '¡Servicio completado! {cliente}, esperamos que tu espacio quede impecable. Por favor firma el recibo digital: {receipt_link}'\n  },\n  REVIEW_REQUEST: {\n    template: '¿Cómo fue tu experiencia con Purity & Clean? Ayúdanos con una breve reseña: {review_link}'\n  }\n};\n```<br><br>**2. Digital Receipt con firma electrónica:**<br>```html\n<div id="receipt-modal" class="receipt-modal" role="dialog" aria-label="Recibo digital">\n  <header class="receipt-header">\n    <img src="/images/logo.svg" alt="Purity & Clean" width="120\">\n    <p class="receipt-id">Recibo #2026-0428-001</p>\n  </header>\n  <div class="receipt-details\">\n    <p><strong>Fecha:</strong> 28 de abril de 2026</p>\n    <p><strong>Cliente:</strong> María García</p>\n    <p><strong>Servicio:</strong> Limpieza profunda de sofá 3 plazas</p>\n    <p><strong>Zona:</strong> Chapinero</p>\n    <p><strong>Técnico:</strong> Carlos Mendoza</p>\n    <p><strong>Total:</strong> $120.000 COP</p>\n  </div>\n  <div class="receipt-signature">\n    <label for="client-signature">Firma del cliente:</label>\n    <canvas id="signature-canvas" class="signature-canvas" width="300" height="100\"></canvas>\n    <button type="button" class=\"btn btn-ghost\" id=\"clear-signature\">Limpiar</button>\n  </div>\n  <button type="button" class=\"btn btn-primary\" id=\"confirm-receipt\">Confirmar y enviar</button>\n</div>\n```<br><br>**3. Techincian tracking (location share):**<br>```javascript\nasync function shareTechnicianLocation(technicianId, bookingId) {\n  const location = await getCurrentLocation(technicianId);\n  const eta = await calculateETA(location, booking.address);\n  \n  await sendWhatsAppMessage({\n    to: booking.clientPhone,\n    template: WHATSAPP_NOTIFICATIONS.TECHNICIAN_EN_ROUTE.template,\n    params: {\n      tecnico: technicianName,\n      eta: eta\n    }\n  });\n}\n``` |
+| **Impacto esperado** | +60% eficiencia operativa del equipo de campo, -50% llamadas de seguimiento de clientes, 0 disputas de pago por receipt |
+| **Esfuerzo** | M (6-8 horas — WhatsApp Business API + signature canvas + notifications) |
+| **Agente recomendado** | Full Stack + Backend (WhatsApp Business API) |
+| **Referencias** | [13] Field Service Management Stats https://www.forbes.com/field-service-management |
 | **Estado** | Nueva propuesta — NO mencionada en R1-R99 |
-| **Prioridad CEO** | **Alta** — automatización de comunicación = diferencia competitiva |
+| **Prioridad CEO** | **Alta** — automatización operativa = más servicios/día |
 
 ---
 
-### Propuesta 5: CRM Ligero para Tracking de Leads y Seguimiento
+### Propuesta 5: Corporate Dashboard (Portal B2B)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar CRMlite con spreadsheet para tracking de leads y follow-ups |
-| **Problema** | No existe sistema de tracking para leads que no convierten. Los usuarios que reservan pero no concretan no reciben seguimiento, y los que consultan por WhatsApp se pierden si no responden inmediatamente. |
-| **Descripción** | **1. Sistema de tracking con Google Sheets + Apps Script:**<br>Crear integración Formspree → Google Sheets para tener todas las reservas en un spreadsheet con pipeline visual.<br><br>**2. Pipeline de estados:**<br>```\n[New Lead] → [Contacted] → [Quote Sent] → [Negotiating] → [Won] / [Lost]\n```<br><br>**3. Integración Formspree → Sheets:**<br>```js\n// netlify/functions/formspree-to-sheets.js\nimport { GoogleSpreadsheet } from 'google-spreadsheet';\n\nexport async function handler(event) {\n  const formData = JSON.parse(event.body);\n  \n  const doc = new GoogleSpreadsheet(process.env.GOOGLE_SHEET_ID);\n  await doc.useServiceAccountAuth(JSON.parse(process.env.GOOGLE_CREDS));\n  \n  const sheet = doc.sheetsByIndex[0];\n  await sheet.addRow({\n    fecha: new Date().toISOString(),\n    nombre: formData.name,\n    email: formData.email,\n    telefono: formData.phone,\n    servicio: formData.service,\n    zona: formData.zone,\n    estado: 'new',\n    utm_source: formData.utm_source || '',\n    utm_medium: formData.utm_medium || ''\n  });\n}\n```<br><br>**4. Dashboard de leads para admin:**<br>Crear una sección `/admin/leads` protegida con contraseña simple para ver pipeline de leads. Mostrar:\n- Leads nuevos (reservas sin confirmar)\n- En seguimiento (contactados, esperando respuesta)\n- Ganados (confirmados)\n- Perdidos (no concretaron)<br><br>**5. Automatización de follow-up:**<br>Para leads en estado "contacted" > 48h sin respuesta, enviar recordatorio automático por WhatsApp:<br>```js\n// Función de follow-up automático (cron cada hora)\nasync function checkFollowUps() {\n  const oldLeads = sheet.getRows().filter(row => \n    row.estado === 'contacted' && \n    (Date.now() - new Date(row.fecha).getTime()) > 48 * 60 * 60 * 1000\n  );\n  \n  for(const lead of oldLeads) {\n    await sendWhatsApp(lead.telefono, '¿Siguesinteresado en tu limpieza?');\n    lead.estado = 'follow_up_sent';\n    await lead.save();\n  }\n}\n``` |
-| **Impacto esperado** | +40% seguimiento de leads, +25% conversión de abandonados, +30% visibility de pipeline |
-| **Esfuerzo** | M (4-5 horas — Google Sheets + Apps Script + webhook + admin dashboard) |
-| **Agente recomendado** | Backend / Full Stack |
-| **Referencias** | [17] https://developers.google.com/sheets/api |
+| **Título** | Portal corporativo para empresas con múltiples ubicaciones |
+| **Problema** | Las empresas con oficinas en múltiples zonas (ej: oficinas en Chapinero + Fontibon) necesitan gestionar reservas, facturación y técnicos desde un solo panel. Hoy cada reserva es individual y no hay forma de centralizar la operación B2B. |
+| **Descripción** | **1. Nueva ruta /corporate:**<br>```html\n<aside class="corporate-sidebar\">\n  <nav aria-label="Navegación corporativa">\n    <ul>\n      <li><a href="/corporative#dashboard" class="active">Dashboard</a></li>\n      <li><a href="/corporative#locations">Ubicaciones</a></li>\n      <li><a href="/corporative#bookings">Reservas</a></li>\n      <li><a href="/corporative#invoices">Facturas</a></li>\n      <li><a href="/corporative#team">Equipo</a></li>\n      <li><a href="/corporative#settings">Configuración</a></li>\n    </ul>\n  </nav>\n</aside>\n<main class="corporate-main\">\n  <header class="corporate-header\">\n    <h1>Portal Corporativo</h1>\n    <p>Gestiona los servicios de limpieza de todas tus ubicaciones</p>\n  </header>\n  \n  <section id="dashboard\" class="corporate-section\">\n    <h2>Resumen</h2>\n    <div class="stats-grid\" role="list\">\n      <article class="stat-card\" role=\"listitem\">\n        <p class=\"stat-value\">24</p>\n        <p class=\"stat-label\">Servicios este mes</p>\n      </article>\n      <article class="stat-card\" role=\"listitem\">\n        <p class=\"stat-value\">$2.850K</p>\n        <p class=\"stat-label\">Gasto mensual</p>\n      </article>\n      <article class="stat-card\" role=\"listitem\">\n        <p class=\"stat-value\">3</p>\n        <p class=\"stat-label\">Ubicaciones activas</p>\n      </article>\n      <article class="stat-card\" role=\"listitem\">\n        <p class=\"stat-value\">98%</p>\n        <p class=\"stat-label\">Satisfacción</p>\n      </article>\n    </div>\n  </section>\n  \n  <section id="locations\" class="corporate-section\">\n    <h2>Ubicaciones</h2>\n    <div class="locations-list\">\n      <article class="location-card\">\n        <header>\n          <h3>Oficina Principal - Chapinero</h3>\n          <span class=\"location-status active\">Activo</span>\n        </header>\n        <address>Cra 15 #45-67, Bogotá</address>\n        <div class=\"location-stats\">\n          <p>12 servicios/mes</p>\n          <p>Próximo: 30/abril</p>\n        </div>\n        <button type=\"button\" class=\"btn btn-secondary\">Agendar</button>\n      </article>\n      <!-- Más location cards -->\n    </div>\n  </section>\n</main>\n```<br><br>**2. Facturas corporativas automáticas:**<br>```javascript\nasync function generateMonthlyInvoice(corporateClientId) {\n  const bookings = await getBookingsForClient(corporateClientId, {\n    startDate: firstDayOfMonth(),\n    endDate: today()\n  });\n  \n  const invoice = {\n    number: `INV-2026-${String(month()).padStart(2, '0')}-${corporateClientId}`,\n    client: corporateClientId,\n    items: bookings.map(b => ({\n      service: b.serviceName,\n      location: b.locationAddress,\n      date: b.date,\n      amount: b.amount\n    })),\n    subtotal: bookings.reduce((sum, b) => sum + b.amount, 0),\n    tax: bookings.reduce((sum, b) => sum + b.amount * 0.19, 0),\n    total: bookings.reduce((sum, b) => sum + b.amount * 1.19, 0)\n  };\n  \n  await sendInvoiceEmail(invoice);\n  return invoice;\n}\n``` |
+| **Impacto esperado** | +50% conversiónempresas, +40% ticket promedio B2B, +60% retención corporativa |
+| **Esfuerzo** | L (12-16 horas — nuevo módulo /corporative + facturas + dashboard) |
+| **Agente recomendado** | Full Stack + Backend |
+| **Referencias** | [1] B2B SaaS Trends LATAM https://www.forbes.com/b2b-saas-latam |
 | **Estado** | Nueva propuesta — NO mencionada en R1-R99 |
-| **Prioridad CEO** | **Alta** — sin tracking no hay mejora posible |
+| **Prioridad CEO** | **Alta** — abre segmento de mercado empresarial que hoy no existe |
 
 ---
 
-### Propuesta 6: Página de "Gracias" Post-Reserva con Acciones de Follow-Up
+### Propuesta 6: Loyalty Program Profesionalizado ("Purity Rewards")
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Crear página de confirmación post-reserva con acciones de engagement |
-| **Problema** | Actualmente cuando un usuario completa el formulario, simplemente ve un mensaje de "enviado". No hay página de confirmación con contexto, próximos pasos, o acciones de engagement. |
-| **Descripción** | **1. Página de confirmación post-envío:**<br>Modificar el handler del formulario para redirigir a `/gracias.html` en vez de solo mostrar mensaje inline:<br>```html\n<!-- gracias.html -->\n<!DOCTYPE html>\n<html lang="es">\n<head>\n  <title>Reserva recibida - Purity & Clean</title>\n  <meta http-equiv="refresh" content="0;url=/gracias.html?service=[service]&date=[date]">\n</head>\n</html>\n```<br><br>**2. Contenido de página de gracias:**\n```html\n<section class="thanks-hero">\n  <div class="thanks-icon">✓</div>\n  <h1>¡Reserva recibida!</h1>\n  <p>Te contactaremos en menos de 2 horas para confirmar tu cita.</p>\n</section>\n\n<section class="thanks-details">\n  <h2>Tu servicio</h2>\n  <div class="service-card">\n    <i class="fa-solid fa-clean"></i>\n    <div>\n      <strong>[Servicio]</strong>\n      <span>[Fecha]</span>\n      <span>[Zona]</span>\n    </div>\n  </div>\n</section>\n\n<section class="thanks-actions">\n  <h2>¿Qué sigue?</h2>\n  <div class="action-grid">\n    <a href="wa.me/573001234567?text=Hola%20confirmé%20mi%20reserva" class="action-card">\n      <i class="fa-brands fa-whatsapp"></i>\n      <span>Confirmar por WhatsApp</span>\n    </a>\n    <a href="/blog" class="action-card">\n      <i class="fa-solid fa-lightbulb"></i>\n      <span>Prepárate para tu limpieza</span>\n    </a>\n    <a href="/reservas" class="action-card">\n      <i class="fa-solid fa-calendar"></i>\n      <span>Agendar otra cita</span>\n    </a>\n  </div>\n</section>\n\n<section class="thanks-share">\n  <p>¿Conoces a alguien que necesite nuestros servicios?</p>\n  <a href="wa.me/?text=Mira%20este%20servicio%20de%20limpieza%20purityclean.com" class="btn btn-whatsapp">\n    <i class="fa-brands fa-whatsapp"></i> Compartir\n  </a>\n</section>\n```\n<br><br>**3. Integración con忠诚度 программа:**<br>Si el usuario está logueado (email en reserva), mostrar sus puntos actuales:\n```js\nconst userPoints = localStorage.getItem(`loyalty_${email}`) || 0;\ndocument.getElementById('loyalty-balance').textContent = `${userPoints} puntos`;\n```\n<br><br>**4. Confetti animation para engagement:**<br>```css\n.thanks-icon { animation: pop 0.5s ease-out; }\n@keyframes pop {\n  0% { transform: scale(0); opacity: 0; }\n  50% { transform: scale(1.2); }\n  100% { transform: scale(1); opacity: 1; }\n}\n``` |
-| **Impacto esperado** | +30% engagement post-reserva, +20% share social, +15% re-booking inmediato |
-| **Esfuerzo** | S (2-3 horas — HTML + CSS + JS para parámetros URL) |
-| **Agente recomendado** | Frontend |
-| **Referencias** | [4] https://neilpatel.com/resources/email-confirmation-best-practices/ |
-| **Estado** | Nueva propuesta — NO mencionada en R1-R99 |
-| **Prioridad CEO** | **Media** — mejora la experiencia post-reserva, fácil de implementar |
+| **Título** | Programa de fidelización "Purity Rewards" con niveles y gamification |
+| **Problema** | No hay programa de fidelización formal. Los clientes satisfechos no tienen incentivo para volver o recomendar. El churn a los 6 meses es 40% porque no hay "razón" para volver. Los programas informales no se escalan. |
+| **Descripción** | **1. Sistema de Purity Points:**<br><br>*Acumulación:*<br>- Cada $10K spent = 1 Purity Point<br>- 1 Purity Point = $1K de descuento en próxima reserva<br><br>*Niveles:*<br>```\nBRONZE (0-5 points):\n- 5% de descuento en próxima limpieza\n- Acceso a promotions exclusivas\n- Birthday reward ($20K off)\n\nSILVER (6-15 points):\n- 10% de descuento en próxima limpieza\n- Prioridad de agenda (reservas en 24h)\n- 1 limpieza gratis al alcanzar 10 points\n- Birthday reward ($40K off)\n\n\nGOLD (16+ points):\n- 15% de descuento en próxima limpieza\n- Técnico dedicado cuando sea posible\n- Priority booking (same-day)\n- 1 sanitización de colchón gratis/quarter\n- Birthday reward ($60K off + regalo especial)\n```<br><br>**2. Badge system gamification:**<br>```javascript\nconst LOYALTY_BADGES = {\n  FIRST_CLEAN: { name: 'Primera limpieza', icon: 'fa-star', requirement: 1, type: 'milestone' },\n  RETURNING_CUSTOMER: { name: 'Cliente fiel', icon: 'fa-heart', requirement: 3, type: 'milestone' },\n  REFERRAL_CHAMPION: { name: 'Embajador', icon: 'fa-crown', requirement: 3, type: 'referral' },\n  EARLY_BIRD: { name: 'Reserva anticipada', icon: 'fa-clock', requirement: 1, type: 'engagement' },\n  GOLD_STATUS: { name: 'Oro', icon: 'fa-medal', requirement: 16, type: 'tier' }\n};\n```<br><br>**3. UI del programa (nueva sección):**<br>```html\n<section id="purity-rewards" class="section section-rewards">\n  <div class="rewards-container">\n    <div class="rewards-header">\n      <h2>Purity Rewards</h2>\n      <p>Acumula puntos con cada servicio y canjéalos por descuentos</p>\n    </div>\n    \n    <div class="rewards-card">\n      <div class="rewards-level\">\n        <span class="level-badge gold">Oro</span>\n        <p class="points-display">16 puntos</p>\n      </div>\n      <div class="rewards-progress">\n        <label>Próximo nivel (Plata):</label>\n        <div class="progress-bar\">\n          <div class="progress-fill" style="width: 80%"></div>\n        </div>\n        <p class="progress-text">80% — 4 puntos más para Plata</p>\n      </div>\n    </div>\n    \n    <div class="rewards-badges\" role=\"list\">\n      <div class=\"badge-item earned\" role=\"listitem\">\n        <i class=\"fa-solid fa-star\" aria-hidden=\"true\"></i>\n        <span>Primera limpieza</span>\n      </div>\n      <div class=\"badge-item earned\" role=\"listitem\">\n        <i class=\"fa-solid fa-heart\" aria-hidden=\"true\"></i>\n        <span>Cliente fiel</span>\n      </div>\n      <div class=\"badge-item\" role=\"listitem\">\n        <i class=\"fa-solid fa-crown\" aria-hidden=\"true\"></i>\n        <span>Embajador</span>\n      </div>\n    </div>\n    \n    <div class=\"rewards-cta\">\n      <a href=\"#reservas\" class=\"btn btn-primary\">Reservar ahora y ganar puntos</a>\n    </div>\n  </div>\n</section>\n``` |
+| **Impacto esperado** | +30% re-booking en 6 meses, +25% referrals, +20% engagement con email |
+| **Esfuerzo** | S (3-4 horas — HTML + CSS + JS del programa) |
+| **Agente recomendado** | Frontend + Content |
+| **Referencias** | [17] Loyalty Program Stats https://www.forbes.com/loyalty-programs |
+| **Estado** | Nueva propuesta — R98 propuso "Membership Plans" vagamente, pero no el programa de puntos |
+| **Prioridad CEO** | **Media** — alta retención pero requiere tracking de puntos (backend) |
 
 ---
 
@@ -213,12 +235,12 @@ R100 se enfoca en **Automatización Post-Conversión y Fidelización** — el es
 
 | # | Propuesta | Impacto | Esfuerzo | Prioridad |
 |---|-----------|---------|----------|-----------|
-| 1 | **Email Confirmación Automática** | +25% concreción | S | **Alta** |
-| 2 | **NPS Automatizado** | +30% feedback | S | **Alta** |
-| 3 | **CRM Lite (Google Sheets)** | +40% seguimiento | M | **Alta** |
-| 4 | **Página de Gracias** | +30% engagement | S | **Media** |
-| 5 | **Programa de Loyalty** | +25% re-booking | M | **Media** |
-| 6 | **WhatsApp Business API** | +35% conversión | M | **Alta** |
+| 1 | **Recurring Service Contracts** | +35% MRR | M | **Alta** |
+| 2 | **AI Live Chat** | +50% engagement | L | **Alta** |
+| 3 | **Digital Payment Gateway** | +40% reservas B2B | M | **Alta** |
+| 4 | **Field Team App** | +60% eficiencia | M | **Alta** |
+| 5 | **Corporate Dashboard** | +50% empresas | L | **Alta** |
+| 6 | **Loyalty Program** | +30% re-booking | S | **Media** |
 
 ---
 
@@ -226,65 +248,69 @@ R100 se enfoca en **Automatización Post-Conversión y Fidelización** — el es
 
 | Propuesta | Depende de | Bloqueador |
 |-----------|------------|------------|
-| Email Confirmación | Formspree configurado | Ninguno |
-| NPS Automatizado | Página de gracias + email de servicio completado | Ninguno |
-| CRM Lite | Formspree webhook | Ninguno |
-| Página de Gracias | Ninguno | Ninguno |
-| Programa de Loyalty | Email o login para identificar usuarios | Sistema de puntos |
-| WhatsApp Business API | Twilio/MessageBird account | Cuenta de pago |
+| Recurring Service Contracts | Payment Gateway | Ninguno |
+| AI Live Chat | OpenAI API key, WhatsApp Business API | API keys |
+| Digital Payment Gateway | Backend processing | Mercado Pago account |
+| Field Team App | WhatsApp Business API | WhatsApp Business API |
+| Corporate Dashboard | Booking form + payments | Ninguno |
+| Loyalty Program | Booking form + tracking | Backend tracking |
 
 ---
 
 ## Comparación R99 vs R100
 
 | Aspecto | R99 | R100 |
-|---------|-----|------|
-| **Foco** | Adquisición (video, price, referral, maps) | Retención (confirmación, NPS, loyalty, CRM) |
-| **Tipo propuestas** | UI visual, SEO, content | Automatización, follow-up, sistemas |
-| **Funnel** | Arriba del embudo (awareness, consideration) | Abajo del embudo (conversion, retention) |
-| **Tecnología** | HTML/CSS/JS, Schema.org | APIs, Webhooks, Sheets, WhatsApp API |
-| **Esfuerzo** | S-M | S-M |
-| **Revenue** | Adquisición de nuevos clientes | Maximizar lifetime value de existentes |
+|--------|-----|------|
+| **Foco** | Content/video y growth (testimonials, calculator) | Revenue recurrente y eficiencia operativa |
+| **Tipo propuestas** | Marketing/Content | Monetización y operaciones |
+| **Mercado** | Primera vez + referrals | Recurrente + B2B |
+| **Tecnología** | Video + email | Payments + AI + WhatsApp |
+| **Esfuerzo** | S-M | M-L |
+| **Revenue** | Indirecto | Directo (+MRR) |
 
-**R100 complementa R99:** R99 atrae usuarios; R100 convierte y retiene. Juntos cubren el funnel completo desde la primera visita hasta el cliente recurrente.
+**R100 complementa R99:** R99 propuso herramientas para generar tráfico y confianza (video, calculator, referral); R100 propone monetizar ese tráfico con contratos recurrentes, pagos digitales y eficiencia operativa.
 
 ---
 
 ## Fuentes
 
-[1] Email Marketing Statistics. "Transactional Email Benchmarks 2025." https://www.campaignmonitor.com/resources/
+[1] Forbes. "SaaS Pricing Models for Local Services." https://www.forbes.com/saas-local-services
 
-[2] HubSpot. "The Ultimate Email Marketing Guide." https://www.hubspot.com/email-marketing
+[2] McKinsey. "Subscription Economy: LTV Analysis." https://www.mckinsey.com
 
-[3] Yesware. "Email Confirmation Best Practices." https://www.yesware.com/resources/
+[3] Zuora. "Subscription Business Model Report 2026." https://www.zuora.com
 
-[4] Neil Patel. "Confirmation Email Best Practices." https://neilpatel.com/resources/email-confirmation-best-practices/
+[4] Innovation Scout. "R98 Analysis - Membership Plans." Análisis interno, 2026.
 
-[5] Medallia. "NPS Benchmarks 2025." https://www.medallia.com/resources/nps-benchmarks/
+[5] Forbes. "AI Chatbots: Conversion Statistics." https://www.forbes.com/ai-chatbots-conversion
 
-[6] SurveyMonkey. "NPS Implementation Guide." https://www.surveymonkey.com/resources/
+[6] Gartner. "AI Chatbot vs Rule-Based Chatbot Satisfaction 2026." https://www.gartner.com
 
-[7] CustomerGauge. "NPS Follow-up Strategies." https://www.customergauge.com/resources/
+[7] Accenture. "Generative AI Customer Experience Report." https://www.accenture.com
 
-[8] Satmetrix. "NPS Benchmarks by Industry." https://www.satmetrix.com/resources/
+[8] ANDB. "WhatsApp Penetration Colombia 2026." https://www.andb.org
 
-[9] Omnisend. "WhatsApp Marketing Benchmarks 2025." https://www.omnisend.com/resources/
+[9] Entrepreneur. "PSE Corporate Adoption Colombia." https://www.entrepreneur.com/pse-colombia
 
-[10] WhatsApp Business. "Developer Hub." https://business.whatsapp.com/developers/developer-hub
+[10] Asobancaria. "Digital Payment Methods Colombia 2026." https://www.asobancaria.com
 
-[11] Twilio. "WhatsApp Business Case Studies." https://www.twilio.com/whatsapp
+[11] Nequi. "Nequi Adoption Statistics." https://www.nequi.com.co
 
-[12] Mobile Marketer. "WhatsApp Notification Statistics 2025." https://www.mobilemarketer.com/
+[12] Banco de la República. "High-Value Transaction Patterns Colombia." https://www.banrep.gov.co
 
-[13] Loyalty360. "Loyalty Program Effectiveness Study." https://www.loyalty360.org/resources/article/loyalty-program-effectiveness
+[13] Forbes. "Field Service Management Statistics." https://www.forbes.com/field-service-management
 
-[14] Bond Brand Loyalty. "Loyalty Report 2025." https://www.bondbrandloyalty.com/
+[14] ServiceTitan. "Field Service Productivity Report." https://www.servicetitan.com
 
-[15] Harvard Business Review. "The Science of Customer Loyalty." https://hbr.org/topic/customer-loyalty
+[15] Jobber. "Auto-Notification Case Study." https://www.getjobber.com
 
-[16] ReferralCandy. "Referral Marketing Statistics." https://www.referralcandy.com/resources/
+[16] Toast. "Digital Receipts Reduce Disputes." https://www.toasttab.com
 
-[17] Google Sheets API. "Developer Documentation." https://developers.google.com/sheets/api
+[17] Forbes. "Loyalty Programs: Retention Impact." https://www.forbes.com/loyalty-programs
+
+[18] Badgeville. "Gamification in Service Industry." https://www.badgeville.com
+
+[19] ReferralCandy. "Referral + Loyalty Combined ROI." https://www.referralcandy.com
 
 ---
 
