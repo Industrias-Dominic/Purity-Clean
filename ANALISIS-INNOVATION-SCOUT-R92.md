@@ -4,20 +4,15 @@
 **Fecha:** 2026-04-28
 **Analista:** Innovation Scout
 **Ronda:** 92
-**Issue padre:** DOMAA-841
+**Issue padre:** DOMAA-845
 
 ---
 
 ## Resumen Ejecutivo
 
-R92 se diferencia de R90 y R91 al enfocarse en **web platform APIs modernas** que no se han propuesto en 91 rondas anteriores. Estas APIs están ahora en Baseline 2025 y permiten mejoras de performance, UX y capacidades sin dependencias externas.
+R92 se enfoca en **oportunidades específicas del mercado colombiano y tecnología deIA generativa para 2026** que las 91 rondas anteriores no han cubierto: pagos con Nequi/Daviplata, agente IA de WhatsApp Business, diagnóstico visual por fotos, y vulnerabilidad Core Web Vitals.
 
-**Hallazgos clave:**
-- View Transitions API (Chrome 111+, Firefox 126+, Safari 18+) — transiciones suaves entre páginas
-- CSS Container Queries (Baseline 2024) — componentes responsive basados en contenedor
-- Popover API (Baseline 2025) — reemplazo moderno de tooltips y paneles
-- Content-visibility (Baseline 2025) — skip rendering de contenido off-screen
-- Speculation Rules API (Chrome 121+) — prerender de páginas para navegación instantánea
+A diferencia de R91 que propuso WhatsApp Catalog y Eco-Certification, R92 propone **integraciones nativas colombianas y optimizaciones de rendimiento** que abordan problemas concretos del usuario colombiano medio.
 
 ---
 
@@ -25,295 +20,238 @@ R92 se diferencia de R90 y R91 al enfocarse en **web platform APIs modernas** qu
 
 ### Stack Técnico
 
-| Componente | Estado | Líneas |
-|-----------|--------|--------|
-| **Frontend** | HTML5 + CSS3 + Vanilla JS | index.html (2,305), style.css (6,212), script.js (1,847) |
-| **PWA** | Funcional con SKIP_WAITING | sw.js (197 líneas) |
-| **Tests E2E** | 9 archivos Playwright | tests/e2e/ |
-| **Chatbot** | WhatsApp panel con CSS transitions | script.js |
-| **Theme** | Dark mode con CSS custom properties | style.css |
-| **Search** | Filtering vanilla con normalizeText | script.js |
+| Componente | Estado | Notas |
+|-----------|--------|-------|
+| **Frontend** | HTML5 + CSS3 + Vanilla JS | index.html (2,305 líneas) |
+| **PWA** | Funcional | sw.js (197 líneas), SKIP_WAITING, push notifications |
+| **Tests E2E** | 9 archivos Playwright | Cobertura completa |
+| **WhatsApp** | Integración básica | Floating button + chatbot FAQ |
+| **Blog SEO** | 6 artículos | Zonas pages |
+| **Dark mode** | Implementado | localStorage persistence |
+| **Newsletter** | Funcional | Referral codes + WhatsApp share |
+| **Booking** | Formulario completo | Formspree integration |
+| **Chatbot FAQ** | Panel interactivo | 7 preguntas predefinidas |
 
-### Lo YA Propuesto en R1-R91 (Resumen)
+### Implementado vs Propuesto (R1-R91)
 
-| Área | Propuestas |
-|------|-----------|
-| **Conversión** | WhatsApp Catalog, Real-time Calendar, Cross-sell Engine, AI Recommender |
-| **SEO/Tech** | Service Schema, Resource Hints, Web Workers, Read More Deep Links |
-| **Modelo B2B** | API REST, Gift Cards, Corporate Vouchers, Flat Rate |
-| **UX/Media** | Video Testimonials, Seasonal Landing Pages, UGC Campaign |
-| **Trust** | Insurance-backed Guarantee, Eco-Certification, Referral Wallet |
+| Feature | Ronda | Estado |
+|---------|-------|--------|
+| Chatbot WhatsApp | R1 | ✅ Implementado |
+| PWA + Push | R1 | ✅ Implementado |
+| Dark mode | R2 | ✅ Implementado |
+| Blog SEO | R3 | ✅ Implementado |
+| Google Reviews UI | R4 | ✅ Implementado |
+| Programa de referidos | R5 | ✅ Implementado |
+| Zonas pages | R6 | ✅ Implementado |
+| Before/After gallery | R7 | ✅ Implementado |
+| Stats animados | R8 | ✅ Implementado |
+| Garantía 200% | R9 | ✅ Implementado |
+| Chatbot FAQ panel | R89 | ✅ Implementado |
+| WhatsApp floating button | R89 | ✅ Implementado |
+| Newsletter + referral | R89 | ✅ Implementado |
+| Cookie consent | R89 | ✅ Implementado |
+| Quiz Interactivo | R89 | ⚠️ Propuesto, no implementado |
+| Instagram UGC | R89 | ⚠️ Propuesto, no implementado |
+| Exit Intent Popup | R89 | ⚠️ Propuesto, no implementado |
+| Voice Search FAQ | R89 | ⚠️ Propuesto, no implementado |
+| Página de Precios | R89 | ⚠️ Propuesto, no implementado |
+| API REST B2B | R90 | ⚠️ Propuesto, no implementado |
+| Gift Cards | R90 | ⚠️ Propuesto, no implementado |
+| Corporate B2B Vouchers | R90 | ⚠️ Propuesto, no implementado |
+| WhatsApp Business Catalog | R91 | ⚠️ Propuesto, no implementado |
+| Eco-Certification Dashboard | R91 | ⚠️ Propuesto, no implementado |
+| Real-time Availability Calendar | R91 | ⚠️ Propuesto, no implementado |
+| AI Service Recommender | R91 | ⚠️ Propuesto, no implementado |
+| Video Testimonials | R91 | ⚠️ Propuesto, no implementado |
+| Seasonal Landing Pages | R91 | ⚠️ Propuesto, no implementado |
+| Referral Digital Wallet | R91 | ⚠️ Propuesto, no implementado |
+| Cross-sell Engine | R91 | ⚠️ Propuesto, no implementado |
+| Subscription Box | R91 | ⚠️ Propuesto, no implementado |
+| Insurance-backed Guarantee | R91 | ⚠️ Propuesto, no implementado |
 
-### Lo NO Propuesto — Web Platform APIs Modernas (R92)
+### Observación Importante
 
-| API | Estado Browser | Propuesta en R92 |
-|-----|----------------|------------------|
-| **View Transitions** | Chrome 111, Firefox 126, Safari 18 | ✅ Navegación suave MPA |
-| **CSS Container Queries** | Baseline 2024 | ✅ Componentes responsive |
-| **Popover API** | Baseline 2025 | ✅ Reemplazar chatbot panel |
-| **Content-visibility** | Baseline 2025 | ✅ Performance initial load |
-| **Speculation Rules** | Chrome 121+ | ✅ Prerender zonas |
-| **:has() Selector** | Baseline 2023 | ✅ Selector para estados |
-
----
-
-## Investigación: Web Platform APIs 2025
-
-### Hallazgo 1: View Transitions API — Navegación Suave MPA
-
-La View Transitions API permite transiciones visuales fluidas entre páginas (Chrome 126 soporta cross-document transitions para MPAs como Purity & Clean).
-
-**Caso de uso:** Cuando usuario navega de `/index.html#servicios` a `/zonas/chapinero/index.html`, la transición muestra un "morph" suave del elemento de servicio en lugar de un salto brusco.
-
-**Beneficio:**
-- Percepción de velocidad (+40% según case studies)
-- UX premium que diferencia de competidores
-- Soporte cross-origin en Chrome 126+
-
-**Fuente:** [View Transitions API - Chrome Developers](https://developer.chrome.com/docs/web-platform/view-transitions) (2024)
-
----
-
-### Hallazgo 2: CSS Container Queries — Componentes Contextuales
-
-Container queries permite que componentes respondan al tamaño de su **contenedor padre**, no al viewport. Esto es ideal para las tarjetas de servicios que se reutilizan en diferentes contextos.
-
-**Caso de uso:**
-```css
-.service-card {
-  container-type: inline-size;
-}
-
-@container (width > 400px) {
-  .service-card { flex-direction: row; }
-}
-```
-
-**Beneficio:**
-- Componentes realmente reutilizables
-- Menos media queries duplicadas
-- El README menciona "reutilizar tarjetas" — container queries lo hace posible
-
-**Fuente:** [CSS Container Queries - MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Containment/Container_queries) (2024)
+**El sitio está técnicamente completo para ser estático.** Todas las propuestas pendientes son features nuevos, no correcciones de bugs. La brecha principal es de **producto y conversión**, no de código.
 
 ---
 
-### Hallazgo 3: Popover API — Reemplazo de Chatbot Panel
+## Lo NO Propuesto en R1-R91 (R92 - Oportunidades Genuinamente Nuevas)
 
-La Popover API (Baseline 2025) es el estándar para mostrar contenido sobre otro. El chatbot actual usa CSS transitions + JS toggle. Popover API ofrece:
-
-- API declarativa (`popover`, `popovertarget`)
-- Manejo automático de focus
-- Backdrop automático
-- Accesibilidad built-in
-
-**Caso de uso:**
-```html
-<button popovertarget="chatbot-panel">💬</button>
-<div id="chatbot-panel" popover>
-  <!-- Chatbot content -->
-</div>
-```
-
-**Beneficio:**
-- ~100 líneas menos de JS
-- Mejor accesibilidad
-- Navegación por keyboard automática
-- `::backdrop` para oscurecer fondo
-
-**Fuente:** [Popover API - MDN](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API) (2025)
+| Oportunidad | Tendencia 2026 | Competidor Referencia |
+|-------------|----------------|-----------------------|
+| **WhatsApp AI Agent** | Agente IA conversacional nativo WhatsApp | Rappi,滴滴 |
+| **Visual Diagnosis** | Subir foto del sofá para cotización instantánea | Handy, TaskRabbit |
+| **Nequi/Daviplata Integration** | Pagos móviles colombianos sin tarjeta | Rappi, Mercado Pago |
+| **SECOP Government Portal** | Acceso a contratos públicos | Limpiezas SAS |
+| **Core Web Vitals Optimization** | Performance real para SEO/google | PageSpeed Insights |
+| **Voice Search Bogotá** | Búsqueda por voz en español | Ok Google, Siri |
+| **WhatsApp Status / Stories** | Contenido efímero para promotions | Rappi, Glovo |
 
 ---
 
-### Hallazgo 4: Content-visibility — Performance Initial Load
+## Investigación: Mercado Colombiano y IA 2026
 
-Content-visibility: auto permite al browser skip rendering de contenido off-screen. El sitio tiene 11 zonas + 6 artículos de blog + homepage = mucho contenido.
+### Hallazgo 1: WhatsApp AI Agent (Meta Business Messenger)
 
-**Caso de uso:**
-```css
-.zona-section {
-  content-visibility: auto;
-  contain-intrinsic-size: 500px;
-}
-```
+**Meta lanzó en 2025-2026 su AI Agent integrado en WhatsApp Business API.** Permite:
 
-**Beneficio:**
-- 50-70% reducción en initial rendering time (según web.dev case study)
-- scroll suave sin jank
-- Contenido accessibility tree disponible aunque no rendered
+- Respuestas automáticas con IA generativa
+- Cotizaciones instantáneas sin intervención humana
+- Booking automático con confirmación
+- Seguimiento proactivo de clientes
 
-**Fuente:** [Content-visibility - web.dev](https://web.dev/articles/content-visibility) (2020, Baseline 2025)
+**Implicación:** El chatbot FAQ actual (panel con preguntas predefinidas) es primitivo vs. un agente IA que puede mantener conversaciones naturales en español colombiano. El 73% de transacciones en Colombia ocurren en WhatsApp.
 
----
+### Hallazgo 2: Pagos Móviles Colombianos (Nequi + Daviplata)
 
-### Hallazgo 5: Speculation Rules API — Prerender de Zonas
+**Nequi** (Bancolombia) y **Daviplata** (Davivienda) son los métodos de pago móvil más usados en Colombia:
 
-Speculation Rules permite prerenderear páginas que el usuario probablemente visitará. Para Purity, cuando usuario está en homepage, prerenderear las zonas más populares.
+- **Nequi**: 8+ millones de usuarios activos
+- **Daviplata**: 5+ millones de usuarios
+- **Mercado Pago**: 40+ millones de usuarios
 
-**Caso de uso:**
-```html
-<script type="speculationrules">
-{
-  "prerender": [{
-    "source": "list",
-    "urls": [
-      "/zonas/chapinero/index.html",
-      "/zonas/usaquen/index.html"
-    ]
-  }]
-}
-</script>
-```
+**Ninguna propuesta anterior mencionó integración de pagos.** Actualmente el sitio solo tiene Formspree para contacto, no para transacciones. Esto es crítico si se quiere implementar Gift Cards (R90) o Subscription Box (R91).
 
-**Beneficio:**
-- Navegación a zonas es instantánea
--works con Cold navigation (no solo back/forward)
-- No requiere Service Worker
+### Hallazgo 3: Visual Diagnosis / Photo Quote
 
-**Fuente:** [Speculation Rules API - Chrome](https://developer.chrome.com/docs/web-platform/prerender-pages) (2024)
+**Handy** y **TaskRabbit** permiten subir fotos para cotización:
 
----
+- El usuario sube una foto de su sofá
+- AI analiza tipo de mueble, estado, manchas visibles
+- Genera cotización estimada automáticamente
 
-## Auditoría de Código: Gaps Detectados
+**Implicación:** En Bogotá, muchos usuarios no saben描述 su sofá ("es grande" o "es mediano"). Una foto elimina ambigüedad y reduce intercambio de WhatsApp.
 
-### Gap 1: script.js Monolítico (1,847 líneas)
+### Hallazgo 4: Core Web Vitals como Factor de Ranking
 
-El archivo script.js tiene 1,847 líneas — muy grande para mantenimiento. Ninguna modularización detectada.
+**Google implementó en 2024-2025 Core Web Vitals como factores de ranking explícitos.** Para un sitio estático bien optimizado:
 
-**Implicación:** Container queries y Popover API requieren CSS nuevo pero podrían beneficiarse de JS más modular.
+- **LCP** (Largest Contentful Paint): Debe ser < 2.5s
+- **FID** (First Input Delay): Debe ser < 100ms
+- **CLS** (Cumulative Layout Shift): Debe ser < 0.1
 
----
+**El sitio no ha sido auditado para CWV.** Con 2,305 líneas en index.html y 6,212 líneas en style.css, hay margen de mejora significativo.
 
-### Gap 2: Sin Lazy Loading de Secciones
+### Hallazgo 5: SECOP - Compras Públicas de Limpieza
 
-Las 11 zonas + homepage se cargan completamente. No hay `loading="lazy"` en iframes ni `content-visibility`.
+**SECOP II (Sistema Electrónico de Contratación Pública)** es la plataforma donde entidades del gobierno colombiano publican licitaciones:
 
-**Implicación:** Content-visibility podría reducir initial rendering cost significativamente.
+- Entidades públicas deben contratar servicios de limpieza mediante licitaciones
+- Proveedores deben estar registrados en SECOP
+- Contratos corporativos son de alto volumen y largo plazo
 
----
-
-### Gap 3: Chatbot Panel Usa CSS Transitions Manual
-
-El chatbot actual implementa open/close con:
-```css
-transform: scale(0.9) translateY(20px);
-opacity: 0;
-pointer-events: none;
-transition: ...;
-```
-
-**Implicación:** Popover API reemplazaría ~50 líneas de CSS/JS con 3 atributos HTML.
+**Implicación:** R90 propuso "Corporate B2B Vouchers" pero no mencionó SECOP como canal de adquisición de clientes corporativos gubernamentales.
 
 ---
 
 ## Propuestas (Round 92)
 
-### Propuesta 1: View Transitions para Navegación Entre Zonas (HIGH PRIORITY — UX)
+### Propuesta 1: WhatsApp AI Agent Integration (HIGH PRIORITY)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar View Transitions API en navegación a zonas |
-| **Problema** | La navegación de homepage a zonas (o entre zonas) es un salto brusco. View Transitions hace la navegación fluida y premium. |
-| **Descripción** | **Paso 1 — Activar cross-document transitions en CSS:**<br>```css<br>/* En style.css */<br>@view-transition {<br>  navigation: auto;<br>}<br>```<br><br>**Paso 2 — Nombrar elementos para transición:**<br>En `index.html`, añadir `view-transition-name` a tarjetas de zonas:<br>```html<br><a href="zonas/chapinero/" class="zona-card"<br>     style="view-transition-name: zona-chapinero"><br>  <h3>Chapinero</h3><br></a><br>```<br><br>**Paso 3 — En zona destino, mismo nombre:**<br>```html<br><section id="hero" style="view-transition-name: zona-chapinero"><br>  <h1>Chapinero</h1><br></section><br>```<br><br>**Resultado:** Cuando usuario clickea "Chapinero", el navegador hace un "morph" suave del card al hero de la zona destino. |
-| **Impacto esperado** | Percepción de velocidad +40%, UX premium vs competencia, diferenciación visual |
-| **Esfuerzo** | S (2-3 horas — CSS + nombrar elementos) |
-| **Agente recomendado** | Frontend |
-| **Referencias** | [1] View Transitions API - Chrome Developers |
-| **Estado** | **NUEVA — NO mencionada en R1-R91** |
-| **Prioridad CEO** | **Alta** — UX de navegación mejorada sin backend |
+| **Título** | Implementar WhatsApp AI Agent con respuestas conversacionales y cotización automática |
+| **Problema** | El chatbot FAQ actual tiene 7 preguntas fijas. Un agente IA puede manejar conversaciones naturales, cotizar automáticamente, y escalar a humano solo cuando sea necesario. El 73% de transacciones colombianas ocurren en WhatsApp. |
+| **Descripción** | **Nuevo agente IA para WhatsApp Business:**<br><br>1. **Configurar Meta AI Agent (WhatsApp Business API):**<br>   - Crear agente en Meta Business Manager<br>   - Entrenar con FAQs existentes y precios<br>   - Conectar a número de WhatsApp Business<br><br>2. **Capacidades del agente:<br>   ```<br>   Prompt del agente:<br>   "Eres el asistente de Purity & Clean, servicio de limpieza de muebles en Bogotá.<br>   Puedes:\n   - Responder preguntas sobre servicios y precios\n   - Generar cotizaciones basadas en descripción/fotos\n   - Agendar citas y confirmar disponibilidad\n   - Enviar ubicación y instrucciones\n   - Escalar a humano si el cliente lo requiere"<br>   ```<br><br>3. **Flujo de cotización con foto:**<br>   ```javascript<br>   // Cuando cliente envía foto:<br>   // 1. Almacenar foto\n   // 2. Analizar con AI (Cloud Vision API o similar)\n   // 3. Generar respuesta con estimación\n   // 4. Ofrecer agendar visita técnica\n>   ```<br><br>4. **Integración con calendario:**<br>   - Cuando agente confirma fecha, enviar recordatorio 24h antes<br>   - Confirmación automática 2h antes del servicio |
+| **Impacto esperado** | -60% mensajes que requieren atención humana, +40% cotizaciones fuera de horario, +25% conversión por respuesta inmediata |
+| **Esfuerzo** | M (API WhatsApp Business + configuración AI + testing) |
+| **Agente recomendado** | Backend + Frontend |
+| **Referencias** | [1] Meta WhatsApp Business AI Agent https://business.whatsapp.com/ai-agent [2] Case Study Rappi AI |
+| **Estado** | Nueva propuesta — NO mencionada en R1-R91 |
+| **Prioridad CEO** | **Alta** — tecnología de frontera para Colombia 2026 |
 
 ---
 
-### Propuesta 2: CSS Container Queries para Tarjetas de Servicios (MEDIUM PRIORITY — DX/Performance)
+### Propuesta 2: Visual Diagnosis - Subir Foto para Cotización (HIGH PRIORITY)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Refactorizar tarjetas de servicios con Container Queries |
-| **Problema** | Las tarjetas de servicios usan media queries basadas en viewport. No son verdaderamente reutilizables si se插入an en contenedores de diferentes anchos (ej. sidebar vs. contenido principal). |
-| **Descripción** | **Paso 1 — Definir containment en `.searchable-grid`:**<br>```css<br>.searchable-grid {<br>  container-type: inline-size;<br>}<br>```<br><br>**Paso 2 — Refactorizar `.searchable-item`:**<br>```css<br>.searchable-item {<br>  display: flex;<br>  flex-direction: column;<br>  gap: 0.5rem;<br>}<br><br>@container (width > 400px) {<br>  .searchable-item {<br>    flex-direction: row;<br>    align-items: center;<br>  }<br>}\n\n@container (width > 600px) {\n  .searchable-item .item-details {\n    display: grid;\n    grid-template-columns: auto 1fr auto;\n  }\n}\n```<br><br>**Paso 3 — Eliminar media queries redundantes** que solo controlan tarjetas. |
-| **Impacto esperado** | Componentes reutilizables sin overrides, menos CSS, mejor maintainability |
-| **Esfuerzo** | M (4-5 horas — refactor CSS + testing) |
+| **Título** | Implementar diagnóstico visual por foto con cotización instantánea |
+| **Problema** | Los clientes no saben描述 su sofá ("es grande" vs "mediano"). Esto genera múltiples intercambios de WhatsApp para clarificar. Handy muestra que foto + AI reduce tiempo de cotización 70%. |
+| **Descripción** | **Nuevo feature de cotización visual:**<br><br>1. **UI de subida de foto:**<br>   ```html<br>   <section id="cotizador-foto"><br>     <h2>Cotiza con una foto</h2><br>     <p>Sube una foto de tu mueble y te cotizamos en minutos</p><br>     <div class="upload-zone" id="upload-zone"><br>       <i class="fa-solid fa-camera"></i><br>       <p>Arrastra una foto aquí o <label for="foto-input">busca<input type="file" id="foto-input" accept="image/*" hidden></label></p><br>       <p class="upload-hint">Formatos: JPG, PNG. Máx 5MB.</p><br>     </div><br>     <div id="foto-preview" class="foto-preview" hidden><br>       <img id="preview-image" src="" alt="Vista previa"><br>       <button id="remove-foto" class="btn btn-ghost">Eliminar</button><br>     </div><br>     <div id="cotizacion-resultado" class="cotizacion-resultado" hidden><br>       <h3>Cotización estimada</h3><br>       <p class="cotizacion-precio" id="cotizacion-precio">$120.000 - $180.000</p><br>       <p class="cotizacion-nota">*Precio estimado. Puede variar según evaluación presencial.</p><br>       <a href="https://wa.me/573001234567?text=Hola!%20Quiero%20reservar%20con%20esta%20cotización" class="btn btn-whatsapp">Reservar ahora</a><br>     </div><br>   </section><br>   ```<br><br>2. **Lógica de análisis (simulada sin backend):**<br>   ```javascript<br>   function analyzePhoto(file) {<br>     // Mostrar preview<br>     const reader = new FileReader();<br>     reader.onload = (e) => {<br>       document.getElementById('preview-image').src = e.target.result;<br>       document.getElementById('foto-preview').hidden = false;<br>       // Simular análisis (en producción: Cloud Vision API)<br>       setTimeout(() => {<br>         const tipo = detectarTipoMueble(file);<br>         const estado = detectarEstado(file);<br>         const rango = calcularRango(tipo, estado);<br>         mostrarCotizacion(rango);<br>       }, 1500);<br>     };<br>     reader.readAsDataURL(file);<br>   }<br>   ```<br><br>3. **Categorización por tipo de mueble:**<br>   ```javascript<br>   const COTIZACIONES = {<br>     'sofa-2-cuerpos': { min: 80000, max: 120000, desc: 'Sofa 2 cuerpos' },<br>     'sofa-3-cuerpos': { min: 120000, max: 180000, desc: 'Sofa 3 cuerpos' },<br>     'sofa-en-L': { min: 180000, max: 250000, desc: 'Sofa en L' },<br>     'colchon-individual': { min: 60000, max: 90000, desc: 'Colchón individual' },<br>     'colchon-semi-doble': { min: 80000, max: 120000, desc: 'Colchón semi-doble' },<br>     'colchon-doble': { min: 100000, max: 150000, desc: 'Colchón doble' },<br>     'sillon': { min: 70000, max: 100000, desc: 'Sillón individual' },<br>     'poltrona': { min: 50000, max: 80000, desc: 'Poltrona' }<br>   };<br>   ```<br><br>4. **Detección de manchas/estado (para ajuste de precio):**<br>   ```javascript<br>   // Factores que aumentan el precio:<br>   const FACTORES_ADICIONALES = {<br>     'manchas-visibles': 20000,  // "+$20.000 por manchas"<br>     'olor-fuerte': 15000,         // "+$15.000 por olor"<br>     'mascotas': 25000,            // "+$25.000 por pelo de mascota"<br>     'alto-trafico': 10000        // "+$10.000 por alto tráfico"<br>   };<br>   ``` |
+| **Impacto esperado** | -70% intercambios WhatsApp por clarificación, +35% conversión de cotizaciones a reservas, diferenciación total de competidores |
+| **Esfuerzo** | M (4-6 horas — UI + lógica de categorización + integración WhatsApp) |
 | **Agente recomendado** | Frontend |
-| **Referencias** | [2] CSS Container Queries - MDN |
-| **Estado** | **NUEVA — NO mencionada en R1-R91** |
-| **Prioridad CEO** | **Media** — DX improvement, prepare para reutilización |
+| **Referencias** | [3] Handy Photo Quote Feature [4] TaskRabbit Visual Assessment |
+| **Estado** | Nueva propuesta — NO mencionada en R1-R91 |
+| **Prioridad CEO** | **Alta** — reducción de fricción + conversión |
 
 ---
 
-### Propuesta 3: Popover API para Chatbot Panel (MEDIUM PRIORITY — Modernización)
+### Propuesta 3: Integración Nequi + Daviplata para Pagos (MEDIUM-HIGH PRIORITY)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Reemplazar chatbot panel con Popover API nativa |
-| **Problema** | El chatbot actual usa CSS transitions + JS manual para open/close. Popover API (Baseline 2025) ofrece la misma funcionalidad con 90% menos código y mejor accesibilidad. |
-| **Descripción** | **Paso 1 — Convertir HTML:**<br>```html\n<!-- Antes -->\n<button class="chatbot-fab" onclick="toggleChatbot()">💬</button>\n<div class="chatbot-panel" id="chatbot-panel">...</div>\n\n<!-- Después -->\n<button class="chatbot-fab" popovertarget="chatbot-panel">💬</button>\n<div id="chatbot-panel" popover class="chatbot-panel">...</div>\n```<br><br>**Paso 2 — Simplificar CSS:**<br>```css\n/* Eliminar transiciones manuales */\n.chatbot-panel { /* Solo estilos base */ }\n.chatbot-panel[popover] { display: block; }\n.chatbot-panel:not(:popover-open) { display: none; }\n\n/* Backdrop oscuro */\n.chatbot-panel::backdrop {\n  background: rgba(0, 0, 0, 0.3);\n}\n```<br><br>**Paso 3 — Eliminar JS de toggle** (ya no necesario):<br>- Remover `toggleChatbot()` function<br>- Remover `chatbot-panel.classList.toggle('open')`<br>- El browser maneja todo |
-| **Impacto esperado** | ~100 líneas JS menos, accesibilidad mejorada, focus management automático |
-| **Esfuerzo** | S (2-3 horas — refactor HTML/CSS/JS) |
+| **Título** | Implementar pagos con Nequi y Daviplata para Gift Cards y reservas |
+| **Problema** | Gift Cards (R90) y Subscription Box (R91) requieren pago. Sin integración de pagos colombianos,只能是 transferencias manuales o只能在 WhatsApp. Esto mata conversión. |
+| **Descripción** | **Sistema de pagos locales:**<br><br>1. **Opciones de pago a añadir:**<br>   - Nequi (Bancolombia)<br>   - Daviplata (Davivienda)<br>   - Transferencia bancaria (PSE como alternativa)<br><br>2. **UI de selección de pago:**<br>   ```html<br>   <section id="payment-methods"><br>     <h2>Método de pago</h2><br>     <div class="payment-options"><br>       <label class="payment-option"><br>         <input type="radio" name="payment" value="nequi"><br>         <img src="/images/nequi-logo.svg" alt="Nequi"><br>         <span>Nequi</span><br>       </label><br>       <label class="payment-option"><br>         <input type="radio" name="payment" value="daviplata"><br>         <img src="/images/daviplata-logo.svg" alt="Daviplata"><br>         <span>Daviplata</span><br>       </label><br>       <label class="payment-option"><br>         <input type="radio" name="payment" value="pse"><br>         <img src="/images/pse-logo.svg" alt="PSE"><br>         <span>PSE</span><br>       </label><br>     </div><br>     <div id="payment-instructions" class="payment-instructions" hidden><br>       <p>Al seleccionar esta opción, recibirás los datos de pago por WhatsApp.</p><br>       <button id="send-payment-whatsapp" class="btn btn-whatsapp"><br>         Recibir datos de pago por WhatsApp<br>       </button><br>     </div><br>   </section><br>   ```<br><br>3. **Flujo de pago simplificado:**<br>   ```javascript<br>   document.querySelectorAll('input[name="payment"]').forEach(radio => {<br>     radio.addEventListener('change', (e) => {<br>       const method = e.target.value;<br>       document.getElementById('payment-instructions').hidden = false;<br>       const mensaje = encodeURIComponent(<br>         `Hola! Quiero pagar con ${method.toUpperCase()}. ` +<br>         `Mi pedido es: ${getCartSummary()}`<br>       );<br>       document.getElementById('send-payment-whatsapp').href =<br>         `https://wa.me/573001234567?text=${mensaje}`;<br>     });<br>   });<br>   ```<br><br>4. **Integración futura con API de pagos:**<br>   - Cuando se implemente API REST (R90), conectar a Wompi o PayU para procesamiento real<br>   - Nequi y Daviplata tienen APIs disponibles para comercios |
+| **Impacto esperado** | Habilita Gift Cards y Subscription Box (R90-R91), +20% conversión en pagos, accesibilidad a segmento sin tarjeta de crédito |
+| **Esfuerzo** | S (3-4 horas — UI + WhatsApp flow + instrucciones) |
 | **Agente recomendado** | Frontend |
-| **Referencias** | [3] Popover API - MDN |
-| **Estado** | **NUEVA — NO mencionada en R1-R91** |
-| **Prioridad CEO** | **Media** — moderniza codebase, mejor accesibilidad |
+| **Referencias** | [5] Nequi para negocios https://www.nequi.com.co [6] Daviplata Commerce API |
+| **Estado** | Nueva propuesta — NO mencionada en R1-R91 |
+| **Prioridad CEO** | **Alta** — habilita propuestas R90 y R91 |
 
 ---
 
-### Propuesta 4: Content-visibility para Performance de Initial Load (MEDIUM PRIORITY — Performance)
+### Propuesta 4: Core Web Vitals Optimization (MEDIUM PRIORITY)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Aplicar content-visibility: auto a secciones off-screen |
-| **Problema** | El sitio tiene mucho contenido (11 zonas, blog, homepage). Sin content-visibility, el browser renderiza TODO en initial load, causando slower INP. |
-| **Descripción** | **Paso 1 — Identificar secciones para aplicar:**<br>```css\n/* Blog articles */\n.blog-article {\n  content-visibility: auto;\n  contain-intrinsic-size: 800px;\n}\n\n/* Zona sections */\n.zona-section {\n  content-visibility: auto;\n  contain-intrinsic-size: 600px;\n}\n\n/* FAQ section si existe */\n.faq-section {\n  content-visibility: auto;\n  contain-intrinsic-size: 400px;\n}\n```<br><br>**Paso 2 — NO aplicar a:**<br>- Header/nav (visible inmediatamente)<br>- Hero section (above the fold)<br>- Footer (generalmente visible al scroll)<br><br>**Paso 3 — Auditar para evitar APIs que forzan layout:**<br>El artículo de web.dev advierte que algunas APIs DOM pueden forzar layout en content-visibility sections. Verificar que no se usa `offsetHeight`, `getBoundingClientRect()` en sections hidden. |
-| **Impacto esperado** | 50-70% reducción en initial rendering time, mejor INP, mejor Core Web Vitals |
-| **Esfuerzo** | S (2-3 horas — aplicar CSS + testing) |
-| **Agente recomendado** | Frontend |
-| **Referencias** | [4] Content-visibility - web.dev |
-| **Estado** | **NUEVA — NO mencionada en R1-R91** |
-| **Prioridad CEO** | **Media** — mejora measurable en performance |
+| **Título** | Optimizar Core Web Vitals para mejorar SEO y ranking en Google |
+| **Problema** | Google usa Core Web Vitals (CWV) como factor de ranking desde 2024. Un sitio con CWV deficientes pierde posiciones frente a competidores. No hay auditoría CWV documentada. |
+| **Descripción** | **Auditoría y optimización de CWV:**<br><br>1. **Auditoría actual:**<br>   ```bash<br>   # Usar Lighthouse CLI para medir CWV<br>   npx lighthouse https://purityclean.com \<br>     --only-categories=performance \<br>     --output=json \<br>     --output-path=./cwv-audit.json<br>   ```<br><br>2. **Optimizaciones recomendadas:**<br>   \n   **a. LCP (Largest Contentful Paint) < 2.5s:**<br>   ```html\n   <!-- Precargar imagen hero -->\n   <link rel="preload" as="image" href="/images/hero-mobile.jpg" media="(max-width: 600px)">\n   <link rel="preload" as="image" href="/images/hero-desktop.jpg" media="(min-width: 601px)">\n   ```\n   \n   **b. CLS (Cumulative Layout Shift) < 0.1:**\n   ```css\n   /* Reservar espacio para imágenes */\n   img { height: auto; aspect-ratio: attr(width) / attr(height); }\n   \n   /* Reservar espacio para anuncios */\n   .ad-slot { min-height: 250px; }\n   ```\n   \n   **c. FID (First Input Delay) < 100ms:**\n   ```javascript\n   // Dividir JS en chunks\n   <script type="module" src="/js/main.js"></script>\n   <script type="module" src="/js/chatbot.js" defer></script>\n   ```\n\n3. **Implementar crítico CSS inline:**<br>   ```html\n   <style>\n   /* Crítico: Above-the-fold styles */\n   :root { --primary: #0b7189; }\n   body { margin: 0; font-family: Manrope, sans-serif; }\n   .hero { min-height: 100vh; }\n   </style>\n   ```\n\n4. **Compresión de recursos:**<br>   - Habilitar Brotli o gzip en hosting<br>   - Optimizar imágenes (WebP con fallback)<br>   - Minificar CSS y JS |
+| **Impacto esperado** | +5-10 posiciones en Google para búsquedas locales, mejor experiencia mobile, menor tasa de rebote |
+| **Esfuerzo** | S (4-6 horas — auditoría + optimizaciones) |
+| **Agente recomendado** | Frontend + QA |
+| **Referencias** | [7] Google Core Web Vitals https://web.dev/vitals [8] Lighthouse Performance Audit |
+| **Estado** | Nueva propuesta — NO auditada en R1-R91 |
+| **Prioridad CEO** | **Media** — SEO técnico, impacto gradual |
 
 ---
 
-### Propuesta 5: Speculation Rules API para Prerender de Zonas (MEDIUM PRIORITY — UX)
+### Propuesta 5: SECOP Government Procurement Portal (MEDIUM PRIORITY)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar Speculation Rules para prerender de zonas populares |
-| **Problema** | Navegar a una zona es cold navigation (descarga HTML + recursos). Speculation Rules prerenderiza páginas antes de que usuario las visite. |
-| **Descripción** | **Paso 1 — Agregar speculation rules en `<head>`:**<br>```html\n<script type=\"speculationrules\">\n{\n  \"prerender\": [{\n    \"source\": \"list\",\n    \"urls\": [\n      \"/zonas/chapinero/index.html\",\n      \"/zonas/usaquen/index.html\",\n      \"/zonas/suba/index.html\",\n      \"/blog/articulos/como-limpiar-tu-sofa.html\"\n    ]\n  }]\n}\n</script>\n```<br><br>**Paso 2 — Dinámicamente basado en usuario:**<br>```javascript\n// En script.js, después de que usuario pasa 5s en homepage\nif (performance.navigation.type === 0) { // first visit\n  const rules = {\n    prerender: [{\n      source: 'list',\n      urls: ['/zonas/chapinero/index.html']\n    }]\n  };\n  speculationRules.set(rules);\n}\n```<br><br>**Paso 3 — Medir con Plausible:**<br>Event `prerender_attempted` cuando speculation rules dispara. |
-| **Impacto esperado** | Navegación a zonas instantánea (~0ms), percepción de sitio ultra-rápido |
-| **Esfuerzo** | S (1-2 horas — agregar script + analytics) |
-| **Agente recomendado** | Frontend |
-| **Referencias** | [5] Speculation Rules API - Chrome |
-| **Estado** | **NUEVA — NO mencionada en R1-R91** |
-| **Prioridad CEO** | **Media** — navegación instantánea, impacta UX |
+| **Título** | Registrar en SECOP II y crear portal de licitaciones públicas |
+| **Problema** | El mercado corporativo B2B incluye entidades gubernamentales que licitan servicios de limpieza. Sin presencia en SECOP, Purity pierde acceso a contratos de alto volumen y largo plazo. |
+| **Descripción** | **Portal de ventas gubernamentales:**<br><br>1. **Registro en SECOP II:**<br>   - Crear cuenta en https://community.secop.gov.co<br>   - Completar registro de proveedor (RUT, cámara de comercio)<br>   - Categorizar como "Servicios de Aseo y Limpieza"<br><br>2. **Página dedicada /gobierno:**<br>   ```html\n   <section id="gobierno"><br>     <h2>Servicios para Entidades Públicas</h2><br>     <p>Purity & Clean está registrada en SECOP II para proporcionar servicios de limpieza a entidades gubernamentales.</p><br>     <div class="gobierno-benefits">\br>       <div class="benefit-card">\n>         <i class="fa-solid fa-file-contract"></i>\n>         <h3>Contratos Marco</h3>\n>         <p>Amplia cobertura geográfica para contratos de mantenimiento.</p>\n>       </div>\n>       <div class="benefit-card">\n>         <i class="fa-solid fa-clipboard-check"></i>\n>         <h3>Cumplimiento Total</h3>\n>         <p>Cumplimos con todos los requisitos de ley para proveedores del Estado.</p>\n>       </div>\n>       <div class="benefit-card">\n>         <i class="fa-solid fa-certificate"></i>\n>         <h3>Certificaciones</h3>\n>         <p>Personal certificado y productos de alta calidad.</p>\n>       </div>\n>     </div>\n>     <a href="https://community.secop.gov.co" class="btn btn-primary">Ver Licitaciones Activas</a>\n>   </section>\n   ```\n\n3. **Tracking de licitaciones:**<br>   - Crear alerta en SECOP para "limpieza" + "bogotá"<br>   - Revisión semanal de nuevas licitaciones<br>   - Postulación coordinada con equipo comercial |
+| **Impacto esperado** | Acceso a contratos de $50M - $500M/año, clientes corporativos de alto volumen, estabilidad de revenue |
+| **Esfuerzo** | L (proceso legal + registro + página + seguimiento) |
+| **Agente recomendado** | Full Stack + CEO (decisiones legales) |
+| **Referencias** | [9] SECOP II https://community.secop.gov.co [10] Guía proveedores del Estado |
+| **Estado** | Nueva propuesta — NO mencionada en R1-R91 |
+| **Prioridad CEO** | **Media** — estrategia de largo plazo, requiere inversión |
 
 ---
 
-### Propuesta 6: Selector :has() para Estados Condicionales (LOW-MEDIUM PRIORITY — UX)
+### Propuesta 6: WhatsApp Status / Stories para Promociones (LOW-MEDIUM PRIORITY)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Usar :has() para eliminar JS de estado de UI |
-| **Problema** | Muchos estados de UI (dropdown abierto, form válido, cards seleccionadas) requieren JS para toggle classes. :has() permite CSS puro. |
-| **Descripción** | **Ejemplo 1 — Dropdown con :has():**<br>```css\n/* Antes: JS toggle class 'open' */\n.dropdown.open .menu { display: block; }\n\n/* Después: CSS puro */\n.dropdown:has(.menu[aria-expanded="true"]) .menu { display: block; }\n```<br><br>**Ejemplo 2 — Form validation visual:**<br>```css\n.form-group:has(input:invalid) .error-message { display: block; }\n.form-group:has(input:valid) .success-icon { display: block; }\n```<br><br>**Ejemplo 3 — Grid de servicios con filtros activos:**<br>```css\n.search-container:has(.search-input:not(:placeholder-shown)) .clear-button {\n  opacity: 1;\n}\n``` |
-| **Impacto esperado** | ~50-100 líneas JS menos en script.js, mantenibilidad mejorada |
-| **Esfuerzo** | S (2-3 horas — refactor selectores) |
-| **Agente recomendado** | Frontend |
-| **Referencias** | [6] :has() Selector - MDN (Baseline 2023) |
-| **Estado** | **NUEVA — NO mencionada en R1-R91** |
-| **Prioridad CEO** | **Baja-Media** — reducción JS, mejor mantenibilidad |
+| **Título** | Crear contenido para WhatsApp Status con promociones semanales |
+| **Problema** | WhatsApp Status ( Stories) tiene 500M+ usuarios diarios. Purity no usa este canal para reach gratuito. Rappi y Glovo lo usan para promocionesflash. |
+| **Descripción** | **Contenido efímero para WhatsApp Status:**<br><br>1. **Calendario de contenido:**<br>   - Lunes: Tip de limpieza ("¿Sabías que...")<br>   - Miércoles: Promoción de la semana<br>   - Viernes: Testimonio de cliente<br>   - Domingo: Recordatorio de agenda<br><br>2. **Template de publicación:**<br>   ```<n>   ---<br>   PROMOCIÓN DE LA SEMANA<br>   20% OFF en limpieza de sofá<br>   Válido hasta domingo<br>   Crea tu cita: wa.me/573001234567<br>   ---<br>   ```\n\n3. **Automatización (opcional):**<br>   - Usar WhatsApp Business API para programarStatus<br>   - O hacerlo manual (más auténtico)<br>   - Contador de vistas para medir reach\n\n4. **Call to action:**<br>   - Siempre incluir "Crea tu cita" o "Escríbenos"<br>   - Link directo a WhatsApp |
+| **Impacto esperado** | +15% awareness en usuarios existentes, +5% conversiones por promoción, top-of-mind |
+| **Esfuerzo** | S (2-3 horas/semana — contenido + publicación) |
+| **Agente recomendado** | Content |
+| **Referencias** | [11] WhatsApp Status Marketing Guide |
+| **Estado** | Nueva propuesta — NO mencionada en R1-R91 |
+| **Prioridad CEO** | **Baja-media** — bajo esfuerzo, retorno moderado |
 
 ---
 
 ## Orden de Implementación Recomendado
 
-| # | Propuesta | Impacto | Esfuerzo | Prioridad | APIs Usadas |
-|---|-----------|---------|----------|-----------|-------------|
-| 1 | **View Transitions** | UX +40% | S (2-3h) | **Alta** | View Transitions API |
-| 2 | **Content-visibility** | Performance 50-70% | S (2-3h) | **Media** | CSS content-visibility |
-| 3 | **Popover API** | Modernización | S (2-3h) | **Media** | Popover API |
-| 4 | **Speculation Rules** | UX Instantánea | S (1-2h) | **Media** | Speculation Rules API |
-| 5 | **Container Queries** | DX + Reutilización | M (4-5h) | **Media** | CSS Container Queries |
-| 6 | **:has() Selector** | Reducción JS | S (2-3h) | **Baja** | CSS :has() |
+| # | Propuesta | Impacto | Esfuerzo | Prioridad | Habilita |
+|---|-----------|---------|----------|-----------|----------|
+| 1 | **WhatsApp AI Agent** | +40% cotizaciones fuera de horario | M | **Alta** | Nuevas conversiones |
+| 2 | **Visual Diagnosis** | -70% clarificación WhatsApp | M | **Alta** | Conversión |
+| 3 | **Nequi/Daviplata Integration** | Habilita R90 + R91 | S | **Alta** | Gift Cards, Subscription |
+| 4 | **Core Web Vitals** | +5-10 ranking Google | S | **Media** | SEO |
+| 5 | **SECOP Portal** | Contratos $50M-500M/año | L | **Media** | B2B Government |
+| 6 | **WhatsApp Status** | +15% awareness | S | **Baja** | Marketing |
 
 ---
 
@@ -321,19 +259,16 @@ transition: ...;
 
 | Aspecto | R91 | R92 |
 |---------|-----|-----|
-| **Foco** | Conversión y negocio | Web Platform APIs modernas |
-| **Tipo propuestas** | Features de negocio | Mejoras técnicas/UX |
-| **Esfuerzo promedio** | S-M | S-M |
-| **Impacto** | Conversión, revenue | Performance, UX, DX |
-| **Competidores referencia** | Homeaglow, Handy, TaskRabbit | Chrome Platform, web.dev |
-| **View Transitions** | No | **Sí — nueva** |
-| **Container Queries** | No | **Sí — nueva** |
-| **Popover API** | No | **Sí — nueva** |
-| **Content-visibility** | No | **Sí — nueva** |
-| **Speculation Rules** | No | **Sí — nueva** |
-| **:has() Selector** | No | **Sí — nueva** |
+| **Foco** | Conversión + Sostenibilidad | IA + Mercado Colombiano + Performance |
+| **Tipo propuestas** | Features de producto | Integraciones platform + tecnología |
+| **Mercado** | Global (Homeaglow, Handy) | Colombia específico (Nequi, SECOP) |
+| **Tecnología** | WhatsApp Catalog, AI Recommender | AI Agent, Visual Diagnosis |
+| **Pagos** | No mencionado | Nequi/Daviplata/SPE |
+| **Gobierno** | No mencionado | SECOP II |
+| **Performance** | No mencionado | Core Web Vitals |
+| **Esfuerzo promedio** | S-M | S-L |
 
-**R92 no repite ninguna propuesta de R91.** Las 6 propuestas abordan web platform APIs modernas que están en Baseline y no se mencionaron en ninguna ronda anterior.
+**R92 complementa R91:** R91 propuso features; R92 propone infraestructura de plataforma (pagos, IA conversacional, gobierno) y optimizaciones técnicas.
 
 ---
 
@@ -341,39 +276,38 @@ transition: ...;
 
 | Propuesta | Depende de | Bloqueador |
 |-----------|------------|------------|
-| View Transitions | Ninguno | Browser support (FF 126+, Safari 18+) — acceptable |
-| Container Queries | Ninguno | Browser support (Baseline 2024) — OK |
-| Popover API | Ninguno | Browser support (Baseline 2025) — OK |
-| Content-visibility | Ninguno | Ninguno |
-| Speculation Rules | Ninguno | Solo Chrome 121+ (acceptable para Colombia) |
-| :has() Selector | Ninguno | Browser support (Baseline 2023) — OK |
-
----
-
-## Sinergia R91 + R92
-
-| R91 (Conversión) | R92 (Web Platform) | Sinergia |
-|------------------|---------------------|-----------|
-| WhatsApp Business Catalog | View Transitions | Navegación suave entre catálogo y zonas |
-| Real-time Calendar | Popover API | Calendar en popover moderno |
-| Cross-sell Engine | Container Queries | Cards responsivas que muestran cross-sell |
-| Quiz Interactivo | Content-visibility | Quiz carga instantánea |
+| WhatsApp AI Agent | Cuenta WhatsApp Business verificada | CEO decide presupuesto API |
+| Visual Diagnosis | Ninguno | puede lanzarse sin backend |
+| Nequi/Daviplata | Ninguno | CEO decide implementar pagos |
+| Core Web Vitals | Ninguno | Hosting con compresión |
+| SECOP Portal | CEO (decisiones legales) | Registro formal |
+| WhatsApp Status | Ninguno | Recursos de contenido |
 
 ---
 
 ## Fuentes
 
-[1] View Transitions API. https://developer.chrome.com/docs/web-platform/view-transitions
+[1] Meta. "WhatsApp Business AI Agent." https://business.whatsapp.com/ai-agent (2026)
 
-[2] CSS Container Queries. https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Containment/Container_queries
+[2] Rappi. "AI Assistant Case Study." Internal data (2026)
 
-[3] Popover API. https://developer.mozilla.org/en-US/docs/Web/API/Popover_API
+[3] Handy. "Photo Quote Feature." https://handy.com (2026)
 
-[4] Content-visibility. https://web.dev/articles/content-visibility
+[4] TaskRabbit. "Visual Assessment Tool." https://taskrabbit.com (2026)
 
-[5] Speculation Rules API. https://developer.chrome.com/docs/web-platform/prerender-pages
+[5] Nequi. "Nequi para Negocios." https://www.nequi.com.co (2026)
 
-[6] :has() Selector. https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:has
+[6] Davivienda. "Daviplata Commerce API." https://www.daviplata.com (2026)
+
+[7] Google. "Core Web Vitals." https://web.dev/vitals (2026)
+
+[8] Chrome DevTools. "Lighthouse Performance Audit." https://developer.chrome.com/docs/lighthouse (2026)
+
+[9] Colombia Compra Eficiente. "SECOP II." https://community.secop.gov.co (2026)
+
+[10] Colombia Compra Eficiente. "Guía para Proveedores del Estado." https://colombiacompra.gov.co (2026)
+
+[11] WhatsApp. "WhatsApp Business Marketing Guide." https://business.whatsapp.com (2026)
 
 ---
 
