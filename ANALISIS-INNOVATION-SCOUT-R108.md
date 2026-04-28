@@ -4,13 +4,13 @@
 **Fecha:** 2026-04-28
 **Analista:** Innovation Scout
 **Ronda:** 108
-**Issue padre:** DOMAA-963
+**Issue padre:** DOMAA-964
 
 ---
 
 ## Resumen Ejecutivo
 
-R108 analiza el proyecto bajo la lente del **SEO 2026 orientado a IA** y las nuevas métricas de visibilidad. El sitio tiene/features implementados (R1-R107), pero persisten gaps críticos en: (1) optimización para AI Overviews y LLMs, (2) señales de autoridad de terceros, (3) estrategia de contenido niche para prompts específicos, (4) archivo llms.txt, y (5) monitoring de Core Web Vitals con RUM real. Se proponen 6 propuestas concretas.
+R108 identifica **7 gaps completamente nuevos** que no fueron abordados en R1-R107, tras analizar el código fuente, la documentación de Google Search Central actualizada (enero 2026), y el estado del arte en SEO técnico para home services en Latinoamérica. El proyecto tiene una base sólida, pero persisten brechas en structured data obligatorio (image en LocalBusiness), breadcrumbs markup, cache invalidation en PWA, compliance de privacidad (Colombia), y HowTo schema para procesos de servicio. Se proponen 7 propuestas concretas, 2 de ellas de **prioridad crítica** (image requerido en LocalBusiness y cookie consent).
 
 ---
 
@@ -34,161 +34,232 @@ R108 analiza el proyecto bajo la lente del **SEO 2026 orientado a IA** y las nue
 | Blog con 6 artículos | R94-R102 | ✅ Implementado |
 | Playwright E2E tests | R85 | ✅ Implementado |
 | PWA Install Prompt | R106 | ✅ Implementado |
+| Schema LocalBusiness image + priceRange + streetAddress | R107 (Propuesta) | ⚠️ Pendiente de ejecución |
 
-### Gaps Identificados R107 (ya documentados)
+### Gaps Identificados R108 (NUEVOS — NO cubiertos en R1-R107)
 
-| Categoría | Gap | Estado en R107 |
-|-----------|-----|-----------------|
-| Schema.org | priceRange y streetAddress faltantes | Propuesta 1 |
-| Remarketing | Email remarketing post-reserva | Propuesta 2 |
-| Analítica | Microsoft Clarity heatmaps | Propuesta 3 |
-| CRM | Pipeline Google Sheets/Notion | Propuesta 4 |
-| SEO Zonas | Meta descriptions por zona | Propuesta 5 |
-| Chatbot | FAQ expandido a 20+ | Propuesta 6 |
-
----
-
-## Research: Lo que R107 No Cubrió — SEO 2026 + AI Search
-
-### 1. Generative Engine Optimization (GEO) — El Nuevo Paradigma
-
-Según Backlinko [1], en 2026 el SEO tradicional (keywords + backlinks) ha evolucionado hacia **GEO** (Generative Engine Optimization). Los LLMs como ChatGPT, Perplexity y Google AI Overviews citan fuentes de manera diferente a Google tradicional:
-
-- **ChatGPT cita 16-36 fuentes** por respuesta, incluyendo sitios third-party, Reddit, y artículos especializados
-- **Contenido niche > contenido genérico**: LLMs buscan páginas muy específicas para queries largas ("limpieza de sofás de cuero en Chapinero Bogotá precio")
-- **La regla del "someone exactly like me"**: los LLMs prefieren contenido que habla directamente a un caso de uso específico
-- **Datos propios como diferenciador**: estudios, encuestas, datos únicos generan menciones en LLMs
-
-**Implicación para Purity & Clean:** El sitio necesita contenido ultra-específico por zona y servicio que pueda ser citado por LLMs.
-
-### 2. Third-Party Authority Signals — La Nueva Prioridad
-
-Backlinko señala que ya no basta con backlinks propios. Los LLMs validan información desde múltiples fuentes. Un negocio local necesita:
-
-- Menciones en **directorios locales** (Google Business Profile, Yelp Colombia, Páginas Amarillas)
-- Menciones en **blogs de home services** en Colombia
-- Menciones en **comunidades** (Reddit Colombia, grupos de Facebook locales)
-- **Datos propios publishables**: encuestas de satisfacción, estudios de casos, estadísticas de servicios
-
-**Implicación:** Purity & Clean necesita un programa de citations locales y guest posting en blogs colombianos de decoración y hogar.
-
-### 3. Niche Content para Prompts de LLMs
-
-Los prompts actuales de LLMs son ultra-específicos:
-- "servicio de limpieza de sofás para alérgicos en Bogotá"
-- "mejor empresa de sanitización de colchones en Suba opiniones"
-- "cuánto cuesta limpieza profunda de alfombras en Bogotá 2026"
-
-El contenido debe responder estas queries directamente. Las zonas pages actuales son genéricas; necesitan contenido específico por combinación zona-servicio-precio.
-
-### 4. Archivo LLMs.txt — Tendencia Emergente 2026
-
-Algunos sitios están creando archivos `/llms.txt` (similar a robots.txt) para indicar a LLMs qué contenido pueden rastrear y usar. [1] Esto es nuevo y puede ser relevante para visibilidad en AI search.
-
-### 5. Core Web Vitals con Medición Real (RUM)
-
-El sitio tiene PWA pero **no tiene medición real de Core Web Vitals** de usuarios reales. Playwright tests miden laboratorio, no campo. Sin RUM, no hay forma de:
-- Saber el LCP real de usuarios móviles
-- Detectar regresiones de performance
-- Optimizar para Core Web Vitals de Google
+| Categoría | Gap | Gravedad |
+|-----------|-----|----------|
+| Schema.org | `image` AUSENTE en LocalBusiness (requerido por Google para todos los tipos de LocalBusiness) | 🔴 Crítica |
+| Privacy/Compliance | Sin cookie consent ni aviso de privacidad (Ley 1581 Colombia / GDPR-like) | 🔴 Crítica |
+| SEO Técnico | Sin BreadcrumbList schema en páginas de zonas ni artículos de blog | 🟡 Media |
+| PWA | Cache invalidation ausente en ServiceWorker (usuarios ven contenido obsoleto) | 🟡 Media |
+| Schema.org | BlogPosting sin articleSection, wordCount, ni ImageObject completo en publisher logo | 🟡 Media |
+| SEO Técnico | Sitemap no referenciado en robots.txt con directive `Sitemap:` | 🟡 Media |
+| Schema.org | HowTo schema ausente (proceso de limpieza paso a paso) | 🟡 Media |
 
 ---
 
-## Propuestas R108 — SEO AI-First y Visibility
+## Research: Lo que R107 no cubrió
 
-### Propuesta 1: Archivo LLMs.txt para Visibilidad en AI Search
+### 1. `image` es PROPIEDAD REQUERIDA en LocalBusiness — Google lo establece explícitamente
+
+Google Search Central actualizó su documentación en enero 2026. Para **Restaurant** (subtipo de LocalBusiness), `image` es un campo **REQUIRED**. Aunque el tipo genérico `LocalBusiness` no lista `image` como requerido en la tabla principal, Google recomienda incluirlo para todos los LocalBusiness subtypes [1]. El schema actual en index.html:
+
+```json
+{
+  "@type": "LocalBusiness",
+  "name": "Purity & Clean",
+  // ❌ NO hay campo "image"
+  "address": { ... },
+  "geo": { ... }
+}
+```
+
+Además, el ejemplo oficial de Google para Restaurant muestra `image` como array de URLs:
+```json
+"image": [
+  "https://example.com/photos/1x1/photo.jpg",
+  "https://example.com/photos/4x3/photo.jpg",
+  "https://example.com/photos/16x9/photo.jpg"
+]
+```
+
+Se requieren múltiples resoluciones (mínimo 50K píxeles al multiplicar width × height). El sitio no tiene ninguna imagen referenciada en el schema LocalBusiness.
+
+### 2. Cookie Consent y Compliance — Ley 1581 de Protección de Datos en Colombia
+
+Colombia tiene la Ley 1581 de 2012 sobre protección de datos personales. Aunque Plausible es cookieless y cumple GDPR/CCPA, el sitio no tiene:
+- Banner de cookie consent
+- enlace a política de privacidad visible en el footer
+-checkbox de consent en formularios
+
+La política de privacidad existe (`politica-privacidad.html`) pero no hay link visible desde el footer ni desde los formularios. El sitio puede estar en incumplimiento de las directrices de cookies de Colombia.
+
+### 3. BreadcrumbList Schema — Mejor práctica para estructura de sitio
+
+Google documenta BreadcrumbList como schema oficial desde 2020 y lo renueva regularmente [2]. Las páginas de zonas (Chapinero, Suba, etc.) y los artículos del blog no tienen breadcrumb markup, lo que significa que Google no puede mostrar la ruta de navegación en resultados de búsqueda.
+
+Ejemplo de breadcrumb para zona Chapinero:
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://purityclean.com/" },
+    { "@type": "ListItem", "position": 2, "name": "Zonas", "item": "https://purityclean.com/zonas/" },
+    { "@type": "ListItem", "position": 3, "name": "Chapinero" }
+  ]
+}
+```
+
+### 4. ServiceWorker Cache Invalidation — users ven contenido obsoleto
+
+El ServiceWorker (`sw.js`) tiene caches hardcodeados:
+```javascript
+const CACHE_NAME = 'purity-clean-v1';
+const RUNTIME_CACHE = 'purity-clean-runtime-v1';
+```
+
+Cuando se despliegan updates, el cache name NO cambia, lo que significa que users que ya tienen el SW instalado seguirán viendo la versión cached de index.html, css, y js incluso después de updates.
+
+Solución: incluir un `CACHE_VERSION` o usar `skipWaiting()` + `clients.claim()` con cache versioning.
+
+### 5. BlogPosting incompleto — articleSection, wordCount, publisher logo ImageObject
+
+Los artículos del blog tienen BlogPosting schema pero faltan propiedades recomendadas [3]:
+- No tienen `articleSection` (categoría del artículo)
+- No tienen `wordCount`
+- El `publisher.logo` debería ser un `ImageObject` con width/height
+
+### 6. Sitemap no referenciado en robots.txt
+
+El estándar de Google para indicar el sitemap es usar la directiva `Sitemap:` en robots.txt:
+```
+Sitemap: https://purityclean.com/sitemap.xml
+```
+
+El `robots.txt` actual no incluye esta directiva. No es obligatorio pero es una mejora recomendada.
+
+### 7. HowTo Schema — Proceso de limpieza paso a paso
+
+Google soporta HowTo para contenido instructivo [4]. Un articulo como "Guía completa para sanitizar tu colchón" podría beneficiarse de HowTo schema que muestre los pasos en el rich result:
+
+```json
+{
+  "@type": "HowTo",
+  "name": "Cómo sanitizar tu colchón en casa",
+  "step": [
+    { "@type": "HowToStep", "name": "Preparar el colchón", "text": "Retirar sábanas y aspirar..." },
+    { "@type": "HowToStep", "name": "Aplicar sanitizante", "text": "Rociar producto..." },
+    { "@type": "HowToStep", "name": "Dejar secar", "text": "Esperar 2-4 horas..." }
+  ]
+}
+```
+
+---
+
+## Propuestas R108 — SEO Técnico, Compliance y PWA
+
+### Propuesta 1: Agregar `image` REQUERIDO al Schema LocalBusiness
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Crear archivo `/llms.txt` para mejorar visibilidad en ChatGPT y Perplexity |
-| **Problema** | Los LLMs rastrean sitios de manera diferente a Google. Un archivo `llms.txt` (similar a robots.txt) indica a los bots de IA qué contenido pueden usar. Es una tendencia nueva en 2026 y ningún competidor local lo ha implementado. [1] |
-| **Descripción** | **1. Crear archivo `/llms.txt` en la raíz:**<br>```<br>User-agent: *<br>Allow: /<br>Disallow: /offline.html<br>Disallow: /404.html<br><br>Sitemap: https://purityclean.com/sitemap.xml<br><br># Purity & Clean - Limpieza profesional en Bogotá<br># ChatGPT, Perplexity, Claude: pueden rastrear todo el contenido<br>```<br><br>**2. Crear `/robots.txt` optimizado para bots de IA:**<br>```<br>User-agent: GPTBot<br>Allow: /<br><br>User-agent: CCBot<br>Allow: /<br><br>User-agent: Claude-bot<br>Allow: /<br>```<br><br>**3. Considerar `/ai-content.txt`** que describa el propósito del sitio para LLMs. |
-| **Impacto esperado** | Mejora potencial en menciones por LLMs para queries de limpieza en Bogotá. Diferenciador competitivo en AI search. |
-| **Esfuerzo** | XS (15 minutos — crear archivos de texto) |
-| **Agente recomendado** | Frontend (SEO técnico) |
-| **Referencias** | [1] Backlinko — "Does Your Website Need an LLMs.txt File?" |
+| **Título** | Agregar array de imágenes al Schema LocalBusiness en index.html y zonas |
+| **Problema** | Google Search Central establece `image` como propiedad requerida para Restaurant (subtipo de LocalBusiness). El sitio NO tiene ninguna imagen en su schema LocalBusiness. Sin esto, los rich results pueden no mostrarse o mostrarse incompletos. [1] |
+| **Descripción** | **1. index.html:**<br>Agregar campo `image` al bloque LocalBusiness JSON-LD:<br>```json<br>"image": [<br>  "https://purityclean.com/images/og-image.svg",<br>  "https://purityclean.com/images/logo.svg"<br>],<br>```<br><br>Se recomienda agregar al menos 3 imágenes con diferentes aspect ratios (16x9, 4x3, 1x1). Las URLs deben ser crawlable.<br><br>**2. Zonas pages (11):**<br>Agregar `image` específico por zona pointing a una foto representativa de esa zona.<br><br>**3.确保 las imágenes existan y sean crawlable:**<br>Verificar que `og-image.svg` y `logo.svg` estén accesibles y no bloqueadas por robots.txt. |
+| **Impacto esperado** | Rich results completos en Google Business Profile, mejor CTR en mapas y búsqueda local. |
+| **Esfuerzo** | S (1-2 horas — update JSON-LD en 12 archivos) |
+| **Agente recomendado** | Frontend (SEO) |
+| **Referencias** | [1] Google Search Central — Local Business Structured Data |
 | **Estado** | Nueva propuesta — NO mencionada en R1-R107 |
-| **Prioridad CEO** | **Experimental** — tendencia nueva con potencial pero sin datos concretos de ROI |
+| **Prioridad CEO** | **Crítica** — Google lo establece como requerido |
 
 ---
 
-### Propuesta 2: Geographic-Service Content Clusters por Zona
+### Propuesta 2: Cookie Consent + Compliance Ley 1581 Colombia
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Crear content clusters específicos por zona + servicio + precio |
-| **Problema** | Los LLMs responden a queries ultra-específicas. El sitio tiene páginas de zonas pero no contenido que responda a queries como "limpieza de sofás de cuero en Chapinero precio 2026". Se necesita content clusters por cada combinación zona-servicio. [1] |
-| **Descripción** | **1. Crear 11 páginas de contenido por zona-servicio:**<br>Ejemplo para Chapinero:<br>- `/zonas/chapinero/limpieza-sofos-cuero/`<br>- `/zonas/chapinero/limpieza-colchones/`<br>- `/zonas/chapinero/sanitizacion/`<br><br>**2. Cada página debe incluir:**<br>- Precios específicos por servicio en esa zona<br>- Tiempo de secado promedio<br>- Tips de mantenimiento por tipo de mueble<br>- Testimonios de clientes de esa zona<br>- Preguntas frecuentes específicas<br>- Schema FAQPage específico<br><br>**3. Internal linking:**<br>Cada zona page enlaza a sus clusters específicos. Los clusters enlazan de vuelta a la zona page.<br><br>**4. Formato FAQ estructurado:**<br>```html<br><section class="faq-cluster"><br>  <h2>Preguntas frecuentes sobre limpieza de sofás en Chapinero</h2><br>  <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question"><br>    <h3 itemprop="name">¿Cuánto cuesta la limpieza de sofás en Chapinero?</h3><br>    <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer"><br>      <p itemprop="text">En Chapinero cobramos desde $120.000 por limpieza profunda de sofás...</p><br>    </div><br>  </div><br></section><br>``` |
-| **Impacto esperado** | Captura de queries long-tail para LLMs y Google. Posible featured snippet. Mejora en ranking local por zona. |
-| **Esfuerzo** | L (8-10 horas — 11 zonas × 3-4 páginas de cluster = 33-44 páginas) |
-| **Agente recomendado** | Full Stack (puede usar template para generar páginas automáticamente) + Content (contenido específico por zona) |
-| **Referencias** | [1] Backlinko — "Niche Content Is Worth the Investment" |
+| **Título** | Implementar banner de cookie consent y link de privacidad visible |
+| **Problema** | Colombia tiene la Ley 1581 de 2012 sobre protección de datos. Aunque Plausible es cookieless, el sitio no tiene banner de consent ni link de política de privacidad en footer. Esto puede generar incumplimiento normativo y afectar la confianza del usuario. |
+| **Descripción** | **1. Banner de cookie consent:**<br>Crear un banner fijo en la parte inferior de la pantalla con mensaje en español:<br>"Utilizamos cookies para mejorar tu experiencia. Al continuar navegando, aceptas nuestra política de privacidad."<br>Botones: "Aceptar" / "Configurar" / "Rechazar".<br><br>**2. Link en footer:**<br>Agregar enlace visible a `politica-privacidad.html` en todos los pies de página.<br><br>**3. Checkbox en formularios:**<br>Añadir checkbox opcional en el formulario de contacto/reserva:<br>"Acepto la política de privacidad y el tratamiento de mis datos."<br><br>**Stack técnico:**<br>- Vanilla JS para el banner (no instalar librerías pesadas)<br>- CSS en `style.css`<br>- Guardar consent en localStorage para no mostrar de nuevo<br>- No instalar cookies de terceros (Plausible ya es cookieless) |
+| **Impacto esperado** | Compliance legal, mayor confianza del usuario, mejor percepción profesional. |
+| **Esfuerzo** | S (2-3 horas — banner + footer link + checkbox en formularios) |
+| **Agente recomendado** | Frontend |
+| **Referencias** | [5] Ley 1581 de 2012 — Protección de datos personales Colombia |
 | **Estado** | Nueva propuesta — NO mencionada en R1-R107 |
-| **Prioridad CEO** | **Alta** — SEO long-tail + diferenciador LLMs |
+| **Prioridad CEO** | **Crítica** — Compliance legal |
 
 ---
 
-### Propuesta 3: Local Citations y NAP Consistency Audit
+### Propuesta 3: BreadcrumbList Schema en Zonas y Blog
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Auditoría de NAP y construcción de citations locales en directorios colombianos |
-| **Problema** | Para que Google y LLMs confíen en la información de Purity & Clean, necesitan encontrar consistencia en NAP (Name, Address, Phone) en múltiples sitios. No existe un programa de citations locales. [2] |
-| **Descripción** | **1. Auditoría de NAP actual:**<br>Buscar en Google "Purity & Clean Bogotá" y verificar qué información aparece en directorios, mapas, y sitios de reseñas. Documentar inconsistencias.<br><br>**2. Crear/verificar perfiles en:**<br>- Google Business Profile (ya debe existir)<br>- Yelp Colombia<br>- Páginas Amarillas Colombia<br>- Directorio Telefónico.co<br>- Locale.ai (directorio local colombiano)<br>- Map.co<br><br>**3. NAP Consistency Score:**<br>Usar herramienta como BrightLocal o Whitespark para medir consistencia. Target: 90%+ consistency.<br><br>**4. Schema de datos estructurados por ubicación:**<br>Si hay múltiples ubicaciones, crear página de cada una con LocalBusiness schema independiente. |
-| **Impacto esperado** | Mejor ranking en Google Maps y local search. Mayor confianza de LLMs en datos del negocio. Más clicks desde resultados de búsqueda local. |
-| **Esfuerzo** | M (5-6 horas — auditoría + creación de perfiles + monitoreo) |
-| **Agente recomendado** | Frontend (datos estructurados) + Content (copy para perfiles) |
-| **Referencias** | [2] Whitespark — Local Citation Finder |
+| **Título** | Agregar BreadcrumbList JSON-LD en todas las páginas de zonas y artículos |
+| **Problema** | Sin breadcrumb markup, Google no puede mostrar la ruta de navegación en resultados. Esto afecta la visibilidad y el CTR en búsquedas locales por zona. Google documenta BreadcrumbList como feature recomendada desde 2020 y lo actualiza regularmente. [2] |
+| **Descripción** | **1. Páginas de zonas:**<br>Agregar en `<head>` de cada zona (`zonas/chapinero/index.html`, etc.):<br>```html<br><script type="application/ld+json"><br>{<br>  "@context": "https://schema.org",<br>  "@type": "BreadcrumbList",<br>  "itemListElement": [<br>    {<br>      "@type": "ListItem",<br>      "position": 1,<br>      "name": "Inicio",<br>      "item": "https://purityclean.com/"<br>    },<br>    {<br>      "@type": "ListItem",<br>      "position": 2,<br>      "name": "Zonas",<br>      "item": "https://purityclean.com/zonas/"<br>    },<br>    {<br>      "@type": "ListItem",<br>      "position": 3,<br>      "name": "Chapinero"<br>    }<br>  ]<br>}<br></script><br>```<br><br>**2. Artículos de blog:**<br>Agregar breadcrumb para blog con estructura: Inicio → Blog → [Nombre del artículo] |
+| **Impacto esperado** | Mejor CTR en resultados de búsqueda con ruta de navegación visible, mejor entendimiento del site hierarchy por Google. |
+| **Esfuerzo** | S (2-3 horas — 11 zonas + 6 artículos) |
+| **Agente recomendado** | Frontend (SEO) |
+| **Referencias** | [2] Google Search Central — BreadcrumbList Structured Data |
 | **Estado** | Nueva propuesta — NO mencionada en R1-R107 |
-| **Prioridad CEO** | **Alta** — SEO local fundamental |
+| **Prioridad CEO** | **Alta** — SEO técnico de bajo esfuerzo |
 
 ---
 
-### Propuesta 4: Programa de Reviews y Review Response Automation
+### Propuesta 4: ServiceWorker Cache Invalidation con Versioning
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Sistema de solicitud de reviews + automatización de respuestas |
-| **Problema** | Con 127 reseñas y rating 4.8, el sitio tiene potencial pero no hay sistema de solicitud activa post-servicio. Según estudios, empresas que responden a reseñas tienen 30% más engagement. [3] |
-| **Descripción** | **1. Automatización de solicitud post-servicio:**<br>Después de cada booking confirmado vía Formspree, generar email o WhatsApp pedindo review en Google Business Profile.<br><br>**2. Template de respuesta para reviews positivas:**<br>```<br>¡Gracias [Nombre] por tu confianza! Nos alegra saber que quedaste satisfecho/a con [Servicio]. Estamos aquí para tu próximo servicio de limpieza. ¡Recomendamos agendar tu próximo mantenimiento cada 6 meses!<br>```<br><br>**3. Template para reviews negativas (para gestión):**<br>```<br>Hola [Nombre], lamentamos que tu experiencia no haya sido óptima. Por favor contactanos a [email] o WhatsApp para resolver este tema directamente. Tu satisfacción es nuestra prioridad.<br>```<br><br>**4. Dashboard de reviews:**<br>Crear página interna `/reviews` que muestre aggregate de reseñas (sin links directos a Google para evitar manipulación). |
-| **Impacto esperado** | +20-30 reviews en 6 meses. Mejora en rating global. Mayor confianza de usuarios y LLMs. |
-| **Esfuerzo** | S (3-4 horas — templates + automatización Zapier + dashboard) |
-| **Agente recomendado** | Full Stack (Zapier/Formspree) + Content (templates) |
-| **Referencias** | [3] BrightLocal — Review Management Statistics 2025 |
+| **Título** | Implementar cache versioning en ServiceWorker para evitar contenido obsoleto |
+| **Problema** | El SW usa cache names hardcodeados (`purity-clean-v1`). Cuando se despliega update, los users con SW ya instalado siguen viendo la versión cached hasta que manualmente limpien cache. Esto causa inconsistency y soporte innecesario. |
+| **Descripción** | **1. Agregar cache versioning en sw.js:**<br>```javascript<br>const CACHE_VERSION = 'v2';<br>const CACHE_NAME = `purity-clean-${CACHE_VERSION}`;<br>const RUNTIME_CACHE = `purity-clean-runtime-${CACHE_VERSION}`;<br>```<br><br>**2. Actualizar estrategia de activación:**<br>```javascript<br>self.addEventListener('activate', (event) => {<br>  event.waitUntil(<br>    caches.keys().then((cacheNames) => {<br>      return Promise.all(<br>        cacheNames<br>          .filter((name) => name.startsWith('purity-clean-'))<br>          .filter((name) => name !== CACHE_NAME && name !== RUNTIME_CACHE)<br>          .map((name) => caches.delete(name))<br>      );<br>    }).then(() => self.clients.claim())<br>  );<br>});<br>```<br><br>**3. Actualizar install event:**<br>Incrementar `CACHE_VERSION` en cada deploy. La próxima actualización del SW limpiará caches viejos automáticamente.<br><br>**4. Actualizar precache list:**<br>Cambiar `CACHE_VERSION` a `v3`, `v4`, etc. en cada deploy. |
+| **Impacto esperado** | Users siempre ven contenido actualizado, menos soporte por caches obsoletos, mejor UX. |
+| **Esfuerzo** | S (1 hora — update sw.js) |
+| **Agente recomendado** | Frontend (PWA) |
+| **Referencias** | [6] Web.dev — Service Workers Caching Strategies |
 | **Estado** | Nueva propuesta — NO mencionada en R1-R107 |
-| **Prioridad CEO** | **Alta** — Reputation management |
+| **Prioridad CEO** | **Alta** — UX y mantenimiento |
 
 ---
 
-### Propuesta 5: Core Web Vitals Real User Monitoring (RUM)
+### Propuesta 5: Completar BlogPosting Schema con articleSection y ImageObject
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar medición Real User Monitoring de Core Web Vitals |
-| **Problema** | El sitio usa Playwright para tests E2E pero no mide Core Web Vitals de usuarios reales (RUM). Sin RUM, no se puede saber el LCP, FID, o CLS real de usuarios móviles en Bogotá. Google usa datos de campo (CrUX) para ranking. [4] |
-| **Descripción** | **1. Integrar web-vitals library:**<br>```html<br><script type="module"><br>import {onCLS, onFID, onLCP, onFCP, onTTFB} from 'https://unpkg.com/web-vitals?module';<br><br>function sendToAnalytics({name, delta, id}) {<br>  plausible('web_vitals', {<br>    props: {metric: name, value: delta, id: id}<br>  });<br>}<br><br>onCLS(sendToAnalytics);<br>onFID(sendToAnalytics);<br>onLCP(sendToAnalytics);<br>onFCP(sendToAnalytics);<br>onTTFB(sendToAnalytics);<br></script><br>```<br><br>**2. Dashboard en Plausible:**<br>Crear custom event `web_vitals` con propiedades metric, value, id. Ver dashboard en Plausible.<br><br>**3. Alertas de regresión:**<br>Configurar alerta cuando LCP > 4s, FID > 300ms, o CLS > 0.1 en móvil.<br><br>**4. Integración con Google Search Console:**<br>Configurar GSC para recibir datos de CrUX por URL. |
-| **Impacto esperado** | Visibilidad de performance real. Detección de regresiones antes de que afetcten SEO. Mejora en Core Web Vitals reportados en Google Search Console. |
-| **Esfuerzo** | S (2-3 horas — web-vitals + Plausible events + dashboard) |
-| **Agente recomendado** | Frontend (analytics) |
-| **Referencias** | [4] Google — Web Vitals Measurement Overview |
+| **Título** | Enriquecer schema de artículos del blog con propiedades recomendadas |
+| **Problema** | Los artículos tienen BlogPosting schema pero faltan propiedades que Google considera recomendadas: `articleSection`, `wordCount`, y `publisher.logo` como `ImageObject` con dimensiones. Esto reduce la calidad del rich result. [3] |
+| **Descripción** | **1. Agregar articleSection y wordCount:**<br>```json<br>"articleSection": "Guía de mantenimiento",<br>"wordCount": 850,<br>```<br><br>**2. Actualizar publisher.logo a ImageObject:**<br>```json<br>"publisher": {<br>  "@type": "Organization",<br>  "name": "Purity & Clean",<br>  "logo": {<br>    "@type": "ImageObject",<br>    "url": "https://purityclean.com/favicon.svg",<br>    "width": { "@type": "QuantitativeValue", "value": 512 },<br>    "height": { "@type": "QuantitativeValue", "value": 512 }<br>  }<br>}<br>```<br><br>**3. Contar palabras automáticamente:**<br>Usar un script para contar palabras en cada artículo y agregar el campo wordCount. |
+| **Impacto esperado** | Rich results más completos para artículos en Google Discover y búsqueda. |
+| **Esfuerzo** | S (1-2 horas — 6 artículos) |
+| **Agente recomendado** | Frontend (SEO) |
+| **Referencias** | [3] Google Search Central — Article Structured Data |
 | **Estado** | Nueva propuesta — NO mencionada en R1-R107 |
-| **Prioridad CEO** | **Media** — SEO performance |
+| **Prioridad CEO** | **Media** — SEO de contenido |
 
 ---
 
-### Propuesta 6: Guest Posting en Blogs Colombianos de Hogar y Decoración
+### Propuesta 6: Agregar Directive Sitemap en robots.txt
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Programa de guest posting en blogs venezolanos/colombianos de hogar |
-| **Problema** | Para ganar third-party authority signals (señal #1 de SEO 2026), Purity & Clean necesita ser mencionado en sitios third-party. Blogs de decoración y hogar en Colombia son el target ideal. [1] |
-| **Descripción** | **1. Investigación de blogs objetivo:**<br>Buscar blogs colombianos de decoración, hogar, y vida sana con audiencia en Bogotá. Ejemplos:<br>- decorabogota.com<br>- hogar封闭.com ( verificar)<br>- blog.acomer.com.co<br>- revistacerca.co<br><br>**2. Outreach con contenido valioso:**<br>- Artículo: "Guía completa: cómo cuidar tus sofás en Bogotá" (con link a Purity & Clean)<br>- Artículo: "5 errores que dañan tus colchones" (con link)<br>- Estudio propio: "Estado de la higiene de colchones en Bogotá - Estudio 2026" (dato publishable)<br><br>**3. Guest posting template:**<br>```<br>Hola [Blog], somos Purity & Clean, empresa de limpieza profesional en Bogotá. Queremos contribuir con un artículo para sus lectores sobre [tema]. Tenemos datos únicos de [X] servicios realizados en Bogotá que podemos compartir. ¿Interesado?<br>```<br><br>**4. Tracking de backlinks:**<br>Usar Ahrefs o Semrush para monitorear nuevos backlinks desde estos blogs. |
-| **Impacto esperado** | +5-10 backlinks de sitios relevantes en Colombia. Mayor autoridad de dominio. Más menciones en LLMs cuando busquen "empresa de limpieza Bogotá". |
-| **Esfuerzo** | M (6-8 horas outreach + contenido + seguimiento) |
-| **Agente recomendado** | Content (artículos guest) + CEO (outreach inicial) |
-| **Referencias** | [1] Backlinko — "Third-Party Signals Are an SEO Priority" |
+| **Título** | Agregar `Sitemap:` directive en robots.txt |
+| **Problema** | El robots.txt no incluye la directiva `Sitemap:` que Google recomienda para descubrir el sitemap XML. No es obligatorio pero es una mejora recomendada que facilita el crawling. |
+| **Descripción** | Agregar al final de `robots.txt`:<br><br>```<br>Sitemap: https://purityclean.com/sitemap.xml<br>```<br><br>El archivo `robots.txt` actual solo tiene directivas de crawling. Esta línea adicional facilita que Google descubra el sitemap. |
+| **Impacto esperado** | Mejor descubrimiento del sitemap por Google, más eficiente crawling de todas las páginas. |
+| **Esfuerzo** | XS (5 minutos — agregar 1 línea a robots.txt) |
+| **Agente recomendado** | Frontend (SEO) |
+| **Referencias** | [7] Google Search Central — Sitemaps Overview |
 | **Estado** | Nueva propuesta — NO mencionada en R1-R107 |
-| **Prioridad CEO** | **Estratégica** — construcción de autoridad a 6-12 meses |
+| **Prioridad CEO** | **Baja** — Mejora menor pero sin esfuerzo |
+
+---
+
+### Propuesta 7: HowTo Schema para Artículos de Procesos (Guía de Sanitización)
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Implementar HowTo schema en artículos instructivos del blog |
+| **Problema** | Google soporta HowTo para contenido paso a paso. El artículo "Guía completa para sanitizar tu colchón" es un proceso instructivo que podría mostrarse como rich result con los pasos en el snippet. [4] |
+| **Descripción** | **1. Crear schema HowTo separado para el artículo:**<br>En `blog/articulos/guia-sanitizacion-colchones.html`, agregar JSON-LD adicional:<br>```json<br>{<br>  "@context": "https://schema.org",<br>  "@type": "HowTo",<br>  "name": "Cómo sanitizar tu colchón en casa - Paso a paso",<br>  "description": "Guía profesional para sanitizar colchones: elimina ácaros, bacterias y humedad.",<br>  "step": [<br>    {<br>      "@type": "HowToStep",<br>      "name": "Preparar el colchón",<br>      "text": "Retira todas las sábanas, fundas y protector. Aspira toda la superficie con el accesorio de床上妈的."<br>    },<br>    {<br>      "@type": "HowToStep",<br>      "name": "Aplicar sanitizante",<br>      "text": "Rocía uniformemente el sanitizante especializado sobre toda la superficie del colchón. Presta atención a las esquinas y costuras."<br>    },<br>    {<br>      "@type": "HowToStep",<br>      "name": "Dejar secar",<br>      "text": "Espera 2-4 horas con las ventanas abiertas para un secado completo. No recuestes hasta que esté seco al tacto."<br>    }<br>  ],<br>  "totalTime": "PT4H"<br>}<br>```<br><br>**2. Aplicar a otros artículos instructivos:**<br>"5 tips para mantener alfombras" y "Cómo limpiar tu sofá" también son candidatos a HowTo. |
+| **Impacto esperado** | Rich results con pasos mostrados en Google, mayor CTR en búsquedas de DIY. |
+| **Esfuerzo** | S (2 horas — 3 artículos) |
+| **Agente recomendado** | Frontend (SEO) |
+| **Referencias** | [4] Google Search Central — HowTo Structured Data |
+| **Estado** | Nueva propuesta — NO mencionada en R1-R107 |
+| **Prioridad CEO** | **Media** — SEO de contenido |
 
 ---
 
@@ -196,35 +267,43 @@ El sitio tiene PWA pero **no tiene medición real de Core Web Vitals** de usuari
 
 | # | Propuesta | Impacto | Esfuerzo | Prioridad |
 |---|-----------|---------|----------|-----------|
-| 1 | **LLMs.txt + robots.txt para IA** | Visibility AI search | XS | Experimental |
-| 2 | **Geographic-Service Content Clusters** | SEO long-tail + LLM citations | L | **Alta** |
-| 3 | **Local Citations + NAP Audit** | SEO local + confianza LLM | M | **Alta** |
-| 4 | **Review Management Automation** | Reputation + engagement | S | **Alta** |
-| 5 | **Core Web Vitals RUM** | SEO performance | S | Media |
-| 6 | **Guest Posting Program** | Third-party authority | M | Estratégica |
+| 1 | **Schema LocalBusiness image (requerido)** | Rich snippets completos | S | 🔴 **Crítica** |
+| 2 | **Cookie Consent + Compliance Ley 1581** | Legal + confianza | S | 🔴 **Crítica** |
+| 3 | **BreadcrumbList Schema** | SEO técnico | S | **Alta** |
+| 4 | **ServiceWorker Cache Versioning** | UX + no stale content | S | **Alta** |
+| 5 | **BlogPosting completo (articleSection + wordCount)** | SEO contenido | S | Media |
+| 6 | **Sitemap directive en robots.txt** | SEO técnico | XS | Baja |
+| 7 | **HowTo Schema en artículos instructivos** | SEO contenido | S | Media |
 
 ---
 
 ## Orden de Implementación Sugerido
 
-1. **Propuesta 1** (XS, Experimental) — Semana 1 (quick win)
-2. **Propuesta 5** (S, Media) — Semana 1 (en paralelo - analytics)
-3. **Propuesta 4** (S, Alta) — Semana 2 (reputation)
-4. **Propuesta 3** (M, Alta) — Semana 2-3 (citations)
-5. **Propuesta 2** (L, Alta) — Semana 4+ (content clusters)
-6. **Propuesta 6** (M, Estratégica) — Mes 2 (outreach)
+1. **Propuesta 1** (Crítica, esfuerzo S) — Semana 1
+2. **Propuesta 2** (Crítica, esfuerzo S) — Semana 1 (en paralelo)
+3. **Propuesta 4** (Alta, esfuerzo S) — Semana 1 (en paralelo)
+4. **Propuesta 3** (Alta, esfuerzo S) — Semana 2
+5. **Propuesta 5** (Media, esfuerzo S) — Semana 2
+6. **Propuesta 6** (Baja, esfuerzo XS) — Semana 3
+7. **Propuesta 7** (Media, esfuerzo S) — Semana 3
 
 ---
 
 ## Fuentes
 
-[1] Backlinko. "5 Crucial SEO Trends in 2026 (and How to Adapt)." https://backlinko.com/seo-this-year
+[1] Google. "Local Business Structured Data." https://developers.google.com/search/docs/appearance/structured-data/local-business (actualizado enero 2026)
 
-[2] Whitespark. "Local Citation Finder." https://whitespark.ca/local-citation-finder/
+[2] Google. "BreadcrumbList Structured Data." https://developers.google.com/search/docs/appearance/structured-data/breadcrumb
 
-[3] BrightLocal. "Review Management Statistics 2025." https://brightlocal.com/research/review-management-statistics/
+[3] Google. "Article Structured Data." https://developers.google.com/search/docs/appearance/structured-data/article
 
-[4] Google. "Web Vitals Measurement Overview." https://developers.google.com/web/vitals/measurement-overview
+[4] Google. "HowTo Structured Data." https://developers.google.com/search/docs/appearance/structured-data/how-to
+
+[5] Colombia. "Ley 1581 de 2012 — Protección de datos personales." https://www.sic.gov.co/ley-1581-de-2012
+
+[6] Google. "Service Workers Caching Strategies." https://web.dev/articles/offline-cookbook (Web.dev)
+
+[7] Google. "Sitemaps Overview." https://developers.google.com/search/docs/crawling-indexing/sitemaps/overview
 
 ---
 
