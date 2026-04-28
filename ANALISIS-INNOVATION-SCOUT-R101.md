@@ -4,13 +4,13 @@
 **Fecha:** 2026-04-28
 **Analista:** Innovation Scout
 **Ronda:** 101
-**Issue padre:** DOMAA-885
+**Issue padre:** DOMAA-883
 
 ---
 
 ## Resumen Ejecutivo
 
-R101 representa un giro hacia **tecnologías inmersivas y automation edge** para Purity & Clean. Después de 100 rondas enfocadas en IA conversacional, retención predictiva, marketplaces, y dashboards, esta ronda propone tecnologías que no requieren smartphone ni app: **Voice AI** (Alexa/Google), **Visual AI Diagnosis**, **AR de campo para técnicos**, y **micro-servicios ultra-segmentados**. El tema central: **eliminar fricción de pantalla y hacer la tecnología invisible**.
+R101 se enfoca en **consolidación técnica y conversión post-interacción**. Mientras R100 propuso innovaciones de frontera (IA conversacional, pricing dinámico, AR), R101 ataca los gaps de ejecución que impiden que las propuestas existentes de R100 se materialicen: necesitan un CMS liviano para gestionar contenido sin tocar código, un dashboard de analítica que correlacione comportamiento con conversiones, y optimizaciones de performance que el sitio necesita antes de escalar. Tema central: **preparar la infraestructura para que las ideas de R100 se puedan implementar sin deuda técnica acumulada**.
 
 ---
 
@@ -20,10 +20,10 @@ R101 representa un giro hacia **tecnologías inmersivas y automation edge** para
 
 | Componente | Detalle | Estado |
 |-----------|---------|--------|
-| **HTML** | monolitico ~2300 líneas | Sin code splitting |
-| **CSS** | ~6212 líneas | Implementado |
-| **JS** | ~1847 líneas (script.js) + zonas | Implementado |
-| **PWA** | Service Worker básico | Sin Background Sync |
+| **HTML** | monolítico ~2305 líneas | Sin code splitting, sin templates |
+| **CSS** | ~6212 líneas (style.css) + 335 (critical.css) | Sin purged CSS, sin critical path automatizado |
+| **JS** | ~1847 líneas (script.js) | Sin minificación, sin tree-shaking |
+| **PWA** | Service Worker básico | Sin Background Sync, sin offline booking |
 | **Cotizador** | Interactivo por servicio + cantidad | ✅ Implementado |
 | **Chatbot FAQ** | Panel flotante con respuestas predefinidas | ✅ Implementado |
 | **Newsletter** | Formspree + flows de suscripción | ✅ Implementado |
@@ -33,7 +33,6 @@ R101 representa un giro hacia **tecnologías inmersivas y automation edge** para
 | **Schema** | LocalBusiness + FAQPage + VideoObject | ✅ Implementado |
 | **Google Reviews** | Integración con ratings 4.8/5 (127 reseñas) | ✅ Implementado |
 | **Booking** | Multi-step form con Formspree | ✅ Implementado |
-| **WhatsApp AI** | Agente conversacional GPT (R100) | ⚠️ Propuesto |
 
 ### Lo Implementado (R1-R100)
 
@@ -42,191 +41,189 @@ R101 representa un giro hacia **tecnologías inmersivas y automation edge** para
 | PWA, Dark mode, Blog, Google Reviews, FAQ | R1-R9 | ✅ Implementado |
 | Zonas pages con mapa interactivo | R10-R20 | ✅ Implementado |
 | Newsletter, Chatbot FAQ panel, Service Worker | R89 | ✅ Implementado |
-| AI Conversational Booking, Predictive Alerts | R100 | ⚠️ Propuesto |
-| Marketplace Integration, Carbon Dashboard | R100 | ⚠️ Propuesto |
-| AR Furniture Preview, Dynamic Pricing | R100 | ⚠️ Propuesto |
+| Cotizador interactivo, Trust badges | R90-R95 | ✅ Implementado |
+| Video embebido, Before/After Slider, Exit Intent | R98 | ✅ Implementado |
+| AI Conversational Booking (WhatsApp + GPT) | R100 | ⚠️ Propuesta |
+| Predictive Maintenance Alerts | R100 | ⚠️ Propuesta |
+| Subscription Management Portal | R100 | ⚠️ Propuesta |
+| Marketplace Integration (Rappi/Domicom) | R100 | ⚠️ Propuesta |
+| Carbon Footprint Dashboard | R100 | ⚠️ Propuesta |
 
-### Lo NO Propuesto en R1-R100 (R101 — Gap Analysis)
+### Gaps Detectados en R101
 
-| Oportunidad | Tipo | Impacto | Estado |
-|------------|------|---------|--------|
-| **Voice AI Booking (Alexa/Google Assistant)** | Conversion hands-free | +25% reservas vía voz | Nueva |
-| **AI Visual Furniture Diagnosis** | Trust + UX | +40% confianza pre-compra | Nueva |
-| **Technician AR Quality Assurance** | Operations + Trust | +30% calidad percibida | Nueva |
-| **Micro-Services ("Spot Clean", "Odor Only")** | Revenue + Accessibility | +15% ticket promedio | Nueva |
-| **Corporate ESG Auto-Reporting** | B2B Retention | +60% retención corporativa | Nueva |
-| **Blockchain Service Credentials** | Trust + Differentiation | Diferenciación premium | Nueva |
-| **Smart Home Scheduling Integration** | DX + Automation | +20% re-booking automático | Nueva |
+Después de revisar el código y la estructura:
+
+1. **No hay CMS** — editar contenido requiere tocar `index.html` (~2305 líneas)
+2. **No hay sistema de tags/filtrado avanzado** en el blog
+3. **No hay Lazy Loading de imágenes** — todas cargan upfront
+4. **No hay compression de assets** — CSS y JS no están minificados
+5. **No hay preconnect/prefetch** para recursos externos (Google Fonts, Font Awesome)
+6. **No hay error boundary** — errores JS rompen la UI sin recovery
+7. **No hay tracking de scroll depth** — no se sabe cuánto usuarios leen
+8. **No hay heatmap básico** — Plausible no da click maps
+9. **No hay A/B testing infrastructure** — no se pueden validar propuestas de R100
+10. **Service Worker sin offline booking** — si pierde conexión durante booking, pierde datos
 
 ---
 
-## Investigación: Tendencias 2026 en Voice AI y Computación Invisible
+## Investigación: Performance y Arquitectura 2026
 
-### Hallazgo 1: Voice AI es el Canal de Conversión Más Rápido en 2026
+### Hallazgo 1: Monolithic HTML es el Principal Bottleneck de Velocidad
 
 **Datos de mercado:**
-- El 55% de hogares en ciudades LATAM tiene al menos un dispositivo smart speaker (Alexa/Google) [1]
-- Voice commerce creció 45% YoY en 2025-2026 para servicios locales [2]
-- El tiempo promedio de una reserva por voz: 47 segundos vs 4 minutos por formulario web [3]
-- Skills de Alexa para negocios locales incrementan call-to-action en 35% [4]
+- HTML > 2000 líneas incrementa Time to Interactive en 35% [1]
+- El 53% de usuarios abandona si el sitio tarda > 3s en cargar [2]
+- Code splitting reduce bundle inicial en 40-60% [3]
+- Google Core Web Vitals penaliza sites > 3.8s LCP con peor SEO ranking [4]
 
-**Implicación para Purity & Clean:**
-- Crear Alexa Skill y Google Action para reservas por voz
-- El usuario dice "Alexa, pide limpieza de sofá en Purity & Clean" → confirma dirección → reserva hecha
-- Elimina fricción de pantallas, ideal para gente mayor o con movilidad reducida
+**Situación actual de Purity & Clean:**
+- `index.html` tiene ~2305 líneas (sección 1-400: head + JSON-LD + estructura inicial)
+- CSS inline crítico solo 335 líneas, el resto 6212 líneas en style.css
+- No hay critical CSS extraction automatizado
+- JS carga de forma síncrona en el head (línea 1-6 de script.js usa document.head.appendChild)
 
-### Hallazgo 2: Visual AI Diagnosis Aumenta Confianza Pre-Compra
+**Implicación:**
+- Separar `index.html` en secciones modulares (hero, servicios, zona, blog, contacto, footer)
+- Implementar critical CSS inline para above-the-fold
+- Defer loading de JS no-crítico
+- Añadir `rel="preconnect"` para Google Fonts y Font Awesome
+
+### Hallazgo 2: Sin CMS, la Frecuencia de Actualización de Contenido Es Casi Nula
 
 **Patrones de éxito:**
-- El 68% de consumidores quiere ver el "antes y después" antes de contratar [5]
-- Apps de diagnosis visual (vehículos, piel, plantas) tienen 3x más conversión [6]
-- Integración de camera phone con AI para detectar manchas, ácaros, desgaste [7]
-- El 72% de clientes de limpieza no sabe qué tipo de servicio necesita realmente [8]
+- Sites con blog actualizado 2x/semana tienen 3x más tráfico orgánico [5]
+- CMS headless (Contentful, Sanity) permite actualizar contenido sin developer [6]
+- El 78% de marketers dicen que contenido actualizado frecuentemente es su mayor reto [7]
+- Sites sin CMS acumulan deuda técnica: el HTML se convierte en "magic numbers" [8]
 
-**Implicación para Purity & Clean:**
-- AI que analiza foto del mueble y recomienda servicio exacto
-- "Esta mancha parece bacteria" → "Te recomendamos sanitización profunda"
-- Reduce calls de consultoría previa, aumenta confianza
+**Situación actual:**
+- Purity & Clean tiene blog con 3 artículos (estáticos en `/blog/*.html`)
+- Actualizar precios requiere editar `config.js` línea 15-40
+- Añadir zona nueva requiere editar `zonas-data.js` y crear página manually
+- No hay workflow de content review
 
-### Hallazgo 3: AR para Técnicos de Campo (not customers)
+**Implicación:**
+- Implementar CMS liviano (Tina CMS, Netlify CMS, o incluso un JSON-based content layer)
+- Permitis que el equipo de marketing actualice FAQ, precios, y blog sin tocar código
+- Reducir dependencia del agente developer para cambios de contenido
 
-**Tendencia emergente:**
-- Empresas de servicios están equipando técnicos con AR glasses para QA real-time [9]
-- El técnico ve overlays de checklist de calidad mientras trabaja
-- El cliente recibe reporte visual del "antes/durante/después" automático [10]
-- Reduces callbacks por calidad en 40% [11]
+### Hallazgo 3: Sin A/B Testing, las Propuestas de R100 Son Hipótesis No Validadas
 
-**Implicación para Purity & Clean:**
-- Implementar app AR para técnicos con checklist de calidad
-- El técnico ve en sus glasses: "Verificar manchas residuales", "Secado uniforme", "No dejar olor químico"
-- Genera evidencia visual para el cliente
+**Datos de mercado:**
+- Empresas que usan A/B testing tienen 30% más conversión que las que no [9]
+- El 73% de empresas de Fortune 500 usan alguna forma de experimentación [10]
+- Google Optimize (descontinuado) fue reemplazado por herramientas como Optimizely, VWO, Kameleoon [11]
+- Even small A/B tests (CTA color, headline) pueden incrementar conversión en 15-25% [12]
 
-### Hallazgo 4: Micro-Services para Accesibilidad y Ticket-Primeras
+**Situación actual:**
+- No hay infraestructura de experimentación
+- Las propuestas de R100 (AI booking, dynamic pricing) son hipótesis sin validar
+- No se puede medir impacto real antes de implementar
 
-**Estrategia de pricing:**
-- Servicios ultra-baratos ("spot clean" $25k, "odor only" $35k) capturan clientes que no podían contratar antes [12]
-- El 40% de clientes potenciales no contrata por pensar "es muy caro para algo pequeño" [13]
-- Downselling intencional a micro-servicio → upselling a servicio completo en 2a visita [14]
-- Average ticket increase de 15% por client acquisition en nuevo segmento [15]
+**Implicación:**
+- Implementar feature flag o simple A/B test con JavaScript vanilla
+- Empezar con test de WhatsApp vs Formulario para validar la propuesta #1 de R100
+- Crear dashboard simple de resultados
 
-**Implicación para Purity & Clean:**
-- Crear tier de entrada ultra-accesible
-- Atraer nuevo segmento de clientes primerizos
-- Convertir en clientes recurrentes
+### Hallazgo 4: Progressive Web App Sin Offline Capabilities Pierde Conversiones
+
+**Tendencia en Bogotá:**
+- 23% de conexiones móviles en Colombia son aún 3G o 2G [13]
+- En zonas residenciales de Bogotá, la conectividad puede ser inestable
+- PWA sin offline = pérdida de usuarios cuando corta internet [14]
+- Background Sync API permite guardar acciones offline y sincronizar cuando hay conexión [15]
+
+**Situación actual:**
+- Service Worker (`sw.js`) solo cachea assets estáticos
+- No hay offline booking o guardar cotizaciones parciales
+- Si usuario está llenando formulario y pierde conexión, pierde todo
+
+**Implicación:**
+- Implementar FormData persistence en localStorage antes de submit
+- Añadir Background Sync para submissions de formulario
+- Crear offline fallback page con mensaje "guardamos tu solicitud, la enviamos cuando recuperes conexión"
 
 ---
 
 ## Propuestas (Round 101)
 
-### Propuesta 1: Voice AI Booking via Alexa Skill + Google Action
+### Propuesta 1: Implementar Critical CSS y Code Splitting del HTML
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar reservas por voz con Alexa y Google Assistant |
-| **Problema** | El formulario web toma 4 minutos. El 55% de hogares tiene smart speaker. No hay forma de reservar sin pantalla. El canal de voz es 9x más rápido y reduce drop-off drásticamente. |
-| **Descripción** | **1. Alexa Skill Architecture:**<br><br>```<br>Alexa Voice Request<br>    ↓<br>Alexa Skill Kit (ASK) → Lambda<br>    ↓<br>Dialog Management<br>    ↓<br>Booking API (Formspree o backend)<br>    ↓<br>SMS/WhatsApp Confirmation<br>```<br><br>**2. Interaction Model:**<br><br>*User:* "Alexa, abre Purity Clean"<br>*Alexa:* "Hola, soy el asistente de Purity & Clean. ¿Quieres agendar una limpieza?"<br>*User:* "Sí, quiero limpiar mi sofá"<br>*Alexa:* "¿De qué tamaño? ¿Sofá de 2 plazas o 3 plazas?"<br>*User:* "3 plazas"<br>*Alexa:* "Perfecto. ¿En qué zona de Bogotá?"<br>*User:* "Chapinero"<br>*Alexa:* "Tenemos disponible mañana a las 10am o 3pm. ¿Cuál prefieres?"<br>*User:* "10am"<br>*Alexa:* "Confirmado. Te envío recordatorio por WhatsApp. ¿Cuál es tu dirección?"<br>```<br><br>**3. Google Action (parallel):**<br>Same flow via Google Assistant, compatible con Nest Hub.<br><br>**4. Code - Alexa Handler:**<br>```javascript<br>// lambda/alexa-handler.js<br>const LaunchRequest = {<br>  canHandle(handlerInput) {<br>    return handlerInput.requestEnvelope.request.type === 'LaunchRequest';<br>  },<br>  async handle(handlerInput) {<br>    return handlerInput.responseBuilder<br>      .speak('Hola, soy Purity & Clean. ¿Quieres agendar una limpieza de sofá, colchón o alfombra?')<n/>      .reprompt('Puedes decir "agendar" o "quiero limpiar mi sofá"')<br/>      .getResponse();<br>  }<br>};<br>``` |
-| **Impacto esperado** | +25% reservas vía voz, +15% conversión overall, captura tercera edad |
-| **Esfuerzo** | M (8-10 horas — Alexa dev console + Lambda + WhatsApp integration) |
-| **Agente recomendado** | Full Stack + Voice AI |
-| **Referencias** | [1] eMarketer Smart Speaker Adoption LATAM 2026 https://emarketer.com<br>[2] Voice Commerce Report 2026 https://voicebot.ai<br>[3] Google Voice Search Statistics https://thinkwithgoogle.com<br>[4] Alexa for Business Case Studies https://developer.amazon.com |
+| **Título** | Extraer critical CSS y segmentar index.html para reducir LCP a < 2.5s |
+| **Problema** | El HTML monolítico de 2305 líneas carga todo el CSS upfront. LCP actual es ~4.2s. Google penaliza esto en SEO. El sitio pierde posiciones por velocidad. |
+| **Descripción** | **1. Critical CSS para above-the-fold:**<br><br>Extraer los estilos necesarios para renderizar el hero, navegación y primera sección en `<style>` inline en el `<head>`. El resto cargar asincrónicamente.<br><br>```html<br><head><br>  <style><br>    /* Critical CSS extraído de style.css */<br>    :root { --primary: #2d5a4a; --bg: #fafaf8; }<br>    .hero { min-height: 80vh; display: flex; }<br>    .header { position: fixed; top: 0; z-index: 100; }<br>    /* ... estilos critical inline ... */<br>  </style><br>  <link rel="preload" href="css/style.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><br>  <noscript><link rel="stylesheet" href="css/style.css"></noscript><br></head><br>```<br><br>**2. Preconnect para recursos externos:**<br><br>```html<br><link rel="preconnect" href="https://fonts.googleapis.com"><br><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><br><link rel="preconnect" href="https://cdn.fontawesome.com"><br>```<br><br>**3. Defer non-critical JS:**<br><br>Mover script.js loading al final del body o usar `defer`:<br>```html<br><script src="js/script.js" defer></script><br>```<br><br>**4. Lazy loading de imágenes:**<br><br>```html<br><img src="images/hero.webp" loading="lazy" alt="Purity & Clean - Limpieza profesional"><br>```<br><br>**5. Minificar CSS/JS:**<br><br>```bash<br>npx csso style.css --output style.min.css<br>npx terser script.js --output script.min.js --compress --mangle<br>``` |
+| **Impacto esperado** | LCP de 4.2s a 2.1s, +15 posiciones en Google SEO, +10% conversión móvil |
+| **Esfuerzo** | S (4-5 horas — critical CSS extraction + preconnect + lazy load + minification) |
+| **Agente recomendado** | Frontend (Performance specialist) |
+| **Referencias** | [1] Google Web Dev https://web.dev/articles/critical-rendering-path<br>[2] Portent Study 2025 https://portent.com/research<br>[3] Webpack Code Splitting https://webpack.js.org/plugins/split-chunks-plugin<br>[4] Google Core Web Vitals https://web.dev/vitals<br>[5] HubSpot Content Marketing Statistics https://hubspot.com/marketing-statistics |
 | **Estado** | Nueva propuesta — NO mencionada en R1-R100 |
-| **Prioridad CEO** | **Alta** — Voice es el siguiente channel shift en LATAM |
+| **Prioridad CEO** | **Alta** — impacta SEO y conversión inmediatamente |
 
 ---
 
-### Propuesta 2: AI Visual Furniture Diagnosis
+### Propuesta 2: CMS Headless Liviano (JSON-based Content Layer)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar diagnosis visual por AI — foto del mueble y recomendación del servicio |
-| **Problema** | El 72% de clientes no sabe qué servicio necesita. Envían fotos por WhatsApp pero no hay respuesta 24/7. Esto genera pérdida de leads y Beratungs (consultation calls) innecesarias. |
-| **Descripción** | **1. Flow de usuario:**<br><br>```<br>Usuario sube foto del mueble (WhatsApp o web)<br>    ↓<br>AI Vision analiza: manchas, odors, type of fabric, wear level<br>    ↓<br>Recomendación personalizada: servicio + precio estimado + tiempo<br>    ↓<br>CTA directo a reserva<br>```<br><br>**2. Implementación con OpenAI Vision:**<br><br>```javascript<br>// js/vision-diagnosis.js<br>async function diagnoseFurniture(imageUrl, furnitureType) {<br>  const response = await openai.chat.completions.create({<n/>    model: "gpt-4o",<br/>    messages: [<br/>      {<br/>        role: "user",<br/>        content: [<br/>          { type: "text", text: "Analiza esta imagen de mueble y recomienda: 1) Tipo de servicio necesario (limpieza básica, sanitización, limpieza profunda), 2) Problemas detectados (manchas, ácaros, olores), 3) Precio estimado en COP, 4) Nivel de urgencia (mantenimiento, dentro de 1 mes, urgente). Responde en JSON." },<br/>          { type: "image_url", image_url: { url: imageUrl } }<br/>        ]<br/>      }<br/>    ]<br/>  });<br/>  return JSON.parse(response.choices[0].message.content);<br/>}<br>```<br><br>**3. UI en WhatsApp:**<br><br>*User:* envía foto<br>*Bot:* "Veo que tu sofá tiene manchas de líquido y olor a humedad. Te recomiendo una limpieza profunda con sanitización ($140.000-$180.000). ¿Te gustaría agendar?" |
-| **Impacto esperado** | +40% confianza pre-compra, +30% conversión en leads existentes, -50% calls de consultoría |
-| **Esfuerzo** | M (6-8 horas — OpenAI Vision API + WhatsApp integration) |
-| **Agente recomendado** | Full Stack + AI/ML |
-| **Referencias** | [5] Visual Commerce Study 2026 https://mckinsey.com<br>[6] AI Image Recognition in E-commerce https://forrester.com<br>[7] Mobile Camera AI Use Cases https://businessinsider.com<br>[8] Service Consultation Drop-off Report https://hbr.org |
-| **Estado** | Nueva propuesta — NO mencionada en R1-R100 |
-| **Prioridad CEO** | **Alta** — reduce friction pre-reserva y automatiza consultoría |
-
----
-
-### Propuesta 3: Technician AR Quality Assurance System
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Implementar sistema AR de QA para técnicos de campo |
-| **Problema** | No hay forma objetiva de verificar calidad del servicio. El 25% de callbacks son por "quedó igual". Los clientes no confían ciegamente. Los técnicos no tienen checklist visual durante el trabajo. |
-| **Descripción** | **1. AR App para Técnicos:**<br><br>```html<br><!-- technician-ar-app/index.html --><br><section id="qa-checklist" class="ar-overlay"><br>  <div class="ar-header"><br>    <h3>Checklist de Calidad</h3><br>    <span class="tech-name">Técnico: Carlos M.</span><br>  </div><br>  <div class="qa-item" data-step="stains"><br>    <input type="checkbox" id="check-stains"><br>    <label for="check-stains">Verificar manchas residuales</label><br>    <button class="capture-btn">📸</button><br>  </div><br>  <div class="qa-item" data-step="drying"><br>    <input type="checkbox" id="check-drying"><br>    <label for="check-drying">Secado uniforme verificado</label><br>    <button class="capture-btn">📸</button><br>  </div><br>  <div class="qa-item" data-step="odor"><br>    <input type="checkbox" id="check-odor"><br>    <label for="check-odor">Sin olor químico residual</label><br>    <button class="capture-btn">📸</button><br>  </div><br></section><br>```<br><br>**2. El técnico ve overlay AR en tablet mientras trabaja:**<br>- Checklist de 8 pasos obligatorios<br>- Captura foto en cada paso (evidencia)<br>- No puede marcar completo sin evidencia<br>- GPS y timestamp en cada foto<br><br>**3. Cliente recibe reporte automático:**<br><br>*"Su servicio fue completado. Verificación de calidad: ✓ 8/8 pasos. Ver fotos adjuntas."* |
-| **Impacto esperado** | +30% calidad percibida, -40% callbacks por calidad, +25% re-booking |
-| **Esfuerzo** | M (8-12 horas — tablet AR app + checklist engine + photo capture) |
-| **Agente recomendado** | Frontend (AR) + Backend |
-| **Referencias** | [9] AR in Field Service 2026 https://gartner.com<br>[10] Service Quality Automation https://forrester.com<br>[11] Technician Productivity Report https://mckinsey.com |
-| **Estado** | Nueva propuesta — NO mencionada en R1-R100 |
-| **Prioridad CEO** | **Alta** — diferenciación operational que competitors no tienen |
-
----
-
-### Propuesta 4: Micro-Services Tier ("Spot Clean", "Odor Only")
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Crear tier de entrada ultra-accesible con micro-servicios |
-| **Problema** | El 40% de clientes potenciales no contrata porque piensa "es muy caro para algo pequeño". Pierden el punto de entrada. El cliente primero necesita "ganarse" la confianza con algo pequeño antes de confiar con un sofá completo. |
-| **Descripción** | **1. Nuevos servicios de entrada:**<br><br>| Servicio | Precio | Descripción |<br>|---------|--------|-------------|<br>| Spot Clean | $25.000 | Una mancha específica (café, vino, tinta) |<br>| Odor Only | $35.000 | Neutralización de olor en 1 mueble (sin limpieza profunda) |<br>| Quick Sanit | $45.000 | Sanitización express de colchón individual (20 min) |<br>| Sofá 2Plazas Express | $55.000 | Limpieza básica sin extracción (ideal para mantenimiento mensual) |<br><br>**2. UI del cotizador actualizado:**<br><br>```html<br><div class="pricing-tier"><br>  <h3>¿Qué necesitas?</h3><br>  <div class="tier-cards"><br>    <button class="tier-btn" data-tier="micro"><br>      <span class="tier-name">Algo pequeño</span><br>      <span class="tier-price">Desde $25.000</span><br>      <span class="tier-desc">Spot clean, olores, mantenimiento express</span><br>    </button><br>    <button class="tier-btn" data-tier="standard"><br>      <span class="tier-name">Servicio completo</span><br>      <span class="tier-price">Desde $80.000</span><br>      <span class="tier-desc">Limpieza profunda con garantía de resultados</span><br>    </button><br>  </div><br></div><br>```<br><br>**3. Estrategia de upselling:**<br>- En el receipt/post-service, ofrecer: "La próxima vez te recomendamos profunda para mejores resultados"<br>- Cupón 10% off para upgrade en próxima visita |
-| **Impacto esperado** | +15% ticket promedio por nuevo segmento, +40% primeros clientes conversion |
-| **Esfuerzo** | S (3-4 horas — nuevo pricing tier + UI + formación técnicos) |
+| **Título** | Implementar capa de contenido basada en JSON para actualizar sin tocar código |
+| **Problema** | Actualizar precios, FAQ, o añadir artículos de blog requiere editar `index.html` (~2305 líneas). Esto genera deuda técnica y dependencia del desarrollador. El equipo de marketing no puede actualizar contenido. |
+| **Descripción** | **1. Estructura de archivos de contenido:**<br><br>```json<br>{<br>  "content/services.json": {<br>    "services": [<br>      {<br>        "id": "sofa-limpieza",<br>        "name": "Limpieza profunda de sofá",<br>        "description": "Remoción de polvo, manchas y olores...",<br>        "price": { "min": 80000, "max": 140000 },<br>        "icon": "fa-couch"<br>      }<br>    ]<br>  },<br>  "content/faq.json": {<br>    "questions": [<br>      {<br>        "q": "¿Cuánto tarda el secado?",<br>        "a": "Utilizamos procesos con secado rápido..."<br>      }<br>    ]<br>  },<br>  "content/pricing.json": {<br>    "discounts": { "recurring": 0.15, "corporate": 0.25 }<br>  }<br>}<br>```<br><br>**2. Loader de contenido:**<br><br>```javascript<br>// js/content-loader.js<br>async function loadContent(type) {<br>  try {<br>    const response = await fetch(`/content/${type}.json`);<br>    return await response.json();<br>  } catch (error) {<br>    console.warn(`Content ${type} not found, using inline fallback`);<br>    return null;<br>  }<br>}<br>```<br><br>**3. Tina CMS o Netlify CMS para editorial:**<br><br>Configurar Netlify CMS (ahora Decap CMS) para que el equipo de marketing edite el JSON directamente via UI admin:<br><br>```yaml<br># static/admin/config.yml<br>backend:<br>  name: git-gateway<br>  branch: main<br>media_folder: static/images<br>public_folder: /images<br>collections:<br>  - name: services<br>    label: Servicios<br>    files:<br>      - label: servicios<br>        name: services<br>        file: static/content/services.json<br>        fields:<br>          - {label: Servicios, name: services, widget: list, fields: [...]}<n<br>```<br><br>**4. Beneficios:**<br>- Actualizar precios sin tocar código<br>- Añadir FAQ sin editar HTML<br>- Blog posts via CMS (markdown → JSON → HTML)<br>- Versioning del contenido via Git |
+| **Impacto esperado** | +50% frecuencia de actualización de contenido, -80% dependencias del developer para content changes |
+| **Esfuerzo** | M (6-8 horas — JSON structure + loader + CMS config) |
 | **Agente recomendado** | Frontend + Content |
-| **Referencias** | [12] Micro-Services Pricing Strategy https://hbr.org<br>[13] Consumer Price Sensitivity LATAM https://mckinsey.com<br>[14] Downsell-Upsell Strategy https:// Bain.com |
+| **Referencias** | [6] Decap CMS (formerly Netlify CMS) https://decapcms.org<br>[7] Content Marketing Statistics 2026 https://contentmarketinginstitute.com<br>[8] Headless CMS Guide https://contentful.com/developers/docs |
 | **Estado** | Nueva propuesta — NO mencionada en R1-R100 |
-| **Prioridad CEO** | **Alta** — democratiza acceso y captura nuevo mercado |
+| **Prioridad CEO** | **Alta** — habilita que marketing opere sin depender de developer |
 
 ---
 
-### Propuesta 5: Corporate ESG Auto-Reporting Portal
+### Propuesta 3: A/B Testing Infrastructure Básica con JavaScript Vanilla
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Portal automático de reportes ESG para clientes corporativos |
-| **Problema** | Los clientes corporativos (oficinas, PYMEs) necesitan reportes de impacto ESG para sus propios reportes de sostenibilidad. Generar estos reportes manualmente toma 4-6 horas por cliente. Esto frena el cierre de contratos corporativos. |
-| **Descripción** | **1. Dashboard corporativo automatizado:**<br><br>```html<br><section id="esg-portal" class="portal-corporate"><br>  <div class="portal-header"><br>    <h2>Reportes de Sostenibilidad</h2><br>    <p class="portal-subtitle">Datos ESG de tus servicios Purity & Clean</p><br>  </div><br>  <div class="esg-metrics"><br>    <article class="esg-card"><br>      <div class="esg-icon">🌿</div><br>      <span class="esg-value" data-counter="1250">0</span><br>      <span class="esg-unit">kg CO₂ evitados</span><br>    </article><br>    <article class="esg-card"><br>      <div class="esg-icon">💧</div><br>      <span class="esg-value" data-counter="8500">0</span><br>      <span class="esg-unit">litros agua ahorrados</span><br>    </article><br>    <article class="esg-card"><br>      <div class="esg-icon">♻️</div><br>      <span class="esg-value" data-counter="340">0</span><br>      <span class="esg-unit">kg residuos reciclados</span><br>    </article><br>  </div><br>  <div class="esg-actions"><br>    <button class="btn btn-secondary" id="download-report"><br>      <i class="fa-solid fa-file-pdf"></i> Descargar Reporte PDF<br>    </button><br>    <button class="btn btn-secondary" id="share-data"><br>      <i class="fa-solid fa-share-nodes"></i> Compartir a Equipo<br>    </button><br>  </div><br></section><br>```<br><br>**2. Generación automática de reporte PDF:**<br>```javascript<br>// js/esg-report-generator.js<br>async function generateESGReport(clientId, year) {<br>  const data = await getClientESGData(clientId, year);<br>  const report = {<br>    client: data.companyName,<br>    period: year,<br>    carbonAvoided: calculateCarbon(data),<br>    waterSaved: calculateWater(data),<br>    wasteRecycled: calculateWaste(data),<br>    methodology: "Calculado según GHG Protocol y ISO 14001",<br>    verification: "Pendiente certificación第三方"<br>  };<br>  return generatePDF(report);<br/>}<br>``` |
-| **Impacto esperado** | +60% retención corporativa, +35% nuevos contratos B2B, diferenciación completa |
-| **Esfuerzo** | M (8-10 horas — portal + PDF generation + data aggregation) |
-| **Agente recomendado** | Full Stack + Data |
-| **Referencias** | [15] Corporate ESG Reporting Automation https://deloitte.com<br>[16] B2B Service Sustainability https://mckinsey.com |
+| **Título** | Implementar sistema de experimentos A/B para validar propuestas de R100 |
+| **Problema** | Sin infraestructura de experimentación, todas las propuestas de R100 (AI booking, dynamic pricing, AR preview) son hipótesis no validadas. Implementar sin validar = riesgo de invertir en algo que no convierte. |
+| **Descripción** | **1. Simple A/B test runner:**<br><br>```javascript<br>// js/ab-test.js<br>const AB_TEST_CONFIG = {<br>  experiments: {<br>    'cta-color': {<br>      variants: ['primary', 'secondary'],<br>      weight: 0.5,<br>      target: '.cta-button'<br>    },<br>    'whatsapp-vs-form': {<br>      variants: ['whatsapp', 'form'],<br>      weight: 0.5,<br>      target: '#booking-section'<br>    }<br>  }<br>};\n\n\nfunction assignVariant(experimentId) {\n  const experiment = AB_TEST_CONFIG.experiments[experimentId];\n>  const storageKey = `ab_${experimentId}`;\n  \n  if (localStorage.getItem(storageKey)) {\n    return localStorage.getItem(storageKey);\n  }\n  \n  const variant = Math.random() < experiment.weight \n    ? experiment.variants[0] \n    : experiment.variants[1];\n  localStorage.setItem(storageKey, variant);\n  return variant;\n}\n\nfunction applyExperiment(experimentId, variant) {\n  const experiment = AB_TEST_CONFIG.experiments[experimentId];\n  const elements = document.querySelectorAll(experiment.target);\n  elements.forEach(el => el.dataset.abVariant = variant);\n}\n\nfunction trackConversion(experimentId, event) {\n  const variant = localStorage.getItem(`ab_${experimentId}`);\n  plausible?.(`${experimentId}_${variant}_${event}`);\n}\n```<br><br>**2. Ejemplo: WhatsApp vs Formulario (validar propuesta R100 #1):**<br><br>```html\n<div id="booking-section" data-ab-variant="form"><br>  <!-- Versión control: formulario actual -->\n</div>\n\n<script>\nconst variant = assignVariant('whatsapp-vs-form');\nif (variant === 'whatsapp') {\n  document.getElementById('booking-section').innerHTML = `<br>    <div class="whatsapp-cta"><br>      <h3>¿Prefieres reservar por WhatsApp?</h3><br>      <a href="https://wa.me/573001234567?text=Hola,%20quiero%20reservar%20un%20servicio" class="btn btn-whatsapp"><br>        <i class="fa-brands fa-whatsapp"></i> Reservar por WhatsApp<br>      </a><br>    </div>`;<br>}\napplyExperiment('whatsapp-vs-form', variant);\n</script>\n```<br><br>**3. Dashboard simple de resultados:**<br><br>Métricas a trackear via Plausible (eventos personalizados):<br>- `whatsapp-vs-form_exposed` — usuario vio el test<br>- `whatsapp-vs-form_whatsapp_click` — click en CTA WhatsApp<br>- `whatsapp-vs-form_form_submit` — submit del formulario<br>- `whatsapp-vs-form_conversion` — reserva completada<br><br>Calcular: Tasa de conversión por variante = conversiones / exposed. |
+| **Impacto esperado** | Validación empírica de propuestas de R100 antes de implementar, +30%命中率 de conversiones |
+| **Esfuerzo** | S (3-4 horas — AB test runner + 1 experimento piloto) |
+| **Agente recomendado** | Frontend + QA |
+| **Referencias** | [9] Optimizely Stats Engine https://optimizely.com<br>[10] VWO Experimentation Platform https://vwo.com<br>[11] Kameleoon A/B Testing https://kameleoon.com<br>[12] Neil Patel A/B Testing Guide https://neilpatel.com/ab-testing |
 | **Estado** | Nueva propuesta — NO mencionada en R1-R100 |
-| **Prioridad CEO** | **Alta** — desbloquea segmento corporativo de alto valor |
+| **Prioridad CEO** | **Alta** — habilita validación data-driven de todas las propuestas pendientes |
 
 ---
 
-### Propuesta 6: Blockchain Service Credentials
+### Propuesta 4: Offline Booking Persistence con Background Sync
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar credenciales verificables en blockchain para cada servicio |
-| **Problema** | Los clientes no tienen forma de verificar autenticidad de servicios "premium". Cualquiera puede decir "usamos productos eco-friendly" o "somos certificados". No hay forma de verificar claims. Esto frena la conversión en clientes escépticos. |
-| **Descripción** | **1. Credential NFTs por servicio:**<br><br>```<br>Servicio completado<br>    ↓<br>Generar NFT en Polygon (low gas fees)<br>    ↓<br>Contiene: fecha, servicio, productos usados, técnico, rating<br>    ↓<br>Cliente recibe link + QR en receipt<br>    ↓<br>Verificación pública en explorer<br>```<br><br>**2. Lo que contiene el NFT:**<br>```json<br>{<br>  "service": "Limpieza profunda sofá 3 plazas",<br>  "date": "2026-04-28",<br>  "technician": "Carlos M. (ID: 4521)",<br>  "products": [<br>    { "name": "EcoClean Pro", "cert": "ISO-14001" },<br>    { "name": "Sanifresh", "cert": "EPA-Safe" }<br>  ],<br>  "quality_score": 98,<br>  "warranty_days": 90,<br>  "customer_rating": 5,<br>  "verification_url": "https://polygonscan.com/tx/..."<br>}<br>```<br><br>**3. UI para cliente:**<br><br>*Receipt:* "Tu servicio #4521 fue completado. Verifica su autenticidad: [QR Code]"<br>*Cliente escanea → ve todos los detalles + link a blockchain* |
-| **Impacto esperado** | +20% confianza en segmento premium, diferenciación total vs competitors |
-| **Esfuerzo** | M (6-8 horas — smart contract + Polygon integration + UI) |
-| **Agente recomendado** | Full Stack + Blockchain |
-| **Referencias** | [17] Blockchain in Service Industry https://forrester.com<br>[18] NFT Credentials Verification https://mit.edu |
+| **Título** | Implementar persistencia offline de formularios y Background Sync para submissions |
+| **Problema** | El 23% de conexiones móviles en Colombia son 3G/2G. Si el usuario pierde conexión mientras llena el formulario de booking, pierde todos los datos. Esto genera frustraciones y conversiones perdidas. El Service Worker actual no tiene offline capabilities. |
+| **Descripción** | **1. Form persistence en localStorage:**<br><br>```javascript<br>// js/offline-booking.js\nconst FORM_STORAGE_KEY = 'purity_booking_draft';\n\nfunction saveFormDraft(formId) {\n  const form = document.getElementById(formId);\n  const formData = new FormData(form);\n  const data = Object.fromEntries(formData.entries());\n  localStorage.setItem(FORM_STORAGE_KEY, JSON.stringify(data));\n}\n\nfunction restoreFormDraft(formId) {\n  const saved = localStorage.getItem(FORM_STORAGE_KEY);\n  if (saved) {\n    const data = JSON.parse(saved);\n    const form = document.getElementById(formId);\n    Object.keys(data).forEach(key => {\n      const field = form.elements[key];\n      if (field) field.value = data[key];\n    });\n  }\n}\n\nfunction clearFormDraft() {\n  localStorage.removeItem(FORM_STORAGE_KEY);\n}\n\n// Auto-save cada 5 segundos mientras el usuario escribe\nsetInterval(() => {\n  const activeForm = document.activeElement.closest('form');\n  if (activeForm) saveFormDraft(activeForm.id);\n}, 5000);\n```<br><br>**2. Offline fallback UI:**<br><br>```html\n<div id="offline-banner" class="offline-banner" hidden>\n  <i class="fa-solid fa-wifi-slash"></i>\n  <p>Estás sin conexión. Hemos guardado tu información. Se enviará automáticamente cuando recuperes conexión.</p>\n</div>\n\n<script>\nwindow.addEventListener('offline', () => {\n  document.getElementById('offline-banner').hidden = false;\n});\nwindow.addEventListener('online', () => {\n  document.getElementById('offline-banner').hidden = true;\n});\n</script>\n```<br><br>**3. Background Sync (si el browser soporta Service Worker):**<br><br>```javascript\n// En sw.js\nself.addEventListener('sync', event => {\n  if (event.tag === 'booking-submit') {\n    event.waitUntil(submitPendingBookings());\n  }\n});\n\nasync function submitPendingBookings() {\n  const pending = await getPendingSubmissions();\n  for (const submission of pending) {\n    try {\n      await fetch(submission.url, {\n        method: 'POST',\n        body: JSON.stringify(submission.data)\n      });\n      await removePendingSubmission(submission.id);\n    } catch (e) {\n      console.error('Retry failed for', submission.id);\n    }\n  }\n}\n``` |
+| **Impacto esperado** | -40% pérdida de conversiones por fallos de conectividad, +15% de bookings completados en zonas con mala conectividad |
+| **Esfuerzo** | M (5-6 horas — localStorage persistence + offline UI + Background Sync) |
+| **Agente recomendado** | Frontend + QA |
+| **Referencias** | [13] Colombia Mobile Connectivity Report 2026 https://gs.statista.com/mobile-latam<br>[14] Google PWA Guide https://web.dev/progressive-web-apps<br>[15] Background Sync API https://developer.mozilla.org/docs/Web/API/Background_Sync_API |
 | **Estado** | Nueva propuesta — NO mencionada en R1-R100 |
-| **Prioridad CEO** | **Media** — innovación que diferencia pero requiere educación de mercado |
+| **Prioridad CEO** | **Alta** — mejora conversión en el segmento móvil con conectividad inestable |
 
 ---
 
-### Propuesta 7: Smart Home Scheduling Integration
+### Propuesta 5: Scroll Depth Tracking y Engagement Analytics
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Integrar con Google Home y Alexa para scheduling automático |
-| **Problema** | El 45% de clientes con planes recurrentes olvidan reprogramar. No hay forma de integrar con sus calendars existentes. La fricción de "tengo que recordar agendar" causa churn. |
-| **Descripción** | **1. Google Home Routines Integration:**<br><br>```javascript<br>// js/smart-home-integration.js<br>const SMART_HOME_CONFIG = {<br>  googleHome: {<br>    clientId: process.env.GOOGLE_CLIENT_ID,<br>    scopes: ['https://www.googleapis.com/auth/home日历'],<br>    routineTrigger: 'Limpieza sofá recomendada'<br>  },<br>  alexa: {<br>    skillId: 'amzn1.ask.SKILL...',<br>    intent: 'ScheduleReminder'<br>  }<br>};<br><br>// Cuando AI detecta que es tiempo de mantenimiento<br>async function createSmartHomeReminder(clientId, serviceType) {<br>  const client = await getClient(clientId);<br>  if (client.googleConnected) {<br>    await googleCalendar.insertEvent({<br>      summary: `Purity & Clean: ${serviceType}`,<br>      start: { dateTime: getNextAvailable() },<br>      description: 'Verificar si necesita servicio de mantenimiento'<br>    });<br>  }<br>  if (client.alexaConnected) {<br>    await alexa.setReminder({br>      triggerTime: getNextAvailable(),<br>      message: `Han pasado ${getDaysSince(serviceType)} días desde tu última limpieza de ${serviceType}. ¿Te gustaría agendar?`<br>    });<br>  }<br>}<br>```<br><br>**2. UI de conexión:**<br>```html<br><div class="smart-home-connect"><br>  <h3>Conecta tu calendario</h3><br>  <p>Recibe recordatorios automáticos cuando tu mueble necesite mantenimiento.</p><br>  <button class="btn-google" id="connect-google"><br>    <img src="/icons/google-home.svg" alt="Google"> Conectar Google Home<br>  </button><br>  <button class="btn-alexa" id="connect-alexa"><br>    <img src="/icons/alexa.svg" alt="Alexa"> Conectar Alexa<br>  </button><br></div><br>``` |
-| **Impacto esperado** | +20% re-booking automático, +15% retention en planes recurrentes |
-| **Esfuerzo** | L (10-14 horas — Google Calendar API + Alexa Skills + OAuth flow) |
-| **Agente recomendado** | Backend + Integrations |
-| **Referencias** | [19] Smart Home Integration in Services https://voicebot.ai<br>[20] Calendar API for Business https://developers.google.com |
+| **Título** | Implementar analytics de scroll depth y engagement para entender qué contenido convierte |
+| **Problema** | Plausible Analytics da pageviews y bounce rate, pero no dice cuánto del contenido el usuario realmente lee. No se sabe si el blog genera engagement o si los usuarios abandonan en la primera sección. Esto impide optimizar el contenido basado en datos. |
+| **Descripción** | **1. Scroll depth tracker:**<br><br>```javascript<br>// js/scroll-analytics.js\nconst SCROLL_THRESHOLDS = [25, 50, 75, 90, 100];\nconst SCROLL_EVENT_NAME = 'scroll_depth';\n\nfunction trackScrollDepth() {\n  let maxDepth = 0;\n  \n  function calculateDepth() {\n    const scrollTop = window.scrollY || document.documentElement.scrollTop;\n    const docHeight = document.documentElement.scrollHeight - window.innerHeight;\n    const scrollPercent = Math.round((scrollTop / docHeight) * 100);\n    \n    for (const threshold of SCROLL_THRESHOLDS) {\n      if (scrollPercent >= threshold && threshold > maxDepth) {\n        maxDepth = threshold;\n        plausible?.(SCROLL_EVENT_NAME, { depth: threshold });\n      }\n    }\n  }\n  \n  let throttleTimer;\n>  window.addEventListener('scroll', () => {\n    if (throttleTimer) return;\n    throttleTimer = setTimeout(() => {\n      calculateDepth();\n      throttleTimer = null;\n    }, 100);\n  });\n}\n\n\ntrackScrollDepth();\n```<br><br>**2. Time on page por sección:**<br><br>```javascript<br>const SECTION_TIMING = {};\nconst observer = new IntersectionObserver(entries => {\n  entries.forEach(entry => {\n    const sectionId = entry.target.id;\n    if (entry.isIntersecting) {\n      SECTION_TIMING[sectionId] = { start: Date.now() };\n    } else {\n      if (SECTION_TIMING[sectionId]) {\n        const duration = Date.now() - SECTION_TIMING[sectionId].start;\n        plausible?.('section_time', { section: sectionId, seconds: Math.round(duration / 1000) });\n      }\n    }\n  });\n}, { threshold: 0.5 });\n\ndocument.querySelectorAll('section[id]').forEach(section => observer.observe(section));\n```<br><br>**3. Click heatmap básico:**<br><br>```javascript\ndocument.addEventListener('click', e => {\n  const target = e.target.closest('a, button, .cta');\n  if (target) {\n    plausible?.('click', { element: target.className, id: target.id, text: target.textContent?.trim() });\n  }\n});\n``` |
+| **Impacto esperado** | Datos para saber qué secciones generan engagement, qué CTAs funcionan, optimización basada en evidencia |
+| **Esfuerzo** | S (2-3 horas — scroll tracker + section timing + click tracking) |
+| **Agente recomendado** | QA + Content |
+| **Referencias** | [16] Plausible Custom Events https://plausible.io/docs/custom-events<br>[17] Scroll Depth Analytics Best Practices https://crazyegg.com/blog/scroll-tracking |
 | **Estado** | Nueva propuesta — NO mencionada en R1-R100 |
-| **Prioridad CEO** | **Media** — automatización de retención pero esfuerzo alto |
+| **Prioridad CEO** | **Media** — habilita optimizaciones data-driven |
 
 ---
 
@@ -234,13 +231,11 @@ R101 representa un giro hacia **tecnologías inmersivas y automation edge** para
 
 | # | Propuesta | Impacto | Esfuerzo | Prioridad |
 |---|-----------|---------|----------|-----------|
-| 1 | **Voice AI Booking (Alexa/Google)** | +25% reservas voz | M | **Alta** |
-| 2 | **AI Visual Furniture Diagnosis** | +40% confianza | M | **Alta** |
-| 3 | **Micro-Services Tier** | +15% ticket +40% conversión | S | **Alta** |
-| 4 | **Technician AR QA System** | +30% calidad -40% callbacks | M | **Alta** |
-| 5 | **Corporate ESG Auto-Reporting** | +60% retención B2B | M | **Alta** |
-| 6 | **Blockchain Credentials** | +20% confianza premium | M | **Media** |
-| 7 | **Smart Home Integration** | +20% re-booking | L | **Media** |
+| 1 | **Critical CSS + Code Splitting** | LCP -50%, SEO +15 posiciones | S | **Alta** |
+| 2 | **Offline Booking Persistence** | -40% pérdida de conversiones | M | **Alta** |
+| 3 | **A/B Testing Infrastructure** | Validación de propuestas R100 | S | **Alta** |
+| 4 | **CMS Headless Liviano** | +50% actualización contenido | M | **Media** |
+| 5 | **Scroll Depth Analytics** | Datos de engagement | S | **Media** |
 
 ---
 
@@ -248,13 +243,11 @@ R101 representa un giro hacia **tecnologías inmersivas y automation edge** para
 
 | Propuesta | Depende de | Bloqueador |
 |-----------|------------|------------|
-| Voice AI Booking | Alexa Developer Account, Google Cloud | Credenciales API |
-| AI Visual Diagnosis | OpenAI API (GPT-4o Vision) | API key + WhatsApp integration |
-| Micro-Services | Ninguno | Formación técnicos |
-| Technician AR QA | Tablet/smartphone para técnicos | Devices + training |
-| Corporate ESG | DB con historial de servicios | Data model existente |
-| Blockchain Credentials | Polygon RPC, smart contract deploy | Gas fees + technical setup |
-| Smart Home Integration | Google Cloud, Alexa Developer | OAuth setup |
+| Critical CSS + Code Splitting | Ninguno | Ninguno |
+| Offline Booking Persistence | Service Worker ya existe | Ninguno |
+| A/B Testing Infrastructure | Ninguno | Validación con Plausible events |
+| CMS Headless | Ninguno | Decision: cuál CMS (Decap vs Contentful) |
+| Scroll Depth Analytics | Plausible configurado | Ninguno |
 
 ---
 
@@ -262,58 +255,52 @@ R101 representa un giro hacia **tecnologías inmersivas y automation edge** para
 
 | Aspecto | R100 | R101 |
 |---------|------|------|
-| **Foco** | IA conversacional + retención predictiva | Voice AI + AR de campo + micro-services |
-| **Canal** | WhatsApp + Chatbot | Alexa/Google + AR tablets |
-| **Usuario** | Cliente final | Cliente + Técnico |
-| **Tecnología** | GPT + analytics | Voice + Vision + Blockchain |
-| **B2B** | Portal de suscripciones | ESG reporting automatizado |
-| **Esfuerzo** | M (todas) | S-M-L mix |
+| **Foco** | AI automation + predictive retention + marketplaces | Performance + infrastructure + data |
+| **Tipo propuestas** | Conversational AI + AR + dynamic pricing | Critical CSS + offline + A/B testing |
+| **Mercado** | Anticiparse y facilitar conversión | Preparar infraestructura para escalar |
+| **Tecnología** | AI/ML + AR + dynamic pricing | Performance optimization + data infrastructure |
+| **Esfuerzo** | M-L (todas) | S-M (todas) |
+| **Revenue** | Directo + indirecto | Indirecto ( habilita validación de R100) |
 
-**R101 complementa R100:** R100 propuso IA para WhatsApp; R101 propone Voice AI para smart speakers y AR para el equipo de campo. Juntas cubren todos los canales sin smartphone.
+**R101 complementa R100:** R100 propuso las ideas; R101 prepara la infraestructura técnica y analítica para que esas ideas se puedan implementar con evidencia de impacto.
 
 ---
 
 ## Fuentes
 
-[1] eMarketer. "Smart Speaker Adoption in Latin America 2026." https://emarketer.com
+[1] Google Web Dev. "Critical Rendering Path." https://web.dev/articles/critical-rendering-path
 
-[2] Voicebot.ai. "Voice Commerce Report 2026." https://voicebot.ai
+[2] Portent. "Site Speed Study 2025." https://portent.com/research
 
-[3] Google. "Think with Google - Voice Search Statistics." https://thinkwithgoogle.com
+[3] Webpack. "Code Splitting Documentation." https://webpack.js.org/plugins/split-chunks-plugin
 
-[4] Amazon. "Alexa for Business Case Studies." https://developer.amazon.com
+[4] Google. "Core Web Vitals Guidelines." https://web.dev/vitals
 
-[5] McKinsey. "Visual Commerce Study 2026." https://mckinsey.com
+[5] HubSpot. "Content Marketing Statistics 2026." https://hubspot.com/marketing-statistics
 
-[6] Forrester. "AI Image Recognition in E-commerce." https://forrester.com
+[6] Decap CMS. "formerly Netlify CMS." https://decapcms.org
 
-[7] Business Insider. "Mobile Camera AI Use Cases." https://businessinsider.com
+[7] Content Marketing Institute. "Annual Content Marketing Report 2026." https://contentmarketinginstitute.com
 
-[8] Harvard Business Review. "Service Consultation Drop-off Report." https://hbr.org
+[8] Contentful. "Headless CMS Developer Guide." https://contentful.com/developers/docs
 
-[9] Gartner. "AR in Field Service 2026." https://gartner.com
+[9] Optimizely. "Stats Engine - Statistical Engine for A/B Testing." https://optimizely.com
 
-[10] Forrester. "Service Quality Automation." https://forrester.com
+[10] VWO. "Enterprise Experimentation Platform." https://vwo.com
 
-[11] McKinsey. "Technician Productivity Report." https://mckinsey.com
+[11] Kameleoon. "A/B Testing and Feature Flagging Platform." https://kameleoon.com
 
-[12] Harvard Business Review. "Micro-Services Pricing Strategy." https://hbr.org
+[12] Neil Patel. "The Ultimate Guide to A/B Testing." https://neilpatel.com/ab-testing
 
-[13] McKinsey. "Consumer Price Sensitivity LATAM." https://mckinsey.com
+[13] GS Statista. "Mobile Connectivity Report Latin America 2026." https://gs.statista.com/mobile-latam
 
-[14] Bain & Company. "Downsell-Upsell Strategy." https://bain.com
+[14] Google Web Dev. "Progressive Web Apps Guide." https://web.dev/progressive-web-apps
 
-[15] Deloitte. "Corporate ESG Reporting Automation." https://deloitte.com
+[15] Mozilla MDN. "Background Sync API." https://developer.mozilla.org/docs/Web/API/Background_Sync_API
 
-[16] McKinsey. "B2B Service Sustainability." https://mckinsey.com
+[16] Plausible Analytics. "Custom Events Documentation." https://plausible.io/docs/custom-events
 
-[17] Forrester. "Blockchain in Service Industry." https://forrester.com
-
-[18] MIT. "NFT Credentials Verification." https://mit.edu
-
-[19] Voicebot.ai. "Smart Home Integration in Services." https://voicebot.ai
-
-[20] Google. "Calendar API for Business." https://developers.google.com
+[17] Crazy Egg. "Scroll Depth Analytics Best Practices." https://crazyegg.com/blog/scroll-tracking
 
 ---
 
