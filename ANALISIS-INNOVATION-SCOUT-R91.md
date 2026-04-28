@@ -4,13 +4,13 @@
 **Fecha:** 2026-04-28
 **Analista:** Innovation Scout
 **Ronda:** 91
-**Issue padre:** DOMAA-840
+**Issue padre:** DOMAA-839
 
 ---
 
 ## Resumen Ejecutivo
 
-R91 se diferencia de R90 al enfocar en **tecnologías emergentes de 2026**: AI visual para diagnóstico instantáneo, voice commerce, y mapas de calor de cobertura geográfica. Mientras R90 propuso modelos B2B y Gift Cards, R91 propone **innovaciones tecnológicas** que usan Chrome Built-in AI APIs y capacidades de navegador que no requieren backend complejo.
+R91 se enfoca en **cierre de features pendientes de R89** y **mejoras de UX/animación** que son realistas para el equipo actual — sin pasarelas de pago ni integraciones complejas. A diferencia de R90 (modelo de negocio B2B), R91 propone mejoras tácticas de conversión que coinciden con las instrucciones del CEO: "cosas como crear animaciones, mejorar el SEO".
 
 ---
 
@@ -18,15 +18,31 @@ R91 se diferencia de R90 al enfocar en **tecnologías emergentes de 2026**: AI v
 
 ### Stack Técnico
 
-| Componente | Estado | Líneas |
-|-----------|--------|--------|
-| **Frontend** | HTML5 + CSS3 + Vanilla JS | index.html (2,305), style.css (122KB), script.js (64KB) |
-| **Blog** | 6 artículos con SEO | blog/ |
-| **Zonas** | 11 páginas + template | zonas/ |
-| **PWA** | Funcional con SKIP_WAITING | sw.js |
-| **Tests E2E** | Playwright configurado | tests/e2e/ |
-| **Chatbot** | WhatsApp routing | script.js |
-| **Forms** | Formspree | config.js |
+| Componente | Estado | Notas |
+|-----------|--------|-------|
+| **Frontend** | HTML5 + CSS3 + Vanilla JS | SPA-like, multi-sección |
+| **Dark mode** | ✅ Funcional | localStorage persistence |
+| **Búsqueda** | ✅ Funcional | Filtra tarjetas por data-* |
+| **Blog SEO** | ✅ 6 artículos | Con meta tags completos |
+| **Google Reviews** | ✅ UI completa | Avatares, estrellas, texto real |
+| **Before/After sliders** | ✅ 6 comparison sliders | Unsplash + CSS filtros |
+| **Video showcase** | ✅ Sección video | YouTube embed (placeholder) |
+| **Cotizador** | ✅ Interactivo | Stepper + WhatsApp |
+| **WhatsApp Chatbot** | ✅ Fab button + panel | Con quick replies |
+| **PWA** | ✅ Funcional | SKIP_WAITING |
+| **Tests E2E** | ✅ Playwright | 9 archivos |
+| **Pricing section** | ✅ Completo | Cards con rangos |
+| **FAQ** | ✅ Schema.org | Pero sin acordeón interactivo |
+
+### Features Pendientes (R89)
+
+| Feature | Ronda | Prioridad CEO | Estado |
+|---------|-------|--------------|--------|
+| Quiz Interactivo | R89 | ⏳ Pendiente | Sin implementar |
+| Instagram UGC | R89 | ⏳ Pendiente | Sin implementar |
+| Exit Intent Popup | R89 | ⏳ Pendiente | Sin implementar |
+| Voice Search FAQ | R89 | ⏳ Pendiente | Sin implementar |
+| Página de Precios | R89 | ⏳ Pendiente | **SÍ existe** (sección #pricing) |
 
 ### Lo Implementado en R1-R90 (Resumen)
 
@@ -42,128 +58,130 @@ R91 se diferencia de R90 al enfocar en **tecnologías emergentes de 2026**: AI v
 | Before/After gallery | R7 | ✅ |
 | Stats animados | R8 | ✅ |
 | Garantía 200% | R9 | ✅ |
-| Quiz Interactivo | R89 | ⏳ Pendiente |
+| API B2B | R90 | ⏳ Pendiente |
 | Gift Cards | R90 | ⏳ Pendiente |
-| API Pública B2B | R90 | ⏳ Pendiente |
-| Flat Rate + Recurring | R90 | ⏳ Pendiente |
+| Corporate Vouchers | R90 | ⏳ Pendiente |
+| Public Checklists | R90 | ⏳ Pendiente |
+| Flat Rate Pricing | R90 | ⏳ Pendiente |
 
 ---
 
-## Investigación: Tendencias 2026 en Home Services
+## Análisis Competitivo: Áreas de Mejora UX
 
-### Hallazgo 1: Chrome Built-in AI APIs (2026)
+### Comparación con Maid Complete
 
-Chrome 2026 incluye APIs nativas de AI que NO requieren backend:
+| Feature | Maid Complete | Purity & Clean | Gap |
+|---------|--------------|----------------|-----|
+| **Proceso visual (3 pasos)** | ✅ "Select → Schedule → Enjoy" | ❌ No tiene sección "cómo funciona" | **Alto — implementar** |
+| **Exit intent popup** | ❌ No visible | ❌ No implementado | **Medio — pendiente R89** |
+| **FAQ accordion** | Simple FAQ | FAQ con Schema pero sin acordeón | **Bajo — mejora UX** |
+| **Sticky CTA** | Header con "Book Now" | Nav normal sin CTA sticky | **Medio** |
+| **Certificación badges** | "Bonded & Insured" | Solo confianza badges | **Bajo** |
+| **Scroll animations** | Básicas | `data-reveal` con delays | ✅ Correcto |
 
-- **chrome.ai.translator** — Traducción en tiempo real sin llamadas externas
-- **chrome.ai.prompt** — LLM local para chatbots sin servidor
-- **chrome.ai.summarizer** — Resumir reseñas y contenido largo
-- **Document Extraction API** — Extraer texto de imágenes (menus, contratos)
+### Lo que NO tienen los competidores que Purity podría liderar
 
-**Implicación:** Purity puede ofrecer diagnóstico AI de muebles directamente en el navegador, sin costos de API externa.
-
-### Hallazgo 2: Voice Commerce en América Latina
-
-Para 2026, 35% de búsquedas en Colombia son por voz (Google Trends). Los servicios de hogar son candidatos ideales porque:
-- Consultas cortas ("limpieza sofá cerca")
-- Comando directo ("agenda limpieza para mañana")
-- Seguimiento de estado ("dónde está mi limpiador")
-
-**Implicación:** Un Action para Google Assistant o Alexa podría capturar tráfico voice-first.
-
-### Hallazgo 3: Mapas de Calor de Cobertura
-
-Competidores en USA (TaskRabbit, Handy) muestran densidad de proveedores por zona. Purity no tiene mapa visual de cobertura.
-
-**Implicación:** Un heatmap interactivo de zonas atendidas aumenta confianza y reduce consultas de "llegan a mi zona?".
-
-### Hallazgo 4: Screen Reader + AI
-
-WebAIM 2026 reporta que 15% de usuarios bogotanos usan lectores de pantalla. Chrome tiene Reader Mode y AI-powered alt text.
-
-**Implicación:** Purity puede ser líder en accesibilidad para servicios de limpieza.
+1. **Animación de contadores en scroll** — Ya existe `data-counter` pero podría mejorar
+2. **Microinteracciones en cards** — Hover effects más ricos
+3. **Video testimonials** — Ningún competidor bogotano lo tiene
 
 ---
 
 ## Propuestas (Round 91)
 
-### Propuesta 1: AI Visual Furniture Diagnosis con Chrome AI (HIGH PRIORITY)
+### Propuesta 1: Exit Intent Popup (HIGH PRIORITY — Cierre R89)
 
 | Campo | Detalle |
-|------|---------|
-| **Título** | Implementar diagnóstico AI de muebles usando chrome.ai + Document Extraction API |
-| **Problema** | Los clientes no saben qué tipo de limpieza necesitan. Envían fotos por WhatsApp y un humano responde. Con AI, el navegador puede analizar la imagen y dar un diagnóstico instantáneo. |
-| **Descripción** | **Nueva sección en index.html:**<br><br>1. **Upload de imagen:**<br>   ```html<br>   <section id="ai-diagnosis"><br>     <h2>Diagnóstico AI Gratuito</h2><br>     <p>Subí una foto de tu mueble y te decimos qué servicio necesitás.</p><br>     <input type="file" id="furniture-photo" accept="image/*" capture="environment"><br>     <button id="analyze-btn" class="btn btn-primary">Analizar con AI</button><br>     <div id="diagnosis-result" class="hidden"></div><br>   </section><br>   ```<br><br>2. **JavaScript con chrome.ai:**<br>   ```javascript<br>   async function diagnoseFurniture(imageFile) {<br>     // Usar Document Extraction API para obtener descripción<br>     const docAI = await chrome.ai.documentExtraction?.create();<br>     const extracted = await docAI.extract(imageFile);<br>     <br>     // Usar chrome.ai.prompt para analizar<br>     const session = await chrome.ai.prompt.createSession({<br>       systemPrompt: 'Eres un experto en limpieza de muebles. Analiza la descripción y sugiere: 1) Tipo de mueble, 2) Estado (bueno/regular/malo), 3) Servicio recomendado, 4) Precio estimado.'<br>     });<br>     <br>     const diagnosis = await session.prompt(extracted.text);<br>     return formatDiagnosis(diagnosis);<br>   }<br>   ```<br><br>3. **Fallback para navegadores sin chrome.ai:**<br>   ```javascript<br>   // Usar un microservicio serverless o enviar a WhatsApp<br>   function fallbackDiagnosis(imageFile) {<br>     const formData = new FormData();<br>     formData.append('image', imageFile);<br>     formData.append('phone', getWhatsAppLink());<br>     // Enviar a WhatsApp con la imagen<br>     window.open(`https://wa.me/573001234567?text=${encodeURIComponent('Necesito cotización. Adjunto foto de mi mueble.')}&media=${imageFile}`);<br>   }<br>   ```<br><br>4. **Resultados de diagnóstico:**<br>   - Tipo de mueble detectado<br>   - Estado estimado<br>   - Servicio recomendado<br>   - Precio indicativo<br>   - CTA directo a WhatsApp con prellenado |
-| **Impacto esperado** | Reducción de consultas por WhatsApp, mayor conversión por diagnóstico instantáneo, diferenciación tecnológica |
-| **Esfuerzo** | M (8-10 horas — UI + chrome.ai + fallback) |
+|-------|---------|
+| **Título** | Implementar Exit Intent Popup para capturar visitantes que se van |
+| **Problema** | Muchos visitantes revisan el sitio pero no reservan. Un popup al intentar cerrar la pestaña o retroceder puede recuperar ~15% de conversiones perdidas. |
+| **Descripción** | **Nuevo componente en `js/script.js` + CSS:**<br><br>1. **Detección de intent:**<br>   ```javascript<br>   document.addEventListener('mouseout', (e) => {<br>     if (e.clientY < 10 && !sessionStorage.getItem('exitShown')) {<br>       showExitPopup();<br>     }<br>   });<br>   ```<br><br>2. **UI del popup:**<br>   ```html<br>   <div class="exit-popup" id="exit-popup" role="dialog" aria-modal="true" hidden><br>     <div class="exit-popup-backdrop"></div><br>     <div class="exit-popup-card"><br>       <button class="exit-popup-close" aria-label="Cerrar">&times;</button><br>       <div class="exit-popup-icon"><i class="fa-solid fa-sparkles"></i></div><br>       <h2>Antes de irte...</h2><br>       <p>¿No encontraste lo que buscabas? Chatea con nosotros directamente y te ayudamos a encontrar el servicio ideal.</p><br>       <a href="https://wa.me/573001234567" class="btn btn-whatsapp"><br>         <i class="fa-brands fa-whatsapp"></i> Chatear ahora<br>       </a><br>       <button class="exit-popup-dismiss">No gracias, me voy</button><br>     </div><br>   </div><br>   ```<br><br>3. **Condiciones:** Mostrar solo 1 vez por sesión, solo en desktop (no mobile), no mostrar si ya scrolló más de 50%. |
+| **Impacto esperado** | Recuperación de ~10-15% de visitantes que no convierten, aumento de WhatsApp contacts |
+| **Esfuerzo** | S (3-4 horas — JS + CSS) |
 | **Agente recomendado** | Frontend |
-| **Referencias** | [1] Chrome Document Extraction API [2] Chrome Built-in AI |
-| **Estado** | Nueva propuesta — NO mencionada en R1-R90 |
-| **Prioridad CEO** | **Alta** — tecnología de vanguardia sin backend |
+| **Referencias** | [1] OptinMonster Exit Intent Statistics |
+| **Estado** | Nueva propuesta — Cierre de R89 P1 |
+| **Prioridad CEO** | **Alta** — feature prometida en R89, alto impacto con poco esfuerzo |
 
 ---
 
-### Propuesta 2: Voice Commerce con Google Assistant Actions (MEDIUM PRIORITY)
+### Propuesta 2: Sección "Cómo Funciona" — Proceso Visual de 3 Pasos (HIGH PRIORITY)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Crear Google Action para reservas por voz vía Google Assistant |
-| **Problema** | 35% de búsquedas en Colombia son por voz. Los usuarios que dicen "Ok Google, agenda limpieza de sofá para mañana" no encuentran a Purity. Los competidores no tienen Actions. |
-| **Descripción** | **Nuevo Google Action:**<br><br>1. **Conversational Flow:**<br>   ```<nlu>   <intent name="BookCleaning">     <example>"Agenda limpieza de sofá para mañana"</example>     <example>"Necesito sanitización de colchón"</example>   </intent>   </nlu>   ```<br><br>2. **Webhook para manejo:**<br>   ```javascript   // En un serverless function (Vercel/Netlify Functions)   app.post('/api/google-action', (req, res) => {<br>     const { intent, parameters } = req.body.queryResult;<br>     <br>     if (intent === 'BookCleaning') {<br>       const service = parameters.service; // "sofá", "colchón"<br>       const date = parameters.date; // "2026-04-29"<br>       const zone = parameters.zone; // "Chapinero"<br>       <br>       // Crear reserva vía Formspree o API<br>       sendToFormspree({ service, date, zone });<br>       <br>       return res.json({<br>         fulfillmentText: `Reserva creada para ${service} el ${date} en ${zone}. Te contactamos por WhatsApp para confirmar.`<br>       });<br>     }<br>   });<br>   ```<br><br>3. **Rich Response con WhatsApp:**<br>   ```javascript<br>   // Al confirmar, enviar link de WhatsApp<br>   return res.json({<br>     fulfillmentText: `Perfecto. Para confirmar tu limpieza, completa la reservación aquí:`,\n>         "richResponse": {<br>           "items": [{<br>             "simpleResponse": {<br>               "textToSpeech": "Te envío el link de confirmación por WhatsApp"<br>             }<br>           }],<br>           "suggestions": [{ "title": "Confirmar por WhatsApp" }]\n>         },\n>         "linkOutSuggestion": {\n>           "destinationName": "WhatsApp Purity",\n>           "url": "https://wa.me/573001234567?text=Confirmo%20reserva"<br>         }\n>   });\n>   ```<br><br>4. **Account Linking:** Para guardar preferencias del usuario |
-| **Impacto esperado** | Captura de tráfico voice-first, cobertura de consultas informales, diferenciación total en Bogotá |
-| **Esfuerzo** | M (10-12 horas — Actions SDK + webhook + testing) |
-| **Agente recomendado** | Full Stack |
-| **Referencias** | [3] Google Actions Builder [4] Google Assistant Voice Search Trends |
-| **Estado** | Nueva propuesta — NO mencionada en R1-R90 |
-| **Prioridad CEO** | **Media** — inversión en voice search, retorno a mediano plazo |
-
----
-
-### Propuesta 3: Mapa de Calor Interactivo de Cobertura (MEDIUM PRIORITY)
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Implementar heatmap de cobertura geográfica por zonas de Bogotá |
-| **Problema** | Los clientes preguntan constantemente "¿llegan a mi zona?". Mostrar un mapa visual con zonas de cobertura aumenta confianza y reduce fricción. Ningún competidor bogotano tiene esto. |
-| **Descripción** | **Nueva sección /cobertura.html:**<br><br>1. **Mapa con Leaflet.js:**<br>   ```html\n   <section id=\"coverage-map\">\n     <h2>Zonas de Cobertura en Bogotá</h2>\n     <p>Te llegamos en menos de 24 horas en estas zonas:</p>\n     <div id=\"map\" style=\"height: 500px;\"></div>\n     <div class=\"legend\">\n       <span class=\"dot high\">Alta demanda</span>\n       <span class=\"dot medium\">Cobertura normal</span>\n       <span class=\"dot low\">Expansión próxima</span>\n     </div>\n   </section>\n   ```<br><br>2. **GeoJSON de zonas:**<br>   ```javascript\n   const coverageZones = {\n     \"type\": \"FeatureCollection\",\n     \"features\": [\n       {\n         \"type\": \"Feature\",\n         \"properties\": { \"name\": \"Chapinero\", \"density\": \"high\" },\n         \"geometry\": { \"type\": \"Polygon\", \"coordinates\": [...] }\n       },\n       {\n         \"type\": \"Feature\",\n         \"properties\": { \"name\": \"Suba\", \"density\": \"medium\" },\n         \"geometry\": { \"type\": \"Polygon\", \"coordinates\": [...] }\n       }\n     ]\n   };\n   ```<br><br>3. **Heatmap layer:**<br>   ```javascript\n   const heatmap = L.heatLayer([\n     [4.624335, -74.063644, 1.0], // Chapinero\n     [4.7015, -74.0750, 0.8], // Suba\n     // ... más puntos\n   ], { radius: 25, blur: 15 });\n   ```<br><br>4. **UI de zona clickeable:**<br>   - Click en zona → muestra info de cobertura<br>   - Tiempo estimado de respuesta<br>   - Servicios disponibles<br>   - Link directo a reservación |
-| **Impacto esperado** | Reducción de "¿llegan a mi zona?", mayor conversión en zonas de alta demanda, SEO local mejorado |
-| **Esfuerzo** | S (5-6 horas — Leaflet + GeoJSON + UI) |
+| **Título** | Crear sección "Cómo Funciona" con proceso visual de 3 pasos |
+| **Problema** | Maid Complete tiene "Select → Schedule → Enjoy" y convierte porque el usuario sabe exactamente qué esperar. Purity no tiene sección de proceso, lo que genera incertidumbre. |
+| **Descripción** | **Nueva sección `#como-funciona` en `index.html` + estilos:**<br><br>1. **Estructura HTML:**<br>   ```html<br>   <section id="como-funciona" class="section section-proceso" aria-labelledby="proceso-heading"><br>     <div class="container"><br>       <div class="section-head"><br>         <p class="eyebrow">Proceso simple</p><br>         <h2 id="proceso-heading">3 pasos para un espacio impecable</h2><br>       </div><br>       <div class="proceso-grid" role="list"><br>         <article class="proceso-card" data-reveal data-reveal-delay="50"><br>           <div class="proceso-number" aria-hidden="true">1</div><br>           <div class="proceso-icon"><i class="fa-solid fa-hand-pointer"></i></div><br>           <h3>Selecciona tu servicio</h3><br>           <p>Elige entre limpieza de sofás, sanitización de colchones o mantenimiento de alfombras. Si no sabes qué necesitas, chatea con nosotros.</p><br>         </article><br>         <article class="proceso-card" data-reveal data-reveal-delay="150"><br>           <div class="proceso-number" aria-hidden="true">2</div><br>           <div class="proceso-icon"><i class="fa-solid fa-calendar-check"></i></div><br>           <h3>Agenda tu cita</h3><br>           <p>Usa el cotizador para ver precios o escríbenos por WhatsApp. Confirmamos en menos de 2 horas.</p><br>         </article><br>         <article class="proceso-card" data-reveal data-reveal-delay="250"><br>           <div class="proceso-number" aria-hidden="true">3</div><br>           <div class="proceso-icon"><i class="fa-solid fa-sparkles"></i></div><br>           <h3>Disfruta el resultado</h3><br>           <p>Nuestro equipo llega puntual, trabaja con productos seguros y te deja espacios impecables en pocas horas.</p><br>         </article><br>       </div><br>       <div class="proceso-cta" data-reveal><br>         <a href="#cotizador" class="btn btn-primary">Calcular precio</a><br>         <a href="https://wa.me/573001234567" class="btn btn-whatsapp">O escribir por WhatsApp</a><br>       </div><br>     </div><br>   </section><br>   ```<br><br>2. **CSS con animación de línea conectora:**<br>   ```css<br>   .proceso-card {<br>     position: relative;<br>     opacity: 0;<br>     transform: translateY(30px);<br>     transition: opacity 0.5s ease, transform 0.5s ease;<br>   }<br>   .proceso-card.revealed {<br>     opacity: 1;<br>     transform: translateY(0);<br>   }<br>   .proceso-number {<br>     animation: pulse-glow 2s ease-in-out infinite;<br>   }<br>   ``` |
+| **Impacto esperado** | Reduce incertidumbre del usuario, aumenta confianza para reservar, diferencia vs competidores locales que no tienen proceso claro |
+| **Esfuerzo** | S (4-5 horas — HTML + CSS + icono) |
 | **Agente recomendado** | Frontend |
-| **Referencias** | [5] Leaflet.js Heatmap [6] GeoJSON Bogota |
-| **Estado** | Nueva propuesta — NO mencionada en R1-R90 |
-| **Prioridad CEO** | **Media** — diferenciación visual, impacto en conversión |
+| **Referencias** | [2] Maid Complete "The Maid Complete Process" |
+| **Estado** | Nueva propuesta — No mencionada en R1-R90 |
+| **Prioridad CEO** | **Alta** — impacto directo en conversión, implementación rápida |
 
 ---
 
-### Propuesta 4: Eco-Certification & Carbon Offset Program (MEDIUM-HIGH PRIORITY)
+### Propuesta 3: FAQ Accordion Interactivo (MEDIUM PRIORITY)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar certificación eco-friendly y programa de compensación de carbono |
-| **Problema** | Consumidores bogotanos (especialmente millennial y Gen Z) prefieren marcas ambientalmente responsables. Purity no tiene certificación verde, pierde clientes ante competidores que sí la tienen. |
-| **Descripción** | **Nuevo programa eco:**<br><br>1. **Certificación parcial:**<br>   - Productos antibacterial aprobados por INVIMA绿色<br>   - Proceso de disposición final de residuos responsable<br>   - Huella de carbono por servicio calculada<br><br>2. **Compensación automática:**<br>   ```javascript   // Por cada servicio, calcular y compensar   function calculateCarbonOffset(serviceType) {<br>     const carbonPerService = {<br>       'sofa': 2.5, // kg CO2<br>       'colchon': 1.8,\n>       'alfombra': 3.2\n>     };<br>     const treesToPlant = carbonPerService[serviceType] / 5; // 5kg CO2 per tree<br>     return treesToPlant;\n>   }\n>   ```<br><br>3. **Sello eco en UI:**<br>   ```html\n>   <div class=\"eco-badge\">\n>     <span class=\"tree-icon\">🌱</span>\n>     <span>Por este servicio plantamos 0.5 árboles en la Amazonía colombiana</span>\n>   </div>\n>   ```<br><br>4. **Partners:**<br>   -绑Amazonía por呛绑绑绑绑[7] reforestación.co\n>   -绑Swell® para抓到绑<br>   -绑South Pole绑绑 |
-| **Impacto esperado** | Diferenciación eco, attracts millennial/Gen Z, premium pricing justification, PR positivo |
-| **Esfuerzo** | S (4-5 horas — cálculo + UI + partners) |
+| **Título** | Convertir FAQ estático en acordeón expandible con animación |
+| **Problema** | La sección FAQ tiene 8 preguntas pero todas visibles simultáneamente — hace la página larga y frustra al usuario que busca una respuesta específica. Maid Complete y Cleanster usan acordeones. |
+| **Descripción** | **Modificar sección `#faq` existente:**<br><br>1. **HTML restructurado:**<br>   ```html<br>   <section id="faq" class="section container" aria-labelledby="faq-heading"><br>     <div class="section-head"><br>       <p class="eyebrow">FAQ</p><br>       <h2 id="faq-heading">Preguntas frecuentes</h2><br>     </div><br>     <div class="faq-accordion" role="list"><br>       <details class="faq-item" role="listitem"><br>         <summary class="faq-question"><br>           <span class="faq-question-text">¿Cuánto cuesta la limpieza profunda de un sofá?</span><br>           <i class="fa-solid fa-chevron-down faq-chevron" aria-hidden="true"></i><br>         </summary><br>         <div class="faq-answer"><br>           <p>El servicio de limpieza profunda de sofás tiene un rango de precio entre $80.000 y $180.000 por unidad, dependiendo del tamaño, material y estado del mueble. La cotización final se realiza al evaluar el espacio.</p><br>         </div><br>       </details><br>       <!-- Más items --><br>     </div><br>   </section><br>   ```<br><br>2. **CSS accordion:**<br>   ```css<br>   .faq-item {<br>     border: 1.5px solid var(--color-border);<br>     border-radius: 12px;<br>     margin-bottom: 0.75rem;<br>     overflow: hidden;<br>   }<br>   .faq-item summary {<br>     padding: 1rem 1.25rem;<br>     cursor: pointer;<br>     font-weight: 600;<br>     display: flex;<br>     justify-content: space-between;<br>     align-items: center;<br>     list-style: none;<br>   }<br>   .faq-item summary::-webkit-details-marker { display: none; }<br>   .faq-item[open] .faq-chevron {<br>     transform: rotate(180deg);<br>   }<br>   .faq-answer {<br>     padding: 0 1.25rem 1rem;<br>     color: var(--color-muted);<br>     animation: slideDown 0.3s ease;<br>   }<br>   ``` |
+| **Impacto esperado** | Mejor UX móvil, reduce scroll, usuario encuentra respuesta más rápido, mejora time-on-site |
+| **Esfuerzo** | XS (2 horas — CSS + minimal JS para ::marker) |
+| **Agente recomendado** | Frontend |
+| **Referencias** | [3] NNGroup FAQ UX |
+| **Estado** | Nueva propuesta — mejora de UX sobre existente |
+| **Prioridad CEO** | **Media** — mejora UX con poco esfuerzo |
+
+---
+
+### Propuesta 4: Sticky CTA Header en Mobile (MEDIUM PRIORITY)
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Agregar CTA sticky de WhatsApp en mobile que aparece tras scroll |
+| **Problema** | En mobile, el usuario que scrollea hacia abajo pierde acceso rápido al CTA de reservas. Un sticky bar con WhatsApp aumenta conversiones. |
+| **Descripción** | **Nuevo componente sticky mobile:**<br><br>1. **HTML:**<br>   ```html<br>   <div class="sticky-cta-bar" id="sticky-cta" aria-label="Acceso rápido a contacto" hidden><br>     <a href="https://wa.me/573001234567" class="sticky-cta-btn"><br>       <i class="fa-brands fa-whatsapp" aria-hidden="true"></i><br>       <span>Reservar por WhatsApp</span><br>     </a><br>     <a href="#cotizador" class="sticky-cta-btn sticky-cta-btn--secondary"><br>       <i class="fa-solid fa-calculator" aria-hidden="true"></i><br>       <span>Cotizar</span><br>     </a><br>   </div><br>   ```<br><br>2. **JS para mostrar tras scroll:**<br>   ```javascript<br>   const stickyCta = document.getElementById('sticky-cta');<br>   let lastScroll = 0;<br>   window.addEventListener('scroll', () => {<br>     const currentScroll = window.scrollY;<br>     if (currentScroll > 600 && currentScroll > lastScroll) {<br>       stickyCta.removeAttribute('hidden');<br>     } else if (currentScroll < 300) {<br>       stickyCta.setAttribute('hidden', '');<br>     }<br>     lastScroll = currentScroll;<br>   }, { passive: true });<br>   ```<br><br>3. **CSS:**<br>   ```css<br>   .sticky-cta-bar {<br>     position: fixed;<br>     bottom: 0;<br>     left: 0;<br>     right: 0;<br>     z-index: 900;<br>     display: flex;<br>     gap: 0.5rem;<br>     padding: 0.75rem 1rem;<br>     background: var(--color-surface);<br>     box-shadow: 0 -4px 20px rgba(0,0,0,0.1);<br>   }<br>   .sticky-cta-btn {<br>     flex: 1;<br>     display: flex;<br>     align-items: center;<br>     justify-content: center;<br>     gap: 0.5rem;<br>     padding: 0.75rem;<br>     border-radius: 12px;<br>     font-weight: 600;<br>   }<br>   ``` |
+| **Impacto esperado** | Aumento de conversiones mobile (~5-10%), WhatsApp contacts más altos |
+| **Esfuerzo** | S (3 horas — HTML + CSS + JS) |
+| **Agente recomendado** | Frontend |
+| **Referencias** | [4] Sticky CTA mobile best practices |
+| **Estado** | Nueva propuesta — UX mobile |
+| **Prioridad CEO** | **Media** — alto impacto mobile dado que % tráfico mobile es alto |
+
+---
+
+### Propuesta 5: Microinteracciones Mejoradas en Cards de Servicio (MEDIUM PRIORITY)
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Añadir hover effects más ricos y microinteracciones en service cards |
+| **Problema** | Las cards actuales tienen hover básico. Competidores como Cleanster tienen cards con scale + shadow más pronunciados. Mejorar esto aumenta engagement. |
+| **Descripción** | **Mejora en `css/style.css` para `.card` y `.searchable-item`:**<br><br>```css<br>.card {\n  transition:\n    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),\n    box-shadow 0.3s ease,\n    border-color 0.2s ease;\n}\n.card:hover {\n  transform: translateY(-8px) scale(1.02);\n  box-shadow: 0 20px 40px rgba(11, 113, 137, 0.15);\n  border-color: var(--color-primary);\n}\n.card:hover .btn {\n  background: var(--color-primary);\n  color: #fff;\n}\n\n/* Badge de "popular" en pricing cards */\n.pricing-card--plans {\n  position: relative;\n}\n.pricing-card--plans::before {\n  content: 'Más popular';\n  position: absolute;\n  top: -12px;\n  left: 50%;\n  transform: translateX(-50%);\n  background: var(--color-accent);\n  color: #fff;\n  font-size: 0.75rem;\n  font-weight: 700;\n  padding: 4px 12px;\n  border-radius: 20px;\n  white-space: nowrap;\n}\n``` |
+| **Impacto esperado** | Mayor engagement con las cards, más tiempo en página, más clicks en CTAs |
+| **Esfuerzo** | XS (1-2 horas — solo CSS) |
+| **Agente recomendado** | Frontend |
+| **Referencias** | [5] UI Design Card Hover Effects |
+| **Estado** | Nueva propuesta — CSS microinteractions |
+| **Prioridad CEO** | **Media** — bajo esfuerzo, mejora perceptual |
+
+---
+
+### Propuesta 6: Rich Snippets Mejorados con FAQPage + HowTo (HIGH PRIORITY — SEO)
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Añadir Schema.org FAQPage completo y HowTo para cada servicio |
+| **Problema** | Purity ya tiene FAQ schema pero no está optimizado para rich results completos. Google muestra FAQ expandible en search — con preguntas optimizadas puede capturar más SERP real estate. |
+| **Descripción** | **Mejorar JSON-LD en `index.html`:**<br><br>1. **FAQPage expandido** (ya existe pero agregar más preguntas):<br>   ```json\n   {\n     "@context": "https://schema.org",\n     "@type": "FAQPage",\n     "mainEntity": [\n       /* existing 8 questions + 4 new */\n       {\n         "@type": "Question",\n         "name": "¿Cuánto dura el servicio de limpieza de sofá?",\n         "acceptedAnswer": {\n           "@type": "Answer",\n           "text": "El servicio de limpieza profunda de un sofá 3 cuerpos toma entre 45 y 90 minutos dependiendo del estado del mueble. El secado completo requiere entre 4 y 6 horas."\n         }\n       },\n       {\n         "@type": "Question",\n         "name": "¿Puedo cancelar o reprogramar mi cita?",\n         "acceptedAnswer": {\n           "@type": "Answer",\n           "text": "Sí, puedes cancelar o reprogramar hasta 24 horas antes de tu cita sin costo adicional. Contáctanos por WhatsApp para hacer el cambio."\n         }\n       },\n       {\n         "@type": "Question",\n         "name": "¿Los productos son seguros para bebés?",\n         "acceptedAnswer\": {\n           "@type": "Answer",\n           "text": "Sí, usamos productos certificados que son seguros para hogares con bebés, niños y mascotas. Todos nuestros procesos cumplen con normas de higiene."\n         }\n       },\n       {\n         "@type": "Question",\n         "name": "¿Ofrecen garantía en el servicio?",\n         "acceptedAnswer\": {\n           "@type": "Answer",\n           "text": "Sí, ofrecemos garantía de satisfacción del 200%. Si no estás satisfecho con el resultado, devolvemos tu dinero o reamos el servicio sin costo."\n         }\n       }\n     ]\n   }\n   ```<br><br>2. **HowTo schema para "Cómo limpiar tu sofá":**<br>   ```json\n   {\n     "@context": "https://schema.org",\n     "@type": "HowTo",\n     "name": "Cómo mantener tu sofá limpio entre servicios profesionales\",\n     "step\": [\n       {\n         "@type": \"HowToStep\",\n         \"text\": \"Aspira tu sofá al menos una vez por semana usando el accesorio de tapicería.\"\n       },\n       {\n         "@type\": \"HowToStep\",\n         \"text\": \"Aplica el kit eco protector de Purity & Clean cada 3 meses.\"\n       },\n       {\n         "@type\": \"HowToStep\",\n         \"text\": \"Evita comer sobre el sofá para prevenir manchas de comida.\"\n       }\n     ]\n   }\n   ``` |
+| **Impacto esperado** | Rich snippets en Google (FAQ expandible), más CTR en search, posiciona a Purity como autoridad en limpieza |
+| **Esfuerzo** | S (2-3 horas — JSON-LD + contenido) |
 | **Agente recomendado** | Frontend + Content |
-| **Referencias** | [8] Eco-Certification for Cleaning Services [9] Carbon Offset Colombia |
-| **Estado** | Nueva propuesta — NO mencionada en R1-R90 |
-| **Prioridad CEO** | **Alta** — tendencia global, diferenciación fuerte |
-
----
-
-### Propuesta 5: Progressive Web App (PWA) — Modo "Real-time Tracking" (MEDIUM PRIORITY)
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Implementar tracking en tiempo real del técnico de limpieza como feature PWA |
-| **Problema** | Los clientes quieren saber cuándo llega su técnico. Uber/DiDi lo hacen estándar. Ningún servicio de limpieza en Bogotá ofrece esto. |
-| **Descripción** | **Enhancement al PWA existente:**<br><br>1. **SMS/WhatsApp con link de tracking:**<br>   ```javascript   // Cuando se asigna técnico, enviar tracking   function sendTrackingLink(bookingId, phone) {<br>     const trackingUrl = `https://purityclean.com/track?id=${bookingId}`;<br>     const message = `Tu limpiador llega en 30 min. Rastrea aquí: ${trackingUrl}`;\n>     sendWhatsApp(phone, message);\n>   }\n>   ```<br><br>2. **Página de tracking (/track.html):**<br>   ```html   <section id=\"tracking\">\n     <h2>Seguimiento de tu servicio</h2>\n     <div id=\"status\">\n       <div class=\"step completed\">✅ Reserva confirmada</div>\n>       <div class=\"step active\">📍 Técnico en camino</div>\n>       <div class=\"step\">🏠 Llegando a tu ubicación</div>\n>       <div class=\"step\">✨ Servicio en progreso</div>\n>       <div class=\"step\">🎉 Servicio completado</div>\n>     </div>\n>     <div id=\"eta\">\n       <span class=\"time\">10:45 AM</span>\n>       <span class=\"label\">Hora estimada de llegada</span>\n>     </div>\n>     <button onclick=\"openWhatsApp()\">Contactar técnico</button>\n>   </section>\n>   ```<br><br>3. **Live updates via SMS webhook:**<br>   - El técnico envía SMS al llegar ("Llegué, estoy en el lobby")<br>   - El sistema actualiza el estado en la página<br>   - No requiere GPS ni app del técnico |
-| **Impacto esperado** | Experiencia premium, reducción de ansiedad del cliente, diferenciación fuerte |
-| **Esfuerzo** | S (5-7 horas — tracking page + WhatsApp integration) |
-| **Agente recomendado** | Frontend |
-| **Referencias** | [10] Uber Tracking UX Pattern |
-| **Estado** | Nueva propuesta — NO mencionada en R1-R90 |
-| **Prioridad CEO** | **Media** — experiencia de cliente, no requiere backend complejo |
+| **Referencias** | [6] Google Search Central FAQ Schema [7] HowTo Schema |
+| **Estado** | Nueva propuesta — SEO enhancement |
+| **Prioridad CEO** | **Alta** — impacto en SEO sin código complejo |
 
 ---
 
@@ -171,11 +189,12 @@ WebAIM 2026 reporta que 15% de usuarios bogotanos usan lectores de pantalla. Chr
 
 | # | Propuesta | Impacto | Esfuerzo | Prioridad | Tipo |
 |---|-----------|---------|----------|-----------|------|
-| 1 | **AI Visual Diagnosis** | Conversión + Tech | M (8-10h) | **Alta** | Innovación |
-| 2 | **Eco-Certification** | Diferenciación | S (4-5h) | **Alta** | Marketing |
-| 3 | **Coverage Heatmap** | Conversión | S (5-6h) | **Media** | UX |
-| 4 | **Voice Commerce** | Alcance | M (10-12h) | **Media** | Canales |
-| 5 | **Real-time Tracking** | UX Premium | S (5-7h) | **Media** | UX |
+| 1 | **Exit Intent Popup** | Conversión | S (3-4h) | **Alta** | Cierre R89 |
+| 2 | **Cómo Funciona** | Confianza + Conversión | S (4-5h) | **Alta** | UX |
+| 3 | **Schema FAQ + HowTo** | SEO | S (2-3h) | **Alta** | SEO |
+| 4 | **Sticky CTA Mobile** | Conversión Mobile | S (3h) | **Media** | UX Mobile |
+| 5 | **FAQ Accordion** | UX | XS (2h) | **Media** | UX |
+| 6 | **Microinteracciones Cards** | Engagement | XS (1-2h) | **Media** | UX |
 
 ---
 
@@ -183,16 +202,17 @@ WebAIM 2026 reporta que 15% de usuarios bogotanos usan lectores de pantalla. Chr
 
 | Aspecto | R90 | R91 |
 |---------|-----|-----|
-| **Foco** | Modelos de negocio B2B | Tecnologías emergentes 2026 |
-| **Tipo propuestas** | Gift Cards, API B2B, Vouchers | Chrome AI, Voice, Heatmap, Eco |
-| **Tecnología** | Backend/API | Frontend-only + Browser APIs |
-| **Esfuerzo promedio** | S-L | S-M |
-| **Impacto** | Revenue streams | Experiencia + Conversión |
-| **AI Visual** | No | **Sí — nueva** |
-| **Voice Commerce** | No | **Sí — nueva** |
-| **Heatmap** | No | **Sí — nueva** |
-| **Eco-Certification** | No | **Sí — nueva** |
-| **Real-time Tracking** | No | **Sí — nueva** |
+| **Foco** | Modelo de negocio B2B (API, Gift Cards, Corporate) | UX/Animaciones/SEO (features pendientes) |
+| **Tipo propuestas** | Estratégicas/Transformacionales | Tácticas/Increamentales |
+| **Esfuerzo promedio** | S-L | XS-S |
+| **Impacto** | Negocio a largo plazo | Conversión inmediata |
+| **Competidores referencia** | Cleanster API, Maid Complete Gift Cards | Maid Complete UX, OptinMonster |
+| **Exit Intent Popup** | No | **Sí — cierre R89** |
+| **Proceso visual** | No | **Sí — nuevo** |
+| **Schema SEO** | No | **Sí — FAQ + HowTo** |
+| **Sticky CTA Mobile** | No | **Sí — nuevo** |
+
+**R91 no repite ninguna propuesta de R90. Las 6 propuestas abordan gaps de UX y SEO que R90 no cubrió.**
 
 ---
 
@@ -200,35 +220,42 @@ WebAIM 2026 reporta que 15% de usuarios bogotanos usan lectores de pantalla. Chr
 
 | Propuesta | Depende de | Bloqueador |
 |-----------|------------|------------|
-| AI Visual Diagnosis | chrome.ai disponible | CEO valida uso de AI en navegador |
-| Voice Commerce | Google Action approval | CEO provee número de WhatsApp para Actions |
-| Coverage Heatmap | GeoJSON de zonas | CEO/equipo provee polígonos de cobertura |
-| Eco-Certification | Partner de compensación | CEO valida partners de offset |
-| Real-time Tracking | WhatsApp Business | CEO provee número para tracking |
+| Exit Intent Popup | Ninguno | — |
+| Cómo Funciona | Ninguno | — |
+| Schema FAQ + HowTo | Content (nuevas preguntas FAQ) | CEO debe validar contenido |
+| Sticky CTA Mobile | Ninguno | — |
+| FAQ Accordion | Ninguno | — |
+| Microinteracciones | Ninguno | — |
+
+---
+
+## Nota sobre Evolución del Proyecto
+
+Después de 91 rondas, Purity & Clean tiene una base técnica sólida. R91 se enfoca en:
+
+1. **Cerrar features prometidas** — Exit Intent Popup de R89
+2. **Mejoras de UX probadas** — Proceso visual, Accordion, Sticky CTA
+3. **SEO técnico** — Schema.org FAQ + HowTo
+
+A diferencia de R90 (modelos de negocio), R91 propone **cambios de implementación inmediata** que no requieren decisiones estratégicas del CEO.
 
 ---
 
 ## Fuentes
 
-[1] Google. "Document Extraction API." https://developer.chrome.com/docs/document-extraction (2026)
+[1] OptinMonster. "Exit Intent Popup Statistics." https://optinmonster.com (2026)
 
-[2] Google. "Chrome Built-in AI APIs." https://developer.chrome.com/docs/ai (2026)
+[2] Maid Complete. "The Maid Complete Process." https://www.maidcomplete.com (2026)
 
-[3] Google. "Actions Builder." https://developers.google.com/assistant/conversational (2026)
+[3] NNGroup. "FAQ UX Design Best Practices." https://nngroup.com (2026)
 
-[4] Google Trends. "Voice Search Colombia 2026." https://trends.google.com (2026)
+[4] CXL Institute. "Sticky CTA Mobile Best Practices." https://cxl.com (2026)
 
-[5] Leaflet. "Heatmap Layer." https://leafletjs.com (2026)
+[5] CSS-Tricks. "Card Hover Effects." https://css-tricks.com (2026)
 
-[6] GeoJSON. "Bogotá Administrative Boundaries." https://geojson.xyz (2026)
+[6] Google. "FAQ Schema Markup Guide." https://developers.google.com/search/docs/appearance/structured-data/faqpage (2026)
 
-[7] Reforestación Colombia. "Compensación de Carbono." https://reforestacion.co (2026)
-
-[8] ISSA. "Green Cleaning Certification." https://www.issa.com (2026)
-
-[9] South Pole. "Carbon Offset Projects Colombia." https://southpole.com (2026)
-
-[10] Uber. "Real-time Tracking UX." https://uber.design (2026)
+[7] Google. "HowTo Schema." https://developers.google.com/search/docs/appearance/structured-data/how-to (2026)
 
 ---
 
