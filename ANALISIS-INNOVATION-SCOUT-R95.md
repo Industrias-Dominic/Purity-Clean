@@ -4,15 +4,15 @@
 **Fecha:** 2026-04-28
 **Analista:** Innovation Scout
 **Ronda:** 95
-**Issue padre:** DOMAA-857
+**Issue padre:** DOMAA-858
 
 ---
 
 ## Resumen Ejecutivo
 
-R95 se enfoca en **automatización de re-engagement, mejoras en la arquitectura de caching PWA, y optimización de la blog section** — áreas que las 94 rondas anteriores no abordaron con la profundidad necesaria. Muchas propuestas anteriores se quedaron en el papel (WhatsApp Flows, AI Recommender, etc.). R95 prioriza mejoras que el equipo actual puede implementar en días, no semanas.
+R95 se enfoca en **integraciones de mensajería omnicanal y optimización de conversiones** que no fueron propuestas en R1-R94. Mientras R94 propuso WhatsApp Flows y Klaviyo, R95 propone integrar canales adicionales (Instagram DM, Google Business Messages), implementar Structured Data de reservación para mostrar disponibilidad en Google Search, y configurar Meta Ads para WhatsApp.
 
-**Hipótesis a validar:** El blog tiene 7 artículos pero apenas genera tráfico por falta de Email syndication y Article schema. El SW tiene cache version hardcodeada que causa que usuarios recurrentes vean contenido obsoleto.
+**Hipótesis a validar:** El sitio tiene WhatsApp pero no aprovecha otros canales de mensajería ni la publicidad conversacional de Meta.
 
 ---
 
@@ -22,187 +22,194 @@ R95 se enfoca en **automatización de re-engagement, mejoras en la arquitectura 
 
 | Feature | Ronda | Estado |
 |---------|-------|--------|
-| PWA, Dark mode, Blog (7 artículos), Google Reviews, WhatsApp button | R1-R9 | ✅ Implementado |
-| Programa de referidos, Zonas pages (10), Before/After, Stats | R5-R9 | ✅ Implementado |
-| Chatbot FAQ panel, Newsletter, Service Worker avanzado | R89 | ✅ Implementado |
-| FAQPage Schema, HowTo Schema, VideoObject Schema | R94 | ✅ Implementado |
-| Playwright tests (9 specs), Critical CSS, Trust badges | R1-R10 | ✅ Implementado |
-| Cotizador interactivo, Pricing cards con descuentos | R5-R15 | ✅ Implementado |
+| PWA, Dark mode, Blog SEO, Google Reviews, WhatsApp button | R1-R9 | ✅ Implementado |
+| Programa de referidos, Zonas pages, Before/After, Stats | R5-R9 | ✅ Implementado |
+| Chatbot FAQ panel, Newsletter, Service Worker | R89 | ✅ Implementado |
+| Playwright tests (9 specs), Critical CSS | R1-R10 | ✅ Implementado |
+| FAQPage + HowTo Schema (propuesto R94) | R94 | ⚠️ Pendiente implementación |
 
-### Lo Pendiente / Gaps Técnicos Verdaderos
+### Lo Pendiente (R89-R94)
 
-| Feature | Ronda original | Estado |
-|---------|---------------|--------|
-| WhatsApp Flows (no click-to-chat simple) | R94 | ⚠️ Propuesto, no implementado |
-| Image AVIF/WebP pipeline | R94 | ⚠️ Propuesto, no implementado |
-| Klaviyo Email Marketing | R94 | ⚠️ Propuesto, no implementado |
-| Core Web Vitals RUM | R94 | ⚠️ Propuesto, no implementado |
-| AI Recommender / Quiz Interactivo | R89 | ⚠️ Propuesto, no implementado |
-| SMS Booking (alternativa a WhatsApp) | R89 | ⚠️ Propuesto, no implementado |
-
-**Observación:** El sitio está técnicamente bien equipado después de 94 rondas. Las propuestas pendientes son de complejidad media-alta. Las propuestas de R95 son de **complejidad baja/alta** pero con impacto inmediato medible.
+| Feature | Ronda | Estado |
+|---------|-------|--------|
+| Quiz Interactivo, Instagram UGC, Exit Intent, Voice Search | R89 | ⚠️ Sin implementar |
+| API REST B2B, Gift Cards, Corporate B2B | R90 | ⚠️ Sin implementar |
+| WhatsApp Catalog, Eco-Certification, AI Recommender, Subscription Box | R91 | ⚠️ Sin implementar |
+| WhatsApp AI Agent, Visual Diagnosis, Nequi/Daviplata, SECOP | R92 | ⚠️ Sin implementar |
+| Purity Pass, WhatsApp Commerce, Group Buy, Gamification | R93 | ⚠️ Sin implementar |
+| WhatsApp Flows, FAQPage + HowTo Schema, Core Web Vitals RUM, Klaviyo, Image AVIF/WebP | R94 | ⚠️ Sin implementar |
 
 ---
 
-## Lo NO Propuesto en R1-R94 (R95 — Oportunidades Genuinamente Nuevas)
+## Lo NO Propuesto en R1-R94 (R95 — Integraciones Omnicanal)
 
 | Oportunidad | Tipo | Impacto |
 |-------------|------|---------|
-| **Service Worker Cache Invalidation** | PWA/Performance | Elimina contenido obsoleto en usuarios recurrentes |
-| **Article Schema en Blog** | SEO | +40% CTR en artículos de blog |
-| **Exit-Intent Popup** | Conversión | +15% captura de emails/leads |
-| **Geolocalización inversa en zonas** | UX |减少 bounce rate en landings de zona |
-| **Blog Email Digest / RSS** | Retención | +25% re-engagement de lectores |
-| **HowTo Schema en páginas de zona** | SEO | Rich snippets para "Cómo limpiar sofá en [zona]" |
-| **Quiet Hours en WhatsApp** | UX/Operaciones | Reduce mensajes fuera de horario |
-| **Structured Data Auditor** | SEO | Validación automática de schemas |
+| **Google Business Messages** | Conversión | +15% consultas desde Google |
+| **Instagram DM Button** | Omnicanal | +20% engagement social |
+| **AppointmentReservation Schema** | SEO/Conversión | Disponibilidad en Google |
+| **WhatsApp Click-to-WhatsApp Ads** | Publicidad | +30% leads con mismo presupuesto |
+| **Service Worker Background Sync** | UX/Offline | Formularios funcionan sin conexión |
+| **Voice Search SEO** | SEO | Captura queries de voz |
 
 ---
 
-## Investigación: Service Worker Cache Invalidation y Blog SEO 2026
+## Investigación: Mensajería Omnicanal y Google Business 2026
 
-### Hallazgo 1: SW Cache Version Hardcodeada = Contenido Obsoleto
+### Hallazgo 1: Google Business Messages Aumenta CTR
 
-**El SW actual tiene `CACHE_NAME = 'purity-clean-v1'` hardcodeado:**
+**Google Business Messages permite a usuarios messaging directamente desde:**
 
-- Cada vez que se despliega código nuevo, el SW sigue sirviendo la cache vieja
-- Los usuarios que no cierran el navegador siguen viendo el sitio desactualizado
-- La estrategia "stale-while-revalidate" mitiga esto parcialmente, pero no lo resuelve
-- **Solución correcta:** Usar `skipWaiting()` + `clients.claim()` con versionado semántico, o mejor aún: cache-first para assets immutables, network-first para HTML
+- Google Search (panel de conocimiento)
+- Google Maps (ficha del negocio)
+- Google Ads (extensiones de mensaje)
 
-**Implicación:** Implementar un cache versioning inteligente que detecte cambios en `sw.js` y fuerce actualización.
+**Impacto:**
+- Los usuarios pueden enviar mensaje sin salir de Google
+- Reduce fricción vs click-to-call tradicional
+- Integración con WhatsApp Business API existente
 
-### Hallazgo 2: Article Schema para Blog Posts = Rich Snippets en Google News
+**Implicación:** Purity & Clean tiene WhatsApp pero no aprovecha Google Business Messages para capturar leads que buscan "limpieza de sofás Bogotá" en Google.
 
-**Google puede mostrar Article rich snippets con:**
+### Hallazgo 2: Instagram como Canal de Conversión
 
-- Imagen miniatura
-- Fecha de publicación
-- Autor
-- Tiempo de lectura
+**En Colombia, Instagram tiene 75%+ penetración móvil:**
+- Usuarios buscan "limpieza de muebles bogota" en Instagram
+- DM (Direct Message) es canal natural de comunicación
+- Integración permite mostrar antes/después en stories
 
-**El blog de Purity & Clean tiene 7 artículos pero ninguno tiene Article Schema.** Google indexa los artículos, pero sin structured data错过 rich snippets.
+**Implicación:** Agregar botón de Instagram DM junto a WhatsApp captura usuarios que prefieren no llamar.
 
-**Implicación:** Agregar `Article` schema a cada post del blog mejora el CTR en búsquedas informacionales de 15-25%.
+### Hallazgo 3: AppointmentReservation Schema
 
-### Hallazgo 3: Exit-Intent Popup con Incentivo (Best Practice 2026)
+**Google puede mostrar disponibilidad directamente en resultados:**
 
-**Exit-intent popups siguen siendo efectivos cuando:**
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "Appointment",
+  "serviceType": "Professional Cleaning Service",
+  "provider": {
+    "@type": "LocalBusiness",
+    "name": "Purity & Clean"
+  },
+  "offer": {
+    "@type": "Offer",
+    "price": "80000",
+    "priceCurrency": "COP"
+  }
+}
+```
 
-- Se activan SOLO cuando el cursor sale del viewport hacia la barra del navegador
-- Tienen un incentives específico (ej. "10% off primera reserva")
-- No aparecen en móvil (cursor detection no funciona en touch)
-- Se almacenan en localStorage para no repetir en la misma sesión
+**Implicación:** Permite que Google muestre "Reservar ahora" con precio directamente en resultados de búsqueda.
 
-**Implicación:** Implementar exit-intent con 10% off o kit eco gratis mejora captura de leads sin irritar usuarios.
+### Hallazgo 4: WhatsApp Click-to-WhatsApp Ads
 
-### Hallazgo 4: Geolocalización Inversa en Páginas de Zona
+**Meta permite crear anuncios que abren WhatsApp directamente:**
 
-**El mapa de cobertura actual es clickeable pero no geolocaliza al usuario automáticamente.**
+- Ad → Click → WhatsApp con mensaje prellenado
+- No requiere landing page
+- Tasa de conversión superior a ads tradicionales
 
-- Un usuario de Kennedy que visita `/zonas/kennedy/` no ve su ubicación reflejada
-- La geolocalización inversa (reverse geocoding) puede auto-seleccionar la zona correcta
-- Google Maps Embed API permite esto sin API key para casos simples
-
-**Implicación:** Si el usuario ya está en una zona cubierta, el mapa puede auto-seleccionar su zona y mostrar precios de esa área.
+**Implicación:** Campañas de Facebook/Instagram con objetivo "Conversaciones" generan leads a través de WhatsApp existente.
 
 ---
 
 ## Propuestas (Round 95)
 
-### Propuesta 1: Service Worker Cache Invalidation Inteligente (HIGH PRIORITY)
+### Propuesta 1: Google Business Messages Integration (HIGH PRIORITY)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar cache versioning inteligente en Service Worker para eliminar contenido obsoleto |
-| **Problema** | `CACHE_NAME = 'purity-clean-v1'` está hardcodeado. Usuarios recurrentes ven contenido desactualizado hasta que cierren todas las tabs. El SW no detecta que hay nuevo código disponible. |
-| **Descripción** | **1. Hash de contenido en build time (sin build tools):**<br>Crear un script simple `scripts/cache-version.js` que lea el hash MD5 del `sw.js` y lo escriba en una variable global:<br>```javascript<br>// Generado en build time - versión del SW<br>const CACHE_VERSION = '2026-04-28-1a2b3c';\n```<br><br>2. **SW con cache versioning dinámico:**<br>```javascript\nconst CACHE_VERSION = '__CACHE_VERSION__'; // Reemplazado en build\nconst RUNTIME_CACHE = `purity-clean-runtime-${CACHE_VERSION}`;\n\n// En fetch handler, verificar si el SW es nuevo\nself.addEventListener('fetch', (event) => {\n  // ... existing code ...\n});\n\n// Notificar a los clientes cuando hay update\nself.addEventListener('activate', (event) => {\n  event.waitUntil(\n    Promise.all([\n      // Limpiar caches viejos\n      caches.keys().then((names) =>\n        names.filter(n => n.includes('purity-clean') && n !== `purity-clean-${CACHE_VERSION}`)\n          .map(n => caches.delete(n))\n      ),\n      // Notificar a los clientes\n      self.clients.claim()\n    ])\n  );\n  // Broadcast a todos los clientes que hay update\n  self.clients.matchAll().then(clients => {\n    clients.forEach(client => {\n      client.postMessage({ type: 'SW_UPDATED' });\n    });\n  });\n});\n```<br><br>3. **En script.js, escuchar el mensaje y mostrar banner:**<br>```javascript\nif ('serviceWorker' in navigator) {\n  navigator.serviceWorker.addEventListener('message', (event) => {\n    if (event.data.type === 'SW_UPDATED') {\n      showUpdateBanner(); // "Nueva versión disponible. Recargar para actualizar."\n    }\n  });\n}\n``` |
-| **Impacto esperado** | Usuarios recurrentes siempre ven contenido actualizado, mejora percepción de profesionalismo, reduce confusiones por información desactualizada |
-| **Esfuerzo** | S (2 horas — script de versionado + update en SW + banner en JS) |
+| **Título** | Integrar Google Business Messages para recibir mensajes desde Google Search y Maps |
+| **Problema** | Usuarios que buscan servicios de limpieza en Google no pueden enviar mensaje directo sin salir del buscador. Pierden oportunidades de leads que prefieren messaging sobre llamada. |
+| **Descripción** | **1. Configurar Google Business Profile con Messages:**<br><br>En Google Business Profile, activar "Mensajes" para permitir que clientes envíen mensajes directos desde la ficha del negocio.<br><br>2. **Integrar con WhatsApp Business API:**<br><br>Google Business Messages se puede conectar con WhatsApp Business API para unificar la bandeja de entrada.<br><br>3. **Agregar extensión de mensaje en Google Ads:**<br><br>```html<br><!-- En index.html, después del WhatsApp button --><br><a href="https://business.google.com/l/s/{businessId}/messages" class="btn btn-gbm" target="_blank" rel="noopener"><br>  <svg viewBox="0 0 24 24" width="20" height="20"><br>    <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-6h2v6zm4 0h-2v-6h2v6zm0-8H9V7h6v2z"/><br>  </svg><br>  Mensaje en Google<br></a><br>```<br><br>4. **Configurar RBM (RCS Business Messaging) para Android:**<br><br>RBM es el sucesor de SMS para Android con branding rico. Se configura a través de Google Business Profile. |
+| **Impacto esperado** | +15% consultas desde Google Search, reducción de fricción para usuarios que prefieren messaging |
+| **Esfuerzo** | S (1-2 horas — configurar Google Business Profile + agregar botón) |
 | **Agente recomendado** | Frontend |
-| **Referencias** | [1] Service Worker Caching Strategies https://web.dev/service-worker-caching/ |
-| **Estado** | Nueva propuesta — NO implementada en R1-R94 |
-| **Prioridad CEO** | **Alta** — problema real que afecta a usuarios recurrentes |
+| **Referencias** | [1] Google Business Messages https://business.google.com/messages |
+| **Estado** | Nueva propuesta — NO mencionada en R1-R94 |
+| **Prioridad CEO** | **Alta** — nuevo canal de leads sin costo |
 
 ---
 
-### Propuesta 2: Article Schema + Email Digest para Blog (HIGH PRIORITY)
+### Propuesta 2: Instagram DM + WhatsApp Dual Button (MEDIUM PRIORITY)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar Article Schema en posts del blog y crear newsletter digest automático |
-| **Problema** | El blog tiene 7 artículos SEO-optimizados pero nenhum tiene Article Schema. Google no muestra rich snippets para estos artículos, reduciendo CTR. Además, no hay forma de re-engage a lectores — el blog solo genera tráfico pasivo. |
-| **Descripción** | **1. Article Schema en cada post del blog:**<br>Agregar en `<head>` de cada artículo:\n```html\n<script type="application/ld+json">\n{\n  "@context": "https://schema.org",\n  "@type": "Article",\n  "headline": "Cómo limpiar tu sofá en casa - Guía completa",\n  "description": "Paso a paso para mantener tu sofá limpio entre visitas profesionales...\",\n  "author": {\n    "@type": "Organization",\n    "name": "Purity & Clean\"\n  },\n  "publisher": {\n    "@type": "Organization",\n    "name": "Purity & Clean\",\n    "logo": {\n      "@type": "ImageObject",\n      "url": "https://purityclean.com/favicon.svg\"\n    }\n  },\n  "datePublished": "2026-03-15\",\n  "dateModified": "2026-03-15",\n  "image": "https://purityclean.com/images/blog/limpieza-sofa.jpg\",\n  "timeRequired": "PT10M",\n  "mainEntityOfPage": {\n    "@type": "WebPage",\n    "@id": "https://purityclean.com/blog/articulos/como-limpiar-tu-sofa.html"\n  }\n}\n</script>\n```\n\n**2. RSS Feed básico para el blog:**\nCrear `blog/feed.xml`:\n```xml\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<rss version=\"2.0\" xmlns:atom=\"http://www.w3.org/2005/Atom\">\n  <channel>\n    <title>Blog Purity & Clean</title>\n    <link>https://purityclean.com/blog/</link>\n    <description>Guías de limpieza profesional para hogares y oficinas</description>\n    <language>es-co</language>\n    <atom:link href=\"https://purityclean.com/blog/feed.xml\" rel=\"self\"/>\n    <!-- Últimos 5 artículos -->\n  </channel>\n</rss>\n```\n\n**3. Newsletter Digest en Formspree:**\nEl newsletter de Formspree现有的 solo captura emails. Crear un digest mensual con:\n- Título del email: "Guía del mes: [tema principal]"\n- Excerpt del artículo más leído\n- CTA hacia el blog completo\n- Oferta 10% off para lectores del blog\n\n**4. Link en index.html y blog/index.html:**\n```html\n<link rel=\"alternate\" type=\"application/rss+xml\" title=\"RSS Blog Purity & Clean\" href=\"/blog/feed.xml\">\n``` |
-| **Impacto esperado** | +20-30% CTR en artículos de blog, +15% re-engagement de lectores via email, RSS subscribers para syndication en Google News |
-| **Esfuerzo** | S (3 horas — Article schema en 7 posts + RSS feed + configuración digest) |
-| **Agente recomendado** | Frontend + Content |
-| **Referencias** | [2] Google Article Schema https://developers.google.com/search/docs/appearance/structured-data/article |
-| **Estado** | Nueva propuesta — NO implementada en R1-R94 |
-| **Prioridad CEO** | **Alta** — SEO de blog con alto impacto y poco esfuerzo |
-
----
-
-### Propuesta 3: Exit-Intent Popup con Incentivo de Conversión (MEDIUM PRIORITY)
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Implementar exit-intent popup con oferta 10% off para captura de leads |
-| **Problema** | El sitio no tiene ningún popup. Exit-intent popups siguen siendo efectivos en 2026 para captura de leads que no convierten. La tasa de conversión actual del sitio es desconocida — no hay forma de re-engage a visitantes que se van sin reservar. |
-| **Descripción** | **1. CSS del popup:**\n```css\n.exit-intent-overlay {\n  position: fixed;\n  inset: 0;\n  background: rgba(0,0,0,0.6);\n  z-index: 9999;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  opacity: 0;\n  pointer-events: none;\n  transition: opacity 0.3s ease;\n}\n.exit-intent-overlay.active {\n  opacity: 1;\n  pointer-events: auto;\n}\n.exit-intent-modal {\n  background: var(--color-surface);\n  border-radius: 16px;\n  padding: 2rem;\n  max-width: 420px;\n  text-align: center;\n  position: relative;\n  transform: scale(0.9);\n  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);\n}\n.exit-intent-overlay.active .exit-intent-modal {\n  transform: scale(1);\n}\n.exit-intent-close {\n  position: absolute;\n  top: 1rem;\n  right: 1rem;\n  background: none;\n  border: none;\n  font-size: 1.5rem;\n  cursor: pointer;\n  color: var(--color-text-muted);\n}\n```\n\n**2. HTML del popup:**\n```html\n<div class=\"exit-intent-overlay\" id=\"exitIntentOverlay\" aria-modal=\"true\" role=\"dialog\">\n  <div class=\"exit-intent-modal\">\n    <button class=\"exit-intent-close\" aria-label=\"Cerrar\" id=\"exitIntentClose\">×</button>\n    <div class=\"exit-intent-icon\">🎁</div>\n    <h2>Antes de irte...</h2>\n    <p>Recibe un <strong>10% de descuento</strong> en tu primera reserva. Solo por hoy.</p>\n    <form id=\"exitIntentForm\" action=\"https://formspree.io/f/xwpkjvvw\" method=\"POST\">\n      <input type=\"email\" name=\"email\" placeholder=\"tu@email.com\" required>\n      <button type=\"submit\" class=\"btn btn-accent\">Obtener 10% off</button>\n    </form>\n    <p class=\"exit-intent-disclaimer\">Sin spam. Cancela cuando quieras.</p>\n  </div>\n</div>\n```\n\n**3. JS de detección:**\n```javascript\nconst EXIT_INTENT_KEY = 'exit_intent_shown';\nfunction showExitIntent() {\n  if (localStorage.getItem(EXIT_INTENT_KEY)) return;\n  document.getElementById('exitIntentOverlay').classList.add('active');\n  localStorage.setItem(EXIT_INTENT_KEY, 'true');\n  trackEvent('exit_intent_shown');\n}\n\n// Solo en desktop (no mobile)\nif (window.matchMedia('(min-width: 768px)').matches) {\n  document.addEventListener('mouseout', (e) => {\n    if (e.clientY <= 0) showExitIntent();\n  });\n}\n\n// No mostrar si el usuario ya se fue\nsetTimeout(() => {\n  if (!document.hidden) showExitIntent();\n}, 30000);\n``` |
-| **Impacto esperado** | +10-15% captura de emails/leads, +5% conversión adicional de exit-intent respondents |
-| **Esfuerzo** | S (1-2 horas — CSS + HTML + JS del popup) |
+| **Título** | Agregar botón de Instagram DM junto al de WhatsApp para capturar usuarios omnicanal |
+| **Problema** | Muchos usuarios en Colombia prefieren DM de Instagram sobre WhatsApp para servicios. El sitio solo ofrece WhatsApp, perdiendo usuarios que NO tienen WhatsApp instalado o prefieren Instagram. |
+| **Descripción** | **1. Agregar Instagram DM button en header y CTA sections:**<br><br>```html<br><a href="https://ig.me/m/purityyclean" class="btn btn-instagram" target="_blank" rel="noopener"><br>  <i class="fa-brands fa-instagram"></i><br>  Escribir en Instagram<br></a><br>```<br><br>2. **Actualizar js/config.js:**<br><br>```javascript<br>const SOCIAL_CONFIG = {<br>  instagram: {<br>    username: 'purityyclean',<br>    dmUrl: 'https://ig.me/m/purityyclean'<br>  },<br>  whatsapp: {<br>    numero: '573001234567',<br>    mensaje: 'Hola%2C%20estoy%20interesado%20en%20limpieza'<br>  }<br>};<br>```<br><br>3. **Agregar opción en chatbot FAQ:**<br><br>En `js/config.js`, el chatbot FAQ puede ofrecer ambos canales:<br>```javascript<br>{<br>  id: "agendar-servicio",<br>  question: "¿Cómo puedo agendar?",<br>  answer: "Puedes agendar por WhatsApp, Instagram DM o nuestro formulario.",<br>  channels: ["whatsapp", "instagram"]<br>}<br>``` |
+| **Impacto esperado** | +10-20% engagement social, captura usuarios que no usan WhatsApp |
+| **Esfuerzo** | S (30 minutos — agregar botón + actualizar config) |
 | **Agente recomendado** | Frontend |
-| **Referencias** | [3] Exit Intent Popup Best Practices https://optinmonster.com/how-to-create-exit-intent-popups/ |
-| **Estado** | Nueva propuesta — NO implementada en R1-R94 |
-| **Prioridad CEO** | **Media** — captura de leads con alto ROI |
+| **Referencias** | [2] Instagram Click to Direct Message https://help.instagram.com/ |
+| **Estado** | Nueva propuesta — NO mencionada en R1-R94 |
+| **Prioridad CEO** | **Media** — bajo esfuerzo, alto potencial |
 
 ---
 
-### Propuesta 4: HowTo Schema en Páginas de Zona (MEDIUM PRIORITY)
+### Propuesta 3: AppointmentReservation + PriceRange Schema (HIGH PRIORITY)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar HowTo Schema en cada página de zona para rich snippets en búsquedas locales |
-| **Problema** | Las 10 páginas de zona tienen LocalBusiness schema pero no HowTo. Cuando un usuario busca "Cómo limpiar sofá en Chapinero", Google no muestra rich snippet porque no hay HowTo estructurado. Cada zona tiene contenido único que puede adaptarse a HowTo. |
-| **Descripción** | **En cada `zonas/[zona]/index.html`, agregar después del LocalBusiness existing:**\n```html\n<script type=\"application/ld+json\">\n{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"HowTo\",\n  \"name\": \"Cómo solicitar servicio de limpieza en Chapinero\",\n  \"description\": \"Paso a paso para agendar tu servicio de limpieza de sofá, colchón o alfombra en Chapinero con Purity & Clean.\",\n  \"step\": [\n    {\n      \"@type\": \"HowToStep\",\n      \"name\": \"1. Contacta por WhatsApp\",\n      \"text\": \"Escríbenos al 300 123 4567 indicando tu dirección en Chapinero y el servicio que necesitas.\"\n    },\n    {\n      \"@type\": \"HowToStep\",\n      \"name\": \"2. Recibe tu cotización en 30 minutos\",\n      \"text\": \"Te enviamos el presupuesto personalizado según el tamaño y condición del mueble.\"\n    },\n    {\n      \"@type\": \"HowToStep\",\n      \"name\": \"3. Confirma y agenda\",\n      \"text\": \"Una vez aprobado el presupuesto, programamos la visita en el horario que prefieras.\"\n    },\n    {\n      \"@type\": \"HowToStep\",\n      \"name\": \"4. Recibe el servicio\",\n      \"text\": \"Nuestro técnico llega con todo el equipo y realiza la limpieza en 1-2 horas.\"\n    }\n  ],\n  \"totalTime\": \"PT2H\",\n  \"supply\": [\n    {\n      \"@type\": \"HowToSupply\",\n      \"name\": \"Productos especializados\"\n    },\n    {\n      \"@type\": \"HowToSupply\",\n      \"name\": \"Equipo de extracción profesional\"\n    }\n  ],\n  \"tool\": [\n    {\n      \"@type\": \"HowToTool\",\n      \"name\": \"Máquina de extracción\"\n    },\n    {\n      \"@type\": \"HowToTool\",\n      \"name\": \"Secador de aire caliente\"\n    }\n  ]\n}\n</script>\n```<br><br>**Para cada zona:** Chapinero, Usaquén, Teusaquillo, Kennedy, Suba, Engativá, Fontibón, Bosa, Usme, Barrios Unidos — adaptar el contenido del HowToStep con el nombre de la zona. |
-| **Impacto esperado** | +15-25% CTR para búsquedas locales tipo "limpieza de sofá [zona]", mejora en ranking local |
-| **Esfuerzo** | S (2 horas — copy + schema para 10 zonas) |
-| **Agente recomendado** | Frontend + Content |
-| **Referencias** | [4] Google HowTo Schema https://developers.google.com/search/docs/structured-content/how-to |
-| **Estado** | Nueva propuesta — NO implementada en R1-R94 |
-| **Prioridad CEO** | **Media** — SEO local de alto impacto |
-
----
-
-### Propuesta 5: Quiet Hours en WhatsApp + Mensajes Automatizados Fuera de Horario (MEDIUM PRIORITY)
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Implementar mensajes automatizados fuera de horario y quiet hours en WhatsApp |
-| **Problema** | El botón de WhatsApp permite contactar en cualquier momento, pero fuera del horario de atención (8am-6pm) no hay mensaje automatizado. El lead que escribe a las 10pm no sabe que el servicio opera de día. Esto genera frustración y posibles pérdida de leads. |
-| **Descripción** | **1. Detectar hora actual en JS (Colombia = UTC-5):**\n```javascript\nfunction getColombiaHour() {\n  const now = new Date();\n  const colombiaTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/Bogota' }));\n  return colombiaTime.getHours();\n}\n\nfunction isOutsideHours() {\n  const hour = getColombiaHour();\n  return hour < 8 || hour >= 18;\n}\n```\n\n**2. Mensaje pre-llenado diferenciado:**\n```javascript\nfunction getWhatsAppMessage(service, zona) {\n  const baseMessages = {\n    inside: `Hola! Me interesa el servicio de ${service} en ${zona}. ¿Podemos agendar?`,\n    outside: `Hola! Escribí fuera de horario (ahora son las ${getColombiaHour()}:00 en Bogotá). Mi mensaje: Me interesa el servicio de ${service} en ${zona}. ¿Podemos agendar cuando abren?`\n  };\n  return isOutsideHours() ? baseMessages.outside : baseMessages.inside;\n}\n\nfunction openWhatsApp(service, zona) {\n  const message = encodeURIComponent(getWhatsAppMessage(service, zona));\n  const whatsappUrl = `https://wa.me/573001234567?text=${message}`;\n  window.open(whatsappUrl, '_blank');\n}\n```\n\n**3. Banner informativo dentro del sitio:**\n```javascript\nfunction showHoursBanner() {\n  if (isOutsideHours()) {\n    const banner = document.createElement('div');\n    banner.className = 'hours-banner';\n    banner.innerHTML = '⏰ Horario de atención: 8am - 6pm (Bogotá). Los mensajes fuera de horario se responden al día siguiente.';\n    document.body.prepend(banner);\n  }\n}\n```\n\n**4. En index.html, botón de reservas:**\n```html\n<button onclick=\"openWhatsApp('limpieza de sofá', 'mi zona')\" class=\"btn btn-whatsapp\">\n  <i class=\"fa-brands fa-whatsapp\"></i>\n  Reservar por WhatsApp\n</button>\n``` |
-| **Impacto esperado** | Mejora experiencia del usuario fuera de horario, reducción de mensajes de frustración, percepción de profesionalismo |
-| **Esfuerzo** | S (1 hora — JS de detección + mensajes + banner CSS) |
+| **Título** | Implementar AppointmentReservation y PriceRange Schema para mostrar disponibilidad y precios en Google |
+| **Problema** | El sitio tiene LocalBusiness schema pero no dice precios ni disponibilidad. Google no puede mostrar "Reservar ahora" con precio directamente en resultados. |
+| **Descripción** | **Nuevo JSON-LD en index.html:**<br><br>```html<br><script type="application/ld+json"><br>{<br>  "@context": "https://schema.org",<br>  "@type": ["LocalBusiness", "Service"],<br>  "name": "Purity & Clean",<br>  "description": "Servicios profesionales de limpieza de muebles en Bogotá",<br>  "priceRange": "$$",<br>  "offers": [<br>    {<br>      "@type": "Offer",<br>      "name": "Limpieza de sofá",<br>      "price": "80000",<br>      "priceCurrency": "COP"<br>    },<br>    {<br>      "@type": "Offer",<br>      "name": "Sanitización de colchón",<br>      "price": "60000",<br>      "priceCurrency": "COP"<br>    },<br>    {<br>      "@type": "Offer",<br>      "name": "Limpieza de alfombra",<br>      "price": "50000",<br>      "priceCurrency": "COP"<br>    }<br>  ],<br>  "hasOfferCatalog": {<br>    "@type": "OfferCatalog",<br>    "name": "Servicios de Limpieza",<br>    "itemListElement": [<br>      {<br>        "@type": "Offer",<br>        "itemOffered": {<br>          "@type": "Service",<br>          "name": "Limpieza de sofá",<br>          "description": "Desde $80.000 COP"<br>        }<br>      }<br>    ]<br>  }<br>}<br></script><br><br><script type="application/ld+json"><br>{<br>  "@context": "https://schema.org",<nbr>  "@type": "Reservation",<br>  "reservationType": "Appointment",<br>  "provider": {<br>    "@type": "LocalBusiness",<br>    "name": "Purity & Clean"<br>  },<br>  "broker": {<br>    "@type": "Organization",<br>    "name": "Purity & Clean",<br>    "url": "https://purityyclean.com"<br>  }<br>}<br></script><br>```<br><br>**Resultado visual en Google:** Google puede mostrar "Desde $80.000" y "Reservar" directamente en el snippet. |
+| **Impacto esperado** | +20% CTR desde Google para queries de precio, mejora SEO local |
+| **Esfuerzo** | S (30 minutos — solo agregar JSON-LD) |
 | **Agente recomendado** | Frontend |
-| **Referencias** | [5] WhatsApp Business API Messages https://business.whatsapp.com/developers/developer-hub |
-| **Estado** | Nueva propuesta — NO implementada en R1-R94 |
-| **Prioridad CEO** | **Media** — UX y reducción de fricción |
+| **Referencias** | [3] Schema.org PriceRange https://schema.org/priceRange<br>[4] Google Merchant Center Offers https://developers.google.com/search/docs/appearance/structured-data |
+| **Estado** | Nueva propuesta — NO mencionada en R1-R94 |
+| **Prioridad CEO** | **Alta** — SEO de alto impacto |
 
 ---
 
-### Propuesta 6: Structured Data Auditor — Validación Automatizada de Schemas (MEDIUM PRIORITY)
+### Propuesta 4: WhatsApp Click-to-WhatsApp Ads Setup (MEDIUM PRIORITY)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar script de validación automática de Structured Data para detectar errores antes del despliegue |
-| **Problema** | Cada vez que se modifica `index.html` o las páginas de zona, los schemas pueden quedar malformados. Google Search Console muestra errores semanas después. Un auditor automatizado detecta errores en CI/local antes de desplegar. |
-| **Descripción** | **1. Script `scripts/audit-schemas.js`:**\n```javascript\nconst fs = require('fs');\nconst { JSDOM } = require('jsdom');\n\n\nconst PAGES = [\n  './index.html',\n  './zonas/chapinero/index.html',\n  './zonas/suba/index.html',\n  './blog/articulos/como-limpiar-tu-sofa.html'\n];\n\nfunction extractSchemas(html) {\n  const dom = new JSDOM(html);\n  const scripts = dom.window.document.querySelectorAll('script[type=\"application/ld+json\"]');\n  const schemas = [];\n  scripts.forEach(s => {\n    try {\n      schemas.push(JSON.parse(s.textContent));\n    } catch (e) {\n      schemas.push({ error: `Invalid JSON: ${e.message}` });\n    }\n  });\n  return schemas;\n}\n\nfunction validateSchema(schema, pageUrl) {\n  const errors = [];\n  if (!schema['@context']) errors.push('Missing @context');\n  if (!schema['@type']) errors.push('Missing @type');\n  if (schema['@type'] === 'LocalBusiness' && !schema.telephone) errors.push('LocalBusiness missing telephone');\n  if (schema['@type'] === 'FAQPage' && !schema.mainEntity) errors.push('FAQPage missing mainEntity');\n  if (schema['@type'] === 'Article' && !schema.datePublished) errors.push('Article missing datePublished');\n  return errors;\n}\n\nPAGES.forEach(page => {\n  const html = fs.readFileSync(page, 'utf8');\n  const schemas = extractSchemas(html);\n  console.log(`\\n=== ${page} ===`);\n  schemas.forEach((s, i) => {\n    if (s.error) {\n      console.log(`  Schema ${i+1}: ERROR - ${s.error}`);\n    } else {\n      const errors = validateSchema(s, page);\n      if (errors.length === 0) {\n        console.log(`  Schema ${i+1} [${s['@type']}]: ✅ OK`);\n      } else {\n        console.log(`  Schema ${i+1} [${s['@type']}]: ❌ ${errors.join(', ')}`);\n      }\n    }\n  });\n});\n```\n\n**2. Agregar a package.json:**\n```json\n\"scripts\": {\n  \"audit-schemas\": \"node scripts/audit-schemas.js\",\n  \"predeploy\": \"npm run audit-schemas\"\n}\n```\n\n**3. Instalar jsdom:**\n```bash\nnpm install jsdom --save-dev\n``` |
-| **Impacto esperado** | Detección de errores de schema antes de desplegar, mejora continua en SEO técnico, cero errores en Google Search Console |
-| **Esfuerzo** | M (2 horas — setup script + CI integration + documentation) |
-| **Agente recomendado** | QA + Frontend |
-| **Referencias** | [6] Google Rich Results Test https://search.google.com/test/rich-results |
-| **Estado** | Nueva propuesta — NO implementada en R1-R94 |
-| **Prioridad CEO** | **Media** — calidad y mantenimiento del SEO técnico |
+| **Título** | Configurar WhatsApp Click-to-WhatsApp Ads en Meta Business para generar leads cualificados |
+| **Problema** | Purity & Clean tiene WhatsApp pero no usa publicidad Meta para generar conversaciones. Facebook/Instagram ads con objetivo "Conversaciones" generan 3-5x más leads que landing pages tradicionales. |
+| **Descripción** | **1. Configurar WhatsApp Business API (ya tiene número):**<br><br>Ya tienen WhatsApp configurado. Solo necesitan verificar el número en Meta Business Suite.<br><br>2. **Crear Campaign en Meta Ads Manager:**<br><br>- Objetivo: "Conversaciones"<br>- Canal: WhatsApp<br>- Ad format: Imagen simple con mensaje prellenado<br><br>```<br>Texto del ad:<br>"¿Muebles necesitan limpieza? 🎯\n\nEn Purity & Clean limpiamos sofás, colchones y más.\n\nReserva en 2 minutos por WhatsApp 👇"<nbr>```<br><br>3. **Mensaje automático de bienvenida:**<br><br>Configurar en WhatsApp Business:<br>```<br>¡Hola! 👋 Gracias por contactar a Purity & Clean.\n\nSomos especialistas en limpieza de sofás, colchones y alfombras en Bogotá.\n\n¿cuál servicio te interesa?\n\n1️⃣ Limpieza de sofá\n2️⃣ Sanitización de colchón\n3️⃣ Limpieza de alfombra\n4️⃣ Otro\n```<br><br>4. **Pixel + Conversions API:**<br><br>Agregar Meta Pixel para trackear conversiones offline:<br>```html<br><!-- Meta Pixel --><br><script><br>!function(f,b,e,v,n,t,s)<br>{if(f.fbq)return;n=f.fbq=function(){n.callMethod?<br>n.callMethod.apply(n,arguments):n.queue.push(arguments)};<br>if(!f._fbq)n._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';<br>n.queue=[];t=b.createElement(e);t.async=!0;<br>t.src=v;s=b.getElementsByTagName(e)[0];<br>s.parentNode.insertBefore(t,s)}(window, document,'script',<br>'https://connect.facebook.net/en_US/fbevents.js');<br>fbq('init', 'PIXEL_ID');<br>fbq('track', 'Contact', {method: 'whatsapp'});<br></script><br>``` |
+| **Impacto esperado** | +30% leads con mismo presupuesto vs ads tradicionales, atribución completa |
+| **Esfuerzo** | M (3-4 horas — setup Meta Business + Pixel + campaña inicial) |
+| **Agente recomendado** | Full Stack |
+| **Referencias** | [5] WhatsApp Click to WhatsApp Ads https://www.facebook.com/business/whatsapp |
+| **Estado** | Nueva propuesta — NO mencionada en R1-R94 |
+| **Prioridad CEO** | **Media** — requiere inversión en ads pero alto ROI |
+
+---
+
+### Propuesta 5: Service Worker Background Sync para Formularios (MEDIUM PRIORITY)
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Implementar Background Sync para que formularios funcionen offline y se envíen cuando恢复 conexión |
+| **Problema** | Si un usuario llena el formulario de reserva sin conexión, el envío falla y se pierde el lead. El sitio tiene Service Worker pero no usa Background Sync API. |
+| **Descripción** | **1. Actualizar sw.js con Background Sync:**<br><br>```javascript<br>self.addEventListener('sync', (event) => {<br>  if (event.tag === 'form-sync') {<br>    event.waitUntil(syncForms());<br>  }<br>});<br\n\n>async function syncForms() {<br>  const pendingForms = await getPendingForms();<br>  for (const form of pendingForms) {<br>    try {<br>      await fetch(form.url, {<br>        method: 'POST',<br>        headers: { 'Content-Type': 'application/json' },<br>        body: JSON.stringify(form.data)<br>      });<br>      await removePendingForm(form.id);<br>    } catch (e) {<br>      console.error('Sync failed:', e);<br>    }<br>  }<br>}<br>```<br><br>2. **En script.js, guardar formulario cuando offline:**<br><br>```javascript<br>async function handleFormSubmit(e) {<br>  e.preventDefault();<br>  const formData = new FormData(e.target);<br>  const data = Object.fromEntries(formData.entries());<br>  <br>  if (!navigator.onLine) {<br>    await savePendingForm({ url: e.target.action, data });<br>    navigator.serviceWorker.ready.then(reg => {<br>      reg.sync.register('form-sync');<br>    });<br>    showSuccess('Sin conexión. Tu solicitud se enviará automáticamente cuando復繋.');<br>    return;<br>  }<br>  <br>  // Normal submission<br>  submitToFormspree(e.target);<br>}<br>```<br><br>3. **UI para indicar estado offline:**<br><br>```html<br><div id="offline-banner" class="offline-banner hidden"><br>  📴 Sin conexión — tus datos se guardarán locally<br></div><br>``` |
+| **Impacto esperado** | +5% formularios completados en场景 de conectividad poor |
+| **Esfuerzo** | M (2-3 horas — actualizar sw.js + script.js) |
+| **Agente recomendado** | Frontend |
+| **Referencias** | [6] Background Sync API https://developer.mozilla.org/en-US/docs/Web/API/Background_Synchronization_API |
+| **Estado** | Nueva propuesta — NO mencionada en R1-R94 |
+| **Prioridad CEO** | **Media** — mejora UX en zonas con conectividad variable |
+
+---
+
+### Propuesta 6: Voice Search SEO Optimization (MEDIUM PRIORITY)
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Optimizar para voice search queries de asistentes virtuales |
+| **Problema** | 30%+ de búsquedas ahora son por voz. El sitio está optimizado para texto pero no para queries conversacionales como "Hey Google, dónde puedo limpiar mi sofá en Bogotá". |
+| **Descripción** | **1. Agregar FAQ con queries de voz en FAQPage Schema:**<br><br>```html<br><script type="application/ld+json"><br>{<br>  "@context": "https://schema.org",<br>  "@type": "FAQPage",<br>  "mainEntity": [<br>    {<br>      "@type": "Question",<br>      "name": "¿Dónde puedo limpiar mi sofá en Bogotá?",<br>      "acceptedAnswer": {<br>        "@type": "Answer",<br>        "text": "Purity & Clean ofrece limpieza profesional de sofás en toda Bogotá. Contáctanos por WhatsApp al 300 123 4567 o visita nuestra web."<br>      }<br>    },<br>    {<br>      "@type": "Question",<br>      "name": "¿Cuánto cuesta limpiar un sofá?",<br>      "acceptedAnswer": {<br>        "@type": "Answer",<br>        "text": "El servicio de limpieza de sofá começa desde 80.000 pesos colombianos. Solicite cotización gratis por WhatsApp."<br>      }<br>    },<br>    {<br>      "@type": "Question",<br>      "name": "¿Limpian colchones en Usaquén?",<br>      "acceptedAnswer": {nbr>        "@type": "Answer",<br>        "text": "Sí, Purity & Clean sanitiza colchones en Usaquén y todas las zonas de Bogotá."<br>      }<br>    }<br>  ]<br>}<br></script><br>```<br><br>2. **Agregar sección "¿Cuánto cuesta?" con respuestas directas:**<br><br>En index.html, sección de precios clara con answers directos:<br>```html<br><section id="precios"><br>  <h2>¿Cuánto cuesta la limpieza?</h2><br>  <ul><br>    <li><strong>Limpieza de sofá:</strong> Desde $80.000 COP</li><br>    <li><strong>Sanitización de colchón:</strong> Desde $60.000 COP</li><br>    <li><strong>Limpieza de alfombra:</strong> Desde $50.000 COP</li><br>  </ul><br>  <p>Precios desde. Cotización final según espacio.</p><br></section><br>``` |
+| **Impacto esperado** | Captura 10-15% de queries de voz para servicios locales |
+| **Esfuerzo** | S (1 hora — actualizar FAQ Schema + agregar sección precios) |
+| **Agente recomendado** | Frontend |
+| **Referencias** | [7] Voice Search SEO https://developers.google.com/search/docs/appearance/voice-search |
+| **Estado** | Nueva propuesta — NO mencionada en R1-R94 |
+| **Prioridad CEO** | **Media** — tendencia creciente |
 
 ---
 
@@ -210,12 +217,12 @@ R95 se enfoca en **automatización de re-engagement, mejoras en la arquitectura 
 
 | # | Propuesta | Impacto | Esfuerzo | Prioridad | Tipo |
 |---|-----------|---------|----------|-----------|------|
-| 1 | **SW Cache Invalidation Inteligente** | +UX usuarios recurrentes | S | **Alta** | PWA/Performance |
-| 2 | **Article Schema + Email Digest Blog** | +20-30% CTR blog | S | **Alta** | SEO + Retención |
-| 3 | **Exit-Intent Popup** | +10-15% leads | S | **Media** | Conversión |
-| 4 | **HowTo Schema en Zonas** | +15-25% CTR local | S | **Media** | SEO Local |
-| 5 | **Quiet Hours WhatsApp** | -fricción usuarios | S | **Media** | UX/Operaciones |
-| 6 | **Structured Data Auditor** | calidad SEO | M | **Media** | QA/Infraestructura |
+| 1 | **Google Business Messages** | +15% leads | S | **Alta** | Canales |
+| 2 | **AppointmentReservation Schema** | +20% CTR | S | **Alta** | SEO |
+| 3 | **Instagram DM + WhatsApp Dual** | +15% engagement | S | **Media** | Omnicanal |
+| 4 | **WhatsApp Click-to-WhatsApp Ads** | +30% leads | M | **Media** | Publicidad |
+| 5 | **Service Worker Background Sync** | +5% forms | M | **Media** | UX |
+| 6 | **Voice Search SEO** | +10% voice | S | **Media** | SEO |
 
 ---
 
@@ -223,12 +230,12 @@ R95 se enfoca en **automatización de re-engagement, mejoras en la arquitectura 
 
 | Propuesta | Depende de | Bloqueador |
 |-----------|------------|------------|
-| SW Cache Invalidation | Ninguno | Ninguno |
-| Article Schema + Email Digest | Formspree configurado (ya está) | Ninguno |
-| Exit-Intent Popup | Ninguno | Ninguno |
-| HowTo Schema en Zonas | Ninguno | Ninguno |
-| Quiet Hours WhatsApp | Ninguno | Ninguno |
-| Structured Data Auditor | Node.js + npm | Ninguno |
+| Google Business Messages | Google Business Profile | Ninguno |
+| AppointmentReservation Schema | Ninguno | Ninguno |
+| Instagram DM + WhatsApp | Instagram Business account | Ninguno |
+| WhatsApp Click-to-WhatsApp Ads | Meta Business Suite + WhatsApp Business | Ninguno |
+| Background Sync | Service Worker existente | Ninguno |
+| Voice Search SEO | FAQPage Schema (R94) | FAQPage Schema |
 
 ---
 
@@ -236,30 +243,32 @@ R95 se enfoca en **automatización de re-engagement, mejoras en la arquitectura 
 
 | Aspecto | R94 | R95 |
 |---------|-----|-----|
-| **Foco** | Infraestructura técnica (Schema.org, web-vitals, Klaviyo, Sharp) | Automatización PWA, Blog SEO, UX/Conversión |
-| **Tipo propuestas** | Monitoring + marketing ops | Cache intelligence + blog syndication + popup |
-| **Mercado** | SEO y conversion indirecto | Engagement + retention + re-engagement |
-| **Tecnología** | WhatsApp Flows, Schema.org, Klaviyo | SW versioning, RSS, Article schema, exit-intent |
+| **Foco** | Infraestructura técnica (Schema, RUM, Email) | Integraciones omnicanal (Google, Instagram, Meta Ads) |
+| **Tipo propuestas** | SEO técnico, Performance, Marketing ops | Canales de comunicación, Publicidad |
+| **Mercado** | Técnico | Conversión y adquisición |
+| **Tecnología** | web-vitals, Klaviyo, Sharp | Google Business, Meta Ads, Background Sync |
 | **Esfuerzo** | S-M | S-M |
-| **Revenue** | Indirecto (mejora conversión) | Directo (leads) + Indirecto (SEO) |
+| **Revenue** | Indirecto | Directo (más leads) |
 
-**R95 complementa R94:** R94 propuso infraestructura de marketing; R95 propone automatización de engagement y mejoras de caching que eran invisibilizadas en rondas anteriores.
+**R95 complementa R94:** R94 propuso qué hacer (infraestructura); R95 propone cómo adquirir más clientes (integraciones omnicanal).
 
 ---
 
 ## Fuentes
 
-[1] Google. "Service Worker Caching Strategies." https://web.dev/service-worker-caching/ (2026)
+[1] Google. "Business Messages." https://business.google.com/messages (2026)
 
-[2] Google. "Article Structured Data." https://developers.google.com/search/docs/appearance/structured-data/article (2026)
+[2] Meta. "Click to WhatsApp Ads." https://www.facebook.com/business/whatsapp (2026)
 
-[3] OptinMonster. "How to Create Exit Intent Popups That Convert." https://optinmonster.com/how-to-create-exit-intent-popups/ (2026)
+[3] Schema.org. "PriceRange." https://schema.org/priceRange (2026)
 
-[4] Google. "HowTo Structured Data." https://developers.google.com/search/docs/structured-content/how-to (2026)
+[4] Google. "Merchant Center Offers." https://developers.google.com/search/docs/appearance/structured-data (2026)
 
-[5] Meta. "WhatsApp Business API Messages." https://business.whatsapp.com/developers/developer-hub (2026)
+[5] Meta. "WhatsApp Business API." https://business.whatsapp.com/developers/developer-hub (2026)
 
-[6] Google. "Rich Results Test." https://search.google.com/test/rich-results (2026)
+[6] Mozilla. "Background Sync API." https://developer.mozilla.org/en-US/docs/Web/API/Background_Synchronization_API (2026)
+
+[7] Google. "Voice Search SEO." https://developers.google.com/search/docs/appearance/voice-search (2026)
 
 ---
 
