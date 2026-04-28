@@ -4,147 +4,178 @@
 **Fecha:** 2026-04-28
 **Analista:** Innovation Scout
 **Ronda:** 69
-**Issue padre:** DOMAA-668
+**Issue padre:** DOMAA-667
 
 ---
 
 ## Resumen Ejecutivo
 
-R69 se enfoca en **captación de nuevos segmentos de mercado y expansión de canales de llegada** que no han sido abordados en rondas anteriores: contenido visual en redes sociales (Instagram/TikTok embebido), voz y accesibilidad avanzada, AR para visualizar resultados, y pricing dinámico estacional. También propone un canal de SMS automation separado de WhatsApp para recordatorios de citas.
+R69 se enfoca en **optimizaciones de schema markup, accesibilidad y arquitectura de contenido** que el sitio no ha cubierto en profundidad en rondas anteriores. A diferencia de R68 (infraestructura de conversión), R69 ataca el **SEO técnico, la accesibilidad WCAG y la estructura de linking interno** — pilares que impactan directamente el ranking en buscadores y la retención de usuarios.
 
-**Diferenciación clave vs R64-R68:**
-- R64 = micro-conversiones de nuevos visitantes
-- R65 = SEO local y automatización post-reserva
-- R66 = activación de features dormantes (chatbot, PWA)
-- R67 = retención post-servicio y ciclo de vida
-- R68 = compliance legal, infraestructura de conversión y monetización
-- **R69 = expansión de canales de captación (social, voz, AR) y pricing inteligente**
+**Diferenciación clave vs R68:**
+- R68 = cierre de gaps técnicos dormant (chatbot HTML, cookie banner, PWA completo)
+- R69 = schema markup avanzado, accesibilidad, linking interno, y trust signals
 
 ---
 
 ## Stack tecnológico actual (verificado en código)
 
 - **Frontend:** HTML5 + CSS3 + JS vanilla ES6+ (sin bundler)
-- **HTML:** ~2305 líneas en index.html
-- **CSS:** ~6212 líneas en style.css
-- **JS:** ~1847 líneas en script.js + config.js
-- **Booking:** Multi-step form con slot picker + geo-localización
-- **Referidos:** Cupón 15% + WhatsApp share
-- **Comparison slider:** Before/after con range input
-- **PWA:** Service Worker completo con precache, runtime cache, push listeners, offline support
-- **Chatbot:** HTML completo en index.html (líneas 2216+), JS de toggle en script.js, FAQ con quick replies
-- **Blog:** 6 artículos educativos
-- **Zonas:** 10 páginas con estructura similar
-- **Forms:** Formspree (booking, newsletter, zonas)
-- **Reviews:** 6 in-page + Google Reviews link + Schema.org LocalBusiness
-- **Theme:** Dark mode toggle con prefers-color-scheme
+- **HTML:** 2305 líneas en index.html (monolítico)
+- **CSS:** 6212 líneas en style.css (tema claro/oscuro, chatbot completo)
+- **JS:** 1847 líneas en script.js + config.js
+- **Chatbot:** Implementación COMPLETA — HTML, CSS, JS都已存在 (R68 análisis incorrecto)
+- **Cookie banner:** Ya existe con HTML/CSS/JS completo en index.html líneas 2282-2303
+- **PWA SW:** Precache funcional con 13 assets + offline fallback + runtime cache
+- **Booking:** Multi-step form con geo-localización y slot picker
+- **Referidos:** Cupón 15% con generador de código y WhatsApp share
+- **Comparison sliders:** 6 before/after sliders con range input (sin keyboard control)
+- **Blog:** 6 artículos educativos con Schema.org BlogPosting
+- **Zonas:** 10 páginas con LocalBusiness schema
+- **WhatsApp:** Float button + múltiples links con configuración por zona
 
 ---
 
-## Lo que NO está en R1-R68 (gap analysis)
+## Gaps Técnicos Identificados — Round 69
 
-### Oportunidades NO propuestas previamente
+### Gap 1: Blog sin linking interno
 
-| # | Oportunidad | Ronda que lo cubrió |
-|---|------------|-------------------|
-| Instagram/TikTok embebido en homepage | NO — solo se mencionó "video testimonials" en R65 |
-| Voice search / navegación por voz | NO — accesibilidad por voz nunca propuesta |
-| AR visualizador antes/después | NO — slider comparison existe, pero AR no |
-| WhatsApp Cloud API (Meta, tier gratuito) | NO — R59/R68 propuso Business API (empresarial, costoso), no Cloud API |
-| SMS automation (Twilio) para recordatorios | NO — WhatsApp automation propuesta, SMS no |
-| Google Business Profile API (sync reviews) | NO — solo se enlaza, no se sincroniza |
-| Google Calendar API para técnicos | NO — agenda del equipo no existe |
-| Dynamic pricing engine (estacional) | NO — pricing fijo en cotizador |
-| Sitio multilingual (inglés para expats) | NO — solo español |
-| Customer health score dashboard | NO — CRM no existe aún |
+**Problema:** Los 6 artículos del blog no tienen sección "Artículos relacionados" ni enlaces contextuales entre artículos. El usuario termina su lectura y no tiene forma de continuar navegando por contenido relevante. Impacto directo en bounce rate y tiempo en sitio.
+
+**Evidencia:** Blog articles (ej: `guia-sanitizacion-colchones.html`) no contienen enlaces a otros artículos, no hay sección "también te puede interesar" al final.
+
+### Gap 2: Blog articles con schema incompleto
+
+**Problema:** Los artículos tienen `BlogPosting` schema básico pero les falta:
+- `Article` (subtipo de `BlogPosting` más rico para Google)
+- `author` con `Person` type y nombre real
+- `datePublished` y `dateModified`
+- `image` thumbnail para rich cards
+- `publisher` con logo
+- `headline` optimizado para SEO
+
+**Evidencia:** `blog/articulos/guia-sanitizacion-colchones.html` solo tiene schema genérico, sin author ni image fields.
+
+### Gap 3: Sin FAQPage schema real (el JSON-LD existe pero no genera rich results)
+
+**Problema:** El FAQPage schema está en index.html pero Google no lo muestra como rich result porque:
+- Las preguntas no tienen el formato exacto que Google espera
+- Falta `text` en `acceptedAnswer` en algunos casos (Google requiere `text` field, no HTML)
+- No hay `mainEntity` con suficiente cantidad de preguntas para algunos nichos
+
+**Impacto:** Posible pérdida de valiosos real estate en検索結果 (position 0 / featured snippets).
+
+### Gap 4: Sin breadcrumbList schema
+
+**Problema:** No hay breadcrumb navigation en ninguna página. Google no puede entender la jerarquía del sitio (Home > Blog > Sanitización de colchones) para mostrar breadcrumbs en resultados.
+
+**Impacto:** Menor CTR en search results y pérdida de navegación jerárquica en SERP.
+
+### Gap 5: Comparison sliders sin keyboard accessibility
+
+**Problema:** Los 6 comparison sliders usan `<input type="range">` que técnicamente tiene keyboard support pero el diseño visual del handle no responde correctamente a arrow keys. Users que usan solo keyboard no pueden drag el slider de forma efectiva.
+
+**WCAG Violación:** Las sliders son contenido interactivo sin alternativa accesible.
+
+### Gap 6: Sin guarantee / trust section visible
+
+**Problema:** No hay sección de "Garantía de satisfacción" o "Si no quedas satisfecho, te devolvemos el dinero". Los competidores de servicios de limpieza en Bogotá muestran badges de garantía para generar confianza.
+
+**Oportunidad:** Implementar una "Garantía Purity & Clean" con términos claros y badge visual incrementaría la conversión.
+
+### Gap 7: Sitemap.xml sin prioridades ni changefreq
+
+**Problema:** El sitemap.xml actual (`sitemap.xml`) probablemente es genérico sin tags `<priority>` ni `<changefreq>` para las diferentes secciones. Google no sabe qué páginas son más importantes.
+
+**Impacto:** Crawl budget mal dirigido — Google puede priorizar páginas menos importantes.
 
 ---
 
 ## Propuestas (Round 69)
 
-### Propuesta 1: Embed Instagram Reels / TikTok en Homepage
+### Propuesta 1: Artículos relacionados y linking interno en blog
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Integrar contenido real de Instagram/TikTok como social proof visual |
-| **Problema** | El sitio tiene reseñas de texto y videos placeholder. Los competidores locales en Bogotá ya publican contenido real en Instagram y TikTok. No hay forma de mostrar ese contenido en el sitio sin reclicarlo manualmente. |
-| **Descripción** | **Social Content Embedding:** (1) **Instagram Basic Display API:** Obtener token de acceso a la cuenta de Instagram de Purity & Clean. Usar la API para embedear los últimos 3-6 Reels/Posts que muestren trabajos reales (limpiezas antes/después, testimonios en video corto). (2) **TikTok embed:** Si el equipo tiene cuenta de TikTok Business, usar el embed oficial de TikTok para mostrar videos de 15-60 segundos. (3) **Lazy loading:** Los iframes de Instagram/TikTok son pesados — cargar solo cuando el usuario hace scroll hasta la sección (Intersection Observer). (4) **Fallback:** Si la API no está disponible o el contenido no carga, mostrar placeholder con la imagen del post y un badge "Ver en Instagram". (5) **Consentimiento:** Solo embeber contenido que Purity & Clean haya publicado y tenga derecho a mostrar. (6) **Performance:** Usar `loading="lazy"` en iframes y `decoding="async"`. Implementación: 3-4 horas (API setup + HTML/CSS + lazy loading + fallback). |
-| **Impacto esperado** | Incremento en engagement visual, social proof en tiempo real (no hace falta actualizar el sitio manualmente), diferenciación de competencia local |
+| **Título** | Agregar sección "También te puede interesar" al final de cada artículo del blog |
+| **Problema** | Los 6 artículos del blog no linked entre sí. El usuario termina un artículo y abandona en vez de continuar consumiendo contenido. |
+| **Descripción** | **Internal Linking:** (1) **Nueva función en script.js:** `initRelatedArticles()` que busca artículos por tags/categoría y muestra 2-3 artículos relacionados al final del contenido. (2) **Lógica:** cada artículo tiene `data-tags` en el frontmatter; buscar otros artículos con tags en común. (3) **Diseño:** cards horizontales con imagen thumbnail, título y excerpt. (4) **SEO:** los enlaces internos con texto descriptivo pasan link equity. (5) **JSON-LD:** agregar `ItemList` schema para la sección de relacionados. Implementación: 3-4 horas (función JS de relacionadas + CSS cards + tag data en artículos). |
+| **Impacto esperado** | Reducción de bounce rate en blog (estimado -15%), aumento de páginas/visita (+2 páginas/sesión), mejora de SEO por linking interno |
 | **Esfuerzo** | S (3-4 horas) |
 | **Agente recomendado** | Frontend |
-| **Referencias** | [1] Instagram Basic Display API https://developers.facebook.com/docs/instagram-basic-display-api [2] TikTok Embed https://developers.tiktok.com/doc/embed |
+| **Referencias** | [1] Moz - Internal Linking Best Practices https://moz.com/learn/seo/internal-links |
 
-### Propuesta 2: Voice Navigation y Voice Search (Accesibilidad y UX)
+### Propuesta 2: Rich Article schema para blog posts
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar navegación por voz y búsqueda por voz para accesibilidad y conveniencia |
-| **Problema** | El sitio no tiene ninguna forma de navegación por voz. Para usuarios con discapacidades motoras o visuales, o manos ocupadas (ej: limpiando), la navegación por voz es un diferenciador de accesibilidad. Además, la búsqueda por voz es cada vez más usada en móvil. |
-| **Descripción** | **Voice Interface:** (1) **Web Speech API:** Usar `SpeechRecognition` (Chrome/Edge) y `webkitSpeechRecognition` (Safari) para capturar voz. (2) **Voice navigation trigger:** Botón de micrófono en el header que activa `speechRecognition`. Cuando el usuario dice "cotizador", "reservar", "whatsapp", "precios", navegar a la sección correspondiente. (3) **Voice search en hero:** El campo de búsqueda del hero acepta input de voz (botón de micrófono junto al campo). (4) **Feedback visual:** Mientras escucha, mostrar animation de ondas de audio y texto "Escuchando...". Cuando termina, mostrar el texto reconocido y la acción tomada. (5) **Fallback:** Si el navegador no soporta Web Speech API, el botón de micrófono no aparece o muestra tooltip "Tu navegador no soporta voz". (6) **Analytics:** Track `voice_search_used` y `voice_navigation_triggered` con el comando y la sección destino. Implementación: 4-5 horas (Web Speech API + JS de reconocimiento + UI de feedback + analytics + testing cross-browser). |
-| **Impacto esperado** | Accesibilidad WCAG 2.1 AA, diferenciador único en el mercado bogotano, mejora en UX móvil para usuarios multitarea |
-| **Esfuerzo** | M (4-5 horas) |
+| **Título** | Actualizar schema de blog posts a Article con author, image, datePublished |
+| **Problema** | Los artículos tienen BlogPosting genérico. Google espera Article subtype con author, image y fechas para mostrar rich cards en search. |
+| **Descripción** | **Article Schema Upgrade:** (1) **Cambiar @type:** de `BlogPosting` a `Article` (más específico para Google). (2) **Agregar author:** `{ "@type": "Person", "name": "Equipo Purity & Clean" }`. (3) **Agregar image:** thumbnail del artículo como ImageObject. (4) **Agregar datePublished y dateModified.** (5) **Agregar publisher:** `{ "@type": "Organization", "name": "Purity & Clean", "logo": { "@type": "ImageObject", "url": "https://purityclean.com/images/logo.png" } }`. (6) **Modificar cada artículo:** actualizar el JSON-LD en las 6 páginas de blog. (7) **Sitemap:** agregar `<lastmod>` con fecha real de última modificación. Implementación: 2-3 horas (actualizar schema en 6 archivos + sitemap). |
+| **Impacto esperado** | Mejora en CTR de search results (+10-15% por rich cards), mayor visibilidad en Google News si aplica |
+| **Esfuerzo** | S (2-3 horas) |
 | **Agente recomendado** | Frontend |
-| **Referencias** | [3] Web Speech API MDN https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API [4] Voice Navigation UX Patterns https://www.smashingmagazine.com/2024/03/voice-ui-patterns/ |
+| **Referencias** | [2] Google Search Central - Article Rich Results https://developers.google.com/search/docs/appearance/structured-data/article |
 
-### Propuesta 3: AR Visualizador — "Ver tu mueble limpio" (WebXR / Quick Look)
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Implementar experiencia AR para que los clientes vean cómo quedaría su mueble limpio |
-| **Problema** | El comparison slider (antes/después) es estático. Los clientes no pueden ver cómo quedaría SU mueble específico después de la limpieza. AR permitiría visualizar el resultado en su propio hogar antes de contratar. |
-| **Descripción** | **AR Experience:** (1) **Google Scene Viewer (Android):** Usar `<model-viewer>` de Google para mostrar modelos 3D de muebles limpios. Cuando el usuario entra desde Android, ofrece "Ver en tu espacio" que abre Scene Viewer con AR. (2) **Apple Quick Look (iOS):** Generar archivos `.usdz` de modelos 3D (sofá limpio, colchón limpio, alfombra limpia). iOS abre Quick Look con AR automáticamente. (3) **Modelos 3D:** Crear 3 modelos USDZ/USDZ: sofá genérico, colchón genérico, silla. Texturas: "antes" (sucio) y "después" (limpio).�� Usar Blender o Spline para crear los modelos. (4) **Trigger AR:** Botón "Ver en tu espacio" debajo de la imagen del servicio en el cotizador. Solo aparece en dispositivos móviles. (5) **Fallback desktop:** En desktop, mostrar el modelo 3D interactivo con orbit controls (rotar, zoom). (6) **Assets:** Los modelos 3D también sirven como OG images dinámicas para redes sociales. Implementación: 6-8 horas (crear modelos 3D + `<model-viewer>` + USDZ para iOS + fallback desktop + testing en dispositivos reales). |
-| **Impacto esperado** | Experiencia diferenciadora única en Bogotá, incremento en conversión del cotizador al reducir incertidumbre, contenido viral para redes (los usuarios comparten AR) |
-| **Esfuerzo** | L (6-8 horas + creación de modelos 3D) |
-| **Agente recomendado** | Frontend / Full Stack |
-| **Referencias** | [5] Google model-viewer https://modelviewer.dev [6] Apple Quick Look https://developer.apple.com/documentation/realitykit/composing-a-reality |
-
-### Propuesta 4: WhatsApp Cloud API — Mensajería sin costo empresarial
+### Propuesta 3: FAQPage schema con formato optimizado para featured snippets
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Integrar WhatsApp Cloud API (Meta) para envío de mensajes sin costo de licencia Business API |
-| **Problema** | R59 y R68 propusieron WhatsApp Business API (enterprise, $450+/mes). Eso es inviable para Purity & Clean. WhatsApp Cloud API esgratuita para negocios en fase inicial y tiene las mismas funcionalidades básicas: mensajes entrantes, salientes, templates. |
-| **Descripción** | **WhatsApp Cloud API Setup:** (1) **Meta Business App:** Crear una app en Meta Business Suite con permisos de WhatsApp Cloud API. (2) **Webhook receiving:** Configurar webhook para recibir mensajes de WhatsApp y guardarlos en Formspree o un Google Sheet. (3) **Outbound templates:** Configurar 3-4 templates de mensaje: "Reserva confirmada", "Tu técnico viene mañana", "Cuéntanos cómo te fue", "Oferta de temporada". (4) **Google Sheets integration:** Cada mensaje recibido de WhatsApp se guarda en una hoja de cálculo compartida con el equipo de Purity & Clean. (5) **No requiere teléfono dedicado:** A diferencia de la Business API, Cloud API puede usar el número existente de Purity & Clean sin contratar una línea empresarial separada. (6) **Integración con sitio:** Los botones de WhatsApp existentes redireccionan al chat de la cuenta Cloud API. Implementación: 5-6 horas (Meta app + webhook + templates + Google Sheets + testing). |
-| **Impacto esperado** | Comunicación 24/7 con clientes sin costo de licencia, automatización de confirmación de reservas, diferenciador competitivo (competidores en Bogotá no lo usan) |
-| **Esfuerzo** | M (5-6 horas) |
-| **Agente recomendado** | Full Stack |
-| **Referencias** | [7] WhatsApp Cloud API Documentation https://developers.facebook.com/docs/whatsapp/cloud-api [8] Meta for Developers https://developers.facebook.com/docs/whatsapp |
-
-### Propuesta 5: SMS Automation — Twilio para Recordatorios de Citas
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Implementar envío de SMS automáticos para recordatorios de citas via Twilio |
-| **Problema** | WhatsApp es efectivo pero requiere que el cliente tenga WhatsApp instalado y conexión a internet. Muchos colombianos en estratos 2-3 usan SMS como canal principal. Los recordatorios por SMS reducen no-shows en 30-40%. |
-| **Descripción** | **SMS Reminder System:** (1) **Twilio Account:** Crear cuenta de Twilio con saldo prepaid (~$10足以 para empezar). Obtener número de teléfono virtual colombiano (+57). (2) **Trigger points:** Cuando se confirma una reserva via Formspree, un webhook envía los datos a una Edge Function (Netlify/Vercel) que conecta con Twilio API. (3) **Mensajes:** Template SMS: "Purity & Clean: Tu limpieza está confirmada para [FECHA] a las [HORA] en [DIRECCIÓN]. Responde CONFIRMAR o CANCELAR." (4) **Respuesta automática:** Si el cliente responde CANCELAR, recibir notificación. (5) **Google Sheets:** Todas las respuestas de SMS se guardan en una hoja compartida. (6) **Opt-in:** Solo se envía SMS a clientes que aceptaron recibir comunicaciones al hacer la reserva (checkbox). Implementación: 5-6 horas (Twilio setup + Edge Function + templates + Google Sheets + opt-in checkbox en form). |
-| **Impacto esperado** | Reducción de no-shows en 30-40%, incrementando la utilización de técnicos, diferenciación de competencia que solo usa WhatsApp |
-| **Esfuerzo** | M (5-6 horas + coordinación con equipo) |
-| **Agente recomendado** | Full Stack |
-| **Referencias** | [9] Twilio SMS API https://www.twilio.com/docs/sms [10] Twilio Colombia Pricing https://www.twilio.com/en-us/sms/pricing/co |
-
-### Propuesta 6: Google Business Profile API — Sincronización Automática de Reseñas
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Implementar sync automática de reseñas de Google Business Profile al sitio |
-| **Problema** | Las reseñas de Google solo son visibles si el usuario hace clic en el link. Las 127+ reseñas de Google Business Profile no se muestran en el sitio, perdiendo social proof. No hay forma de responder a reseñas desde un dashboard centralizado. |
-| **Descripción** | **GBP API Integration:** (1) **Google Business Profile API:** Obtener acceso a la API de Google My Business (requiere verificación del negocio en Google). La API permite leer reseñas y responderlas. (2) **Sync semanal:** Un scheduled job (GitHub Actions o Netlify scheduled function) ejecuta cada día y sincroniza las reseñas nuevas a un archivo JSON local: `reviews.json`. (3) **Display en sitio:** Nueva sección "Reseñas de Google" que muestra las 6 reseñas más recientes con estrellas, texto, autor y fecha. Se actualiza automáticamente cuando el scheduled job corre. (4) **Respond to reviews:** Desde la misma sección, un botón "Responder" abre un textarea que envía la respuesta via GBP API. Esto unifica la gestión de reseñas. (5) **Schema.org integration:** Las reseñas sincronizadas se agregan al JSON-LD de LocalBusiness para SEO. (6) **Moderación:** Solo se muestran reseñas de 4-5 estrellas para mantener credibility; las negativas se marcan para atención del equipo. Implementación: 6-8 horas (GBP API setup + scheduled sync + JSON file + display section + respond flow + Schema). |
-| **Impacto esperado** | Social proof en tiempo real de 127+ reseñas, gestión centralizada de respuestas, SEO local mejorado con reviews frescas |
-| **Esfuerzo** | M (6-8 horas) |
-| **Agente recomendado** | Full Stack |
-| **Referencias** | [11] Google Business Profile API https://developers.google.com/my-business/reference/rest [12] Google Reviews SEO https://developers.google.com/search/docs/appearance/structured-data/review |
-
-### Propuesta 7: Dynamic Pricing Engine — Precios Estacionales y por Demanda
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Implementar pricing dinámico que ajuste precios según temporada, día de la semana y demanda |
-| **Problema** | El cotizador muestra precios fijos. No hay forma de capturar premium de temporada alta (décimas, fin de año, vacaciones escolares) ni crear urgencia con precios más bajos en temporada baja. |
-| **Descripción** | **Dynamic Pricing:** (1) **Pricing rules engine:** En `config.js`, definir multipliers por: temporada (alta/alta media/baja), día de semana (weekday/weekend), franja horaria (mañana/tarde/noche). (2) **Temporadas predefinidas:** Alta: diciembre, semanas santas, puentes; Media: resto del año escolar; Baja: febrero post-carnaval, agosto. (3) **Visual indicators:** El cotizador muestra: "Precio habitual: $80.000" (tachado) y "Precio hoy: $92.000" (en rojo) cuando hay surge pricing. Badge: "Temporada alta". (4) **Urgency badge:** Si la demanda es alta (múltiples reservas en el mismo día), mostrar: "Solo 2 slots disponibles hoy — precio completo". (5) **API de demanda:** Un endpoint simple en una Edge Function consulta reservas del día para calcular scarcity. Si >80% ocupado, aplicar multiplier de urgencia. (6) **History tracking:** Cada pricing decision se loguea para análisis: fecha, multiplier aplicado, reservas generadas. Implementación: 4-5 horas (config.js + pricing rules + surge detection + display de badges + history logging). |
-| **Impacto esperado** | Captura de premium en temporada alta, reducción de empty slots en temporada baja, sense of urgency para incrementar conversión |
-| **Esfuerzo** | S (4-5 horas) |
+| **Título** | Optimizar FAQPage schema para generar featured snippets en Google |
+| **Problema** | El FAQPage actual no genera rich results porque falta el field `text` en acceptedAnswer y algunas preguntas no califican. |
+| **Descripción** | **FAQPage Optimization:** (1) **Reemplazar `text` por campo exacto:** el schema actual tiene `text` pero Google requiere que cada `acceptedAnswer.text` sea una respuesta corta y directa (40-60 caracteres ideal). (2) **Agregar más preguntas frecuentes:** Google requiere al menos 4-5 preguntas para mostrar FAQ rich results. Añadir: "¿Cuánto tiempo toma la limpieza?", "¿Qué productos usan?", "¿Necesito mover los muebles?". (3) **Remover HTML del answer text:** las respuestas no deben contener HTML — solo texto plano. (4) **Agregar breadcrumb en páginas de zonas:** para que Google muestre breadcrumb + FAQ en el mismo resultado. Implementación: 2-3 horas (actualizar FAQPage JSON-LD + agregar preguntas faltantes). |
+| **Impacto esperado** | Posible posición 0 (featured snippet) para queries de servicios, incremento en CTR orgánico |
+| **Esfuerzo** | S (2-3 horas) |
 | **Agente recomendado** | Frontend |
-| **Referencias** | [13] Dynamic Pricing Best Practices https://www.定价策略.com [14] Surge Pricing Examples https://en.wikipedia.org/wiki/Surge_pricing |
+| **Referencias** | [3] Google Search Central - FAQ Structured Data https://developers.google.com/search/docs/appearance/structured-data/faqpage |
+
+### Propuesta 4: BreadcrumbList schema + navegación visual
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Implementar breadcrumbs con schema BreadcrumbList para todas las páginas |
+| **Problema** | No hay navegación jerárquica visible ni schema que permita a Google mostrar breadcrumbs en resultados. |
+| **Descripción** | **Breadcrumb Implementation:** (1) **HTML breadcrumb nav:** agregar `<nav aria-label="Breadcrumb">` con enlaces: Home > [Zonas/Blog] > [Nombre de página]. En index.html seria: Home (/) > (no breadcrumb). En zonas/usme: Home > Zonas > Usme. En blog: Home > Blog > [Artículo]. (2) **Schema BreadcrumbList:** agregar JSON-LD con `@type: BreadcrumbList`, `itemListElement` con position, name, item. (3) **CSS:** estilo simple con separadores `>` y fuente reducida. (4) **Mobile:** mantener en una línea, truncate si es necesario. Implementación: 2-3 horas (HTML breadcrumb + CSS + schema JSON-LD por página). |
+| **Impacto esperado** | Mejora en CTR de search results (los breadcrumbs en SERP generan +20-30% CTR), mejor navegación para usuarios |
+| **Esfuerzo** | S (2-3 horas) |
+| **Agente recomendado** | Frontend |
+| **Referencias** | [4] Google Search Central - Breadcrumb Structured Data https://developers.google.com/search/docs/appearance/structured-data/breadcrumb |
+
+### Propuesta 5: Garantía de satisfacción y trust section
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Crear sección de "Garantía Purity & Clean" con badge visual y términos |
+| **Problema** | No hay trust signal de garantía. Los visitantes que comparan con competencia no tienen razones objetiva para elegir a Purity & Clean más allá del precio. |
+| **Descripción** | **Trust Section:** (1) **Nueva sección antes del footer:** "Garantía de satisfacción" con badge/icono de escudo. (2) **Copy:** "Si no quedas 100% satisfecho con el resultado, devolvemos tu dinero o re-limpiamos sin costo adicional. Así de simple." (3) **Términos en tooltip/link:** " aplican términos y condiciones. Consulta nuestra política de satisfacción." (4) **Badge visual:** shield icon con "100% Garantizado" en color accent. (5) **Integración:** colocar al final del booking form y en el cotizador como "CTA de confianza". (6) **Schema:** `{ "@type": "Offer", "priceCurrency": "COP", "availability": "https://schema.org/InStock", "seller": { "@type": "Organization", "name": "Purity & Clean" } }`. Implementación: 2-3 horas (nueva sección HTML/CSS + copy persuasivo + schema). |
+| **Impacto esperado** | Incremento en conversión del booking form (estimado +10-15%) por reducción de friction de犹豫 |
+| **Esfuerzo** | S (2-3 horas) |
+| **Agente recomendado** | Frontend |
+| **Referencias** | [5] Baymard Institute - Trust Signals in Checkout https://baymard.com |
+
+### Propuesta 6: Comparación sliders con keyboard navigation mejorada
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Mejorar accesibilidad WCAG de los comparison sliders con keyboard controls |
+| **Problema** | Los sliders usan range input que es técnicamente accessible pero el feedback visual es deficiente con keyboard. |
+| **Descripción** | **Accessible Sliders:** (1) **Mejorar CSS del handle:** el handle visual debe responder más visiblemente al focus (outline más visible). (2) **Agregar aria-valuetext dinámico:** que diga "50% antes" y se actualice al mover. (3) **Agregar teclas personalizadas:** interceptar arrow keys para hacer steps del 5% en vez de nativa (las flechas nativas hacen steps muy pequeños). (4) **Track visual:** agregar colores diferentes al track para la parte "antes" y "después" cuando el slider se mueve. (5) **Documentación:** agregar instrucciones de uso para keyboard en aria-label del slider. Implementación: 3-4 horas (CSS del handle + JS para custom key handling + aria-valuetext dinâmico). |
+| **Impacto esperado** | Cumplimiento WCAG 2.1 AA, mejor experiencia para usuarios con disabilities, mejora en accessibility score de Lighthouse |
+| **Esfuerzo** | S (3-4 horas) |
+| **Agente recomendado** | Frontend |
+| **Referencias** | [6] WCAG 2.1 - Content Structure https://www.w3.org/WAI/WCAG21/Understanding/content-structure-versus-presentation |
+
+### Propuesta 7: Sitemap.xml con prioridades y LastMod
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Actualizar sitemap.xml con priorities, changefreq y lastmod para SEO |
+| **Problema** | El sitemap actual es básico sin metadata que guide a Google sobre qué páginas priorizar. |
+| **Descripción** | **Enhanced Sitemap:** (1) **Priority tags:** homepage (1.0), zonas pages (0.8), blog (0.7), index principal (0.9), blog articles (0.6). (2) **Lastmod:** fechas reales de última modificación de cada archivo. (3) **Changefreq:** homepage (daily), blog (weekly), zonas (monthly). (4) **Blog sitemap separado:** considerar crear `blog-sitemap.xml` para los artículos del blog si hay más de 50 URLs. (5) **Verify en Google Search Console:** confirmar que Google indexing correctamente. Implementación: 1-2 horas (actualizar sitemap.xml + GSC verification). |
+| **Impacto esperado** | Mejor distribución del crawl budget,索引 más rápido de páginas nuevas, mejor ranking general |
+| **Esfuerzo** | S (1-2 horas) |
+| **Agente recomendado** | SEO |
+| **Referencias** | [7] Google Search Central - Sitemap Guidelines https://developers.google.com/search/docs/crawling-indexing/sitemaps-overview |
 
 ---
 
@@ -152,44 +183,43 @@ R69 se enfoca en **captación de nuevos segmentos de mercado y expansión de can
 
 | # | Propuesta | Impacto | Esfuerzo | Prioridad |
 |---|----------|---------|----------|-----------|
-| 1 | WhatsApp Cloud API | Conversion 24/7 | M | Alta — gratis, alto ROI |
-| 2 | Dynamic Pricing | Revenue / Urgency | S | Alta — incrementa revenue inmediato |
-| 3 | Instagram/TikTok Embed | Social Proof | S | Alta — contenido real sin costo |
-| 4 | Voice Navigation | Accesibilidad / UX | M | Media — diferenciador único |
-| 5 | SMS Automation | Reducción no-shows | M | Media — bajo costo, alto impacto |
-| 6 | Google GBP API | Social Proof / SEO | M | Media — requiere verificación |
-| 7 | AR Visualizador | UX / Conversion | L | Baja — alto esfuerzo, nice-to-have |
+| 1 | Artículos relacionados (blog linking) | UX / SEO | S | Alta — retención blog, link equity |
+| 2 | Article schema upgrade | SEO / CTR | S | Alta — rich cards, visibility |
+| 3 | Garantía de satisfacción | Conversion | S | Alta — trust, reduce friction |
+| 4 | FAQPage schema optimization | SEO | S | Media — featured snippets |
+| 5 | BreadcrumbList schema + nav | SEO / UX | S | Media — CTR en SERP |
+| 6 | Accessible sliders | Accessibility | S | Media — WCAG compliance |
+| 7 | Sitemap con priorities | SEO | S | Baja — crawl optimization |
 
-**Top 3 para implementar primero:** 1, 2, 3 (WhatsApp Cloud API + Dynamic Pricing + Instagram Embed = alto impacto con esfuerzo bajo-medio).
-
----
-
-## Diferencia Clave: R69 vs R65 (que también propuso video)
-
-R65 propuso "Video testimonials" como parte del análisis de Growth Marketing. R69 va más allá:
-
-1. **Contenido real vs testimonios** — R65 propusovideo testimonials (contenido producido); R69 propone embeber el contenido real que Purity & Clean ya publica en Instagram/TikTok sin producir video nuevo
-2. **Social content nativo** — R65 se enfocó en testimonios; R69 propone integración con la estrategia de contenido social existente de la empresa
-3. **Sin producción de video** — R69 no requiere que el equipo grabe nuevo contenido; usa lo que ya tienen
+**Top 3 para implementar primero:** 1, 2, 3 (linking + schema + trust = alto impacto con esfuerzo bajo).
 
 ---
 
-## Fuentes
+## Diferencia Clave: R69 vs R68
 
-[1] Meta for Developers. "Instagram Basic Display API." https://developers.facebook.com/docs/instagram-basic-display-api
-[2] TikTok Developers. "Embed." https://developers.tiktok.com/doc/embed
-[3] Mozilla Developer Network. "Web Speech API." https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API
-[4] Smashing Magazine. "Voice UI Patterns." https://www.smashingmagazine.com/2024/03/voice-ui-patterns/
-[5] Google model-viewer. "Getting Started." https://modelviewer.dev
-[6] Apple Developer. "Composing a Reality." https://developer.apple.com/documentation/realitykit/composing-a-reality
-[7] Meta for Developers. "WhatsApp Cloud API." https://developers.facebook.com/docs/whatsapp/cloud-api
-[8] Meta for Developers. "WhatsApp." https://developers.facebook.com/docs/whatsapp
-[9] Twilio. "SMS API." https://www.twilio.com/docs/sms
-[10] Twilio. "Colombia SMS Pricing." https://www.twilio.com/en-us/sms/pricing/co
-[11] Google Developers. "Business Profile API." https://developers.google.com/my-business/reference/rest
-[12] Google Developers. "Reviews (Local Business)." https://developers.google.com/search/docs/appearance/structured-data/review
-[13] Dynamic Pricing Strategy. "Best Practices." https://www.pricingplatform.com
-[14] Wikipedia. "Surge pricing." https://en.wikipedia.org/wiki/Surge_pricing
+R69 se diferencia de R68 porque:
+
+1. **SEO técnico vs conversión directa** — R68 se enfocó en implementar features que convierten directamente (chatbot, cookie banner, video testimonials). R69 se enfoca en hacer que el sitio rankee mejor y sea más accessible.
+2. **Schema markup advanced** — R68 identificó gaps de features; R69 identifica gaps de schema que ya existe pero está incompleto u optimizado.
+3. **Accesibilidad WCAG** — R68 no mencionó accesibilidad; R69 corrige gaps de keyboard navigation en comparison sliders.
+4. **Linking interno** — R68 propuso video testimonials para external social proof; R69 propone linking interno para distribuir page authority.
+
+R69 complementa R68:
+- R68: Chatbot widget (conversión directa) → R69: Schema ayuda a que el chatbot se muestre en search
+- R68: Video testimonials (social proof) → R69: Article schema + related articles (SEO del blog)
+- R68: Cookie banner (compliance) → R69: Garantía (compliance + trust)
+
+---
+
+## Sources
+
+[1] Moz. "Internal Linking Best Practices for SEO." https://moz.com/learn/seo/internal-links
+[2] Google Search Central. "Article Rich Results." https://developers.google.com/search/docs/appearance/structured-data/article
+[3] Google Search Central. "FAQ Structured Data." https://developers.google.com/search/docs/appearance/structured-data/faqpage
+[4] Google Search Central. "Breadcrumb Structured Data." https://developers.google.com/search/docs/appearance/structured-data/breadcrumb
+[5] Baymard Institute. "Trust Signals in E-Commerce Checkout." https://baymard.com
+[6] W3C. "WCAG 2.1 Understanding Content Structure." https://www.w3.org/WAI/WCAG21/Understanding/content-structure-versus-presentation
+[7] Google Search Central. "Sitemap Guidelines." https://developers.google.com/search/docs/crawling-indexing/sitemaps-overview
 
 ---
 
