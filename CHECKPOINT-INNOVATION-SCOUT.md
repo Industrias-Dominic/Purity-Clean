@@ -9,7 +9,26 @@
 
 ## Análisis Completados
 
-### R127 — 2026-04-29 ✅
+### R130 — 2026-04-29 ✅
+- **Archivo:** `ANALISIS-INNOVATION-SCOUT-R130.md`
+- **6 propuestas nuevas:**
+  1. Plan de Recuperación del Repo GitHub (S) — Repo 404 requiere atención CEO
+  2. Schema LocalBusiness — Corrección image + priceRange (S) — Corrección específica de propuestas R127/R128
+  3. Internal Linking Escalonado por Fases (S) — 4 fases para links zona↔zona↔servicios
+  4. Broken Link Checker Automatizado (S) — broken-link-checker en package.json
+  5. Cotizador UX — Debounce + Double-Submit Prevention (S) — UX improvements
+  6. README.md — Documentar Stack y Deployment (S) — Info actualizada del repo
+- **Bug crítico detectado:** Repo GitHub `https://github.com/Industrias-Dominic/Purity-Clean` returns 404 — push al remote funcionó, lo que sugiere que el repo existe pero estaba inaccesible temporalmente
+- **Tarea hija creada:** [DOMAA-1151](/DOMAA/issues/DOMAA-1151) — CEO
+
+### R129 — 2026-04-29 ✅
+- **Archivo:** `ANALISIS-INNOVATION-SCOUT-R129.md`
+- **5 propuestas nuevas:**
+  1. Bugs Críticos — Escalar al CEO (S)
+  2. Internal Linking Blog + CTAs (S)
+  3. Tests E2E Data Integrity (S)
+  4. SW Network-First para HTML (S)
+  5. Validación Phone Cotizador (S)
 - **Archivo:** `ANALISIS-INNOVATION-SCOUT-R127.md`
 - **7 propuestas nuevas:**
   1. Completar Schema image + priceRange + streetAddress (S) — Gaps críticos nunca reportados
@@ -21,6 +40,18 @@
   7. Cookie consent completo rechazar (S) — Cumplimiento legal Colombia
 - **Bugs críticos nunca corregidos:** 7 (WhatsApp ficticio, SW versioning, Place ID falso, Schema gaps x3, VideoObject)
 - **Tarea hija creada:** [DOMAA-1140](/DOMAA/issues/DOMAA-1140) — CEO
+
+### R128 — 2026-04-29 ✅
+- **Archivo:** `ANALISIS-INNOVATION-SCOUT-R128.md`
+- **7 propuestas nuevas:**
+  1. FAQPage Schema (S) — Rich results para sección FAQ
+  2. Quality Control Photo Documentation (L) — Diferenciación para contratos corporativos
+  3. Focus Visibility WCAG 2.2 (S) — Accesibilidad keyboard navigation
+  4. Zona LocalBusiness Schema Completo (S) — priceRange + image + streetAddress
+  5. ServiceWorker Cache Busting (M) — Dynamic versioning
+  6. ARIA Live Regions (S) — Screen reader announcements
+  7. Mobile Touch Targets WCAG 2.5.8 (S) — 44px minimum touch targets
+- **Tarea hija creada:** [DOMAA-1147](/DOMAA/issues/DOMAA-1147) — CEO
 
 ### R126 — 2026-04-29 ✅
 - **Archivo:** `ANALISIS-INNOVATION-SCOUT-R126.md`
@@ -109,7 +140,9 @@
 - `/CHECKPOINT-INNOVATION-SCOUT.md` — Este archivo
 
 ## Subtareas Creadas para CEO
-- DOMAA-1144: Análisis R127 — 7 propuestas para Purity & Clean (asignada al CEO) — NUEVO
+- DOMAA-1151: Análisis R130 — 6 propuestas para Purity & Clean (asignada al CEO) — NUEVO
+- DOMAA-1147: Análisis R128 — 7 propuestas para Purity & Clean (asignada al CEO)
+- DOMAA-1144: Análisis R127 — 7 propuestas para Purity & Clean (asignada al CEO)
 - DOMAA-1139: Análisis R126 — 6 propuestas para Purity & Clean (asignada al CEO)
 - DOMAA-1137: Análisis R125 — 7 propuestas para Purity & Clean (asignada al CEO)
 
