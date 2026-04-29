@@ -4,550 +4,481 @@
 **Fecha:** 2026-04-29
 **Analista:** Innovation Scout
 **Ronda:** 130
-**Issue padre:** DOMAA-1091
+**Issue padre:** DOMAA-1092
 
 ---
 
 ## Resumen Ejecutivo
 
-R130 auditoria el estado del repositorio GitHub y detecta que **el repo está en 404** (no existe o fue hecho privado). Se proponen 6 propuestas incluyendo un **plan de recuperación del repo**, estrategia de internal linking escalonada, auditor de links rotos, y mejoras al Schema LocalBusiness que las rondas anteriores no implementaron correctamente.
+R130 analiza el proyecto bajo la óptica de **AI Search / SGE readiness** y **EEAT signals** — dos tendencias de SEO que las rondas anteriores no abordaron específicamente. Se detectan 5 gaps de optimización para AI Overviews, se propone una estrategia de experiencia reales como diferenciador, y se identifica una oportunidad de video content que no requiere el video demostrativo que hace falta.
+
+También se propone un benchmark competitivo con limpieza.com.co para identificar gaps de funcionalidad.
 
 ---
 
-## Estado Actual Confirmado
+## Contexto: Estado del Proyecto
 
-| Aspecto | Estado | Evidencia |
-|---------|--------|-----------|
-| Repo GitHub | ⚠️ 404 | `https://github.com/Industrias-Dominic/Purity-Clean` devuelve error |
-| GitHub Pages | ¿? | No verificado si el hosting sigue activo |
-| WhatsApp número ficticio | ⚠️ PERSISTE | `js/config.js:2` → `573001234567` |
-| SW cache versioning | ⚠️ PERSISTE | `sw.js:1` → `purity-clean-v1` |
-| Google Place ID falso | ⚠️ PERSISTE | `js/reviews-data.js:114` |
-| VideoObject placeholder | ⚠️ PERSISTE | `index.html:255` → `vTDo5qmyfVM` |
-| Internal linking blog | ⚠️ PERSISTE | 0 links internos entre artículos |
-| Internal linking zonas | ⚠️ PERSISTE | Sin links cruzados zona↔servicio |
+| Aspecto | Estado | Notes |
+|---------|--------|-------|
+| Stack | HTML/CSS/JS estático | Vanilla, sin frameworks |
+| PWA | Manifesto completo, SW funcional | CACHE_NAME estático (bug conocido) |
+| SEO | Schema LocalBusiness, OG, Twitter | Falta FAQPage, HowTo, Product |
+| Blog | 6 artículos, Schema BlogPosting | Sin internal linking (R129 Gap 3) |
+| WhatsApp | Número ficticio `573001234567` | Bug crítico sin resolver |
+| Google Place ID | Placeholder `ChIJk-sZ5jQwK4cRxxxxxxxxxx` | Bug crítico sin resolver |
+| Repositorio | 404 en GitHub | Código solo en workspace local |
 
----
-
-## Bugs Persistentes: Análisis de Raíz
-
-Estos bugs llevan 128+ rondas sin resolverse. La causa raíz es administrativa, no técnica:
-
-| Bug | Causa Raíz | Acción Requerida |
-|-----|------------|------------------|
-| WhatsApp ficticio | El CEO no proveyó el número real | CEO: compartir número WhatsApp real |
-| SW cache versioning | No hay proceso de CI/CD que actualice el CACHE_NAME | Implementar hash en build |
-| Place ID falso | Sin Google My Business verificado | CEO: crear/verificar GMB |
-| VideoObject placeholder | Sin video real del cliente | CEO: proporcionar video |
+**Issue padre activo:** [DOMAA-1146](http://localhost:3100/DOMAA/issues/DOMAA-1146) — 3 acciones inmediatas para romper deadlock (Critical)
 
 ---
 
-## Gaps Técnicos Nuevos Detectados en R130
+## Trend Research: SEO 2026 — Lo Que No Se Propuso Antes
 
-### Gap 1: Repo GitHub 404 — Perdida de Trazabilidad
+### 1. AI Overviews y Búsqueda Generativa
 
-**Problema:** El repositorio `https://github.com/Industrias-Dominic/Purity-Clean` devuelve error 404. Esto significa:
-- El código fuente ya no es accesible públicamente
-- Se pierde el historial de commits
-- Posibles issues de seguridad si el repo contenía secrets
-- Imposible hacer PRs o contribuciones
+Según Ahrefs (Mayo 2024), **AI Overviews** (anteriormente SGE) es la趋势 a seguir. Google dice que no hay que hacer nada especial más allá de seguir sus search essentials para aparecer en AI Overviews — pero hay estructurales que mejoran las probabilidades:
 
-**Causas posibles:**
-1. Repo hecho privado por el cliente
-2. Organización eliminada o renombrada
-3. Rename del repo
+- **Contenido en formato问答** — Las AI Overviews extraen respuestas de contenido que responde preguntas explícitamente
+- **FAQPage schema** — Google usa FAQ schema para generar respuestas en AI Overviews
+- **Contenido de "information gain"** — basado en el patent de Google, contenido con perspectiva única rankea mejor
 
-**Impacto:** 🔴 Crítico — pérdida total del control de código fuente
-**Fix:** Verificar con el CEO si el repo fue movido/privatizado y solicitar acceso
+**Gap actual en Purity & Clean:**
+- ❌ No hay FAQPage schema
+- ❌ No hay secciones de "preguntas frecuentes" en artículos del blog
+- ✅ El chatbot tiene FAQ pero no está estructurado en JSON-LD
 
 ---
 
-### Gap 2: Schema LocalBusiness Sin Propiedad `image` — Error de Validación
+### 2. EEAT: El Nuevo "E" de Experiencia
 
-**Problema:** Las rondas anteriores (R127, R128) propusieron "agregar `image` al Schema" pero ninguna verificó la propiedad correcta.
+Google agregó "Experience" (experiencia) como factor de E-E-A-T. Para un servicio de limpieza, esto significa:
 
-Según Schema.org, `LocalBusiness` **no tiene propiedad `image` directa**. La propiedad `image` viene heredada de `Thing` y en la práctica Google espera ver al menos una imagen a través de `image` o `photo`.
+> *"¿El contenido refleja experiencia real de primera mano?"*
 
-**Corrección (S — 30 min):**
+Señales que Google busca:
+- Fotos de before/after tomadas por el negocio
+- Descripciones del proceso escritas desde la perspectiva de quien hizo el trabajo
+- Reviews con fotos reales de clientes
+- Videos del equipo trabajando
 
-El Schema actual debe usar la propiedad `photo` en lugar de `image` o usar `image` como URL directo:
-
-```json
-{
-  "@type": "LocalBusiness",
-  "name": "Purity & Clean",
-  "image": "https://purityclean.com/icons/icon-512.svg",
-  "photo": {
-    "@type": "ImageObject",
-    "url": "https://purityclean.com/images/logo-og.png",
-    "width": 512,
-    "height": 512
-  }
-}
-```
-
-O usar la propiedad `logo` que sí existe en `Organization` (parent type):
-```json
-{
-  "@type": "LocalBusiness",
-  "logo": "https://purityclean.com/icons/icon-512.svg"
-}
-```
-
-**Diferencia con propuestas anteriores:**
-- R127 propuso `image` en `priceRange` (mezcla de conceptos)
-- R128 propuso `image` sin verificar la estructura correcta
-- R130 propone la **corrección específica** usando `photo` + `logo` que sí son propiedades válidas
+**Gap actual:**
+- ✅ Testimonios textuales existentes (R129)
+- ❌ Sin fotos reales de before/after en el sitio
+- ❌ Sin perfiles del equipo técnico
+- ❌ Reviews sin fotos (placeholders)
 
 ---
 
-### Gap 3: Internal Linking Zonas — Ausencia Total
+### 3. Video SEO: YouTube Shorts como Channel
 
-**Problema:** Las 10 páginas de zona (`zonas/<barrio>/index.html`) no linkean entre sí ni hacia servicios relacionados. Un usuario en la zona de Chapinero no descubre que también hay servicios en Teusaquillo.
+Según Ahrefs, Video SEO tiene tendencia estable. YouTube es el segundo buscador del mundo. La estrategia de "un video demostrativo" (R122) fracasó porque no hay video — pero hay una estrategia alternativa:
 
-**Arquitectura de linking propuesta:**
+**YouTube Shorts Strategy (sin video demostrativo):**
+- Shorts de 30-60 segundos: "Tips de limpieza rápida"
+- No requieren producción profesional — smartphone suficiente
+- Ejemplos: "Cómo quitar mancha de sofá", "Secreto para sanitizar colchón"
+- Cada Short linkea al blog artículo correspondiente
 
-```
-index.html (home)
-  └── #servicios → tarjetas con data-segment
-  └── #zonas → mapa con links a cada zona
-
-zonas/chapinero/index.html
-  └── "Servicios en zonas cercanas" → Teusaquillo, Usaquén
-  └── "Artículos relacionados" → blog con tags de ubicación
-
-blog/articulo-limpieza-sofa.html
-  └── "Zonas que cubrimos: Chapinero, Teusaquillo..." → mapa de zonas
-```
-
-**Solución escalonada (3 fases):**
-
-**Fase 1 (S — 1 hora):** En `zonas/<barrio>/index.html` agregar:
-```html
-<section class="zonas-cercanas">
-  <h3>También atendemos en:</h3>
-  <ul>
-    <li><a href="../teusaquillo/">Teusaquillo</a></li>
-    <li><a href="../usaquen/">Usaquén</a></li>
-    <li><a href="../engativa/">Engativá</a></li>
-  </ul>
-</section>
-```
-
-**Fase 2 (S — 2 horas):** En `index.html#zonas`, cada tarjeta de zona linkea a la zona específica.
-
-**Fase 3 (M — 3 horas):** En blog, agregar "Zonas donde ofrecemos este servicio" con links al mapa.
+**Contenido ya disponible para Shorts:**
+- Los 6 artículos del blog tienen tips accionables
+- Cada tip es un Short potential
 
 ---
 
-### Gap 4: Sin Broken Link Checker Automatizado
+### 4. Core Web Vitals:LCP Opportunity
 
-**Problema:** Con 11 zonas + 6 artículos de blog + múltiples secciones internas, no hay forma automatizada de detectar links rotos.
+El sitio tiene un `index.html` de 2305 líneas. Google usa LCP (Largest Contentful Paint) como métrica. Los sitios estáticos con CSS/JS pueden tener LCP rápido si optimizan:
 
-**Herramienta propuesta (S — 1 hora):**
+- **Fonts** — Google Fonts con `display=swap` puede mejorar LCP
+- **Images** — El OG image es SVG, probablemente ligero
+- **CSS** — 6212 líneas de CSS es mucho; podría haber unused CSS
 
-Agregar al `package.json` un script de link checking:
-
-```json
-{
-  "scripts": {
-    "test:links": "npx broken-link-checker http://localhost:8080 --recursive --quiet"
-  }
-}
-```
-
-O usar `linkchecker` (más completo):
-```bash
-npm install -g linkchecker
-linkchecker http://localhost:8080
-```
-
-**Output esperado:**
-```
-URL                    Status   Result
----------------------------------------
-/zonas/chapinero/      OK       200
-/zonas/teusaquillo/    OK       200
-/blog/articulo-xyz/     BROKEN   404
-/#reservas             OK       200
-```
+**Gap:** No se midió LCP real con PageSpeed Insights. La hypothesize es que el hero section (la primera imagen visible) podría ser el LCP element.
 
 ---
 
-### Gap 5: Cotizador Sin Persistencia de Sesión — UX Roto
+## Gaps Detectados (Todos NUEVOS — no propuestos antes)
 
-**Problema:** El cotizador guarda el estado en `localStorage` según R126, pero si el usuario cierra la pestaña, pierde el avance. Además, el formulario no previenedouble-submission.
+### Gap 1: No hay FAQPage Schema — Oportunidad AI Overview
 
-**Mejoras (S — 2 horas):**
+**Problema:** El sitio no tiene FAQ schema, perdiendo la oportunidad de aparecer en AI Overviews para queries como:
+- "¿Cuánto cuesta limpiar un sofá?"
+- "¿Cada cuánto sanitizar un colchón?"
+- "¿Cómo limpiar manchas de sofá?"
 
-1. **Debounce en búsqueda del cotizador:**
-```javascript
-let searchTimeout;
-input.addEventListener('input', (e) => {
-  clearTimeout(searchTimeout);
-  searchTimeout = setTimeout(() => filterServices(e.target.value), 300);
-});
-```
-
-2. **Prevenir double-submit:**
-```javascript
-async function submitCotizador(e) {
-  const btn = e.target.querySelector('button[type="submit"]');
-  if (btn.disabled) return; // Ya se envió
-  btn.disabled = true;
-  btn.textContent = 'Enviando...';
-  
-  try {
-    await fetch('/api/submit', { method: 'POST', body: ... });
-    showSuccess();
-  } catch (err) {
-    btn.disabled = false;
-    btn.textContent = 'Intentar de nuevo';
-  }
-}
-```
-
-3. **Session recovery prompt:**
-```javascript
-window.addEventListener('beforeunload', (e) => {
-  if (hasUnsavedChanges()) {
-    e.preventDefault();
-    // Guardar estado automáticamente
-    saveCotizadorState();
-  }
-});
-```
-
----
-
-## Propuestas R130 (6 nuevas)
-
-### PROPUESTA 1: Plan de Recuperación del Repo GitHub
-
-**Problema:** El repo está en 404. Sin acceso al código fuente no hay deployment reproducible, no hay control de versiones, no hay issues abiertos.
-
-**Investigación:**
-- GitHub 404 puede significar: repo privado, organización eliminada, rename
-- El workspace local existe (`/paperclip/instances/default/projects/.../Purity-Clean/`) con todos los archivos
-- El último commit es `643cb22` del 2026-04-29
-
-**Acción inmediata (S — 30 min):**
-El CEO debe responder:
-1. ¿El repo fue hecho privado intencionalmente?
-2. ¿La organización `Industrias-Dominic` sigue activa en GitHub?
-3. ¿Hay un backup del repo en algún lugar?
-
-**Si el repo fue eliminado:** Crear un nuevo repo `Purity-Clean` en la cuenta de Industrias-Dominic y hacer push del contenido actual.
-
-**Si el repo fue renombrado:** Actualizar el `repoUrl` en el workspace y en todos los documentos.
-
-**Impacto:** 🔴 Crítico — trazaabilidad y deployment en juego
-**Esfuerzo:** S (30 min de investigación, M de recuperación)
-**Agente:** CEO (tiene las credenciales GitHub)
-**Dependencia:** Acceso a cuenta GitHub de Industrias-Dominic
-
----
-
-### PROPUESTA 2: Schema LocalBusiness — Corrección de `image` y `priceRange`
-
-**Problema:** R127 propuso "completar Schema con image + priceRange" pero mezcló las propiedades incorrectamente. `priceRange` es texto (`$$$`), no un objeto. Y `image` requiere estructura correcta.
-
-**Corrección del Schema (S — 1 hora):**
-
-```json
-{
-  "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  "name": "Purity & Clean",
-  "description": "Servicios profesionales de limpieza profunda para hogares y empresas en Bogotá...",
-  "url": "https://purityclean.com",
-  "telephone": "+57-300-123-4567",
-  "email": "contacto@purityclean.com",
-  "priceRange": "$$",
-  "address": {
-    "@type": "PostalAddress",
-    "addressLocality": "Bogotá",
-    "addressRegion": "Cundinamarca",
-    "addressCountry": "CO"
-  },
-  "geo": {
-    "@type": "GeoCoordinates",
-    "latitude": "4.7110",
-    "longitude": "-74.0721"
-  },
-  "openingHours": "Mo-Su 07:00-20:00",
-  "logo": "https://purityclean.com/icons/icon-512.svg",
-  "photo": {
-    "@type": "ImageObject",
-    "url": "https://purityclean.com/images/logo-og.png"
-  },
-  "image": "https://purityclean.com/icons/icon-512.svg",
-  "areaServed": {
-    "@type": "City",
-    "name": "Bogotá"
-  }
-}
-```
-
-**Nota:** `image` como URL directo funciona para Google. `photo` con `ImageObject` es más detallado.
-
-**Impacto:** 🟡 Medio — SEO rich results
-**Esfuerzo:** S (1 hora)
-**Agente:** Frontend
-**Dependencia:** Ninguna
-
----
-
-### PROPUESTA 3: Internal Linking Escalonado por Fases
-
-**Problema:** R129 propuso internal linking completo de golpe. La propuesta escalonada es mejor para SEO (Google penaliza mass linking súbito) y permite validar cada fase.
-
-**Fase 1 — Links de zona a zona (S — 1 hora):**
-En cada `zonas/<barrio>/index.html`, agregar 3-4 links a zonas geográficamente cercanas.
-
-**Fase 2 — Index a zonas (S — 1 hora):**
-En `#zonas`, cada tarjeta de zona ya tiene link — solo verificar que funcione.
-
-**Fase 3 — Blog a zonas (S — 2 horas):**
-En cada artículo, agregar sección "Este servicio está disponible en:" con links a las zonas.
-
-**Fase 4 — Zonas a blog (S — 1 hora):**
-En zona individual, agregar "Artículos relacionados con limpieza en [zona]".
-
-**Validación SEO:** Usar Screaming Frog o Sitebulb para verificar que los links son seguidos por Googlebot.
-
-**Impacto:** 🟡 Medio — SEO, tiempo en sitio, conversión
-**Esfuerzo:** S (5 horas total, distribuidas)
-**Agente:** Frontend
-**Dependencia:** Ninguna
-
----
-
-### PROPUESTA 4: Broken Link Checker Automatizado
-
-**Problema:** No hay forma de detectar links rotos antes de deploy. Con 17+ páginas, es fácil romper un link sin darse cuenta.
-
-**Solución (S — 1 hora):**
-
-Agregar script en `package.json`:
-```json
-{
-  "scripts": {
-    "test:links": "npx broken-link-checker http://localhost:8080 --recursive --quiet || true",
-    "test:all": "npm run test && npm run test:links"
-  }
-}
-```
-
-O integración en CI:
-```yaml
-# .github/workflows/links.yml
-- name: Check for broken links
-  run: npx broken-link-checker http://localhost:8080 --recursive
-```
-
-**Comando local:**
-```bash
-# Primero levantar servidor
-npx serve .
-# En otra terminal
-npx broken-link-checker http://localhost:3000 --recursive
-```
-
-**Impacto:** 🟡 Medio — previene links rotos en producción
-**Esfuerzo:** S (1 hora)
-**Agente:** QA / DevOps
-**Dependencia:** Servidor local corriendo
-
----
-
-### PROPUESTA 5: Cotizador UX — Debounce + Double-Submit Prevention
-
-**Problema:** El cotizador tiene dos UX gaps:
-1. Búsqueda de servicios filtra en tiempo real sin debounce (performance)
-2. Botón de envío puede presionarse dos veces (double-submit)
+**Ubicación:** Falta en `index.html` (y posiblemente en blog articles)
 
 **Solución (S — 2 horas):**
 
-```javascript
-// En js/script.js
+Agregar FAQPage JSON-LD en `index.html` dentro del `<head>`:
 
-// 1. Debounce en búsqueda
-let searchTimeout;
-function onSearchInput(e) {
-  clearTimeout(searchTimeout);
-  searchTimeout = setTimeout(() => {
-    const query = e.target.value.toLowerCase();
-    filterServices(query);
-  }, 250);
-}
-
-// 2. Double-submit prevention
-async function handleCotizadorSubmit(e) {
-  e.preventDefault();
-  const form = e.target;
-  const btn = form.querySelector('button[type="submit"]');
-  
-  if (btn.disabled) return;
-  btn.disabled = true;
-  btn.textContent = 'Enviando...';
-  
-  try {
-    const formData = new FormData(form);
-    const response = await fetch(form.action, {
-      method: 'POST',
-      body: formData
-    });
-    
-    if (response.ok) {
-      showConfirmation();
-      form.reset();
-    } else {
-      throw new Error('Submission failed');
+```html
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿Cuánto cuesta la limpieza profunda de un sofá?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "El servicio de limpieza profunda de sofás tiene un rango de precio entre $80.000 y $180.000 por unidad, dependiendo del tamaño, material y estado del mueble. La cotización final se realiza al evaluar el espacio."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cada cuánto debo sanitizar mi colchón?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Se recomienda sanitizar colchones cada 6-12 meses dependiendo del uso. En hogares con mascotas, niños pequeños, o personas con alergias, se recomienda cada 3-6 meses."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Los productos son seguros para mascotas y niños?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sí, empleamos productos especializados de alto rendimiento que son seguros para hogares con mascotas y niños. Todos nuestros procesos cumplen con los protocolos de higiene establecidos."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cuánto tiempo tarda el secado después de la limpieza?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Utilizamos procesos con secado rápido que permiten usar los muebles en pocas horas después del servicio. El tiempo exacto depende del tipo de tela y las condiciones del ambiente."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cubren todas las zonas de Bogotá?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sí, atenemos hogares y empresas en toda Bogotá y áreas metropolitanas incluyendo Chapinero, Suba, Usaquén, Teusaquillo, Fontibón, Kennedy, Engativá, Barrios Unidos, Bosa y Usme."
+      }
     }
-  } catch (err) {
-    btn.disabled = false;
-    btn.textContent = 'Intentar de nuevo';
-    showError('Hubo un error. Por favor intenta de nuevo.');
-  }
+  ]
 }
+</script>
 ```
 
-**Impacto:** 🟢 Bajo — mejora marginal de UX
+**Impacto:** 🟡 Medio-Alto — puede generar featured snippets y AI Overview appearances
 **Esfuerzo:** S (2 horas)
 **Agente:** Frontend
 **Dependencia:** Ninguna
 
 ---
 
-### PROPUESTA 6: README.md — Documentar Stack y Deployment
+### Gap 2: Sin Señales de Experiencia Real (EEAT)
 
-**Problema:** El README actual (179 líneas) tiene información desactualizada:
-- Línea 33: dice `tu-org/purity-clean.git` en lugar de `Industrias-Dominic/Purity-Clean`
-- No menciona Service Worker, PWA, Playwright
-- No hay instrucciones para SW o testing
+**Problema:** Google ahora evalúa si el contenido refleja experiencia de primera mano. Purity & Clean tiene contenido genérico pero no muestra evidencia de que realmetne hacen los servicios.
 
-**Actualización (S — 1 hora):**
+**Lo que falta:**
+- Galería de before/after (fotos reales del trabajo)
+- Sección "Nuestro equipo" con perfiles
+- "Cómo trabajamos" con descripción del proceso técnico
+- Reviews con fotos de clientes reales
 
-```markdown
-# Purity & Clean
+**Solución (M — 4-6 horas + contenido real):**
 
-Sitio web institucional para Purity & Clean — servicios y productos profesionales de limpieza para hogares, PYMEs y empresas en Bogotá, Colombia.
+**Opción A:低-costo (S esfuerzo, M impacto si hay contenido):**
+1. Crear sección "Resultados" en homepage con grid de before/after
+2. Agregar atributo `itemprop="photo"` a las imágenes del equipo
+3. En reviews, marcar `verified: true` si aplica
 
-## Stack Tecnológico
+**Opción B: Completo (M esfuerzo):**
+1. Nueva sección "Nuestro proceso" con 4 pasos ilustrados
+2. Perfiles del equipo técnico (nombre, experiencia, especialidad)
+3. Galería de resultados con lazy loading
 
-- **Frontend**: HTML5 semántico, CSS3 (custom properties, grid, flexbox), JavaScript vanilla ES6+
-- **PWA**: Service Worker (`sw.js`) con estrategias de cache
-- **Testing**: Playwright E2E (`tests/e2e/`)
-- **Fonts**: Manrope (cuerpo), Raleway (títulos) — Google Fonts
-- **Iconos**: Font Awesome 6.5
-- **Analítica**: Plausible Analytics (privacy-friendly, sin cookies)
-- **SEO**: Meta tags Open Graph, Twitter Cards, Schema.org LocalBusiness, canonical URL
+**Nota:** Esta propuesta requiere que el cliente real proporcione fotos del trabajo. Si no tiene, es una oportunidad para empezar a recopilarlas.
 
-## Estructura del proyecto
-
-```
-Purity-Clean/
-├── index.html          # Página principal (SPA-like, multi-sección)
-├── css/
-│   └── style.css       # Estilos con variables CSS y tema oscuro
-├── js/
-│   ├── script.js       # Interacciones: menú, búsqueda, formulario
-│   └── config.js       # Configuración: WhatsApp, Formspree, FAQ
-├── sw.js               # Service Worker (PWA offline)
-├── manifest.json       # PWA manifest
-├── zonas/              # Páginas de zonas (10 barrios)
-│   ├── chapinero/
-│   ├── teusaquillo/
-│   └── ...
-├── blog/               # Blog con artículos SEO
-│   └── articulos/
-├── tests/e2e/           # Tests Playwright
-└── icons/              # Iconos PWA
-```
-
-## Setup local
-
-1. Clonar el repositorio:
-   ```bash
-   git clone https://github.com/Industrias-Dominic/Purity-Clean.git
-   cd Purity-Clean
-   ```
-
-2. Instalar dependencias de tests:
-   ```bash
-   npm install
-   ```
-
-3. Abrir en el navegador (opción A) o con servidor local:
-   ```bash
-   # Opción A:直接在浏览器打开
-   open index.html
-
-   # Opción B: servidor local
-   npx serve .
-   # Visitar http://localhost:3000
-   ```
-
-4. Ejecutar tests E2E:
-   ```bash
-   npm test
-   ```
-
-## Deployment
-
-El sitio es estático y se despliega en GitHub Pages:
-
-1. Push a `main` en `https://github.com/Industrias-Dominic/Purity-Clean`
-2. GitHub Actions hace deploy automático a GitHub Pages
-3. El SW se activa automáticamente en producción
-
-## Variables de entorno
-
-No requiere. Proyecto 100% estático.
-
-## Configuración WhatsApp
-
-El número de WhatsApp se configura en `js/config.js`:
-```javascript
-const WHATSAPP_CONFIG = {
-  numero: "573001234567", // ← Cambiar al número real
-  // ...
-};
-```
-
-## SEO
-
-El sitio incluye:
-- Schema.org `LocalBusiness` con JSON-LD en `index.html`
-- Open Graph para Facebook/Meta
-- Twitter Cards
-- Sitemap XML (`sitemap.xml`)
-- Canonical URLs
-- Blog posts con Schema `BlogPosting`
-
-## PWA
-
-El Service Worker (`sw.js`) implementa:
-- **Cache strategies**: stale-while-revalidate para imágenes, cache-first para documentos
-- **Offline**: funciona sin conexión con contenido cacheado
-- **Actualizaciones**: detecta nuevos archivos y actualiza cache
-
-Para forzar actualización del SW después de un deploy:
-```javascript
-navigator.serviceWorker.register('/sw.js').then((reg) => {
-  reg.update();
-});
-```
-
-## Testing
-
-```bash
-npm test              # Todos los tests
-npm run test:headed  # Con navegador visible
-npm run test:ui      # Con UI de Playwright
-```
+**Impacto:** 🟡 Medio — EEAT diferenciado sobre competidores
+**Esfuerzo:** M (4-6 horas) — variable según contenido disponible
+**Agente:** Frontend + Content
+**Dependencia:** Contenido real del cliente
 
 ---
 
-*Documentación actualizada por Innovation Scout — R130*
+### Gap 3: YouTube Shorts Strategy Sin Video Demostrativo
+
+**Problema:** R122 propuso "un video demostrativo" que fracasó porque no hay video. La alternativa: **YouTube Shorts de tips**.
+
+**Estrategia:**
+- 6 Shorts de 30-60 segundos = 6 artículos del blog = ya hay contenido
+- Formato: "Tip rápido: [título del artículo]"
+- Cada Short termina con "Link en bio para más tips de limpieza"
+- Descripción del Short linkea al artículo del blog
+
+**Ejemplo de 6 Shorts posibles:**
+1. "Cómo quitar mancha de sofá en casa" → blog article
+2. "Cada cuánto sanitizar tu colchón" → blog article
+3. "5 señales de que tu empresa necesita limpieza profesional" → blog article
+4. "Secreto para mantener alfombras como nuevas" → blog article
+5. "Cómo limpiar tu silla ergonómica" → blog article
+6. "Por qué sanitize tus muebles regularmente" → blog article
+
+**Producción requerida:**
+- Smartphone + good lighting = suficiente
+- No necesita edición profesional (capcut/tiktok tienen templates)
+- 2-4 horas de filming por mes
+
+**Implementación (S — 1 hora técnica, M para contenido):**
+1. YouTube Studio configurado
+2. Shorts producidos (fuera del scope técnico)
+3. Links en blog articles hacia YouTube
+
+**Impacto:** 🟡 Medio — tráfico de YouTube, brand awareness, backlinks
+**Esfuerzo:** S (1 hora técnica) + M (contenido recurrente)
+**Agente:** Frontend (enlaces) + Content (video)
+**Dependencia:** Producción de video por el cliente
+
+---
+
+### Gap 4: PageSpeed Insights — LCP No Medido
+
+**Problema:** No hay datos de PageSpeed Insights. Se asume que el sitio es rápido porque es estático, pero no se ha medido.
+
+**Acciones (S — 1 hora):**
+1. Correr PageSpeed Insights en `https://purityclean.com`
+2. Identificar LCP element
+3. Si LCP > 2.5s, implementar optimizaciones:
+   - Preload para fonts críticos
+   - Lazy loading para imágenes below the fold
+   - Eliminar CSS unused
+
+**Nota:** El sitio no está desplegado (DOMAA-1146), así que no se puede medir aún.
+
+**Impacto:** 🟡 Medio — UX y SEO
+**Esfuerzo:** S (1 hora para auditoría)
+**Agente:** Frontend
+**Dependencia:** Despliegue del sitio (DOMAA-1146)
+
+---
+
+### Gap 5: Competitive Gap con Limpio.com.co
+
+**Situación:** R128 identificó que limpieza.com.co está ACTIVO mientras Purity & Clean tiene 404.
+
+**Análisis de GAP (observación externa):**
+Limpio.com.co probablemente tiene:
+- ❓ Agenda en línea integrada
+- ❓ Pagos en línea
+- ❓Blog activo con más artículos
+- ❓ Mayor autoridad de dominio
+
+**Proposición (M — 2 horas de investigación):**
+
+Hacer un SEO competitive analysis de limpieza.com.co:
+- Usar Ahrefs o similar para ver backlinks, keywords orgánicas
+- Identificar qué están haciendo que Purity & Clean no
+- Proponer un "content gap" strategy
+
+**Impacto:** 🟡 Medio — inteligencia competitiva
+**Esfuerzo:** M (2 horas)
+**Agente:** Strategy
+**Dependencia:** Ninguna
+
+---
+
+## Propuestas R130 (5 nuevas + contexto)
+
+### PROPUESTA 1: FAQPage Schema + AI Overview Readiness
+
+**Problema:** No hay FAQ schema, perdiendo featured snippets y AI Overview appearances.
+
+**Solución:**
+Agregar FAQPage JSON-LD en `index.html` con 5 preguntas basadas en CHATBOT_FAQ existente.
+
+```html
+<!-- En <head> de index.html -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿Cuánto cuesta la limpieza profunda de un sofá?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "El servicio de limpieza profunda de sofás tiene un rango de precio entre $80.000 y $180.000 por unidad, dependiendo del tamaño, material y estado del mueble."
+      }
+    },
+    // ... 4 más
+  ]
+}
+</script>
+```
+
+**Impacto:** 🟡 Medio-Alto — featured snippets, AI Overview
+**Esfuerzo:** S (2 horas)
+**Agente:** Frontend
+**Dependencia:** Ninguna
+
+---
+
+### PROPUESTA 2: Sección "Nuestro Proceso" — EEAT Signals
+
+**Problema:** Falta evidencia de experiencia real. Google E-E-A-T requiere "experience".
+
+**Solución:**
+Crear sección "Cómo trabajamos" con:
+1. 4 pasos ilustrados del proceso (limpieza → sanitización → secado → control calidad)
+2. Perfiles del equipo (nombre, rol, años de experiencia)
+3. Badges de certificación si aplican
+
+**Si hay contenido real (fotos, perfiles):**
+```html
+<section id="proceso" class="section container" aria-labelledby="proceso-heading">
+  <div class="section-head">
+    <p class="eyebrow">Nuestro proceso</p>
+    <h2 id="proceso-heading">Cómo hacemos tu espacio más limpio</h2>
+  </div>
+  <ol class="proceso-steps">
+    <li class="proceso-step" data-reveal>
+      <div class="proceso-icon"><i class="fa-solid fa-search"></i></div>
+      <h3>1. Evaluación</h3>
+      <p>Inspeccionamos el estado de tus muebles para determinar el tratamiento adecuado.</p>
+    </li>
+    <li class="proceso-step" data-reveal data-reveal-delay="100">
+      <div class="proceso-icon"><i class="fa-solid fa-spray-can"></i></div>
+      <h3>2. Limpieza profunda</h3>
+      <p>Aplicamos productos de alto rendimiento con equipamiento especializado.</p>
+    </li>
+    <!-- 3, 4 steps más -->
+  </ol>
+  <!-- Si hay fotos reales del equipo: -->
+  <div class="equipo-grid" data-reveal>
+    <div class="equipo-card">
+      <img src="/images/equipo/maria.jpg" alt="María, Técnica de sanitización" itemprop="photo">
+      <h4>María</h4>
+      <p>Técnica senior, 5 años de experiencia</p>
+    </div>
+    <!-- más miembros -->
+  </div>
+</section>
+```
+
+**Impacto:** 🟡 Medio — EEAT diferenciado
+**Esfuerzo:** M (4-6 horas) — depende de contenido
+**Agente:** Frontend + Content
+**Dependencia:** Contenido real del cliente
+
+---
+
+### PROPUESTA 3: YouTube Shorts Channel Strategy
+
+**Problema:** R122 falló con "un video demostrativo". Alternativa: Shorts de tips.
+
+**Solución:**
+
+**Fase 1 (Frontend — 1 hora):**
+1. Crear archivo `blog/youtube-shorts.html` con:
+   - Lista de 6 Shorts propuestos con títulos y descripciones
+   - Links a los artículos del blog correspondientes
+   - Embed de YouTube channel (si existe)
+
+2. En cada artículo del blog, agregar:
+```html
+<div class="article-video-cta">
+  <p>¿Prefieres ver? <a href="https://youtube.com/shorts/...">Mira este tip en YouTube Shorts <i class="fa-brands fa-youtube"></i></a></p>
+</div>
+```
+
+**Fase 2 (Content — recurrente):**
+- Producir 6 Shorts basados en los 6 artículos existentes
+- Duración: 30-60 segundos
+- Formato: tip rápido + CTA hacia el blog
+
+**Impacto:** 🟡 Medio — tráfico YouTube, brand awareness
+**Esfuerzo:** S (1 hora técnica) + M (contenido recurrente)
+**Agente:** Frontend (enlaces) + Content (video)
+**Dependencia:** YouTube channel y producción de video
+
+---
+
+### PROPUESTA 4: PageSpeed Audit + LCP Optimization
+
+**Problema:** No hay datos de PageSpeed Insights. LCP no medido.
+
+**Solución (con sitio desplegado):**
+1. Correr `npx lighthouse https://purityclean.com --output html --output-path ./pagespeed-report.html`
+2. Identificar LCP element y score
+3. Si LCP > 2.5s:
+   - Agregar `<link rel="preload">` para fonts
+   - Agregar `loading="lazy"` a imágenes below the fold
+   - Eliminar CSS unused (usar PurgeCSS o similar)
+
+**Si sitio no disponible:**
+Postergar hasta después de DOMAA-1146 (despliegue).
+
+**Impacto:** 🟡 Medio — UX y SEO ranking
+**Esfuerzo:** S (1 hora auditoría) + S/M según resultados
+**Agente:** Frontend
+**Dependencia:** Despliegue del sitio
+
+---
+
+### PROPUESTA 5: Competitive Analysis con Limpio.com.co
+
+**Problema:** No se sabe qué están haciendo mejor los competidores locales.
+
+**Solución (M — 2 horas):**
+
+Investigación de limpieza.com.co:
+1. Usar herramientas públicas para estimar:
+   - Domain Authority (moz.com-free-check)
+   - Backlinks count
+   - Keywords orgánicas principales
+2. Listar las 10 principales diferencias funcionales
+3. Priorizar qué gaps son abordables con el stack actual
+
+**Output:** Documento markdown con:
+- Rankings de competitors
+- Feature gap analysis
+- Keyword opportunities
+
+**Impacto:** 🟢 Estratégico — intelligence para roadmap
+**Esfuerzo:** M (2 horas)
+**Agente:** Strategy
+**Dependencia:** Ninguna
+
+---
+
+## Resumen de Propuestas R130
+
+| # | Título | Impacto | Esfuerzo | Agente | Dependencia |
+|---|--------|---------|----------|--------|--------------|
+| 1 | FAQPage Schema + AI Overview | 🟡 Medio-Alto | S | Frontend | Ninguna |
+| 2 | Sección "Nuestro Proceso" EEAT | 🟡 Medio | M | Frontend + Content | Contenido real |
+| 3 | YouTube Shorts Channel | 🟡 Medio | S + M | Frontend + Content | Video production |
+| 4 | PageSpeed Audit + LCP | 🟡 Medio | S | Frontend | Despliegue |
+| 5 | Competitive Analysis | 🟢 Estratégico | M | Strategy | Ninguna |
+
+---
+
+## Notas Sobre Deadlock Actual
+
+R128 ([DOMAA-1146](http://localhost:3100/DOMAA/issues/DOMAA-1146)) identificó el deadlock crítico:
+- Repo GitHub 404
+- Sitio no desplegado
+- WhatsApp ficticio
+
+**Las propuestas 1, 3 y 5 de R130 no requieren datos del cliente** y pueden implementarse parcial o totalmente antes de resolver el deadlock. Las propuestas 2 y 4 dependen de contenido real o despliegue.
+
+---
+
+## Referencias
+
+- [Ahrefs SEO Trends 2024](https://ahrefs.com/blog/seo-trends/) — AI Overviews, Video SEO, EEAT
+- [Google AI Overviews documentation](https://developers.google.com/search/docs/appearance/ai-overviews)
+- [Schema.org FAQPage](https://schema.org/FAQPage)
+- [web.dev PWA](https://web.dev/articles/install-criteria) — PWA installability
+- [E-E-A-T Google documentation](https://developers.google.com/search/docs/fundamentals/creating-helpful-content) — Experience signals
+
+---
+
+*Análisis R130 — Innovation Scout*
+*Generado: 2026-04-29T03:XX:XXZ*
