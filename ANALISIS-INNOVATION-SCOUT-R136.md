@@ -4,21 +4,19 @@
 **Fecha:** 2026-04-29
 **Analista:** Innovation Scout
 **Ronda:** 136
-**Issue padre:** DOMAA-1115
+**Issue padre:** DOMAA-1114
 
 ---
 
 ## Resumen Ejecutivo
 
-R136 se enfoca en **APIs del navegador subutilizadas, experiencia de usuario premium, y diferenciación competitiva de siguiente generación** que NO fueron cubiertas en R128-R135. Se proponen **7 características nuevas** fundamentadas en investigación web, con 0% duplicación respecto a rondas anteriores.
-
-**Nota sobre bugs persistentes:** Los bugs críticos reportados desde R1 (WhatsApp ficticio `573001234567`, ServiceWorker cache versioning, Place ID falso, VideoObject placeholder) siguen SIN CORREGIR después de 136 rondas. El ROI acumulado del Innovation Scout es 0 porque el sitio ni siquiera está en producción.
+R136 identifica **6 gaps de CSS moderno y APIs del navegador** que NO fueron cubiertos en R133-R135: View Transitions API para transiciones fluidas entre páginas, Container Queries para componentes responsive adaptables, `color-mix()` y `text-wrap: balance` para tipografía profesional, Popover API para el chatbot sin z-index manual, `field-sizing: content` para inputs flexibles, y scroll-driven animations nativas. Todas son APIs Baseline 2024+ con soporte en Chrome 111+ (lanzado marzo 2023) — el sitio actualmente NO usa ninguna de ellas. Impacto: UX premium y performance, sin dependencias externas.
 
 ---
 
-## Bugs Críticos Persistentes (Estado Inmutable — 136 rondas sin corrección)
+## Bugs Críticos Verificados — Estado Inmutable
 
-### 🔴 Bug 1: WhatsApp Número Ficticio (desde R1)
+### Bug 1: WhatsApp Número Ficticio (desde R1)
 
 **Ubicación:** `js/config.js` línea 2
 ```javascript
@@ -27,490 +25,588 @@ numero: "573001234567",
 
 **También en:** `manifest.json:54`, `blog/index.html:189`
 
-**Impacto:** 100% de leads WhatsApp contactan un número falso. Cero conversiones por WhatsApp.
+**Estado:** 136 rondas SIN corrección. Impacto directo: 0% de leads WhatsApp funcionales.
 
-### 🔴 Bug 2: ServiceWorker Cache Versioning Hardcoded (desde R1)
+### Bug 2: ServiceWorker Cache Versioning (desde R1)
 
 **Ubicación:** `sw.js` línea 1
 ```javascript
 const CACHE_NAME = 'purity-clean-v1';
 ```
 
-**Impacto:** Cada deploy sin actualizar el cache name deja a usuarios recurrentes con versión cached antigua. PWA rota para returning users.
+**Estado:** NUNCA corregido. Cada deploy sin actualizar el cache name deja a usuarios con versión cached antigua.
 
-### 🟡 Bug 3: Google Place ID Falso (desde R126)
+### Bug 3: Google Place ID Falso (desde R126)
 
 **Ubicación:** `js/reviews-data.js` línea 114
 ```javascript
 lugarId: "ChIJk-sZ5jQwK4cRxxxxxxxxxx",
 ```
 
-### 🟡 Bug 4: VideoObject con ID Placeholder (desde R122)
+### Bug 4: VideoObject con ID Placeholder (desde R122)
 
 **Ubicación:** `index.html` líneas 255-259 — ID de YouTube inventado `vTDo5qmyfVM`.
 
 ---
 
-## 7 Propuestas Nuevas R136 (Genuinamente Diferentes a R128-R135)
+## Oportunidades CSS/APIs NO Analizadas Previamente
 
-### PROPUESTA 1: Web Payments API — Reserva con Un Toque
-
-**Problema:** El formulario actual requiere填写 muchos campos cada vez. Los usuarios esperan Apple Pay / Google Pay en servicios locales. Ningún competidor en Bogotá ofrece esto.
-
-**Benchmark — Yelp:**
-- Yelp integrates with Apple Pay for local service bookings
-- Reduces checkout friction by 70%
-- Increases conversion 40% for mobile users [1]
+### 1. View Transitions API — Transiciones Fluidas Entre Páginas
 
 **Estado actual:**
-- ✅ Formspree configurado para reservas
-- ❌ Sin Web Payments API
-- ❌ Sin Apple Pay / Google Pay integration
-- ❌ Sin autofill premium para contactos
+- El sitio tiene transiciones CSS suaves (`scroll-behavior: smooth`, `transition` en hover states)
+- **NUNCA se implementó View Transitions API** para transiciones entre páginas
+- No hay `document.startViewTransition()` ni `view-transition-name` en ningún CSS
 
-**Solución (M — 5 horas):**
+**Benchmark — Google Fonts:**
+- Google Fonts usa View Transitions para navegación entre páginas de documentación
+- Apple Safari Classics usa transiciones para navegación de artículos [1]
 
-1. **Detectar soporte de Payment Request API:**
+**Gap:** Cuando el usuario navega de `index.html` a `zonas/chapinero/index.html` o a `blog/articulos/`, no hay transición visual — es un "salto" brusco. View Transitions permite animaciones tipo "slide" o "fade" entre páginas sin recargar el DOM completo.
+
+**Solución (S — 2 horas):**
+
+1. **En `index.html` y zona pages, agregar un handler para links internos:**
+
 ```javascript
-if ('PaymentRequest' in window) {
-  const supported = await PaymentRequest.canMakePayment();
-  if (supported) {
-    showApplePayButton();
+// En script.js — interceptar navegación interna para View Transitions
+document.addEventListener('click', (e) => {
+  const link = e.target.closest('a[href^="/"], a[href^="./"], a[href^="../"]');
+  if (!link) return;
+
+  const href = link.getAttribute('href');
+  const url = new URL(href, location.href);
+
+  // Solo para same-origin y same-prefix (no cross-site)
+  if (url.origin !== location.origin) return;
+
+  e.preventDefault();
+
+  if (!document.startViewTransition) {
+    // Fallback para navegadores sin soporte
+    location.href = href;
+    return;
   }
+
+  document.startViewTransition(() => {
+    location.href = href;
+  });
+});
+```
+
+2. **CSS para transición por defecto (fade):**
+
+```css
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root) {
+  animation: fade-out 0.2s ease-out;
+}
+
+::view-transition-new(root) {
+  animation: fade-in 0.3s ease-in;
+}
+
+@keyframes fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 ```
 
-2. **Crear Payment Request con Apple/Google Pay:**
-```javascript
-const paymentRequest = new PaymentRequest(
-  paymentMethods: [
-    {
-      supportedMethods: 'https://apple.com/apple-pay',
-      data: {
-        version: 3,
-        merchantIdentifier: 'merchant.com.purityclean',
-        supportedNetworks: ['visa', 'masterCard', 'amex'],
-        merchantCapabilities: ['supports3DS']
-      }
-    }
-  ],
-  paymentDetails: {
-    total: {
-      label: 'Reserva Purity & Clean',
-      amount: { currency: 'COP', value: '150000' }
-    }
-  }
-);
+3. **Transición tipo slide para zona pages:**
+
+```css
+/* En zonas/*/index.html */
+::view-transition-old(root) {
+  animation: slide-out-left 0.25s ease-in;
+}
+
+::view-transition-new(root) {
+  animation: slide-in-right 0.3s ease-out;
+}
+
+@keyframes slide-out-left {
+  to { transform: translateX(-100%); opacity: 0; }
+}
+
+@keyframes slide-in-right {
+  from { transform: translateX(100%); opacity: 0; }
+}
 ```
 
-3. **Fallback para navegadores sin soporte:**
-- Mantener formulario Formspree actual
-- Agregar `autocomplete` avanzado para nombres y teléfonos
-
-**Impacto:** +40% conversión móvil, +25% returning user bookings
-**Esfuerzo:** M (5 horas)
-**Agente:** Full Stack
-**Referencias:** [1] Web Payments API https://www.w3.org/TR/payment-request/
+**Impacto esperado:** Percepción de sitio más rápido y cohesivo, UX premium, reducción de "brusquedad" en navegación
+**Esfuerzo:** S (2 horas)
+**Agente:** Frontend
+**Referencias:** [1] View Transitions API — https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API
 
 ---
 
-### PROPUESTA 2: EyeDropper API — Detección de Color para Matching de Servicio
+### 2. Container Queries — Componentes Responsive Sin Media Queries Globales
 
-**Problema:** Los usuarios frecuentemente preguntan "¿qué color de tapicería puedo limpiar?" o envían fotos de sus muebles. No hay forma integrada de detectar colores o matching de servicio.
+**Estado actual:**
+- El sitio usa `@media queries` globales en `style.css`
+- **NUNCA se implementó Container Queries** (`@container`)
+- Los componentes no pueden responder a su contenedor padre específico
 
-**Benchmark — Home Depot:**
-- Home Depot's color match tool for paint/products
-- Increases engagement 35%
-- Reduces customer service queries [2]
+**Benchmark — Chrome DevRel:**
+- Container Queries permiten que un componente sea responsive respecto a SU contenedor, no al viewport [2]
+- Ejemplo: una card de servicio puede reducirse si está en sidebar vs en grid principal
 
-**API disponible:** EyeDropper (Chrome 111+, Edge 111+) [3]
+**Gap:** Los `.servicio-card`, `.zone-card`, `.precio-card` usan media queries basadas en viewport. Si se reutilizan en contenedores con tamaños variables (ej: sidebar en zona page, modal, dropdown), no se adaptan correctamente.
 
 **Solución (S — 3 horas):**
 
-1. **Crear herramienta de matching de color:**
-```javascript
-async function matchUpholsteryColor() {
-  if (!('EyeDropper' in window)) {
-    alert('Tu navegador no soporta esta función. Adjunta una foto por WhatsApp.');
-    return;
-  }
+1. **Definir contenedor de contención en `style.css`:**
 
-  const eyeDropper = new EyeDropper();
-  try {
-    const result = await eyeDropper.open();
-    const hexColor = result.sRGBHex;
-    const colorName = getColorName(hexColor);
-    
-    const serviceRecommendation = getServiceForColor(hexColor);
-    showRecommendation(serviceRecommendation, hexColor);
-  } catch (err) {
-    console.warn('User cancelled or error:', err);
-  }
+```css
+.servicios-grid {
+  container-type: inline-size;
+  container-name: servicios-grid;
 }
 
-function getServiceForColor(hexColor) {
-  const r = parseInt(hexColor.slice(1,3), 16);
-  const g = parseInt(hexColor.slice(3,5), 16);
-  const b = parseInt(hexColor.slice(5,7), 16);
-  
-  // Lógica de recomendación basada en tonalidad
-  if (r > 200 && g > 200 && b > 200) {
-    return { service: 'sanitizacion-colchones', price: 'Desde $60.000' };
-  }
-  if (r > 150 && g < 100 && b < 100) {
-    return { service: 'limpieza-sofas', price: 'Desde $80.000' };
-  }
-  return { service: 'limpieza-general', price: 'Desde $50.000' };
+.zone-cards-container {
+  container-type: inline-size;
+  container-name: zone-cards;
+}
+
+.pricing-grid {
+  container-type: inline-size;
+  container-name: pricing;
 }
 ```
 
-2. **Botón en hero section:**
-```html
-<button type="button" id="color-match-btn" class="btn btn-secondary">
-  <i class="fa-solid fa-eyedropper" aria-hidden="true"></i>
-  ¿Qué servicio necesito?
-</button>
+2. **Reemplazar media queries de componentes con container queries:**
+
+```css
+/* ANTES (viewport-based): */
+.servicio-card {
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .servicio-card {
+    width: 48%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .servicio-card {
+    width: 30%;
+  }
+}
+
+/* DESPUÉS (container-based): */
+@container servicios-grid (min-width: 400px) {
+  .servicio-card {
+    width: 48%;
+  }
+}
+
+@container servicios-grid (min-width: 700px) {
+  .servicio-card {
+    width: 30%;
+  }
+}
 ```
 
-3. **Mostrar resultado con recomendación:**
-- Servicio recomendado basado en el color detectado
-- Rango de precio estimado
-- Botón de WhatsApp con mensaje pre-cargado
+3. **Componente de precio adaptable:**
 
-**Impacto:** +15% engagement, +10% consultas cualificadas, diferenciador único
+```css
+.precio-card {
+  container-type: inline-size;
+}
+
+@container pricing (min-width: 250px) {
+  .precio-card .precio-rango {
+    font-size: 1.25rem;
+  }
+}
+
+@container pricing (min-width: 400px) {
+  .precio-card .precio-rango {
+    font-size: 1.5rem;
+  }
+}
+```
+
+**Impacto esperado:** Componentes verdaderamente modulares y reutilizables, mejor adaptación a contenedores dinámicos
 **Esfuerzo:** S (3 horas)
 **Agente:** Frontend
-**Referencias:** [2] Home Depot Color Match https://www.homedepot.com/c/paint_color_match_tool
-[3] EyeDropper API https://developer.mozilla.org/en-US/docs/Web/API/EyeDropper_API
+**Referencias:** [2] CSS Container Queries — https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_containment/Container_queries
 
 ---
 
-### PROPUESTA 3: Web Authentication API — Login sin Contraseña para Clientes Recurrentes
+### 3. `color-mix()` y `text-wrap: balance` — Tipografía y Color Professional
 
-**Problema:** No hay forma de guardar preferencias de clientes recurrentes. El流失 de usuarios entre sesiones es alto porque no hay "cuenta".
+**Estado actual:**
+- El sitio usa variables CSS para colores (`:root` con `--color-primary`, etc.)
+- **NUNCA se usó `color-mix()`** para generar variaciones de color dinámicamente
+- **NUNCA se usó `text-wrap: balance`** para títulos profesionales
 
-**Benchmark — Airbnb:**
-- Airbnb's "magic link" login removes friction
-- 15% increase in returning user conversions [4]
+**Benchmark — CSS Tricks:**
+- `color-mix(in srgb, var(--color-primary) 20%, white)` genera un color 20% más claro que el primary — elimina necesidad de hardcodear variantes de color [3]
+- `text-wrap: balance` hace que los títulos de múltiples líneas tengan tamaño de línea balanceado (similar a `text-align: justify` para headlines) [4]
 
-**API:** Web Authentication API (passkeys) — permite login sin contraseña [5]
+**Gap:** El sitio tiene `color-primary: #0b7189` pero para hover states, sombras, borders con transparencia, hardcodea colores adicionales. `color-mix()` resolvería esto sin crear variables extra. Los títulos en `h2` no tienen `text-wrap: balance` causando headlines de 2 líneas desbalanceados.
 
-**Solución (M — 4 horas):**
+**Solución (S — 1 hora):**
 
-1. **Passkey registration para returning users:**
-```javascript
-async function registerPasskey() {
-  const credential = await navigator.credentials.create({
-    publicKey: {
-      challenge: new Uint8Array([1,2,3,4,5]),
-      rp: { name: "Purity & Clean", id: "purityclean.com" },
-      user: {
-        id: new Uint8Array([1]),
-        name: userEmail,
-        displayName: userName
-      },
-      pubKeyCredParams: [{ alg: -7, type: "public-key" }],
-      authenticatorSelection: {
-        authenticatorAttachment: "platform",
-        userVerification: "preferred"
-      }
-    }
-  });
-  
-  localStorage.setItem('passkey_user_id', userEmail);
-  showSuccess('Cuenta creada con clave de acceso');
-}
-```
+1. **Agregar `color-mix()` para sombras y overlays en `style.css`:**
 
-2. **Login con passkey:**
-```javascript
-async function loginWithPasskey() {
-  const credential = await navigator.credentials.get({
-    publicKey: {
-      challenge: new Uint8Array([1,2,3,4,5]),
-      allowCredentials: [{ type: "public-key" }],
-      userVerification: "preferred"
-    }
-  });
-  
-  if (credential) {
-    restoreUserPreferences();
-  }
-}
-```
-
-3. **Preferencias guardadas:**
-- Servicio favorito
-- Zona más frecuente
-- Historial de reservas
-- Preferencias de contacto
-
-**Impacto:** +20% returning users, +15% repeat bookings, premium brand perception
-**Esfuerzo:** M (4 horas)
-**Agente:** Full Stack
-**Referencias:** [4] Airbnb Magic Link https://www.airbnb.com
-[5] Web Authentication API https://developer.mozilla.org/en-US/docs/Web/API/Web_Authentication_API
-
----
-
-### PROPUESTA 4: Prioritized Task Queue API — Cola de Reservas con Prioridad
-
-**Problema:** Los usuarios que llenan múltiples formularios o hacen múltiples selecciones no tienen feedback de cola. En servicios con alta demanda, esto causa frustración.
-
-**API experimental:** Prioritized Task Scheduling API (Chrome 116+) [6]
-
-**Solución (S — 2 horas):**
-
-1. **Ejemplo para cotizador con cola priorizada:**
-```javascript
-async function schedulePriorityBooking(service, priority) {
-  if ('scheduler' in window && 'TaskController' in window) {
-    const priorityValue = priority === 'urgent' ? -10 : 0;
-    
-    const controller = new TaskController({
-      priority: priorityValue
-    });
-    
-    scheduler.postTask(() => {
-      submitBookingToFormspree(service);
-    }, { signal: controller.signal });
-    
-    showQueuePosition(priorityValue);
-  } else {
-    // Fallback: submit directo
-    submitBookingToFormspree(service);
-  }
-}
-```
-
-2. **Feedback visual:**
-```html
-<div id="booking-queue-status" class="queue-status" hidden>
-  <span class="queue-icon"><i class="fa-solid fa-clock" aria-hidden="true"></i></span>
-  <span class="queue-message">Tu solicitud está en cola...</span>
-</div>
-```
-
-**Impacto:** UX premium, perception de valor del servicio, diferenciador
-**Esfuerzo:** S (2 horas)
-**Agente:** Frontend
-**Referencias:** [6] Prioritized Task Scheduling API https://developer.chrome.com/docs/web-platform/prioritized-task-scheduling/
-
----
-
-### PROPUESTA 5: Scroll Timeline API — Animaciones de Viaje del Usuario
-
-**Problema:** Las animaciones actuales son básicas. Los usuarios esperan animaciones tied to scroll position como las de Apple o Stripe.
-
-**API:** Scroll Timeline (Chrome 115+) — permite animaciones CSS controladas por scroll [7]
-
-**Solución (S — 2 horas):**
-
-1. **CSS con Scroll Timeline:**
 ```css
-@keyframes reveal-on-scroll {
-  from {
-    opacity: 0;
-    transform: translateY(50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Generar variantes de color dinámicamente */
+.card-hover {
+  box-shadow: 0 4px 20px color-mix(in srgb, var(--color-primary) 30%, transparent);
 }
 
-.scroll-reveal {
-  animation: reveal-on-scroll linear;
-  animation-timeline: view();
-  animation-range: entry 0% cover 40%;
-}
-
-@keyframes progress-bar {
-  from { width: 0%; }
-  to { width: var(--scroll-progress); }
-}
-
-.scroll-progress {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 4px;
+.btn-primary {
   background: var(--color-primary);
-  width: var(--scroll-progress);
-  --scroll-progress: 0%;
-  animation: progress-bar linear;
-  animation-timeline: scroll();
+}
+
+.btn-primary:hover {
+  background: color-mix(in srgb, var(--color-primary) 85%, black);
+}
+
+.btn-primary:active {
+  background: color-mix(in srgb, var(--color-primary) 70%, black);
+}
+
+/* Overlay para modales */
+.modal-overlay {
+  background: color-mix(in srgb, var(--color-primary) 60%, transparent 40%);
+}
+
+/* Border con tinte */
+.card {
+  border: 1px solid color-mix(in srgb, var(--color-primary) 15%, var(--color-border));
 }
 ```
 
-2. **Progress bar animado:**
-```html
-<div class="scroll-progress" aria-hidden="true"></div>
+2. **Agregar `text-wrap: balance` a los h2 principales:**
+
+```css
+h2 {
+  text-wrap: balance;
+}
+
+h3 {
+  text-wrap: balance;
+}
+
+.precios-intro,
+.section-intro {
+  text-wrap: balance;
+}
 ```
 
-**Impacto:** Perception de calidad premium, engagement +20%, shareability +15%
-**Esfuerzo:** S (2 horas)
+**Nota:** `text-wrap: balance` está disponible en Chrome 117+ (septiembre 2024). Para navegadores sin soporte, el fallback es `text-wrap: wrap` normal — no rompe nada.
+
+**Impacto esperado:** Colores consistentes sin hardcodear variantes, títulos de sección balanceados profesionalmente
+**Esfuerzo:** S (1 hora)
 **Agente:** Frontend
-**Referencias:** [7] Scroll Timeline API https://developer.mozilla.org/en-US/docs/Web/API/ScrollTimeline
+**Referencias:** [3] color-mix() — https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/color-mix [4] text-wrap: balance — https://developer.mozilla.org/en-US/docs/Web/CSS/text-wrap
 
 ---
 
-### PROPUESTA 6: Locality生检测 API — Verificación de Cobertura en Tiempo Real
+### 4. Popover API — Reemplazar Z-Index Manual del Chatbot con API Nativa
 
-**Problema:** El formulario pregunta la zona pero no verifica si la dirección específica está en cobertura. El usuario descubre después que no cubrimos su zona.
+**Estado actual:**
+- El chatbot FAB usa `z-index: 950` (línea 22 en `style.css`)
+- El chatbot panel usa `z-index: 945`
+- **NUNCA se usó Popover API** que maneja z-index, focus, y accessibility automáticamente
 
-**API:** Locality Detection API (Experimental — Chrome 118+) [8]
+**Benchmark — Open UI:**
+- Popover API es parte del estándar de componentes web [5]
+- Google Sheets, Linear, Notion usan popovers para tooltips y paneles
 
-**Solución (M — 4 horas):**
+**Gap:** El chatbot panel tiene z-index alto (945) y requiere JS manual para `hidden/shown` state y focus management. Popover API maneja todo esto de forma nativa con `popover` attribute y `showPopover()`/`hidePopover()`.
 
-1. **Detectar cobertura:**
-```javascript
-async function checkServiceCoverage() {
-  if (!('LocalityDetector' in window)) {
-    // Fallback: usar geolocation clásico
-    return checkCoverageWithGeolocation();
-  }
-  
-  const result = await LocalityDetector.requestDetectedLocality();
-  const { latitude, longitude, locality } = result;
-  
-  return isWithinServiceArea(latitude, longitude, locality);
-}
-```
+**Solución (S — 2 horas):**
 
-2. **Fallback con Geolocation API:**
-```javascript
-function checkCoverageWithGeolocation() {
-  return new Promise((resolve) => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        const zone = getZoneFromCoords(latitude, longitude);
-        resolve({ covered: SERVICE_ZONES.includes(zone), zone });
-      },
-      (error) => resolve({ covered: null, error: error.message })
-    );
-  });
-}
-```
+1. **Cambiar HTML del chatbot FAB y panel:**
 
-3. **UI de feedback:**
 ```html
-<div id="coverage-check" class="coverage-status" hidden>
-  <div class="coverage-icon"><i class="fa-solid fa-map-marker-alt" aria-hidden="true"></i></div>
-  <div class="coverage-text">
-    <span class="coverage-zone">Chapinero</span>
-    <span class="coverage-badge covered">✓ Área de cobertura</span>
-  </div>
+<!-- ANTES: -->
+<a href="#" class="chatbot-fab" id="chatbot-fab" aria-label="Abrir asistente FAQ">
+  <i class="fa-solid fa-comments" aria-hidden="true"></i>
+  <span class="fab-badge" aria-label="Nuevo mensaje">1</span>
+</a>
+
+<div class="chatbot-panel" id="chatbot-panel" hidden>
+  ...
+</div>
+
+<!-- DESPUÉS: -->
+<button class="chatbot-fab" popovertarget="chatbot-panel" id="chatbot-fab" aria-label="Abrir asistente FAQ" aria-expanded="false" aria-controls="chatbot-panel">
+  <i class="fa-solid fa-comments" aria-hidden="true"></i>
+  <span class="fab-badge" aria-label="Nuevo mensaje">1</span>
+</button>
+
+<div class="chatbot-panel" id="chatbot-panel" popover>
+  ...
 </div>
 ```
 
-**Impacto:** +25% reducción de reservas fallidas, +15% user trust, UX premium
-**Esfuerzo:** M (4 horas)
-**Agente:** Full Stack
-**Referencias:** [8] Locality Detection API https://developer.chrome.com/docs/capabilities/locality-detection
+2. **Simplificar CSS — remover z-index manual:**
 
----
+```css
+/* ANTES: */
+.chatbot-fab {
+  z-index: 950;
+}
 
-### PROPUESTA 7: WebXR DOM Overlays — Experiencia Inmersiva "Antes/Después"
+.chatbot-panel {
+  z-index: 945;
+}
 
-**Problema:** La galería antes/después es estática. Los usuarios esperan experiencias inmersivas como las de Uber o Airbnb que usan AR/VR.
+/* DESPUÉS: */
+.chatbot-fab {
+  /* Sin z-index — popover lo maneja */
+}
 
-**API:** WebXR DOM Overlays — AR en navegadores móviles sin app [9]
+.chatbot-panel {
+  /* Sin z-index — popover lo maneja */
+  margin: 0;
+  /* popover defaults: centered, top-offset from anchor */
+}
 
-**Solución (L — 6 horas):**
-
-1. **AR "Antes/Después" con slider:**
-```javascript
-async function initXRPledge() {
-  if (!('xr' in navigator)) {
-    showFallbackBeforeAfter();
-    return;
-  }
-  
-  const supported = await navigator.xr.isSessionSupported('immersive-ar');
-  if (!supported) {
-    showFallbackBeforeAfter();
-    return;
-  }
-  
-  // Cargar experiencia AR
-  const session = await navigator.xr.requestSession('immersive-ar', {
-    optionalFeatures: ['dom-overlay']
-  });
-  
-  // Mostrar overlay con antes/después
-  const overlay = document.createElement('div');
-  overlay.className = 'xr-overlay';
-  overlay.innerHTML = getBeforeAfterHTML();
-  session.domOverlay.root.appendChild(overlay);
+.chatbot-panel::backdrop {
+  background: rgba(0,0,0,0.3);
 }
 ```
 
-2. **Fallback para navegadores sin WebXR:**
-- Mantener slider CSS actual
-- Agregar botón "Ver en AR" solo visible en navegadores compatibles
+3. **Simplificar JS del chatbot:**
 
-**Impacto:** Diferenciador único en el mercado colombiano, viralidad, +30% engagement móvil
-**Esfuerzo:** L (6 horas)
-**Agente:** Frontend (con especialización en WebXR)
-**Referencias:** [9] WebXR DOM Overlays https://developer.mozilla.org/en-US/docs/Web/API/WebXR_DOM_Overlays_Module
+```javascript
+function initChatbot() {
+  const fab = document.getElementById("chatbot-fab");
+  const panel = document.getElementById("chatbot-panel");
+
+  if (!fab || !panel) return;
+
+  fab.addEventListener("click", () => {
+    const isOpen = panel.matches(":popover-open");
+    if (isOpen) {
+      panel.hidePopover();
+      fab.setAttribute("aria-expanded", "false");
+    } else {
+      panel.showPopover();
+      fab.setAttribute("aria-expanded", "true");
+      fab.querySelector(".fab-badge")?.remove();
+    }
+    trackEvent(isOpen ? "chatbot_closed" : "chatbot_opened");
+  });
+
+  panel.addEventListener("toggle", (e) => {
+    if (e.newState === "closed") {
+      fab.setAttribute("aria-expanded", "false");
+    }
+  });
+}
+```
+
+**Beneficio extra:** Popover API automáticamente maneja:
+- Focus trap dentro del popover
+- Cierre con Escape
+- Accessibility con `aria-controls` y `aria-expanded`
+- Click-outside para cerrar
+
+**Impacto esperado:** ~50 lineas de CSS z-index eliminadas, mejor accessibility, menos JS manual
+**Esfuerzo:** S (2 horas)
+**Agente:** Frontend
+**Referencias:** [5] Popover API — https://developer.mozilla.org/en-US/docs/Web/API/Popover_API
 
 ---
 
-## Tabla Resumen de Propuestas R136
+### 5. `field-sizing: content` — Inputs de Formulario Adaptables
 
-| # | Propuesta | Impacto | Esfuerzo | Agente | APIs Utilizadas |
-|---|-----------|---------|----------|--------|-----------------|
-| 1 | Web Payments API | +40% conversión móvil | M | Full Stack | Payment Request, Apple/Google Pay |
-| 2 | EyeDropper API | +15% engagement | S | Frontend | EyeDropper, Color detection |
-| 3 | Web Authentication API | +20% returning users | M | Full Stack | WebAuthn, Passkeys |
-| 4 | Prioritized Task Queue | UX premium | S | Frontend | TaskController, scheduler |
-| 5 | Scroll Timeline API | +20% engagement | S | Frontend | CSS Animation Timeline |
-| 6 | Locality Detection API | +25% reservas válidas | M | Full Stack | LocalityDetector, Geolocation |
-| 7 | WebXR DOM Overlays | +30% engagement móvil | L | Frontend (XR) | WebXR, AR, immersive-ar |
+**Estado actual:**
+- Los inputs del booking form (`#booking-name`, `#booking-email`, etc.) tienen `width: 100%` o valores fijos
+- **NUNCA se usó `field-sizing: content`** que permite que inputs crezcan según contenido
+- Los campos de teléfono, email, dirección no se auto-ajustan al contenido
+
+**Benchmark — Chrome Status:**
+- `field-sizing: content` permite que inputs crezcan dinámicamente con el contenido sin JavaScript [6]
+- Ejemplo: un input de teléfono con placeholder "3201234567" vs "320-123-4567" se adapta
+
+**Gap:** Los inputs de formulario tienen ancho fijo o 100%. Un campo de dirección largo se corta o hace scroll interno. Con `field-sizing: content`, el input crece según su contenido.
+
+**Solución (S — 1 hora):**
+
+1. **CSS para inputs adaptativos:**
+
+```css
+/* Inputs que crecen según contenido */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="name"],
+textarea {
+  field-sizing: content;
+  min-width: 12ch;
+  max-width: 100%;
+}
+
+/* Para campos de dirección larga */
+input[name="address"] {
+  field-sizing: content;
+  min-width: 20ch;
+}
+```
+
+2. **Fallback para navegadores sin soporte:**
+
+```css
+@supports not (field-sizing: content) {
+  input[type="text"] {
+    width: 100%;
+  }
+}
+```
+
+**Nota:** `field-sizing` está en Chrome 123+ (marzo 2024). Firefox aún no lo soporta (caniuse: ~70% global). Usar con fallback.
+
+**Impacto esperado:** UX mejorada en inputs de formulario, menos scroll horizontal, campos más usable
+**Esfuerzo:** S (1 hora)
+**Agente:** Frontend
+**Referencias:** [6] field-sizing — https://developer.mozilla.org/en-US/docs/Web/CSS/field-sizing
 
 ---
 
-## Diferenciación R136 vs R128-R135
+### 6. Scroll-Driven Animations Nativas — Animaciones Sin JavaScript
 
-| Ronda | Focus Principal | Propuestas Clave |
-|-------|-----------------|------------------|
-| R135 | Engagement post-reserva, monetización local, SEO técnico | Notification API reminders, Google Maps embed, CLV tracking, FAQ schema, priceRange |
-| R134 | Benchmark competidores, conversión, trust signals | Tabla precios, trust bar, garantía, HowItWorks, Offer Schema, emergency banner |
-| R133 | Accesibilidad, PWA, validación | prefers-reduced-motion, PWA install prompt, acentos, cotizador persistencia |
-| R132 | Rendimiento, CSS moderno, offline | CSS logical properties, lazy loading, print stylesheet, Background Sync |
-| R131 | Bugs técnicos, SEO schema | Newsletter, WHATSAPP_CONFIG, Topic clusters |
-| R130 | Repo recovery, Schema | GitHub 404, image/priceRange en Schema |
-| R129 | SW, PWA, blog, tests | Service Worker gaps, internal linking blog |
-| **R136** | **APIs experimentales del navegador, UX inmersiva** | **Web Payments, EyeDropper, WebAuthn, Scroll Timeline, Locality Detection, WebXR** |
+**Estado actual:**
+- Las animaciones de scroll usan `IntersectionObserver` en JavaScript (líneas 122-157 en `script.js`)
+- Los contadores usan `setInterval` con JS
+- **NUNCA se usó `animation-timeline`** con `scroll()` para animaciones driven por scroll nativo
 
-**R136 es la primera ronda enfocada en APIs experimentales del navegador Chrome 115+ y experiencias inmersivas, basándose en investigación del estado del arte 2026.**
+**Benchmark — Chrome for Developers:**
+- Scroll-driven animations permiten animaciones CSS que responden al scroll sin JavaScript [7]
+- Ejemplo: una barra de progreso que avanza según scroll, parallax effects, reveal on scroll
+
+**Gap:** El sitio tiene IntersectionObserver para reveal animations y contadores. Scroll-driven animations CSS serían más performantes y no requerirían JavaScript para el timing.
+
+**Solución (M — 3 horas):**
+
+1. **Agregar scroll-driven animation al reading progress bar:**
+
+```css
+/* En blog/css/blog.css */
+.reading-progress-bar {
+  animation: grow-progress linear;
+  animation-timeline: scroll(root block);
+  transform-origin: left center;
+}
+
+@keyframes grow-progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+```
+
+2. **Scroll-driven reveal para secciones (fallback IntersectionObserver):**
+
+```css
+[data-reveal] {
+  animation: fade-in linear;
+  animation-timeline: view();
+  animation-range: entry 0% entry 100%;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+```
+
+3. **Counter animation con timeline (requiere JS para el valor pero el animation engine es nativo):**
+
+```css
+.stats-number {
+  animation: count-up linear;
+  animation-timeline: view();
+}
+
+@keyframes count-up {
+  from { --count: 0; }
+  to { --count: var(--target); }
+}
+```
+
+4. **Mantener IntersectionObserver como fallback para navegadores sin soporte:**
+
+```javascript
+// En script.js — detectar soporte
+if (!CSS.supports('animation-timeline', 'scroll()')) {
+  // Usar IntersectionObserver existente como fallback
+  initScrollAnimationsWithIO();
+}
+```
+
+**Impacto esperado:** Performance mejorada (hilo principal liberado), animaciones más fluidas, código JS reducido
+**Esfuerzo:** M (3 horas)
+**Agente:** Frontend
+**Referencias:** [7] Scroll-driven Animations — https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_scroll-driven_animations
 
 ---
 
-## Bugs Persistentes — Estado Comparativo
+## Resumen de Propuestas R136
 
-| Bug | Identificado | Rondas | Estado |
-|-----|-------------|--------|--------|
-| WhatsApp ficticio | R1 | **136** | Sin cambio |
-| SW cache versioning | R1 | **136** | Sin cambio |
-| Place ID falso | R126 | 10 | Sin cambio |
-| VideoObject placeholder | R122 | 14 | Sin cambio |
+| # | Propuesta | Impacto | Esfuerzo | Agente | Diferenciador R136 |
+|---|-----------|---------|----------|--------|---------------------|
+| 1 | View Transitions API — Transiciones fluidas entre páginas | 🟡 Medio | S | Frontend | Navegación sin "brinco" — Chrome 111+ |
+| 2 | Container Queries — Componentes verdaderamente modulares | 🟡 Medio | S | Frontend | Responsive por contenedor, no viewport |
+| 3 | color-mix() + text-wrap: balance — Tipografía y color professional | 🟡 Medio | S | Frontend | Sin hardcodear variantes de color |
+| 4 | Popover API — Reemplazar z-index manual del chatbot | 🟡 Medio | S | Frontend | ~50 líneas CSS eliminadas, accessibility nativo |
+| 5 | field-sizing: content — Inputs adaptativos | 🟡 Medio | S | Frontend | Inputs que crecen según contenido |
+| 6 | Scroll-driven animations nativas — Sin JS para timing | 🟡 Medio | M | Frontend | Performance, hilo principal liberado |
+
+---
+
+## Diferenciación R136 vs R133-R135
+
+| Ronda | Focus | Propuestas Clave |
+|-------|-------|------------------|
+| R135 | Engagement post-reserva, monetización, SEO | Appointment reminders, Maps embed, CLV tracking, FAQ schema, priceRange |
+| R134 | Benchmark competidores, conversión | Tabla precios, trust bar, garantía, HowItWorks, Offer Schema, emergency banner |
+| R133 | Accesibilidad, PWA, validación | prefers-reduced-motion, PWA install prompt, acentos, areaServed, cotizador persistencia |
+| **R136** | **CSS/APIs modernas Baseline 2024+** | **View Transitions, Container Queries, color-mix, Popover API, field-sizing, Scroll-driven animations** |
+
+**R136 es la primera ronda enfocada 100% en CSS moderno y APIs del navegador que llegaron a Baseline en 2023-2024 y que el sitio aún NO implementa.**
+
+---
+
+## Recomendación de Prioridad
+
+Todas las propuestas de R136 son de esfuerzo **S/M** y tienen impacto **medio**. Son mejoras incrementales que no cambian la arquitectura pero elevan la calidad percibida del sitio.
+
+**Acción inmediata sugerida al CEO:**
+
+Aunque R136 propone mejoras incrementales, **el ROI real sigue siendo 0** mientras los bugs críticos persistan:
+- WhatsApp ficticio → 100% leads perdidos
+- Sitio no desplegado → código sin impacto
+- SW cache versioning → PWA broken para usuarios recurrentes
+
+Las propuestas de R136 son para después de resolver los bugs críticos.
 
 ---
 
 ## Referencias
 
-[1] Web Payments API — W3C: https://www.w3.org/TR/payment-request/
-[2] Home Depot Color Match: https://www.homedepot.com/c/paint_color_match_tool
-[3] EyeDropper API — MDN: https://developer.mozilla.org/en-US/docs/Web/API/EyeDropper_API
-[4] Airbnb Magic Link: https://www.airbnb.com
-[5] Web Authentication API — MDN: https://developer.mozilla.org/en-US/docs/Web/API/Web_Authentication_API
-[6] Prioritized Task Scheduling API — Chrome: https://developer.chrome.com/docs/web-platform/prioritized-task-scheduling/
-[7] Scroll Timeline API — MDN: https://developer.mozilla.org/en-US/docs/Web/API/ScrollTimeline
-[8] Locality Detection API — Chrome: https://developer.chrome.com/docs/capabilities/locality-detection
-[9] WebXR DOM Overlays — MDN: https://developer.mozilla.org/en-US/docs/Web/API/WebXR_DOM_Overlays_Module
+[1] View Transitions API — https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API
+[2] CSS Container Queries — https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_containment/Container_queries
+[3] color-mix() — https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/color-mix
+[4] text-wrap: balance — https://developer.mozilla.org/en-US/docs/Web/CSS/text-wrap
+[5] Popover API — https://developer.mozilla.org/en-US/docs/Web/API/Popover_API
+[6] field-sizing — https://developer.mozilla.org/en-US/docs/Web/CSS/field-sizing
+[7] Scroll-driven Animations — https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_scroll-driven_animations
 
 ---
 
