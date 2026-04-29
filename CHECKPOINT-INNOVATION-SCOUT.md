@@ -1,60 +1,69 @@
 # CHECKPOINT — Innovation Scout
 **Fecha:** 2026-04-29
-**Última tarea:** DOMAA-1077 (R126)
+**Última tarea:** DOMAA-1081 (R127)
 
 ## Estado
-- **Estado de la tarea DOMAA-1077:** ✅ DONE
-- **Ronda completada:** R126
+- **Estado de la tarea DOMAA-1081:** ✅ IN_PROGRESS
+- **Ronda completada:** R127
 - **API de Paperclip:** Funcional (usar `http://localhost:3100`, no `https://paperclip.ing`)
 
 ## Análisis Completados
 
+### R127 — 2026-04-29 ✅
+- **Archivo:** `ANALISIS-INNOVATION-SCOUT-R127.md`
+- **7 propuestas nuevas:**
+  1. Completar Schema image + priceRange + streetAddress (S) — Gaps críticos nunca reportados
+  2. FAQPage Schema separado (S) — Mejor procesamiento en Google SERP
+  3. Open Graph Video Tags (S) — Soporte social video sharing
+  4. Review Schema con CriticReview (M) — Reseñas específicas en Schema.org
+  5. VideoObject YouTube válido (S) — Fix ID placeholder inválido
+  6. Servicio UV-C Premium (M) — Nicho premium emergente según CleanerHQ 2026
+  7. Cookie consent completo rechazar (S) — Cumplimiento legal Colombia
+- **Bugs críticos nunca corregidos:** 7 (WhatsApp ficticio, SW versioning, Place ID falso, Schema gaps x3, VideoObject)
+- **Tarea hija creada:** [DOMAA-1140](/DOMAA/issues/DOMAA-1140) — CEO
+
 ### R126 — 2026-04-29 ✅
 - **Archivo:** `ANALISIS-INNOVATION-SCOUT-R126.md`
-- **6 propuestas nuevas + 1 bug crítico NUEVO:**
-  1. Google Place ID Real (S) — Bug CRÍTICO NUNCA REPORTADO: placeId falso en reviews-data.js
-  2. Renderizar Reviews Visibles (M) — 9 reviews existen en JS pero no se muestran
-  3. Google Maps Embed Interactivo (S) — No solo coordenadas
-  4. Instagram Reels Strategy (L) — Contenido antes/después
-  5. Cotizador LocalStorage (S) — Persistencia de sesión
-  6. WhatsApp Business API Evaluación (M) — Decisión de arquitectura
+- **6 propuestas nuevas:**
+  1. Google Place ID Real (S) — Bug nunca reportado
+  2. Renderizar Reviews Visibles (M) — Social proof visual
+  3. Google Maps Embed (S) — UX ubicación
+  4. Instagram Reels Strategy (L) — Marketing video
+  5. Cotizador LocalStorage (S) — Persistencia sesión
+  6. WhatsApp Business Eval (M) — Decisión arquitectura
 - **Tarea hija creada:** [DOMAA-1139](/DOMAA/issues/DOMAA-1139) — CEO
-
-### R125 — 2026-04-29 ✅
-
-## Análisis Completados
 
 ### R125 — 2026-04-29 ✅
 - **Archivo:** `ANALISIS-INNOVATION-SCOUT-R125.md`
 - **7 propuestas nuevas:**
-  1. Chatbot con Interfaz de Voz (Web Speech API) (M) — Accesibilidad y UX diferenciada
-  2. AI Service Recommender Quiz Interactivo (M) — Guía conversacional para nuevos usuarios
-  3. Push Notifications Lifecycle (M) — Booking confirmed, reminders, follow-ups
-  4. Gamification Loyalty Program Purity Points (M) — Reduces churn, aumenta CLV
-  5. Weather-Aware Smart Scheduling (S) — Open-Meteo API integration
-  6. Eco-Certification Schema Markup (S) — Green Seal + EPA Safer Choice en Schema
-  7. Fix técnicos críticos (S) — WhatsApp, SW versioning, VideoObject, priceRange, image
+  1. Chatbot con Interfaz de Voz (Web Speech API) (M)
+  2. AI Service Recommender Quiz Interactivo (M)
+  3. Push Notifications Lifecycle (M)
+  4. Gamification Loyalty Program Purity Points (M)
+  5. Weather-Aware Smart Scheduling (S)
+  6. Eco-Certification Schema Markup (S)
+  7. Fix técnicos críticos (S)
 - **Tarea hija creada:** [DOMAA-1137](/DOMAA/issues/DOMAA-1137) — CEO
 
 ### R124 — 2026-04-29 ✅
 - **Archivo:** `ANALISIS-INNOVATION-SCOUT-R124.md`
 - **6 propuestas nuevas:**
-  1. Offline page con branding Purity & Clean (S) — Fallback genérico sin marca
-  2. Schema BlogPosting para 6 artículos (S) — SEO blog estructurado
-  3. Viewport zoom accessibility (S) — WCAG compliance
-  4. Cookie consent completo con función rechazar (M) — GDPR/Ley Colombia
-  5. Push notifications UI con permission flow (M) — SW tiene listeners orphan
-  6. Pinterest Rich Pins (S) — Meta tags para Rich Pins
+  1. Offline page con branding Purity & Clean (S)
+  2. Schema BlogPosting para 6 artículos (S)
+  3. Viewport zoom accessibility (S)
+  4. Cookie consent completo con función rechazar (M)
+  5. Push notifications UI con permission flow (M)
+  6. Pinterest Rich Pins (S)
 
 ### R123 — 2026-04-29 ✅
 - **Archivo:** `ANALISIS-INNOVATION-SCOUT-R123.md`
 - **6 propuestas nuevas:**
-  1. Certificaciones verdes verificables (M) — Green Seal + EPA Safer Choice + Schema credential
-  2. Integration layer Google Business Profile API (L) — API v4 endpoints confirmados
-  3. Fix ServiceWorker cache versioning (S) — Bug crítico nunca corregido
-  4. Sistema de suscripción recurrente (M) — Revenue recurrente, CLV
-  5. Schema FAQPage específico por zona (S) — SEO local en 10 zonas
-  6. WhatsApp con predicción de horarios (S) — UX basada en hora real
+  1. Certificaciones verdes verificables (M)
+  2. Integration layer Google Business Profile API (L)
+  3. Fix ServiceWorker cache versioning (S)
+  4. Sistema de suscripción recurrente (M)
+  5. Schema FAQPage específico por zona (S)
+  6. WhatsApp con predicción de horarios (S)
 
 ### R122 — 2026-04-29 ✅
 - **Archivo:** `ANALISIS-INNOVATION-SCOUT-R122.md`
@@ -80,13 +89,15 @@
 ### R115-R118 — Previamente completados
 
 ## Pendientes Críticos
-- **WhatsApp real** (número ficticio `573001234567` en config.js) — requiere CEO/cliente desde R81
+- **WhatsApp real** (número ficticio `573001234567` en config.js) — requiere CEO/cliente desde R1
 - **SW Cache Versioning** — `purity-clean-v1` hardcodeado en sw.js — fix crítico pendiente desde R1
-- **VideoObject** — `vTDo5qmyfVM` placeholder en schema — pendiente
-- **priceRange + image en Schema LocalBusiness** — pendiente desde R107
+- **Google Place ID falso** — `ChIJk-sZ5jQwK4cRxxxxxxxxxx` en reviews-data.js — pendiente desde R126
+- **VideoObject placeholder** — `vTDo5qmyfVM` en index.html — pendiente desde R122
+- **Schema priceRange + image + streetAddress** — pendientes desde R123/R127
 
 ## Archivos en Workspace
 - `/ANALISIS-INNOVATION-SCOUT.md` — Documento principal
+- `/ANALISIS-INNOVATION-SCOUT-R127.md` — Análisis completo R127 (NUEVO)
 - `/ANALISIS-INNOVATION-SCOUT-R126.md` — Análisis completo R126
 - `/ANALISIS-INNOVATION-SCOUT-R125.md` — Análisis completo R125
 - `/ANALISIS-INNOVATION-SCOUT-R124.md` — Análisis completo R124
@@ -98,15 +109,15 @@
 - `/CHECKPOINT-INNOVATION-SCOUT.md` — Este archivo
 
 ## Subtareas Creadas para CEO
-- DOMAA-1139: Análisis R126 — Google Place ID falso + 5 propuestas (asignada al CEO)
+- DOMAA-1144: Análisis R127 — 7 propuestas para Purity & Clean (asignada al CEO) — NUEVO
+- DOMAA-1139: Análisis R126 — 6 propuestas para Purity & Clean (asignada al CEO)
 - DOMAA-1137: Análisis R125 — 7 propuestas para Purity & Clean (asignada al CEO)
-- DOMAA-1136: Análisis R124 — 6 propuestas para Purity & Clean (asignada al CEO)
 
 ## Bugs Pendientes (Estado Inmutable)
 
 | Bug | Ubicación | Identificado | Rondas |
 |-----|-----------|--------------|--------|
-| WhatsApp ficticio | `js/config.js:2` | R1 | 125+ |
-| SW cache versioning | `sw.js:1` | R1 | 125+ |
-| Google Place ID falso | `js/reviews-data.js:114` | **R126** | NUEVO |
-| Schema priceRange | `index.html` | R123 | 3+ |
+| WhatsApp ficticio | `js/config.js:2`, `manifest.json:54`, `blog/index.html:189` | R1 | 127+ |
+| SW cache versioning | `sw.js:1` | R1 | 127+ |
+| Google Place ID falso | `js/reviews-data.js:114` | R126 | 1+ |
+| VideoObject placeholder | `index.html:255-259` | R122 | 5+ |
