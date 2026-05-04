@@ -109,9 +109,12 @@ const GOOGLE_REVIEWS_DATA = [
   }
 ];
 
+// TODO (board): Obtener el Place ID real desde https://business.google.com
+// Para hacerlo: buscar "Purity & Clean Bogotá" en Google Maps → Compartir → Embed HTML
+// Luego extraer el ID del atributo 'data-placeid' o consultar en https://developers.google.com/maps/documentation/places/web-service/place-id
 const GOOGLE_PLACES_INFO = {
   negocio: "Purity & Clean",
-  lugarId: "ChIJk-sZ5jQwK4cRxxxxxxxxxx",
+  lugarId: "YOUR_PLACE_ID_HERE", // Reemplazar con Place ID real de Google
   rating: 4.8,
   cantidadResenas: 127,
   enlacePerfil: "https://g.page/purityclean/review",

@@ -1,5 +1,7 @@
-const CACHE_NAME = 'purity-clean-v1';
-const RUNTIME_CACHE = 'purity-clean-runtime-v1';
+// Cache versioning: increment vYYYYMMDD on each deploy to force SW update
+const CACHE_VERSION = 'v20260504';
+const CACHE_NAME = `purity-clean-${CACHE_VERSION}`;
+const RUNTIME_CACHE = `purity-clean-runtime-${CACHE_VERSION}`;
 
 const PRECACHE_URLS = [
   '/',

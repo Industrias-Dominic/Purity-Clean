@@ -51,7 +51,7 @@
       "name": "Contactar por WhatsApp",
       "short_name": "WhatsApp",
       "description": "Escríbenos directamente por WhatsApp.",
-      "url": "https://wa.me/573001234567",
+      "url": "https://wa.me/573001234567", // TODO (board): REEMPLAZAR con número real de WhatsApp Business antes de producción
       "icons": [{ "src": "favicon.svg", "sizes": "any" }]
     }
   ],
