@@ -1,553 +1,347 @@
 # Análisis Creativo — Purity & Clean (Round 115)
 
 **Proyecto:** Purity & Clean
-**Fecha:** 2026-04-28
+**Fecha:** 2026-04-29
 **Analista:** Innovation Scout
 **Ronda:** 115
-**Issue padre:** DOMAA-990
+**Issue padre:** DOMAA-1056
 
 ---
 
 ## Resumen Ejecutivo
 
-R115 se centra en **Inteligencia Artificial Conversacional, Automatización de Marketing Local, y Programas de Fidelización**. Tras 114 rondas de propuestas incrementales, estas 6 ideas representan cambios de modelo que pueden diferenciar a Purity & Clean significativamente de la competencia local en Bogotá.
+R115 se enfoca en **monitoreo de búsqueda, contenido evergreen, y optimización de conversión local** — áreas no cubiertas en R114. El sitio tiene buena base técnica, pero carece de: (a) integración con Search Console para métricas reales, (b) posts de Google Business Profile, (c) señales de contenido fresco (dateModified), (d) rich links de WhatsApp/Redes, y (e) estrategia de contenido recurrent. Todas las propuestas son accionables con esfuerzo bajo a medio.
 
 ---
 
-## Diferenciación con R114
+## Hallazgos Pre-R115 (Verificados en Código)
 
-R114 propuso: Funnel Analytics, Exit-Intent Popup, Chatbot FAQ Optimización, Scroll-to-Top, Checkout Step Analytics, A/B Test Framework.
-
-**R115 propone (NUEVO y ESTRATÉGICO):**
-- AI Booking Chatbot (conversational AI) → Nunca propuesto
-- Google Business Profile Automation → Nunca propuesto
-- YouTube Shorts Strategy → Nunca propuesto
-- Loyalty & Referral Program v2 → Nunca propuesto
-- Dynamic Pricing Engine → Nunca propuesto
-- B2B Corporate Portal → Nunca propuesto
+| Feature | Estado en código | Ronda que lo propuso |
+|---------|------------------|----------------------|
+| PWA + Service Worker | ✅ Implementado (sw.js) | R107 |
+| Schema LocalBusiness (index) | ✅ Implementado | R1 |
+| FAQPage schema | ✅ Implementado | R1 |
+| Critical CSS | ✅ Archivo existe (336 líneas) | R108 |
+| WhatsApp placeholder | ⚠️ `numero: "573001234567"` hardcodeado | R81 (parcial) |
+| VideoObject schema | ⚠️ Placeholder con VIDEO_ID ficticio | R112 |
+| BreadcrumbList JSON-LD | ⚠️ NO implementado | R112 (pendiente) |
+| HowTo schema (blog) | ❌ NO implementado | R112 (pendiente) |
+| Trust badges | ✅ Implementados | R67/DOMAA-112 |
+| Google Reviews reales | ✅ Implementados (reviews-data.js) | R79/DOMAA-79 |
+| hreflang zonas | ✅ Implementado en 10 páginas | R113 (ya estaba) |
+| Playwright E2E tests | ⚠️ Pasta existe, no corre en CI | R114 (pendiente) |
+| hreflang en index.html | ❌ NO implementado | R114 (pendiente) |
+| i18n hreflang en sitemap | ❌ NO implementado | R114 (pendiente) |
+| Blog expansion (3 nuevos) | ❌ NO implementado | R114 (pendiente) |
+| Google Search Console | ❌ NO integrado | Nueva |
+| Google Business Profile posts | ❌ NO hay estrategia | Nueva |
+| Schema dateModified/datePublished | ❌ NO implementado | Nueva |
+| Open Graph para WhatsApp | ⚠️ Básico, sin images personalizadas | Nueva |
+| Heatmaps/scroll tracking | ⚠️ Plausible existe, sin segmentation | Nueva |
 
 ---
 
 ## Propuestas R115
 
-### PROPUESTA 1: AI Booking Chatbot — Reservas por Conversación
+### PROPUESTA 1: Integración con Google Search Console — Monitoreo de rendimiento real
 
-**Título:** Implementar chatbot AI para reservas en WhatsApp y web
+**Título:** Conectar sitio con Search Console para métricas de búsqueda
 
 **Descripción del problema:**
-El formulario de reserva actual (#reservas) tiene 3 pasos. El chatbot FAQ solo responde preguntas predefinidas. No hay forma de reservar SOLO con WhatsApp sin salir de la conversación. Los competidores más avanzados usan IA conversacional para manejar reservas completas sin fricción.
+El sitio no tiene conexión con Google Search Console, lo que significa que no hay visibilidad sobre: qué queries traen tráfico, posiciones promedio, CTR real, ni alertas de crawl. Las decisiones SEO se toman sin datos.
 
-**Situación actual:**
-```javascript
-// Solo FAQ static con botones de WhatsApp (script.js:923-1016)
-// Cada pregunta abre WhatsApp externo — no hay flujo conversacional in-site
-```
+**Propuesta — Configurar Search Console + Dashboard interno:**
+1. Verificar propiedad del sitio en Search Console (GSC)
+2. Solicitar acceso al CEO para compartir datos
+3. Crear sección interna "/admin/seo" con métricas clave:
+   - Top 10 queries orgánicas
+   - Posición promedio por semana
+   - CTR promedio
+   - Páginas con errores de indexación
+   - Sitemap status
+4. Actualizar Search Console cuando se publiquen nuevos artículos de blog
 
-**Propuesta — Conversational AI Booking:**
+**Alternativa — API de Search Console:**
+Si hay presupuesto, integrar [Search Console API](https://developers.google.com/webmaster-tools/search-console-api) para dashboard en tiempo real.
 
-```javascript
-// 1. Agregar en config.js
-const AI_BOOKING_CONFIG = {
-  enabled: true,
-  openaiEndpoint: "https://api.openai.com/v1/chat/completions",
-  systemPrompt: `Eres el asistente de Purity & Clean en Bogotá.
-  Servicios: limpieza de sofás ($80K-$180K), sanitización colchones ($60K-$120K),
-  mantenimiento alfombras ($200K-$450K), sillas ergonómicas ($30K-$55K).
-  Atiende en español, sé cálido y profesional. Guía al usuario a dar:
-  1. Nombre, 2. Servicio, 3. Fecha preferida, 4. Teléfono.
-  Si el usuario está listo para reservar, usa la función bookService().`
-};
-
-// 2. En script.js — integración con WhatsApp Flow
-async function handleAIConversation(userMessage) {
-  const response = await fetch(AI_BOOKING_CONFIG.openaiEndpoint, {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${OPENAI_API_KEY}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      model: "gpt-4o-mini",
-      messages: [
-        { role: "system", content: AI_BOOKING_CONFIG.systemPrompt },
-        { role: "user", content: userMessage }
-      ],
-      functions: [{
-        name: "bookService",
-        parameters: {
-          type: "object",
-          properties: {
-            nombre: { type: "string" },
-            servicio: { type: "string" },
-            fecha: { type: "string" },
-            telefono: { type: "string" }
-          }
-        }
-      }]
-    })
-  });
-  
-  const data = await response.json();
-  if (data.choices?.[0]?.message?.function_call) {
-    const booking = JSON.parse(data.choices[0].message.function_call.arguments);
-    trackEvent("ai_booking_completed", { props: booking });
-    return booking;
-  }
-  
-  return data.choices?.[0]?.message?.content;
-}
-```
-
-**Impacto esperado:** Reducción de abandonos en reserva. WhatsApp tiene 98%+ open rate. Conversational AI captura leads que no quieren llenar formularios.
-**Esfuerzo:** M (8-12 horas + OpenAI API cost)
-**Agente recomendado:** Full Stack + Content
-**Referencias:** [Intercom AI chatbot best practices](https://www.intercom.com/blog/customer-service-chatbots/), [OpenAI Function Calling](https://platform.openai.com/docs/guides/gpt-currently-do-not-support-image-analysis-out-of-the-box)
+**Impacto esperado:** Decisiones SEO basadas en datos. Detección temprana de drops. Optimización de contenido enfocada.
+**Esfuerzo:** S-M (2-4 horas si hay acceso)
+**Agente recomendado:** Full Stack (SEO)
+**Referencias:** [Search Console API](https://developers.google.com/webmaster-tools/search-console-api), [GSC Integration Guide](https://developers.google.com/search/docs/specialty/international/localized-versions)
 
 ---
 
-### PROPUESTA 2: Google Business Profile Automation — Posts Semanales
+### PROPUESTA 2: Estrategia de Google Business Profile — Posts recurrentes
 
-**Título:** Automatizar publicación semanal en Google Business Profile via API
+**Título:** Implementar calendario de posts en Google Business Profile
 
 **Descripción del problema:**
-El sitio tiene Schema.org LocalBusiness pero el Google Business Profile (GBP) no se actualiza dinámicamente. Los negocios que publican en GBP获得 3.5x más visualizaciones. No hay posts de Google generados automáticamente.
+Purity & Clean tiene Google Business Profile (datos en reviews-data.js) pero no hay estrategia de posts en Google. Competidores locales publican ofertas semanales que aparecen en el perfil de Google Maps. Purity & Clean está perdiendo visibilidad en el "3-pack" local.
 
 **Situación actual:**
-- Schema LocalBusiness implementado (index.html:28-173)
-- FAQPage Schema implementado (index.html:174-200)
-- VideoObject Schema implementado (index.html:249-260)
-- NO hay automatización de Google Posts
+Reviews existen en schema JSON-LD pero no hay posts de Google Business.
 
-**Propuesta — GBP API Automation:**
+**Propuesta — Calendario de contenido para Google Posts:**
+1. Crear 4 posts recurrentes por mes en Google Business:
+   - **Post 1 (semana 1):** Oferta del mes — "20% en limpieza de sofás"
+   - **Post 2 (semana 2):** Tip de mantenimiento — "Cómo proteger tu sofá"
+   - **Post 3 (semana 3):** Testimonio destacado de cliente
+   - **Post 4 (semana 4):** Servicio destacado — "Sanitización de colchones"
 
-```javascript
-// script.js — crear función de posting
-async function postToGoogleBusiness() {
-  const GBP_API_KEY = "GOOGLE_BUSINESS_PROFILE_API_KEY";
-  const locationId = "LOCATIONS/CHAPINERO_ID";
-  
-  const post = {
-    languageCode: "es-CO",
-    summary: "🎉 ¡Nueva promoción! Combo Hogar desde $195.000. Ahorra $35.000 en tu primera limpieza de sofá + colchón.",
-    callToAction: {
-      url: "https://purityclean.com/#reservas",
-      actionType: "BOOK"
-    }
-  };
-  
-  await fetch(`https://businessbusinessprofile.googleapis.com/v1/${locationId}/localPosts`, {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${GBP_API_KEY}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(post)
-  });
-  
-  trackEvent("gbp_post_published");
-}
+2. Cada post: imagen + texto 100-150 palabras + CTA (llamar/whatsapp)
 
-// Trigger automático cada semana
-if (CRON_TRIGGER_WEEKLY) {
-  postToGoogleBusiness();
-}
-```
+3. Crear documento de planning mensual en `/blog/google-posts-calendar.md`
 
-**Cronograma sugerido:**
-- Lunes: Post promoción semanal (combo/descuento)
-- Miércoles: Post testimonio nuevo
-- Viernes: Post tip de mantenimiento
-
-**Impacto esperado:** 3.5x más visualizaciones en Google Maps. Mejor SEO local. Competitivo con empresas que ya usan GBP.
-**Esfuerzo:** M (requires Google Business API access + OAuth setup)
-**Agente recomendado:** Backend + SEO
-**Referencias:** [Google Business Profile API](https://developers.google.com/my-business/reference/rest), [Local Service Ads](https://ads.google.com/localserviceads)
+**Impacto esperado:** Mayor visibilidad en 3-pack local. CTR en Google Maps +15-25%. Diferenciación vs. competidores sin posts.
+**Esfuerzo:** S (1-2 horas/mes, repetible)
+**Agente recomendado:** Content (coordinación con CEO para imágenes y ofertas)
+**Referencias:** [Google Business Profile Posts](https://www.google.com/business/branding/), [Local Services Ads guide](https://ads.google.com/local-services/)
 
 ---
 
-### PROPUESTA 3: YouTube Shorts Strategy — Contenido Viral Local
+### PROPUESTA 3: Señales de contenido fresco — dateModified y datePublished
 
-**Título:** Crear serie de YouTube Shorts: "Limpieza en 60 segundos"
+**Título:** Añadir timestamps de última modificación a todas las páginas
 
 **Descripción del problema:**
-El sitio tiene un VideoObject Schema apuntando a YouTube pero no hay estrategia de contenido. YouTube Shorts ahora aparece en Google search results para queries locales. Los competidores en home services en Colombia NO están aprovechando este canal.
+Google penaliza sitios donde el contenido parece "estático" sin actualización. El sitio tiene `datePublished` en artículos del blog pero no `dateModified` en otras páginas. Google no sabe cuándo fue la última actualización del index, zonas, o servicios.
 
 **Situación actual:**
 ```html
-<!-- Video schema referencing YouTube pero SIN contenido Shorts real
-     y SIN estrategia de distribución -->
+<!-- En blog/articles, ejemplo: -->
 <script type="application/ld+json">
 {
-  "@type": "VideoObject",
-  "name": "Limpieza profunda de sofá — Proceso completo"
-  // Solo 1 video placeholder, sin Shorts
+  "@type": "Article",
+  "datePublished": "2025-01-15"
+  <!-- NO hay dateModified -->
+}
+```
+
+**Propuesta — Implementar dateModified en todas las páginas:**
+1. Para páginas de zonas: actualizar dateModified cuando se改变 contenido
+2. Para index.html: actualizar dateModified cada vez que se改变 hero o servicios
+3. Para artículos de blog: ya tienen datePublished, agregar dateModified
+
+```html
+<script type="application/ld+json">
+{
+  "@type": "Article",
+  "datePublished": "2025-01-15",
+  "dateModified": "2026-04-28"
 }
 </script>
 ```
 
-**Propuesta — YouTube Shorts Series:**
-
-```javascript
-// En config.js — configuración del programa de contenido
-const YOUTUBE_CONTENT_CONFIG = {
-  channelName: "PurityCleanBogota",
-  shortsSeries: [
-    {
-      title: "Tip #1: Cómo quitar manchas de sofá",
-      duration: 60,
-      script: "Spray especializado → espera 5 min → frota con cerdas suaves → secado rápido",
-      cta: "Link en bio para reservar"
-    },
-    {
-      title: "Antes y Después: Sofá de Chencho",
-      duration: 30,
-      script: "Muestra proceso completo time-lapse",
-      cta: "Ver servicio en purityclean.com"
-    },
-    {
-      title: "3 Errores que dañan tus muebles",
-      duration: 45,
-      script: "1. Usar productos wrong 2. Frotar muy fuerte 3. No sanitizar",
-      cta: "Reserva evaluación gratuita"
-    }
-  ],
-  postingSchedule: {
-    frequency: "2x semana",
-    days: ["martes", "viernes"]
-  }
-};
-```
-
-**Ideas de contenido Shorts:**
-1. "Antes y después" de limpiezas reales en Bogotá (con permiso del cliente)
-2. "Tip rápido": cómo mantener sofás limpios entre visitas profesionales
-3. "Mitos vs Realidad": productos de limpieza caseros
-4. "Tour del proceso": cómo trabajan los técnicos
-5. Testimonios cortos de clientes satisfechos
-
-**Impacto esperado:** YouTube Shorts aparece en Google search para "limpieza sofás Bogotá". Posicionamiento de marca. Bajo costo de producción (celular + edición básica).
-**Esfuerzo:** S-M (contenido real necesita filming, pero producción simple)
-**Agente recomendado:** Content + Frontend (para embed)
-**Referencias:** [YouTube Shorts discovery](https://blog.youtube/shorts), [Local SEO with video](https://www.searchinfluence.com/local-seo-marketing-blog/video-marketing/local-seo-with-youtube-shorts/)
-
----
-
-### PROPUESTA 4: Loyalty & Referral Program v2 — Club Purity
-
-**Título:** Implementar programa de fidelización con puntos y niveles
-
-**Descripción del problema:**
-El programa actual de referidos (#referidos) genera cupones pero no hay programa de fidelización formal. Los clientes recurrentes no tienen incentive adicional para elegir Purity & Clean sobre competidores.
-
-**Situación actual (referidos, script.js:828-906):**
-```javascript
-// Solo genera cupón 15% para referidor
-// No hay tracking de puntos, niveles, o recompensas por uso repetido
-```
-
-**Propuesta — Loyalty Program Architecture:**
-
-```javascript
-// 1. En config.js
-const LOYALTY_CONFIG = {
-  pointsPerService: 100,        // puntos por cada servicio completado
-  pointsPerReferral: 250,      // puntos cuando tu referido reserva
-  pointsPerReview: 50,         // puntos por dejar reseña
-  redemptionRate: 0.01,        // 100 puntos = $1 USD
-  tiers: [
-    { name: "Bronce", minPoints: 0, discount: 0, perks: ["Early access"] },
-    { name: "Plata", minPoints: 500, discount: 5, perks: ["Priority booking", "5% off"] },
-    { name: "Oro", minPoints: 1500, discount: 10, perks: ["Priority booking", "10% off", "Free inspection"] },
-    { name: "Platino", minPoints: 3000, discount: 15, perks: ["VIP booking", "15% off", "Annual deep clean"] }
-  ]
-};
-
-// 2. Loyalty state en localStorage
-const LOYALTY_STORAGE_KEY = "purity_loyalty";
-const loyaltyState = JSON.parse(localStorage.getItem(LOYALTY_STORAGE_KEY)) || {
-  points: 0,
-  tier: "Bronce",
-  history: [],
-  referrals: []
-};
-
-// 3. Función de tracking
-function awardLoyaltyPoints(event, metadata) {
-  const pointsMap = {
-    "booking_completed": LOYALTY_CONFIG.pointsPerService,
-    "referral_converted": LOYALTY_CONFIG.pointsPerReferral,
-    "review_submitted": LOYALTY_CONFIG.pointsPerReview
-  };
-  
-  const points = pointsMap[event] || 0;
-  if (!points) return;
-  
-  loyaltyState.points += points;
-  loyaltyState.history.push({ event, points, date: new Date().toISOString() });
-  
-  // Update tier
-  LOYALTY_CONFIG.tiers.forEach(tier => {
-    if (loyaltyState.points >= tier.minPoints) {
-      loyaltyState.tier = tier.name;
-    }
-  });
-  
-  localStorage.setItem(LOYALTY_STORAGE_KEY, JSON.stringify(loyaltyState));
-  trackEvent("loyalty_points_earned", { props: { event, points, total: loyaltyState.points } });
-}
-
-// 4. UI del programa (sección nueva en index.html)
-function renderLoyaltyDashboard() {
-  const tier = LOYALTY_CONFIG.tiers.find(t => t.name === loyaltyState.tier);
-  return `
-    <section id="club-purity" class="section">
-      <h2>Club Purity — ${tier.name}</h2>
-      <p>Tienes ${loyaltyState.points} puntos</p>
-      <div class="tier-progress">
-        <div class="progress-bar" style="width: ${Math.min(100, (loyaltyState.points / tier.minPoints) * 100)}%"></div>
-      </div>
-      <p>Próximo nivel: ${tier.perks.join(", ")}</p>
-      <a href="#reservas" class="btn">Reservar y ganar puntos</a>
-    </section>
-  `;
+4. En schema LocalBusiness del index.html:
+```json
+{
+  "@type": "LocalBusiness",
+  "datePublished": "2025-01-01",
+  "dateModified": "2026-04-29"
 }
 ```
 
-**Impacto esperado:** Aumenta retención de clientes. Genera boca a boca orgáni. Competitivo con programas de grandes marcas.
-**Esfuerzo:** M (8-10 horas para UI + lógica)
-**Agente recomendado:** Full Stack + Content
-**Referencias:** [Loyalty program best practices retail](https://www.bluecore.com/loyalty-program/), [Subscription loyalty models](https://www.shopify.com/retail/subscription-loyalty-program)
+**Impacto esperado:** Google interpreta sitio como activo y actualizado. Señal de freshness para ranking. Potencial de appearing en "Latest" SERP features.
+**Esfuerzo:** S (15 minutos por página, luego replicable con template)
+**Agente recomendado:** Frontend (SEO)
+**Referencias:** [Schema.org dateModified](https://schema.org/dateModified), [Google Freshness update](https://www.google.com/search/blog/2011/08/freshness-20-algorithm-change)
 
 ---
 
-### PROPUESTA 5: Dynamic Pricing Engine — Precios por Demanda
+### PROPUESTA 4: Open Graph optimizado para WhatsApp — Link previews ricos
 
-**Título:** Implementar motor de precios dinámicos basado en demanda
+**Título:** Configurar Open Graph con imágenes y descriptions personalizadas por sección
 
 **Descripción del problema:**
-Los precios actuales son estáticos. En temporada alta (enero, antes de Navidad) la demanda supera la oferta. No hay forma de ajustar precios automáticamente para maximizar revenue.
+Cuando se comparte el link de Purity & Clean en WhatsApp, el preview muestra una imagen genérica o ninguna. Competidores tienen imágenes personalizadas por servicio que aumentan el CTR.
+
+**Situación actual en index.html:**
+```html
+<meta property="og:title" content="Purity & Clean - Limpieza profesional en Bogotá">
+<meta property="og:description" content="...">
+<!-- og:image solo una genérica -->
+```
+
+**Propuesta — Open Graph por tipo de página:**
+1. **Index:** Imagen hero con logo overlay, colores de marca
+2. **Servicios:** 5 imágenes personalizadas (sofa, colchones, alfombras, sillas, corporate)
+3. **Zonas:** Mapa de Bogotá con zona resaltada
+4. **Blog:** Thumbnail del artículo
+
+```html
+<!-- En servicios/sofás.html -->
+<meta property="og:image" content="https://purityclean.com/images/og-servicio-sofas.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:description" content="Limpieza profesional de sofás en Bogotá. Técnicas de frío y remediación de manchas. Solicita cotización.">
+```
+
+5. Implementar [WhatsApp Link Optimizer](https://business.whatsapp.com/developers/developer-hub) si está disponible.
+
+**Impacto esperado:** CTR en enlaces compartidos +20-30%. Mayor engagement en WhatsApp. Shares con más contexto visual.
+**Esfuerzo:** S-M (crear 8-10 imágenes optimizadas + meta tags)
+**Agente recomendado:** Frontend + Design
+**Referencias:** [Open Graph protocol](https://ogp.me/), [WhatsApp link preview](https://faq.whatsapp.com/542025307392459/)
+
+---
+
+### PROPUESTA 5: Analytics avanzado — Goals y event tracking en Plausible
+
+**Título:** Configurar conversión goals y scroll depth tracking en Plausible
+
+**Descripción del problema:**
+Plausible está implementado (script.js:107-120) pero no hay goals configurados ni tracking de micro-conversiones. No se sabe: % de usuarios que llegan al cotizador, % que hacen scroll hasta footer, % que interactuan con WhatsApp.
 
 **Situación actual:**
-- Precios estáticos en HTML (index.html:530-778)
-- Cotizador funciona con rangos fijos (script.js:1421-1426)
-- Sin lógica de demanda
-
-**Propuesta — Dynamic Pricing:**
-
 ```javascript
-// 1. En config.js
-const DYNAMIC_PRICING_CONFIG = {
-  enabled: true,
-  seasonMultipliers: {
-    "dec-jan": 1.2,    // Temporada alta: +20%
-    "mar-apr": 0.9,     // Temporada baja: -10%
-    "default": 1.0
-  },
-  demandThresholds: {
-    high: 0.85,    // >85% slots tomados → +15%
-    medium: 0.60,  // 60-85% → base price
-    low: 0.60      // <60% → -10%
-  },
-  lastMinuteMultiplier: 1.15,  // reservas < 48h → +15%
-  weekendMultiplier: 1.1        // sábado → +10%
-};
-
-// 2. Función de cálculo de precio
-function calculateDynamicPrice(basePrice, bookingDate, demandLevel) {
-  const date = new Date(bookingDate);
-  const month = date.toLocaleString("es-CO", { month: "short" });
-  
-  let multiplier = DYNAMIC_PRICING_CONFIG.seasonMultipliers[month] ||
-                   DYNAMIC_PRICING_CONFIG.seasonMultipliers.default;
-  
-  if (demandLevel === "high") {
-    multiplier *= 1.15;
-  } else if (demandLevel === "low") {
-    multiplier *= 0.9;
-  }
-  
-  // Last minute
-  const daysUntilBooking = (date - new Date()) / (1000 * 60 * 60 * 24);
-  if (daysUntilBooking < 2) {
-    multiplier *= DYNAMIC_PRICING_CONFIG.lastMinuteMultiplier;
-  }
-  
-  // Weekend
-  if (date.getDay() === 6) {
-    multiplier *= DYNAMIC_PRICING_CONFIG.weekendMultiplier;
-  }
-  
-  return Math.round(basePrice * multiplier);
-}
-
-// 3. UI para mostrar precio dinámico
-function displayDynamicPrice(basePrice, bookingDate, demandLevel) {
-  const finalPrice = calculateDynamicPrice(basePrice, bookingDate, demandLevel);
-  const savings = basePrice - finalPrice;
-  
-  if (savings > 0) {
-    return `<span class="price-discount">$${finalPrice.toLocaleString("es-CO")}</span>
-            <span class="price-base crossed">$${basePrice.toLocaleString("es-CO")}</span>
-            <span class="price-savings">Ahorra $${savings.toLocaleString("es-CO")}</span>`;
-  }
-  
-  return `<span class="price-dynamic">$${finalPrice.toLocaleString("es-CO")}</span>
-          <span class="price-note">Precio por demanda</span>`;
-}
+// script.js - Plausible solo pageviews básicos
+plausible("pageview");
 ```
 
-**Impacto esperado:** Maximiza revenue en temporada alta. Atrae reservas en temporada baja. Parece más profesional/sofisticado.
-**Esfuerzo:** M (6-8 horas)
-**Agente recomendado:** Full Stack
-**Referencias:** [Dynamic pricing strategies](https://www.pricingpro.com/dynamic-pricing-strategies/), [Yield management hospitality](https://www.hospitalitynet.org/yield-management)
+**Propuesta — Goals y eventos en Plausible:**
+1. Configurar goals en dashboard de Plausible:
+   - `cta-whatsapp` — Click en botón WhatsApp
+   - `cotizador-interact` — Usuario interactúa con cotizador
+   - `form-servicio` — Selección de servicio en cotizador
+   - `blog-read` — Scroll > 75% en artículo
+
+2. Agregar eventos en código:
+```javascript
+// Botón WhatsApp
+plausible("cta-whatsapp", {
+  props: { service: "unknown", zone: "unknown" }
+});
+
+// Cotizador
+plausible("cotizador-interact", {
+  props: { service: selectedService, zone: selectedZone }
+});
+```
+
+3. Dashboard compartido con CEO para revisión semanal
+
+**Impacto esperado:** Métricas de conversión reales. Identificación de friction points. ROI de marketing cuantificable.
+**Esfuerzo:** S (2-3 horas)
+**Agente recomendado:** Full Stack + Analytics
+**Referencias:** [Plausible goals](https://plausible.io/docs/goal-conversions), [Custom events](https://plausible.io/docs/custom-event-goals)
 
 ---
 
-### PROPUESTA 6: B2B Corporate Portal — Portal para Clientes Empresariales
+### PROPUESTA 6: Twitter/X Cards y LinkedIn share optimization
 
-**Título:** Crear portal B2B para gestión de contratos corporativos
+**Título:** Añadir Twitter Cards y LinkedIn metadata para shares profesionales
 
 **Descripción del problema:**
-Los clientes corporativos (Empresas y Organizaciones) tienen necesidades diferentes: múltiples ubicaciones, facturación centralizada, gestores de cuenta dedicados, reportes de servicio. El flujo actual de `#contacto` no da respuesta a estas necesidades.
+El sitio no tiene Twitter Cards configuradas, así que cuando alguien tuitea el link aparece sin preview de imagen. Para el mercado B2B/corporate, LinkedIn shares son importantes.
 
-**Situación actual:**
-- Pricing cards con segmento empresarial (index.html:600-658)
-- Plan Corporativo desde $2.000.000/año (index.html:688-704)
-- Formulario de contacto genérico
+**Propuesta — Twitter Cards y LinkedIn:**
+```html
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@PurityCleanBog">
+<meta name="twitter:title" content="Purity & Clean - Limpieza profesional Bogotá">
+<meta name="twitter:description" content="Servicios de limpieza de sofás, colchones, alfombras y más. Sanitización profesional en Bogotá.">
+<meta name="twitter:image" content="https://purityclean.com/images/twitter-card.jpg">
 
-**Propuesta — B2B Portal MVP:**
-
-```javascript
-// 1. Nuevo archivo js/portal-corporativo.js
-
-const CORPORATE_CONFIG = {
-  portalUrl: "https://portal.purityclean.com/api",
-  features: [
-    "multi_location_management",
-    "centralized_billing",
-    "dedicated_account_manager",
-    "service_reporting",
-    "contract_management"
-  ]
-};
-
-function initCorporatePortal() {
-  // Dashboard para empresas
-  const portalHTML = `
-    <section id="portal-corporativo" class="section">
-      <h2>Portal Corporativo</h2>
-      <p>Gestiona todos tus servicios empresariales en un solo lugar</p>
-      
-      <div class="portal-features">
-        <div class="portal-feature">
-          <i class="fa-solid fa-building"></i>
-          <h3>Múltiples ubicaciones</h3>
-          <p>Administra todas tus sedes desde un solo panel</p>
-        </div>
-        <div class="portal-feature">
-          <i class="fa-solid fa-file-invoice-dollar"></i>
-          <h3>Facturación centralizada</h3>
-          <p>Una factura mensual con todos los servicios</p>
-        </div>
-        <div class="portal-feature">
-          <i class="fa-solid fa-chart-line"></i>
-          <h3>Reportes de servicio</h3>
-          <p>Historial completo de servicios por ubicación</p>
-        </div>
-        <div class="portal-feature">
-          <i class="fa-solid fa-handshake"></i>
-          <h3>Gestor dedicado</h3>
-          <p>Tu contacto personal para cualquier necesidad</p>
-        </div>
-      </div>
-      
-      <form id="corporate-lead-form">
-        <input type="text" id="company-name" placeholder="Nombre de la empresa" required>
-        <input type="number" id="company-locations" placeholder="Número de ubicaciones" required>
-        <input type="email" id="company-email" placeholder="Email corporativo" required>
-        <input type="tel" id="company-phone" placeholder="Teléfono de contacto" required>
-        <select id="company-size">
-          <option value="">Tamaño de la empresa</option>
-          <option value="10-50">10-50 empleados</option>
-          <option value="50-200">50-200 empleados</option>
-          <option value="200-1000">200-1000 empleados</option>
-          <option value="1000+">Más de 1000 empleados</option>
-        </select>
-        <button type="submit" class="btn btn-primary">Solicitar acceso al portal</button>
-      </form>
-    </section>
-  `;
-  
-  document.getElementById("main-content").insertAdjacentHTML("beforeend", portalHTML);
-  
-  document.getElementById("corporate-lead-form").addEventListener("submit", (e) => {
-    e.preventDefault();
-    trackEvent("corporate_portal_lead", {
-      props: {
-        company: document.getElementById("company-name").value,
-        locations: document.getElementById("company-locations").value,
-        size: document.getElementById("company-size").value
-      }
-    });
-    // Enviar a Formspree o email del equipo de ventas
-    window.location.href = `mailto:corporativo@purityclean.com?subject=Portal Corporativo - ${document.getElementById("company-name").value}`;
-  });
-}
-
-// 2. Agregar al initialization
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", initCorporatePortal);
-} else {
-  initCorporatePortal();
-}
+<!-- LinkedIn -->
+<meta property="og:image" content="https://purityclean.com/images/linkedin-card.jpg">
 ```
 
-**Impacto esperado:** Captura segmento B2B que actualmente se pierde. Diferenciación total vs competidores. Potencial de contratos de $2M+ anuales.
-**Esfuerzo:** M ( Portal real necesita backend, pero MVP es front-end + email para equipo de ventas)
-**Agente recomendado:** Full Stack + Content
-**Referencias:** [B2B portal best practices](https://www.goodmanFS.com/b2b-customer-portal-best-practices/), [Enterprise customer portal examples](https://www.s march.com/customer-portal-examples-enterprise)
+Crear assets de imagen para:
+- Twitter summary_large_image (1200x628)
+- LinkedIn post image (1200x627)
+
+**Impacto esperado:** Shares en Twitter/LinkedIn con preview rico. Captura de tráfico social B2B. Brand awareness profesional.
+**Esfuerzo:** S (1-2 horas + diseño)
+**Agente recomendado:** Frontend + Design
+**Referencias:** [Twitter Cards documentation](https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/summary-card-with-large-image), [LinkedIn Post Images](https://www.linkedin.com/help/linkedin/answer/a426802)
+
+---
+
+### PROPUESTA 7: Página de políticas GDPR/LCPD para Colombia
+
+**Título:** Expandir política de privacidad con requisitos legales colombianos
+
+**Descripción del problema:**
+La página de política de privacidad es genérica (R1 lo mencionó). Para un negocio en Colombia que recolecta datos de clientes (formularios, WhatsApp), necesita cumplir con la Ley 1581 de 2012 (protección de datos) y el Decreto 1377 de 2013.
+
+**Situación actual:**
+privacy.html tiene contenido básico genérico sin específicos de Colombia.
+
+**Propuesta — Política de privacidad legalmente adecuada:**
+1. Agregar secciones requeridas por LCPD colombiana:
+   - Responsable del tratamiento (nombre, nit, dirección)
+   - Finalidad del tratamiento (para qué usan los datos)
+   - Derechos del titular (acceso, rectificación, supresión)
+   - Canales de atención (email, teléfono, dirección)
+   - Procedimiento de reclamos
+
+2. Consentimiento explícito en formularios:
+```html
+<label>
+  <input type="checkbox" required>
+  Acepto la <a href="/privacy.html">política de tratamiento de datos</a>
+  y autorizo el contacto por parte de Purity & Clean.
+</label>
+```
+
+3. Si usan Formspree, asegurar que tienen DPA firmado.
+
+**Impacto esperado:** Cumplimiento legal. Riesgo legal mitigated. Confianza de clientes corporativos. SEO + por E-E-A-T (Expertise).
+**Esfuerzo:** S (2-3 horas con guidance legal básico)
+**Agente recomendado:** Full Stack + Legal (review de CEO)
+**Referencias:** [Ley 1581 de 2012 - Colombia](https://www.sic.gov.co/ley-1581-de-2012), [Decreto 1377 de 2013](https://www.sic.gov.co/decreto-1377-de-2013)
 
 ---
 
 ## Propuestas Priorizadas (R115)
 
-| # | Propuesta | Tipo | Impacto | Esfuerzo |
-|---|-----------|------|---------|-----------|
-| 1 | AI Booking Chatbot | AI/Conversational | 🔴 Alto | M |
-| 2 | Google Business Profile Automation | SEO/Local | 🔴 Alto | M |
-| 3 | YouTube Shorts Strategy | Content/Marketing | 🔴 Alto | S-M |
-| 4 | Loyalty & Referral Program v2 | Retention/DX | 🟡 Medio | M |
-| 5 | Dynamic Pricing Engine | Revenue | 🟡 Medio | M |
-| 6 | B2B Corporate Portal | B2B/Sales | 🟡 Medio | M |
+| # | Propuesta | Tipo | Impacto | Esfuerzo | Agente |
+|---|-----------|------|---------|---------|--------|
+| 1 | Google Search Console integration | SEO/Métricas | 🔴 Crítico | S-M | Full Stack |
+| 2 | Google Business Profile posts | SEO Local | 🟡 Alto | S | Content |
+| 3 | dateModified en todas las páginas | SEO/Freshness | 🟡 Medio | S | Frontend |
+| 4 | Open Graph para WhatsApp | Social/UX | 🟡 Medio | S-M | Frontend + Design |
+| 5 | Plausible goals y eventos | Analytics | 🟡 Alto | S | Full Stack |
+| 6 | Twitter/LinkedIn cards | Social B2B | 🟡 Medio | S | Frontend + Design |
+| 7 | Política de privacidad LCPD | Legal/Trust | 🟡 Alto | S | Full Stack + Legal |
 
 ---
 
-## Gaps Detectados en Auditoría Rápida R115
+## Diferenciación con R114
 
-| Feature | Estado | Prioridad |
-|---------|--------|----------|
-| AI Booking Chatbot | ❌ NO existe | Alta |
-| Google Business Profile API Automation | ❌ NO existe | Alta |
-| YouTube Shorts Strategy | ❌ NO existe | Alta |
-| Loyalty Program (formal) | ❌ NO existe | Media |
-| Dynamic Pricing | ❌ NO existe | Media |
-| B2B Corporate Portal | ❌ NO existe | Media |
-| Conversational Booking | ❌ NO existe | Alta |
-| WhatsApp AI Integration | ❌ NO existe | Alta |
+**R114 propuestas pendientes de implementar:**
+- WhatsApp real (crítico, sigue pendiente)
+- VideoObject resolver o quitar
+- BreadcrumbList JSON-LD
+- HowTo schema en blog
+- Playwright E2E en CI
+- hreflang en index.html + sitemap
+- Blog expansion 3 nuevos artículos
+
+**R115 novedades propias:**
+- Search Console integration (nunca propuesto)
+- Google Business posts strategy (nunca propuesto)
+- LCPD privacy policy (nunca propuesto)
+- Twitter/LinkedIn cards (nunca propuesto)
+- dateModified freshness signals (nunca propuesto)
+- Plausible goals (nunca propuesto como estrategia)
 
 ---
 
 ## Referencias
 
-[1] Intercom — How customer service chatbots are redefining customer experience — https://www.intercom.com/blog/customer-service-chatbots/
-[2] OpenAI Function Calling — https://platform.openai.com/docs/guides/gpt-currently-do-not-support-image-analysis-out-of-the-box
-[3] Google Business Profile API — https://developers.google.com/my-business/reference/rest
-[4] YouTube Shorts Discovery — https://blog.youtube/shorts
-[5] Loyalty Program Best Practices — https://www.bluecore.com/loyalty-program/
-[6] Dynamic Pricing Strategies — https://www.pricingpro.com/dynamic-pricing-strategies/
-[7] B2B Portal Best Practices — https://www.goodmanFS.com/b2b-customer-portal-best-practices/
+[1] Search Console API - https://developers.google.com/webmaster-tools/search-console/api
+[2] Google Business Profile Posts - https://www.google.com/business/branding/
+[3] Schema.org dateModified - https://schema.org/dateModified
+[4] Open Graph Protocol - https://ogp.me/
+[5] WhatsApp Link Preview - https://faq.whatsapp.com/542025307392459/
+[6] Plausible Goals - https://plausible.io/docs/goal-conversions
+[7] Twitter Cards - https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/summary-card-with-large-image
+[8] Ley 1581 Colombia - https://www.sic.gov.co/ley-1581-de-2012
+[9] LinkedIn Image Specs - https://www.linkedin.com/help/linkedin/answer/a426802
 
 ---
 
 *Análisis generado por Innovation Scout — Innovation Scout Agent*
-*Purity & Clean Round 115 — 2026-04-28*
+*Purity & Clean Round 115 — 2026-04-29*

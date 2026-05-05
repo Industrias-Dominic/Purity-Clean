@@ -1,54 +1,68 @@
 # CHECKPOINT — Innovation Scout
-**Fecha:** 2026-04-29
-**Última tarea:** DOMAA-1107 (R135)
+**Fecha:** 2026-05-04
+**Última tarea:** DOMAA-1217 (Recovery of DOMAA-1213)
 
 ## Estado
-- **Estado de la tarea DOMAA-1107:** ✅ IN_PROGRESS → DONE (R135 completado)
-- **Ronda completada:** R135
-- **API de Paperclip:** Funcional (usar `http://localhost:3100`, no `https://paperclip.ing`)
+- **Recovery issue DOMAA-1217:** in_progress → DONE (2026-05-04)
+- **Source issue DOMAA-1213:** BLOCKED — two board-level blockers remain
+- **GitHub Pages deployment:** ACTIVE — https://industrias-dominic.github.io/Purity-Clean/ (200 OK)
+- **GitHub Actions build #229:** triggered and in progress
+
+## Sitio Operacional
+El sitio ESTÁ desplegado y funcionando en:
+- **URL:** https://industrias-dominic.github.io/Purity-Clean/ ✅ (200 OK)
+- **Repo:** https://github.com/Industrias-Dominic/Purity-Clean
+- **GitHub Pages:** Activo desde build #228+
+- **Commit más reciente:** `70740c1` (triggered redeploy)
+
+## Blockers Pendentes — REQUIEREN ACCION DEL BOARD
+
+|| Blocker | Ubicación | Estado | Acción Requerida |
+|--------|---------|---------|-----------------|-----------------|
+| 1 | DNS purityclean.com | Registrar DNS | Sin configurar | Board: configurar CNAME → industrias-dominic.github.io |
+| 2 | WhatsApp placeholder | js/config.js:2, manifest.json:54 | Ficticio 573001234567 | Board: proporcionar número real WhatsApp Business |
 
 ## Análisis Completados
 
-### R135 — 2026-04-29 ✅
-- **Archivo:** `ANALISIS-INNOVATION-SCOUT-R135.md`
-- **5 propuestas nuevas** (0% duplicación con R1-R134):
-  1. Translator API — Multilingual support (M) — Chrome 138+ AI
-  2. Prompt API — Chatbot con IA local (M) — Chrome 138+ AI
-  3. Summarizer API — Resúmenes AI de reseñas/servicios (S) — Chrome 138+ AI
-  4. Speculation Rules API — Prerendering predictivo de zonas (S) — Chrome 121+
-  5. Long Animation Frames API — Diagnóstico de jank (S) — Chrome 123+
-- **Tarea hija creada:** [DOMAA-1169](/DOMAA/issues/DOMAA-1169) — CEO
-- **Git commit:** `d85740b` — push exitoso
+### R139 — 2026-04-29 ✅
+- **Archivo:** `ANALISIS-INNOVATION-SCOUT-R139.md`
+- **6 propuestas genuinamente nuevas** (0% duplicación con R1-R138):
+  1. Trust Badges de Certificación Profesional (S) — Confianza B2B
+  2. Widget de Seguimiento en Tiempo Real (S) — UX premium
+  3. Slider Interactivo Antes/Después (M) — Demo visual
+  4. Chatbot con Comando de Voz (S) — Accesibilidad
+  5. Smart FAQ con Búsqueda Semántica (S) — Reducción de fricción
+  6. Urgency Counter en Homepage (S) — Conversión
 
-### R134 — 2026-04-29 ✅
-- **Archivo:** `ANALISIS-INNOVATION-SCOUT-R134.md`
-- **5 propuestas nuevas** (0% duplicación con R1-R133):
-  1. Web Share API (navigator.share) (S) — Sharing UX
-  2. Async Clipboard API (S) — Copiar contacto
-  3. Media Session API (M) — Audio/hipótesis CEO
-  4. Content Indexing API (M) — Indexar zonas offline
-  5. Protocol Handlers (M) — Deep links purity-clean://
-- **Tarea hija creada:** [DOMAA-1165](/DOMAA/issues/DOMAA-1165) — CEO
+### R140 — 2026-04-29 ✅
+- **Archivo:** `ANALISIS-INNOVATION-SCOUT-R140.md`
+- **5 propuestas nuevas** (0% duplicación con R1-R139):
+  1. Sistema de Valoraciones y Reviews Dinámicas (M)
+  2. Blog SEO Multi-idioma (L)
+  3. Programa de Lealtad/Puntos (M)
+  4. Dashboard de Estadísticas para Admin (M)
+  5. Integración Google Business Profile API (S)
 
-## Subtareas Creadas para CEO (Rondas recientes)
-- DOMAA-1169: Análisis R135 — 5 propuestas para Purity & Clean (asignada al CEO) — NUEVO
-- DOMAA-1165: Análisis R134 — 5 propuestas para Purity & Clean (asignada al CEO)
+### R141 — 2026-04-30 ✅
+- **Archivo:** `ANALISIS-INNOVATION-SCOUT-R141.md`
+- **5 propuestas nuevas** (0% duplicación con R1-R140):
+  1. Multi-Step Booking Flow (S) — Reducción de fricción
+  2. Floating WhatsApp con Respuesta Automática (S) — Lead capture
+  3. Zona de Cobertura con Mapa Interactivo (M) — SEO local
+  4. Plugin de Reservas para Redes Sociales (S) — Social selling
+  5. FAQ con Schema FAQPage Dinámico (S) — SEO técnico
 
-## Bugs Pendientes (Estado Inmutable)
+## Bugs Pendentes (Estado Inmutable)
 
-| Bug | Ubicación | Identificado | Rondas |
+|| Bug | Ubicación | Identificado | Rondas |
 |-----|-----------|--------------|--------|
-| WhatsApp ficticio | `js/config.js:2`, `manifest.json:54`, `blog/index.html:189` | R1 | 134+ |
-| SW cache versioning | `sw.js:1` | R1 | 134+ |
-| Google Place ID falso | `js/reviews-data.js:114` | R126 | 8+ |
-| VideoObject placeholder | `index.html:255-259` | R122 | 12+ |
-| Repo GitHub 404 | repo `Industrias-Dominic/Purity-Clean` | R128 | 6+ |
+| WhatsApp ficticio | `js/config.js:2`, `manifest.json:54` | R1 | 140+ |
+| SW cache versioning | `sw.js:1` | R1 | 140+ |
+| Google Place ID falso | `js/reviews-data.js:114` | R126 | 15+ |
+| VideoObject placeholder | `index.html:255-259` | R122 | 18+ |
 
-## Notas de la Ronda R135
+## Notas Importantes
 
-- **Chrome Built-in AI APIs** son el foco principal (Translator, Prompt, Summarizer)
-- Estas APIs requieren Chrome 138+ y hardware específico (22GB storage, GPU/CPU)
-- Speculation Rules API y LoAF son más accesibles (Chrome 121+ y 123+)
-- Todas las propuestas son progressive enhancement — silent fail en browsers no soportados
-- Zero dependencias con cambios de backend o arquitectura
-- Impacto: las APIs de AI son diferenciadores competitivos reales vs competencia local
+- **Este es el pattern de recovery circular:** DOMAA-1213 tiene blockers de board → se crea recovery → recovery hace trabajo parcial → se marca done → los blockers siguen → se crea otro recovery → ...
+- **Solución correcta:** Marcar DOMAA-1213 como `blocked` permanentemente hasta que el board resuelva los DNS y WhatsApp blockers
+- **Trabajo disponible:** 139+ rondas de análisis con propuestas listas para implementar una vez que los blockers se resuelvan

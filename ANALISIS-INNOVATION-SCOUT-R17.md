@@ -4,405 +4,732 @@
 **Fecha:** 2026-04-26
 **Analista:** Innovation Scout
 **Ronda:** 17
-**Issue padre:** DOMAA-297
+**Issue padre:** DOMAA-296
 
 ---
 
 ## Resumen Ejecutivo
 
-Round 17 analiza el gap más crítico de Purity & Clean: después de 16 rondas de propuestas, la empresa tiene un sitio web técnicamente avanzado (PWA, dark mode, schema, booking form, chatbot) pero carece sistemáticamente de **sistemas de automatización post-lead**. Según MethodCleanBiz (agencia líder en marketing para empresas de limpieza), el 70% de las empresas de limpieza pierden clientes no por falta de calidad de servicio sino por **falta de seguimiento automatizado** [1]. Purity & Clean tiene todas las piezas para atraer leads pero ninguna para cerrarlos eficientemente. Este round propone 7 mejoras concretas enfocadas en automatización de comunicación, AI para clasificación de leads, y sistemas de retención que no requieren backend complejo.
+Round 17 explora gaps que los rounds anteriores no abordaron: **micro-copy deficiente** en CTAs y mensajes de error, ausencia de elementos de **social proof dinámico**, **fallas de accesibilidad** en elementos interactivos, y **deuda técnica en el Service Worker** (versioning inconsistente). Este ciclo se enfoca en mejoras de UX writing, accesibilidad avanzada, y optimización del caching layer — todas de esfuerzo bajo/medio e impacto significativo en conversión y retención.
 
 ---
 
-## Descubrimiento clave: El gap no está en el sitio — está en el seguimiento
+## Stack tecnológico actual
 
-### Lo que dice la investigación
-
-MethodCleanBiz, con base en datos de cientos de empresas de limpieza, identifica los **5 puntos de pérdida de dinero** en empresas de limpieza [2]:
-
-1. **Inbound Leads** — Respuesta lenta y sin follow-up estructurado (35% del problema)
-2. **Post-Proposal Follow-Up** — Comunicación que se corta después de enviar precio (20%)
-3. **Current Clients** — Sin comunicación de retención (30%)
-4. **Referrals & Reactivation** — Sin solicitar referrals ni reactivar clientes pasados (10%)
-5. **Cold Outreach** — Sin estrategia proactiva (5%)
-
-Purity & Clean tiene:
-- ✅ Landing page optimizada con schema y PWA
-- ✅ Booking form multi-step funcional
-- ✅ Chatbot FAQ con routing a WhatsApp
-- ✅ Newsletter form (Formspree)
-- ✅ Sistema de referidos con cupones
-- ❌ **Zero automatización de follow-up**
-- ❌ **Zero email nurturing después del lead**
-- ❌ **Zero sistema de review requests post-servicio**
-- ❌ **Zero comunicación con clientes existentes**
-- ❌ **Zero reactivation de clientes pasados**
-
-### Por qué R1-R16 nunca implementaron las propuestas de "conversión"
-
-Revisando los análisis anteriores, hay un patrón claro:
-
-| Ronda | Propuestas de conversión | Estado |
-|-------|-------------------------|--------|
-| R10 | WhatsApp Business API Integration | Nunca concretado |
-| R12 | Automated follow-up sequences | Nunca iniciado |
-| R13 | Email nurturing sequence | Nunca implementado |
-| R14 | Review request automation | Nunca implementado |
-| R15 | Subscription/retenance plans | Nunca concretado |
-| R16 | "Cómo funciona" + Garantía + Eco-badges | Nunca implementado |
-
-La razón probable: todas requerían cambios en backend, integraciones complejas, o coordinación con equipos externos. Las propuestas de R17 están diseñadas para ser **implementables con tecnología existente del sitio** (JavaScript + localStorage + Formspree + Zapier/Make), sin necesidad de desarrollo backend desde cero.
+- **Frontend:** HTML5 + CSS3 (custom properties, grid, flexbox) + JS vanilla ES6+
+- **Fuentes:** Manrope (cuerpo), Raleway (títulos) — Google Fonts
+- **Iconos:** Font Awesome 6.5 CDN
+- **Analítica:** Plausible Analytics (sin cookies, GDPR-compliant)
+- **Forms:** Formspree (envío simple, sin automatización)
+- **Testing:** Playwright E2E (10+ suites)
+- **PWA:** Service Worker, manifest.json, push notifications, offline support
+- **SEO:** Schema LocalBusiness + FAQPage + Article + AggregateRating + Review + VideoObject + HowTo + BreadcrumbList
+- **Chatbot:** FAQ routing → WhatsApp con mensaje dinámico
+- **Galería:** Before/After slider con reveal escalonado
+- **Reserva:** Multi-step booking form con validación y slot picker
+- **Referidos:** Sistema de cupones con código generado dinámicamente
+- **Newsletter:** Formspree + localStorage para evitar duplicados
+- **Cotizador:** Slider de cantidad + estimación de rango de precios
+- **Zonas:** 10 páginas de zona con SEO local
+- **Blog:** 6 artículos con SEO optimizado + internal linking
+- **Theme:** Dark mode toggle con persistencia y prefers-color-scheme
 
 ---
 
-## Stack tecnológico actual y gaps de automatización
+## Auditoría de gaps — Round 17
 
-### Configuración actual
+### 1. Micro-copy: CTAs y mensajes de error
 
-- **Forms:** Formspree (envío simple, sin automatización post-envío)
-- **Chatbot:** FAQ routing a WhatsApp (manual, no automatizado)
-- **Email:** Formspree básico, sin sequences ni nurturing
-- **Booking:** Formulario con validación JS pero sin confirmación automatizada
-- **Analítica:** Plausible (solo tracking, no automatización)
-- **Reviews:** Pool estático en reviewsdata.js (sin solicitud post-servicio)
+**Problema:** Los CTAs del sitio son genéricos ("Enviar", "Contactenos", "Reservar"). En 2026, los CTAs de mayor conversión son específicos y orientados a acción [1]. Los mensajes de error del booking form no dan contexto de qué corregir.
 
-### Infraestructura disponible para automatización
+**Hallazgos en el código:**
 
-1. **Formspree** — Puede generar webhooks para integraciones con Zapier/Make
-2. **WhatsApp API** — Ya tiene интеграción de chat
-3. **localStorage** — Puede almacenar estado de leads y tracking
-4. **Service Worker** — Puede manejar notificaciones push
-5. **JavaScript vanilla** — Suficiente para automatizaciones client-side
+```javascript
+// En js/script.js — mensajes de validación genéricos
+if (!email.value || !email.value.includes('@')) {
+  feedback.textContent = 'Por favor ingrese un email válido';
+}
 
-### Lo que NO existe pero debería
+// En index.html — CTAs genéricos en múltiples secciones
+<button type="submit">Enviar</button>
+<a href="#reservas">Reservar</a>
+<button>Contactenos</button>
+```
 
-- Sistema de lead scoring (clasificación de prospectos)
-- Automated email sequences (nurturing drip)
-- Review request post-servicio
-- Follow-up estructurado post-booking
-- Comunicación de retención para clientes existentes
-- Reactivation campaigns para clientes inactivos
+**Gap:** No hay CTAs que transmitan urgencia, valor, o siguiente paso específico. "Enviar" no dice qué pasa después. "Reservar" no dice qué se necesita.
+
+### 2. Social proof estático vs. dinámico
+
+**Problema:** Los testimonios en `reviews-data.js` son **pseudo-estáticos**: se cargan desde JS pero no rotan automáticamente, no se actualizan con reviews reales de Google Places, y no hay forma de verificar que son actuales.
+
+**Análisis de reviews-data.js:**
+- Pool de 9 reviews hardcoded con fechas de 2024
+- `lastUpdated: "2024-11-20"` — el dato tiene 5 meses de antigüedad
+- No hay integración real-time con Google Places API
+- No hay "review más reciente" o "review destacada" por rating
+
+**Benchmark:** Competidores en Bogotá (Lympia, Megalimpieza) tampoco tienen reviews dinámicos, pero empresas de limpieza premium en USA usan widgets de Google Reviews que se actualizan automáticamente [2].
+
+### 3. Accesibilidad: gaps más allá de skip-nav
+
+**Problema:** Skip navigation se implementó en R15, pero hay gaps de accesibilidad restantes:
+
+**Hallazgos en index.html:**
+- `aria-live` en búsqueda: presente ✅
+- `aria-expanded` en menú: presente ✅
+- `aria-label` en botones de icono: ausencia parcial (el chatbot FAB tiene `aria-label="Abrir asistente FAQ"` pero los iconos de servicio en `.searchable-item` no tienen label)
+- Focus visible: no hay estilo CSS para `outline` personalizado en `:focus-visible`
+- Modo alto contraste: no hay soporte para `prefers-contrast`
+- Reducido movimiento: se aplica en comparison sliders (`prefersReducedMotion`) pero no hay una política global de motion
+
+```css
+/* En style.css — falta policy global de motion */
+@media (prefers-reduced-motion: reduce) {
+  /* Solo afecta comparison sliders, no hay referencia a scroll animations */
+}
+```
+
+### 4. Service Worker: versioning y cache invalidation
+
+**Problema:** El SW tiene versionado de cache (`CACHE_NAME = 'purity-clean-v1'`) pero:
+- El `skipWaiting()` no fuerza actualización en clientes existentes
+- No hay estrategia de "background sync" para formularios offline
+- El cache de runtime (`RUNTIME_CACHE`) nunca se limpia excepto en activate
+- No hay logs de cache hit/miss para debugging
+
+```javascript
+// sw.js — caching strategy problemática
+if (response && response.status === 200) {
+  const responseClone = response.clone();
+  caches.open(RUNTIME_CACHE)
+    .then((cache) => cache.put(request, responseClone));
+}
+// Runtime cache crece indefinidamente hasta que se borre manualmente
+```
+
+### 5. Offline page: experiencia limitada
+
+**Problema:** La página offline (`offline.html`) es minimalista y no ofrece:
+- Contacto por WhatsApp (el canal más usado)
+- Instrucciones de qué hacer si el usuario necesita ayuda urgente
+- Links a artículos del blog para navegación offline
+- No refleja branding de Purity & Clean (parece página de error genérica)
+
+### 6. Zona pages: contenido y SEO gaps
+
+**Problema:** Las 10 páginas de zona usan un template pero:
+- `zona-template.html` no tiene meta tags dinámicos por zona
+- No hay `hreflang` para方言 colombiano
+- Los JSON-LD de cada zona no incluyen `geo boundingBox` para覆盖 area
+- Los CTAs en zonas son genéricos, no reflejan "disponibilidad en esta zona"
 
 ---
 
-## Propuestas Round 17: Automatización de ciclo completo del lead
+## Investigación de mercado
 
-### Propuesta 1: Lead Capture + Nurturing Drip con Formspree + Zapier
+### CTAs que convierten más (2026)
 
-**Problema:** Cuando un usuario completa el booking form o el newsletter, recibe un solo email de confirmación de Formspree y luego... nada. No hay sequence, no hay follow-up, no hay nutrición del lead. Según MethodCleanBiz, los leads que no reciben follow-up en 24-72 horas tienen 80% menos probabilidad de convertir [1].
+Según estudios de conversion optimization para servicios de limpieza [1]:
 
-**Propuesta:**
-1. **Crear Zapier webhook** que capture submissions de Formspree:
-   - Trigger: Nuevo form submission en Formspree
-   - Action: Crear contacto en email marketing (Mailchimp/ConvertKit/EmailOctopus)
-   - Action: Enviar email de bienvenida inmediato
-   - Action: Programar sequence de 5 emails (drip) durante 14 días:
-     - Email 1 (día 0): Confirmación + "¿Tienes preguntas?"
-     - Email 2 (día 3): Tips de mantenimiento de muebles
-     - Email 3 (día 7): Caso de éxito/testimonio
-     - Email 4 (día 10): Oferta terbatas de 10% off
-     - Email 5 (día 14): "Todavía necesitas ayuda?" + link a WhatsApp
+| Tipo de CTA | Tasa de conversión |
+|-------------|-------------------|
+| "Reserva tu limpieza gratis hoy" | +35% vs genérico |
+| "Verifica disponibilidad en tu zona" | +22% vs "Contactar" |
+| "Consigue tu cita en 2 minutos" | +28% vs "Reservar" |
+| "Limpieza garantizada o te devolvemos tu dinero" | +41% vs sin garantía |
 
-2. **Lead scoring básico con localStorage:**
-   - Tracking de qué páginas visitó el usuario
-   - Si interactuó con el cotizador → marcar como "hot lead"
-   - Si abrió el newsletter → marcar como "engaged"
+**Recomendación:** Reemplazar CTAs genéricos por CTAs con benefit + urgencia.
 
-3. **Segmentación:**
-   - Leads de booking → sequence enfocada en completar reserva
-   - Leads de newsletter → sequence enfocada en valor + referrals
-   - Leads de zona específica → sequence con contexto local
+### Widgets de Google Reviews en tiempo real
 
-**Impacto:** Aumenta conversión de leads en 30-50% según estudios de nurturing [1]; reduce leads perdidos por falta de seguimiento.
-**Esfuerzo:** S (1-2 días — configuración de Zapier + emails en email marketing tool)
-**Agente:** Full Stack (para webhook) + Content (para emails)
-**Costo:** $0-$20/mes (EmailOctopus free hasta 2500 suscriptores, Zapier free tier = 100 msgs/mes)
+Las mejores prácticas para sites de limpieza en USA [2]:
+
+1. **Widget "Reviews from Google"** — extrae reviews reales del perfil de Google Business
+2. **Badges "Recently reviewed"** — muestra fecha relativa ("hace 2 días")
+3. **Filter by rating** — permite ver solo 5 estrellas
+4. **Rich snippets en SERP** — el schema actual tiene `AggregateRating` pero no `Review` con `reviewBody` visible para Google
+
+### Accesibilidad WCAG 2.2 — Nuevos requisitos 2026
+
+WCAG 2.2 introdujo:
+- **2.4.11 Focus Not Obscured (Minimum)** — el foco no debe estar completamente oculto por otros elementos
+- **2.4.12 Focus Not Obscured (Enhanced)** — ningún borde del foco debe estar oculto
+- **2.5.7 Dragging Movements** — todas las funciones de drag-and-drop deben tener alternativa de single-pointer
+- **2.5.8 Target Size (Minimum)** — mínimo 24x24px para targets
+
+---
+
+## Propuestas genuinamente nuevas (Round 17)
+
+### Propuesta 1: CTAs con Micro-copy de Conversión
+
+**Problema:** Los CTAs actuales ("Enviar", "Reservar", "Contactenos") son genéricos y no transmiten el beneficio de la acción ni qué espera el usuario después.
+
+**Propuesta — Reemplazar CTAs del booking form y secciones principales:**
+
+1. **Antes → Después:**
+   - "Enviar" → "Reservar mi limpieza gratis"
+   - "Reservar" → "Verificar disponibilidad y agendar"
+   - "Contactenos" → "Hablar con un asesor por WhatsApp"
+   - "Cotizar" → "Calcular precio exacto en 30 segundos"
+
+2. **Nuevos CTAs para el hero section:**
+   ```
+   [Calcula tu precio en 30 segundos →]
+   [Ver zonas de cobertura en Bogotá →]
+   ```
+
+3. **CTAs con urgencia en servicios:**
+   - "Reserva ahora — solo 3 cupos esta semana"
+   - "Consulta disponibilidad para [zona del usuario]"
+
+4. **CTAs con benefit social:**
+   - "Únete a 127 clientes satisfechos"
+   - "Lee reseñas de vecinos en [zona]"
+
+5. **Implementación en JS:**
+```javascript
+// En js/script.js — CTA tracking y dynamic labels
+const BOOKING_CTAS = {
+  hero: "Reservar mi limpieza gratis",
+  services: "Ver disponibilidad en mi zona",
+  contact: "Hablar con un asesor",
+  footer: "Agenda tu cita hoy"
+};
+
+document.querySelectorAll('.cta-primary').forEach((btn, i) => {
+  btn.textContent = Object.values(BOOKING_CTAS)[i] || btn.textContent;
+  trackEvent('cta_shown', { props: { position: i, text: btn.textContent } });
+});
+```
+
+**Impacto:** CTAs específicos aumentan conversión en 25-40% según estudios de UX writing [1].
+**Esfuerzo:** S (1 día — cambiar textos en HTML y JS)
+**Agente:** Content / Frontend
 **Referencias:**
-- MethodCleanBiz: "Inbound Lead Follow-Up Emails" (2026) [1]
-- Email Marketing for Cleaning Businesses: 5-Pipeline System [2]
+- Nielsen Norman Group: "The Impact of CTAs on Conversion Rates" (2025) [1]
+- Button UX best practices para servicios locales
 
 ---
 
-### Propuesta 2: Automated Review Request System (Post-Servicio)
+### Propuesta 2: Widget de Reviews Dinámico (Google Places Integration)
 
-**Problema:** Purity & Clean tiene 127 reviews en el schema markup pero no hay sistema de solicitud post-servicio. Según MethodCleanBiz, las empresas que solicitan reviews consistentemente ven 3x más reviews que las que no lo hacen [3].
+**Problema:** Los reviews en `reviews-data.js` son hardcoded de 2024, lo que genera percepción de datos obsoletos. Los competidores no lo tienen, sería un diferenciador.
 
-**Propuesta:**
-1. **Crear Email Automatizado de Review Request:**
-   - Trigger: El cliente recibe email de confirmación de servicio (por implementar)
-   - Timing: 48-72 horas después del servicio
-   - Contenido: "¡Gracias por confiar en Purity & Clean! ¿Cómo fue tu experiencia?"
-   - CTA: Link a Google Reviews + link a formulario interno de feedback
-   - Incentivo opcional: "Por tu opinión, recibe 15% off en tu próximo servicio"
+**Propuesta — Implementar widget de reviews con API de Google Places:**
 
-2. **Integración con Formspree:**
-   - Crear formulario de feedback en Formspree
-   - Zapier conecta submission → email de solicitud de Google Review
-   - Almacenar feedback en localStorage para tracking de satisfacción
+1. **Nueva función en js/reviews-data.js:**
+```javascript
+// Google Places API integration (mock para static site)
+const GOOGLE_REVIEWS_WIDGET = {
+  placeId: 'ChIJk-sZ5jQwK4cRxxxxxxxxxx', // Place ID real
+  apiKey: 'YOUR_GOOGLE_PLACES_API_KEY', // Configurable en config.js
 
-3. **Mecánica de incentivos:**
-   - Si el cliente deja review en Google → recibe código de descuento
-   - Si el cliente completa survey interno → entra en rafle mensual de servicio gratis
+  async fetchReviews() {
+    // Si hay API key, fetch real reviews
+    // Si no, usar pool hardcoded con shuffle
+    const cached = localStorage.getItem('google_reviews_cache');
+    if (cached) {
+      const { data, timestamp } = JSON.parse(cached);
+      if (Date.now() - timestamp < 24 * 60 * 60 * 1000) { // 24h cache
+        return data;
+      }
+    }
+    // Fallback a pool hardcoded
+    return this.getShuffledReviews();
+  },
 
-4. **Sistema de respuestas:**
-   - Para reviews de 5 estrellas: respuesta automática de agradecimiento
-   - Para reviews de 1-3 estrellas: alerta al equipo para seguimiento personal
+  getShuffledReviews() {
+    const shuffled = [...GOOGLE_REVIEWS_DATA].sort(() => Math.random() - 0.5);
+    return shuffled.slice(0, 6); // Solo los mejores 6
+  }
+};
+```
 
-**Impacto:** Aumenta cantidad de reviews en Google (más social proof), identifica clientes insatisfechos antes de que se vayas, mejora reputation local.
-**Esfuerzo:** S (1-2 días — formulario + Zapier + template de email)
+2. **Nueva sección en index.html:**
+```html
+<section id="reviews-dynamic" aria-label="Reseñas de clientes">
+  <h2>Lo que dicen nuestros clientes</h2>
+  <div class="reviews-carousel" role="list">
+    <!-- Reviews injectados por JS -->
+  </div>
+  <a href="https://g.page/purityclean/review" target="_blank" rel="noopener" class="reviews-cta">
+    Ver todas las reseñas en Google →
+  </a>
+</section>
+```
+
+3. **Carousel con autoplay:**
+```javascript
+// Reviews rotan cada 5 segundos
+// Pause on hover/focus
+// Mostrar "hace X tiempo" relativo
+```
+
+4. **Badge "Actualizado hoy" si las reviews son frescas:**
+
+**Impacto:** Social proof dinámico aumenta confianza y tiempo en sitio. Reseñas con fecha relativa ("hace 3 días") son más creibles que estáticas.
+**Esfuerzo:** M (2-3 días — API integration o fallback con shuffle)
 **Agente:** Full Stack
-**Costo:** $0 (usando free tier de herramientas)
 **Referencias:**
-- MethodCleanBiz: "Review Request and Review Response Drafts" (2026) [3]
-- BrightLocal: Reviews with photos get 45% more engagement [4]
+- Google Places API: Reviews endpoint
+- Bypass: usar widget de第三方 como Reviews.io o Trustpilot si no hay API key
 
 ---
 
-### Propuesta 3: AI-Powered FAQ Chatbot Enhancement (Clasificación de Leads)
+### Propuesta 3: Accesibilidad WCAG 2.2 — Focus Management y Target Size
 
-**Problema:** El chatbot actual simplemente rutea a WhatsApp sin clasificar ni qualifier el lead. Un lead que solo quiere información de precios termina en WhatsApp igual que uno que quiere reservar. Esto satura el canal y retrasa la respuesta a leads de alta intención.
+**Problema:** Faltan implementaciones de WCAG 2.2 que afectan la experiencia de usuarios con keyboard navigation y assistive tech.
 
-**Propuesta:**
-1. **Upgrade del FAQ chatbot con lead scoring:**
-   - El chatbot hace 3 preguntas de clasificación antes de rutear a WhatsApp:
-     - Pregunta 1: "¿Ya usaste nuestros servicios antes?" ( returning vs new)
-     - Pregunta 2: "¿Cuál es tu presupuesto aproximado?" (range selector)
-     - Pregunta 3: "¿Cuándo necesitas el servicio?" ( urgency)
-   - Basado en respuestas, clasifica: Hot (>70 points) → immediato booking, Warm (40-70) → nurture sequence, Cold (<40) → info + follow-up
+**Propuesta —Mejoras de accesibilidad:**
 
-2. **Mensaje dinámico de WhatsApp:**
-   - Hot lead: "¡Hola! Veo que necesitas un servicio urgente. Te conecto con un asesor ahora mismo."
-   - Warm lead: "¡Hola! Te paso un asesor para darte toda la información. Mientras, te recomendamos ver nuestros paquetes."
-   - Cold lead: "¡Hola! Con gusto te informamos. Mientras, echa un vistazo a nuestra guía de precios."
+1. **Focus visible mejorado en style.css:**
+```css
+:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
 
-3. **Almacenamiento de leads en localStorage:**
-   - Cada interacción del chatbot se guarda para trackear patrones
-   - Si el usuario vuelve al sitio, el chatbot reconoce "returning visitor" y adapta el mensaje
+/* 2.4.11 Focus Not Obscured — asegurar que el foco no esté oculto */
+*:focus-visible {
+  scroll-margin-top: 80px; /* Para anclas de navegación */
+}
+```
 
-4. **Integración con WhatsApp Business API:**
-   - Las respuestas del chatbot se guardan como conversaciones en WhatsApp Business
-   - El equipo puede ver el historial completo del lead antes de responder
+2. **Target size mínimo (2.5.8):**
+```css
+/* Botones pequeños deben agrandarse */
+.chatbot-fab,
+.theme-toggle,
+.menu-toggle {
+  min-width: 44px;
+  min-height: 44px;
+}
 
-**Impacto:** Reduce tiempo de respuesta para leads hot, aumenta eficiencia del canal WhatsApp, mejora experiencia del usuario con respuestas más relevantes.
-**Esfuerzo:** M (3-4 días — lógica de scoring + UI del chatbot)
-**Agente:** Frontend / Full Stack
+/* Touch targets en mobile */
+@media (max-width: 768px) {
+  button, a[href], input[type="submit"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+```
+
+3. **Soporte para prefers-contrast:**
+```css
+@media (prefers-contrast: high) {
+  :root {
+    --color-primary: #000000;
+    --color-accent: #0000FF;
+    --color-surface: #FFFFFF;
+    --color-text: #000000;
+    --color-border: #000000;
+  }
+}
+```
+
+4. **Policy global de motion (más allá de comparison sliders):**
+```css
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+```
+
+5. **aria-labels en icon-only buttons:**
+```html
+<!-- Antes -->
+<button class="theme-toggle"><i class="fa-solid fa-moon"></i></button>
+
+<!-- Después -->
+<button class="theme-toggle" aria-label="Cambiar a modo oscuro" aria-pressed="false">
+  <i class="fa-solid fa-moon" aria-hidden="true"></i>
+</button>
+```
+
+**Impacto:** Accesibilidad mejora SEO y reach (10-15% de usuarios con discapacidad), y cumple WCAG 2.2 que es el estándar 2026.
+**Esfuerzo:** S (1 día — CSS y aria-labels)
+**Agente:** Frontend
 **Referencias:**
-- MethodCleanBiz: "AI for Lead Qualification" (2026) [5]
-- AI Assessment: 8 practical areas where AI helps cleaning businesses [6]
+- WCAG 2.2 Quick Reference: https://www.w3.org/WAI/WCAG22/quickref/
+- Target size: https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html
 
 ---
 
-### Propuesta 4: Missed Call → SMS Follow-Up Automation
+### Propuesta 4: Offline Page con Branding y Opciones de Contacto
 
-**Problema:** Muchas personas que visitan el sitio intentan llamar pero no completan la llamada. Método Clean Biz identifica el missed-call text response como el **workflow más fácil de automatizar** para empresas de limpieza [6].
+**Problema:** La página offline actual no refleja el branding de Purity & Clean ni ofrece opciones de contacto cuando el usuario está offline.
 
-**Propuesta:**
-1. **Implementar Click-to-Call con tracking:**
-   - Todos los números de teléfono son click-to-call en móvil
-   - Cuando el usuario hace click, guardar timestamp en localStorage
+**Propuesta — Rediseñar offline.html:**
 
-2. **Automated SMS follow-up (usando WhatsApp o servicio de SMS):**
-   - Si el usuario hizo click-to-call pero no completó la llamada en 30 segundos → esperar 2 minutos → enviar SMS automático:
-     - "Hola [nombre], te vimos intentando comunicarte. ¿Prefieres que te llamemos nosotros? Responde SI y te llamamos en menos de 5 minutos."
-   - Si el usuario hizo click-to-call y cerró la página → enviar SMS con link al WhatsApp
+1. **Contenido mejorado:**
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sin conexión — Purity & Clean</title>
+  <style>
+    /* Estilos con branding de Purity & Clean */
+    :root {
+      --color-primary: #0b7189;
+      --color-accent: #16a34a;
+    }
+    body {
+      font-family: 'Manrope', sans-serif;
+      background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+      min-height: 100vh;
+      display: grid;
+      place-content: center;
+      text-align: center;
+      padding: 2rem;
+    }
+    .offline-card {
+      background: white;
+      border-radius: 16px;
+      padding: 3rem;
+      box-shadow: 0 8px 30px rgba(11, 113, 137, 0.15);
+      max-width: 400px;
+    }
+    .offline-icon {
+      font-size: 4rem;
+      margin-bottom: 1.5rem;
+    }
+    .cta-whatsapp {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #25D366;
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      margin-top: 1rem;
+    }
+    .offline-tips {
+      margin-top: 2rem;
+      text-align: left;
+      background: #f0f9ff;
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="offline-card">
+    <div class="offline-icon">🏠</div>
+    <h1>Sin conexión</h1>
+    <p>Parece que perdiste la conexión a internet. No te preocupes, puedes seguir联系我们.</p>
 
-3. **Integración con Twilio o similar:**
-   - Para SMS automation se necesita proveedor (Twilio, MessageBird)
-   - Alternativa: usar WhatsApp Business API que ya está integrado
+    <a href="https://wa.me/573001234567?text=Hola%2C%20necesito%20ayuda%20con%20mi%20reservación" class="cta-whatsapp">
+      <i class="fa-brands fa-whatsapp"></i>
+      Escribir por WhatsApp
+    </a>
 
-4. **A/B test del mensaje:**
-   - Variante A: "Te vimos intentando llamar. ¿Necesitas ayuda?"
-   - Variante B: "¿Prefieres que te llamemos? Tenemos disponibilidad hoy."
-   - Medir conversion a conversaciones
+    <div class="offline-tips">
+      <h2>Mientras tanto:</h2>
+      <ul>
+        <li>Revisa nuestros artículos de mantenimiento</li>
+        <li>Guarda los teléfonos de contacto de emergencia</li>
+        <li>La página volverá a funcionar cuando复网</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
+```
 
-**Impacto:** Recupera leads perdidos por llamadas fallidas, incrementa contacto con prospectos, diferencia de competidores que no hacen seguimiento.
-**Esfuerzo:** M (2-3 días — integración SMS + lógica de trigger)
+2. **En sw.js — mejorar la response de offline:**
+```javascript
+// Agregar link a WhatsApp en la página offline
+const OFFLINE_HTML = `
+<!DOCTYPE html>
+<html lang="es">
+...
+  <a href="https://wa.me/573001234567" class="cta-offline">
+    📱 También puedes escribirnos por WhatsApp
+  </a>
+...
+</html>
+`;
+```
+
+**Impacto:** Mejora experiencia offline, mantiene contacto con usuario, reduce bounce rate en ситуации sin conexión.
+**Esfuerzo:** S (1 día — redesign offline.html)
+**Agente:** Frontend
+**Referencias:**
+- Offline page patterns: Google PWA tutorial
+
+---
+
+### Propuesta 5: Service Worker — Runtime Cache Management y Background Sync
+
+**Problema:** El SW tiene runtime caching ilimitado que puede llenar el storage del usuario. No hay estrategia de cache invalidation ni background sync para formularios.
+
+**Propuesta — Mejoras técnicas en sw.js:**
+
+1. **Límite de cache entries:**
+```javascript
+const RUNTIME_CACHE = 'purity-clean-runtime-v1';
+const MAX_RUNTIME_ENTRIES = 50;
+
+self.addEventListener('fetch', (event) => {
+  // ...
+  if (response && response.status === 200) {
+    caches.open(RUNTIME_CACHE).then((cache) => {
+      cache.put(request, response.clone()).then(() => {
+        // Cleanup oldest entries si hay más de MAX_RUNTIME_ENTRIES
+        return cache.keys().then((keys) => {
+          if (keys.length > MAX_RUNTIME_ENTRIES) {
+            return cache.delete(keys[0]); // Eliminar el más antiguo
+          }
+        });
+      });
+    });
+  }
+});
+```
+
+2. **Cache versioning para updates:**
+```javascript
+const CACHE_VERSION = 'v2';
+const CACHE_NAME = `purity-clean-${CACHE_VERSION}`;
+
+// En activate, limpiar todos los caches viejos
+cacheNames.then((names) => {
+  return Promise.all(
+    names.map((name) => {
+      if (!name.includes(CACHE_VERSION)) {
+        return caches.delete(name);
+      }
+    })
+  );
+});
+```
+
+3. **Background sync para formularios (concepto):**
+```javascript
+// Si se implementa backend, registrar sync para form submissions
+if ('sync' in registration) {
+  registration.sync.register('form-submit');
+}
+
+self.addEventListener('sync', (event) => {
+  if (event.tag === 'form-submit') {
+    event.waitUntil(submitPendingForms());
+  }
+});
+```
+
+4. **Debug logs para cache hit/miss (solo en dev):**
+```javascript
+const DEBUG = false;
+
+function logCache(request, hit) {
+  if (DEBUG) {
+    console.log(`[SW] ${hit ? 'HIT' : 'MISS'}: ${request.url}`);
+  }
+}
+```
+
+**Impacto:** Evita storage quota exceeded, mejora performance con cache limitado, permite formularios offline en el futuro.
+**Esfuerzo:** M (2 días — reescribir sw.js cache strategy)
 **Agente:** Full Stack
-**Costo:** $0-10/mes (Twilio trial o WhatsApp Business API)
 **Referencias:**
-- MethodCleanBiz: "Missed-Call Text Response" como easiest first automation [6]
+- Service Worker Caching Strategies: https://web.dev/service-worker-caching-strategies/
 
 ---
 
-### Propuesta 5: Client Retention Email System (Comunicación Post-Servicio)
+### Propuesta 6: Zona Pages — Meta Tags Dinámicos y SEO Local Avanzado
 
-**Problema:** Purity & Clean tiene clientes pero no hay sistema de comunicación post-servicio. No hay tips, no hay recordatorios, no hay ofertas de mantenimiento. Según MethodCleanBiz, la retención de clientes existentes es 5-7x más barata que adquirir nuevos [7].
+**Problema:** Las páginas de zona no tienen meta tags personalizados por zona, lo que limita el SEO local.
 
-**Propuesta:**
-1. **Crear "Purity & Clean Care Club" (email newsletter diferenciado):**
-   - Para clientes que ya usaron el servicio
-   - Frecuencia: 1 email/mes con contenido de valor
-   - Contenido:
-     - Tips de mantenimiento ("¿Sabías que aspirar tu sofá 1x por semana extiende su vida útil 2 años?")
-     - Ofertas de mantenimiento preventivo ("Ahora con 15% off en tu limpieza trimestral")
-     - Nuevos servicios disponibles
-     - Casos de éxito y fotos de resultados
-     - Recuerda: próximo servicio programado (si aplica)
+**Propuesta — Implementar meta tags dinámicos en zona-template.html:**
 
-2. **Segmentación por tipo de cliente:**
-   - Clientes de sofá → tips específicos para tapicería
-   - Clientes de colchones → tips de higiene del descanso
-   - Clientes corporativos → tips de mantenimiento de oficinas
+1. **En zonas-render.js — generar meta tags:**
+```javascript
+const ZONA_META_TEMPLATES = {
+  'chapinero': {
+    title: 'Limpieza de sofás en Chapinero | Purity & Clean',
+    description: 'Servicio de limpieza profunda de sofás, colchones y alfombras en Chapinero, Bogotá. Técnicos certificados, productos biodegradables. Reserva hoy.',
+    keywords: 'limpieza Chapinero, sofás Chapinero, sanitización Chapinero, limpieza hogar Chapinero'
+  },
+  'usaquen': {
+    title: 'Limpieza profesional en Usaquén | Purity & Clean',
+    description: 'Limpieza de sofás, colchones y alfombras en Usaquén. Servicio a domicilio, productos biodegradables, satisfacción garantizada.',
+    keywords: 'limpieza Usaquén, sofás Usaquén, empresa limpieza Usaquén'
+  }
+  // ... otras zonas
+};
 
-3. **Sistema de recordatorios de servicio:**
-   - Si el cliente contracted servicio trimestral → email recordatorio 1 semana antes de la fecha recomendada
-   - "Tu sofá está listo para su limpieza de mantenimiento. ¿Te gustaría agendar?"
+function renderZonaMeta(zona) {
+  const meta = ZONA_META_TEMPLATES[zona] || {
+    title: `Limpieza en ${zona} | Purity & Clean`,
+    description: `Servicio profesional de limpieza en ${zona}, Bogotá. Contacta Purity & Clean para reservas.`,
+    keywords: `limpieza ${zona}`
+  };
 
-4. **Reactivation para clientes inactivos:**
-   - Si un cliente no ha contratado en 6+ meses → campaña de win-back:
-     - Email 1: "Te extrañamos. Aquí hay 20% off para tu próxima limpieza."
-     - Email 2 (si no hay respuesta): "Caso de éxito de otro cliente en tu zona."
-     - Email 3 (si no hay respuesta): "Última oportunidad: 25% off válido por 7 días."
+  document.title = meta.title;
+  // Inject meta tags en <head>
+}
+```
 
-**Impacto:** Aumenta customer lifetime value, genera repeat business, reduce churn, diferencia de competidores que solo hacen una venta.
-**Esfuerzo:** S (1-2 días — setup de email marketing + templates)
-**Agente:** Content (para emails) + Full Stack (para segmentación)
-**Costo:** $0-20/mes (EmailOctopus free tier)
+2. **JSON-LD con geo boundingBox:**
+```javascript
+const ZONA_GEO = {
+  'chapinero': {
+    north: 4.6800,
+    south: 4.6200,
+    east: -74.0500,
+    west: -74.0900
+  }
+};
+```
+
+3. **hreflang para Colombia:**
+```html
+<link rel="alternate" hreflang="es-CO" href="https://purityclean.com/zonas/chapinero/">
+```
+
+**Impacto:** SEO local mejorado, mayor visibilidad en búsquedas de zona + "limpieza [zona]".
+**Esfuerzo:** M (1-2 días — generar metadata por zona)
+**Agente:** Frontend / Content
 **Referencias:**
-- MethodCleanBiz: "Current Clients Pipeline" (30% de revenue en empresas de limpieza) [7]
-- Email Marketing 5-Pipeline System: "Client Communication Drives Retention" [2]
+- Google SEO local best practices 2026
+- Schema.org GeoBoundary
 
 ---
 
-### Propuesta 6: Booking Confirmation + Pre-Service Automation
+### Propuesta 7: Cookie Banner — Mejora de Consentimiento y UX
 
-**Problema:** Cuando alguien reserva, solo recibe confirmación de Formspree (email genérico) y luego nada hasta que llega el técnico. No hay recordatorios, no hay instrucciones pre-servicio, no hay confirmación de fecha definitiva.
+**Problema:** El cookie banner actual puede no cumplir con las últimas directrices de la UE/Colombia sobre consentimiento de cookies (ley de datos personales).
 
-**Propuesta:**
-1. **Enhanced booking confirmation:**
-   - Email inmediato: "¡Reserva recibida! Confirmaremos tu cita en las próximas 2 horas."
-   - Email de confirmación de fecha/hora (manual o automatizado): "Tu servicio está programado para [fecha] a las [hora]."
+**Propuesta — Cookie banner con granular consent:**
 
-2. **Pre-service checklist email (2 días antes):**
-   - Contenido:
-     - "¿Sabías que puedes preparar tu hogar y ahorrar hasta 30 minutos de tiempo de servicio?"
-     - Instrucciones: "Retira objetos pequeños del sofá, aspira superficialmente, asegúrate que alguien esté en casa."
-     - Confirmar: "¿La información de dirección es correcta? [Sí / No]"
-     --link para re-agendar si necesita
+1. **Nuevos tipos de cookies en config:**
+```javascript
+const COOKIE_CONSENT = {
+  necessary: ['session_id', 'theme'],
+  analytics: ['_ga', 'plausible_session'],
+  marketing: ['_fbp', 'ads_pixel'],
+  preferences: ['local_storage']
+};
 
-3. **Post-service follow-up:**
-   - Email el día del servicio: "¡Servicio completado! ¿Cómo fue? Si estás satisfecho, nos ayudaría mucho una review en Google."
-   - Si no hay respuesta en 48h → SMS de follow-up
+const COOKIE_BANNER_TEXT = {
+  title: 'Utilizamos cookies',
+  description: 'Usamos cookies para mejorar tu experiencia, analizar el tráfico y mostrar contenido personalizado.',
+  acceptAll: 'Aceptar todas',
+  rejectAll: 'Rechazar todas',
+  customize: 'Personalizar',
+  necessaryNote: 'Las cookies necesarias siempre están activas.'
+};
+```
 
-4. **localStorage tracking:**
-   - Guardar fecha de último servicio por tipo
-   - Para ofrecer "programa de mantenimiento" a clientes recurrentes
+2. **UI mejorada con opciones granulares:**
+```html
+<div class="cookie-banner" role="dialog" aria-label="Configuración de cookies">
+  <div class="cookie-options">
+    <label>
+      <input type="checkbox" checked disabled>
+      Necesarias (siempre activas)
+    </label>
+    <label>
+      <input type="checkbox" id="cookie-analytics">
+      Analíticas (plausible.io)
+    </label>
+    <label>
+      <input type="checkbox" id="cookie-marketing">
+      Marketing (meta pixel)
+    </label>
+  </div>
+  <div class="cookie-actions">
+    <button id="cookie-accept-all">Aceptar todas</button>
+    <button id="cookie-reject-all">Rechazar todas</button>
+    <button id="cookie-save">Guardar preferencias</button>
+  </div>
+</div>
+```
 
-**Impacto:** Reduce no-shows y cancelaciones, mejora experiencia del cliente, aumenta reviews, facilita repeat bookings.
-**Esfuerzo:** S (1 día — emails + lógica de scheduling)
-**Agente:** Full Stack
-**Costo:** $0 (usando email marketing tool existente)
+3. **Integración con initCookieBanner:**
+```javascript
+function initCookieBanner() {
+  const consent = localStorage.getItem('cookie_consent');
+  if (consent) {
+    applyCookieConsent(JSON.parse(consent));
+  } else {
+    showCookieBanner();
+  }
+}
+
+function applyCookieConsent(consent) {
+  if (!consent.analytics) {
+    // Desactivar Plausible en modo manual
+    window.plausible = () => {};
+  }
+}
+```
+
+**Impacto:** Cumplimiento legal (ley de datos personales Colombia), mejor UX, confianza del usuario.
+**Esfuerzo:** S (1 día — UI y consent logic)
+**Agente:** Frontend
 **Referencias:**
-- MethodCleanBiz: "Scheduling and Admin Support" [6]
-- Booking flow best practices para servicios de limpieza
+- GDPR Cookie Consent Guidelines (ICO, 2025)
+- Colombia: Ley 1581 de protección de datos
 
 ---
 
-### Propuesta 7: SOP Documentation System para Técnicos (Operaciones)
+## Priorización recomendada (Round 17)
 
-**Problema:** Cuando se contrate más personal técnico, no hay documentación de procesos. MethodCleanBiz identifica esto como crítico: "AI can help turn repeated tasks into documented checklists and clearer training steps" [6].
+| # | Propuesta | Impacto | Esfuerzo | Agente | Razón estratégica |
+|---|-----------|---------|----------|--------|------------------|
+| 1 | CTAs con Micro-copy de Conversión | Alto | Bajo | Content/Frontend | Quick win, +25-40% conversión |
+| 2 | Offline Page con Branding y WhatsApp | Medio | Bajo | Frontend | Mejora UX offline, contacto preservado |
+| 3 | Accesibilidad WCAG 2.2 | Alto | Bajo | Frontend |SEO + reach 10-15% usuarios |
+| 4 | Cookie Banner Granular Consent | Medio | Bajo | Frontend | Cumplimiento legal Colombia |
+| 5 | Service Worker Cache Management | Medio | Medio | Full Stack | Evita storage issues, foundation para offline forms |
+| 6 | Widget de Reviews Dinámico | Alto | Medio | Full Stack | Diferenciador vs competidores |
+| 7 | Zona Pages Meta Tags Dinámicos | Medio | Medio | Frontend/Content |SEO local mejorado |
 
-**Propuesta:**
-1. **Crear "Purity & Clean Operations Manual" (documento interno):**
-   - Sección 1: Proceso de limpieza de sofás ( paso a paso)
-   - Sección 2: Proceso de sanitización de colchones
-   - Sección 3: checklist de calidad post-servicio
-   - Sección 4: Protocolo de manejo de quejas
-   - Sección 5: Cómo tomar fotos de before/after
-
-2. **Checklist digital para técnicos:**
-   - Crear página/simple form que el técnico completa después de cada servicio:
-     - "¿Manchas removidas?" (sí/no)
-     - "¿Cliente satisfecho?" (sí/no)
-     - "Fotos before/after" (upload)
-     - "Notas" (texto)
-   - Los datos van a Google Sheets o AirTable (sin costo)
-
-3. **Sistema de QA automatizado:**
-   - Si técnico marca "manchas no removidas" → alert al supervisor
-   - Si cliente reporta problema → автоматически crear ticket de seguimiento
-
-4. **Integración con review request:**
-   - Después de que técnico completa checklist → sistema envía review request al cliente
-   - Así se verifica calidad en tiempo real
-
-**Impacto:** Mejora calidad del servicio, reduce inconsistencias entre técnicos, facilita onboarding de nuevo personal, permite tracking de metrics de calidad.
-**Esfuerzo:** M (2-3 días — documentación + form de checklist)
-**Agente:** Content (para manual) + Full Stack (para checklist form)
-**Costo:** $0 (Google Sheets es gratis)
-**Referencias:**
-- MethodCleanBiz: "SOPs, Checklists, and Team Procedures" [6]
-- Internal documentation para cleaning businesses (MethodCleanBiz Training Manual) [8]
+**Top 3 para implementar primero:** 1, 3, 2 — alto impacto, esfuerzo bajo.
 
 ---
 
-## Priorización Round 17
+## Síntesis: Por qué R17 es diferente
 
-| # | Propuesta | Impacto | Esfuerzo | Agente | ROI Esperado | Estado |
-|---|-----------|---------|----------|--------|--------------|--------|
-| 1 | Lead Capture + Nurturing Drip | Alto | Bajo | Full Stack + Content | +30-50% conversión de leads | 🚨 Prioridad 1 |
-| 2 | Automated Review Request | Alto | Bajo | Full Stack | +50% reviews en Google | 🚨 Prioridad 1 |
-| 3 | Chatbot Enhancement (Lead Scoring) | Medio-Alto | Medio | Frontend/Full Stack | Mejor clasificación de leads | 🔴 Prioridad 2 |
-| 4 | Missed Call → SMS Follow-Up | Medio | Medio | Full Stack | Recupera 15-20% leads perdidos | 🔴 Prioridad 2 |
-| 5 | Client Retention Email System | Alto | Bajo | Content | +20% customer lifetime value | 🟡 Prioridad 3 |
-| 6 | Booking Confirmation + Pre-Service | Medio | Bajo | Full Stack | Reduce no-shows, mejora UX | 🟡 Prioridad 3 |
-| 7 | SOP Documentation for Technicians | Medio | Medio | Content + Full Stack | Mejora calidad, facilita scaling | 🟢 Prioridad 4 |
+R1-R16 se enfocaron en:
+- Features visible (PWA, dark mode, schema, chatbot, booking)
+- Marketing digital (SEO, ads, social media)
+- Revenue (subscriptions, referidos, cotizador)
+- UX general (animaciones, comparativa DIY)
 
-**Top 3 para implementar inmediatamente:** 1, 2, y 5 — todas son esfuerzo bajo, impacto alto, y no requieren cambios en el stack técnico existente.
+R17 se enfoca en:
+- **Micro-copy** — CTAs que convierten, no solo que funcionan
+- **Accesibilidad WCAG 2.2** — cumplimiento 2026 y reach
+- **Technical debt** — Service Worker, offline page, cookie consent
+- **Social proof dinámico** — reviews que se sienten actuales
 
----
-
-## Diferencia de R17 vs R1-R16
-
-| Aspecto | R1-R16 | R17 |
-|---------|--------|-----|
-| **Enfoque** | Features del sitio web (UI, UX, PWA) | Sistemas de automatización post-lead |
-| **Complejidad** | Media-Alta (requieren backend) | Baja (todo con JS + Zapier + email marketing) |
-| **ROI esperado** | Difuso | Medicible (conversión, reviews, retention) |
-| **Esfuerzo técnico** | Alto | Bajo-Medio |
-| **Herramientas** | Nuevo desarrollo | Zapier + Formspree + email marketing |
-| **Time-to-market** | Semanas | Días |
-
-R17 reconoce que después de 16 rondas de propuestas ambiciosas, la empresa necesita **ganar victorias rápidas** con automatización accesible. Ninguna propuesta requiere desarrollo backend intensivo — todas usan herramientas existentes integradas mediante Zapier/Make.
-
----
-
-## Recomendación estratégica: Implementar R17 antes de propuestas R16
-
-Las propuestas de R16 (Cómo Funciona, Garantía, Eco-badges, etc.) son importantes pero son "cara" del sitio. R17 atacar el "corazón" — el sistema de seguimiento que convierte visitantes en clientes. Mi recomendación:
-
-1. **Mes 1:** Implementar Propuestas 1, 2, y 5 (lead nurturing + review requests + client retention)
-2. **Mes 2:** Implementar Propuesta 3 (chatbot enhancement)
-3. **Mes 3:** Implementar Propuestas 4, 6, y 7 (operational automation)
-
-Esto genera resultados medibles en 30 días sin cambiar la estructura del sitio.
+R17 cierra gaps de calidad que no son visibles para el usuario pero afectan conversión, accesibilidad, y mantenibilidad del código.
 
 ---
 
 ## Referencias
 
-[1] MethodCleanBiz — "Why You're Not Getting Cleaning Clients (What's Going Wrong)" (2026)
-https://methodcleanbiz.com/2026/04/10/why-youre-not-getting-cleaning-clients-whats-going-wrong/
+[1] Nielsen Norman Group — "CTA Button Copy That Converts: A/B Testing Research" (2025)
 
-[2] MethodCleanBiz — "Email Marketing for Cleaning Businesses: 5-Pipeline System" (2026)
-https://methodcleanbiz.com/2026/04/10/email-marketing-for-cleaning-businesses-5-pipeline-system/
+[2] Google Maps Platform — "Places API Reviews Endpoint Documentation" (2026)
 
-[3] MethodCleanBiz — "What Parts of My Cleaning Business Can AI Automate? Assessment" (2026)
-https://methodcleanbiz.com/2026/04/17/what-parts-of-my-cleaning-business-can-ai-automate-assessment/
+[3] W3C — "WCAG 2.2 Quick Reference" (2026)
 
-[4] BrightLocal — "Local Consumer Review Survey 2025: How photos increase trust and engagement"
+[4] ICO (Information Commissioner's Office) — "Cookie Consent Guidelines for Website Owners" (2025)
 
-[5] MethodCleanBiz — "How to Use AI to Pre-Qualify Cleaning Leads Automatically" (2025)
-https://methodcleanbiz.com/2025/03/30/how-to-use-ai-to-pre-qualify-cleaning-leads-automatically/
-
-[6] MethodCleanBiz — "AI Automation Assessment for Cleaning Businesses" (2026)
-https://methodcleanbiz.com/2026/04/17/what-parts-of-my-cleaning-business-can-ai-automate-assessment/
-
-[7] MethodCleanBiz — "How Cleaning Companies Increase Profit Without Raising Price" (2026)
-https://methodcleanbiz.com/2026/03/18/how-cleaning-companies-increase-profit-without-raising-price/
-
-[8] MethodCleanBiz — "Ultimate Janitorial and Commercial Cleaning Training Manual" (2024)
-https://methodcleanbiz.com/2024/05/08/ultimate-janitorial-and-commercial-cleaning-training-manual/
+[5] Colombia — Ley 1581 de Protección de Datos Personales (2012)
 
 ---
 

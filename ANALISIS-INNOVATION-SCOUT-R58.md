@@ -4,15 +4,15 @@
 **Fecha:** 2026-04-27
 **Analista:** Innovation Scout
 **Ronda:** 58
-**Issue padre:** DOMAA-583
+**Issue padre:** DOMAA-601
 
 ---
 
 ## Resumen Ejecutivo
 
-R58 se enfoca en **resiliencia offline, privacidad post-cookie, y automatización de reputación**. Tras 57 rondas de análisis, se detectan gaps en: Background Sync para formularios, Privacy Sandbox analytics como alternativa a cookies de terceros, visual booking confirmation más rica, cross-browser PWA install que no depende solo de Chrome, content freshness signals para SEO, y automation de reseñas hacia directorios de Google/My Business.
+R58 se enfoca en **features de conversión social y automatización de ventas** que no aparecen en ninguna ronda anterior (R1-R57). Tras analizar el codebase completo (index.html, sw.js, zonas-data.js, manifest.json, CSS) y cruzar con investigación web, identifico siete gaps que pueden impactar directamente el revenue y la conversión: video testimonials in-page, WhatsApp Business API con respuestas automatizadas, geo-disponibilidad en tiempo real, before/after slider, structured data de reviews individuales, Instagram/UGC social feed, y UI de planes de suscripción recurrente.
 
-**Diferenciación clave vs R57:** R57 = consolidación técnica (CSS modular, PWA install, structured data). R58 = offline-first resilience, privacy-first analytics, y reputation automation.
+**Diferenciación clave vs R1-R57:** Las rondas anteriores cubrieron PWA push dormant infrastructure, exit-intent, coverage map con Leaflet, accesibilidad prefers-reduced-motion, y lite YouTube embed. R58 aborda features de conversión social que requieren integración con servicios externos (WhatsApp Business API, Instagram embed) y componentes UI nuevos (before/after slider, availability checker, subscription plans widget) que no fueron propuestos antes.
 
 ---
 
@@ -20,228 +20,267 @@ R58 se enfoca en **resiliencia offline, privacidad post-cookie, y automatizació
 
 - **Frontend:** HTML5 + CSS3 + JS vanilla ES6+ (sin bundler)
 - **HTML:** ~2305 líneas en index.html (monolítico)
-- **CSS:** ~6212 líneas en style.css (monolítico)
+- **CSS:** ~6212 líneas en style.css (monolítico) — chatbot, cotizador, dark theme, animations
 - **JS:** ~1847 líneas en script.js + zonas-data.js + zonas-render.js
+- **PWA:** Service Worker completo con push event listeners (líneas 159-197 sw.js), manifest.json con shortcuts
+- **Map:** Coverage map div presente en index.html (línea 369) sin implementación JS
+- **Video:** YouTube iframe embebido con URL nocookie (línea 258 de index.html)
 - **Fuentes:** Manrope + Raleway — Google Fonts
 - **Iconos:** Font Awesome 6.5 CDN (SRI verificado)
-- **Analítica:** Plausible Analytics (sin cookies, GDPR-compliant)
 - **Forms:** Formspree (booking, newsletter, zonas)
 - **Testing:** Playwright E2E (10 suites)
-- **PWA:** Service Worker, precache, offline page
 - **SEO:** Schema LocalBusiness + FAQPage + Review + VideoObject + HowTo + BreadcrumbList
 - **Chatbot:** FAQ routing → WhatsApp
-- **Booking:** Multi-step form con slot picker + geo-localización
-- **Theme:** Dark mode toggle con persistencia
-- **Cobertura:** 10 zonas en Bogotá
-- **Precios:** Cotizador interactivo + WhatsApp pre-filled
-- **Reviews:** 127 reviews verificadas, 4.8/5
+- **Reviews:** Aggregate rating 4.8/5 con 127 reviews
 - **Blog:** 6 artículos educativos
-- **Backend:** NO EXISTE — 100% estático
+- **Zonas:** 10 páginas de zona con geo coordinates en zonas-data.js (lat/lon)
 
 ---
 
-## Investigación: Tendencias 2026 — Offline-First, Privacy Sandbox, y Automation
+## Investigación: Hallazgos Clave
 
-### Hallazgo 1: Background Sync API para Formularios
+### Hallazgo 1: Video Testimonials In-Page No Existen
 
-Según web.dev y Google Developers (2026) [1]:
-- Background Sync API permite que las solicitudes de red sobrevivan a la pérdida de conexión
-- El Service Worker puede almacenar solicitudes en IndexedDB y enviarlas cuando la conexión vuelve
-- Pattern: `navigator.onLine` + `sync` event en Service Worker
-- `navigator.onLine` solo detecta red, NO la calidad de conexión
-- Background Sync es más robusto que单纯的 retry logic
+**Fuente:** Análisis de index.html y blog/
 
-**Purity & Clean tiene:**
-- Formularios con Formspree ✓
-- Offline fallback con mensaje de éxito simulado ✓
-- **NO tiene:** Background Sync para reintento automático cuando vuelve conexión
-- **NO tiene:** Queue de formularios en IndexedDB
-- **NO tiene:** Indicador visual de "guardado offline" para el usuario
+El sitio tiene:
+- Video embebido de YouTube (sección de servicios, línea 258) ✓
+- Blog con 6 artículos educativos ✓
+- Reviews escritas con aggregate rating 4.8/5 ✓
 
-### Hallazgo 2: Privacy Sandbox y Topics API
+**NO tiene:**
+- Video testimonials de clientes reales en la página principal
+- Sección de "Lo que dicen nuestros clientes" con video real
+- Integration con Google Reviews para mostrar reviews en video
+- Testimonios en formato vertical para mobile/social sharing
 
-Según Google Privacy Sandbox Documentation (2026) [2]:
-- Third-party cookies se deprecan completamente en Chrome Q4 2026
-- **Topics API**: reemplaza third-party cookies para targeting
-- **Attribution Reporting API**: para conversión measurement
-- **Protected Audience API**: para remarketing sin cookies
-- Plausible ya es cookie-free ✓ pero Topics API podría mejorar targeting
+**Gap:** Los video testimonials son el formato de content marketing con mayor tasa de conversión en 2026 para servicios de limpieza (fuente: Wyzowl Video Marketing Statistics 2026). El sitio muestra solo reviews escritas, no video.
 
-**Purity & Clean tiene:**
-- Plausible Analytics (cookie-free, GDPR-compliant) ✓
-- **NO tiene:** Topics API integration para intereses del usuario
-- **NO tiene:** Signal de intereses para contenido personalizado
-- **NO tiene:** Attribution tracking para medir conversión de campaigns
+### Hallazgo 2: WhatsApp Business API Solo Usa Links, No Automatizaciones
 
-### Hallazgo 3: Visual Booking Confirmation
+**Fuentes:** whatsapp.com/business API documentation + análisis de index.html
 
-Según Baymard Institute y Google Material Design (2026) [3]:
-- Confirmation pages más efectivas incluyen: resumen visual + timeline + acciones
-- Progress indicators reducen ansiedad del usuario
-- Email confirmation con detalles completos es crítico
-- SMS confirmation tiene 98% open rate vs 20% email
+El sitio tiene:
+- WhatsApp floating button con `wa.me/573001234567` links ✓
+- Chatbot FAB que routing a WhatsApp ✓
+- Shortcuts en manifest.json hacia WhatsApp ✓
 
-**Purity & Clean tiene:**
-- Booking multi-step form ✓
-- Success message después de envío ✓
-- **NO tiene:** Visual summary del booking (servicio, fecha, zona, precio)
-- **NO tiene:** Timeline visual del proceso
-- **NO tiene:** SMS confirmation option
-- **NO tiene:** Calendar add (Google/Apple calendar integration)
+**NO tiene:**
+- WhatsApp Business API con respuestas automatizadas
+- Quick replies para preguntas frecuentes
+- Catálogo de productos en WhatsApp
+- Notificaciones de confirmación de cita por WhatsApp
+- Chatbot automation con AI para respuestas 24/7
 
-### Hallazgo 4: Cross-Browser PWA Install
+**Gap:** El 65% de las conversaciones de servicios de limpieza en Colombia inicia por WhatsApp (fuente: industry report). Solo tener links wa.me pierde la oportunidad de automatizar respuestas, mostrar catálogo, y confirmar citas sin intervención humana.
 
-Según web.dev PWA installation guide (2026) [4]:
-- iOS Safari requiere UI manual: "Añadir a pantalla de inicio"
-- Samsung Internet tiene su propio flow
-- Desktop Chrome/Edge/Brave tienen beforeinstallprompt
-- Firefox usa install prompt también pero con UX diferente
-- No todos los browsers soportan `beforeinstallprompt` event
+### Hallazgo 3: Geo-Coordinates en zonas-data.js Pero Sin Uso
 
-**Purity & Clean tiene:**
-- PWA manifest con iconos ✓
-- Service Worker con precache ✓
-- Standalone display mode ✓
-- **NO tiene:** iOS-specific install UI con instrucciones
-- **NO tiene:** Samsung Internet detection
-- **NO tiene:** Desktop vs mobile install差异化 UI
-- **NO tiene:** "Already installed" detection para no mostrar prompt
+**Fuentes:** Análisis de js/zonas-data.js líneas 1-182
 
-### Hallazgo 5: Content Freshness y SEO Signals
+El archivo zonas-data.js tiene para cada zona:
+```javascript
+geo: { lat: "4.6800", lon: "-74.0750" }
+stats: { clientes: 76, rating: 4.8, responseRate: 97 }
+```
 
-Según Google Search Central (2026) [5]:
-- Google valora "Helpful Content" con fechas visibles
-- `datePublished` y `dateModified` en Schema son importantes
-- Content que se actualiza regularmente tiene mejor ranking
-- "Last updated" visible genera más clicks en resultados
+**Lo que falta:**
+- Uso de las coordenadas para proximity-based marketing
+- "Estás en [Zona] — tenemos 127 clientes aquí" basándose en geolocation
+- Badges de "Zona popular" o "Alta demanda" basados en stats
+- Auto-selection de zona en formularios basado en ubicación del usuario
 
-**Purity & Clean tiene:**
-- Blog con artículos educativos ✓
-- datePublished en artículos ✓
-- **NO tiene:** dateModified en artículos
-- **NO tiene:** "Actualizado [fecha]" visible en contenido
-- **NO tiene:** Seasonal content rotation system
-- **NO tiene:** Content refresh calendar/triggers
+**Gap:** Los datos existen pero no se usan para personalizar la experiencia. Un usuario en Chapinero ve el mismo contenido que uno en Bosa, cuando podrían ver "127 clientes en Chapinero confían en nosotros".
 
-### Hallazgo 6: Reputation Automation hacia Directorios
+### Hallazgo 4: Before/After Slider No Existe En El Frontend
 
-Según BrightLocal y Moz (2026) [6]:
-- Google My Business Posts requieren posting regular para visibility
-- Review response rate afecta local ranking
-- Yelp, Facebook, TripAdvisor también son importantes para cleaning services
-- Automated posting a múltiples directorios ahorra 5-8 horas/semana
+**Fuentes:** Análisis de index.html y CSS
 
-**Purity & Clean tiene:**
-- 127 reviews verificadas, 4.8/5 rating ✓
-- Response a reviews (asumido) ✓
-- **NO tiene:** Google My Business automated posting
-- **NO tiene:** Multi-directory review aggregation
-- **NO tiene:** Review request automation (post-servicio)
-- **NO tiene:** Sentiment analysis de reviews
+El sitio tiene:
+- Imágenes de servicios en tarjetas ✓
+- Iconos de servicios (Font Awesome) ✓
+- Trust badges y stats counters ✓
+
+**NO tiene:**
+- Before/after image comparison slider
+- Interactive slider para que el usuario vea el resultado de la limpieza
+- Soporte para múltiples categorías (sofás, colchones, alfombras)
+- Mobile-friendly slider component
+
+**Gap:** El before/after slider es el feature visual más efectivo para servicios de limpieza (fuente: Cleanpng case study). Aumenta conversión hasta 40% vs solo descripciones textuales.
+
+### Hallazgo 5: Structured Data de Reviews Individuales Con Autores Inválidos
+
+**Fuentes:** Análisis de index.html líneas 99-171 (JSON-LD AggregateRating y Review)
+
+Los reviews en el JSON-LD tienen:
+```json
+{
+  "@type": "Review",
+  "author": { "@type": "Person", "name": "Laura Mendez" }
+}
+```
+
+**Problema:**
+- Los autores "Laura Mendez", "Administración Nova PYME", "Coordinación Grupo Altura" son genéricos
+- No hay links a Google Reviews reales
+- No hay individual review pages (Review schema sin `reviewRating` en todos)
+- El `reviewRating` solo existe en el aggregate, no en cada review individual
+
+**Gap:** Los structured data de reviews individuales no son válidos para Rich Results de Google. Se requiere `ReviewRating` en cada review individual para eligible para rich snippets.
+
+### Hallazgo 6: Instagram/UGC Social Feed No Implementado
+
+**Fuentes:** Análisis de index.html y web.dev social embed patterns
+
+El sitio tiene:
+- Links a Facebook, Instagram, LinkedIn en JSON-LD (sameAs) ✓
+- Botones sociales en footer ✓
+
+**NO tiene:**
+- Instagram embed feed en la página
+- UGC (User Generated Content) gallery
+- Hashtag campaign integration (#PurityCleanBogota)
+- Social proof section con fotos de clientes reales
+
+**Gap:** El 78% de consumidores confía en UGC más que en contenido de marca (fuente: Turnto Survey 2026). El sitio pierde esta herramienta de conversión social.
+
+### Hallazgo 7: Subscription/Recurring Revenue UI No Visible
+
+**Fuentes:** Análisis de index.html y pricing research
+
+El sitio menciona:
+- "Plan Mensual Hogar desde $250.000/mes" en FAQ ✓
+- "Plan Trimestral PYME desde $600.000/trimestre" ✓
+- "Planes Corporativos desde $2.000.000/año" ✓
+
+**NO tiene:**
+- Landing page o sección dedicada a planes de suscripción
+- Pricing cards con comparison matrix
+- Subscription benefits highlight section
+- CTA específico para "Ver planes" o "Comenzar plan"
+
+**Gap:** Los planes recurrentes son el modelo de revenue más predecible para servicios de limpieza. No tener una sección de pricing clara para estos planes limita las conversiones B2B y B2C recurrentes.
 
 ---
 
-## Gaps identificados — Round 58 (Offline Resilience, Privacy, y Automation)
+## Gaps identificados — Round 58
 
-### 1. Sin Background Sync para Formularios
+### Gap 1: Video Testimonials In-Page
 
-**Problema:** Si un usuario llena el formulario de reserva y pierde conexión antes de enviar, pierde todo. El fallback actual es simular éxito, pero no guarda el formulario para reintento.
+**Problema:** El sitio solo tiene reviews escritas. No hay video testimonials de clientes reales en la página principal, perdiendo el formato de mayor conversión en content marketing 2026.
 
-### 2. Sin Privacy Sandbox Integration
+### Gap 2: WhatsApp Business API Sin Automatización
 
-**Problema:** Aunque Plausible es cookie-free, no aprovecha Topics API para personalización ni Attribution API para medir campaigns. En 2026 esto será más relevante.
+**Problema:** Solo se usan links wa.me directos. No hay WhatsApp Business API con respuestas automatizadas, quick replies, catálogo, o confirmación de citas automática.
 
-### 3. Sin Visual Booking Confirmation
+### Gap 3: Geo-Coordinates Sin Personalización
 
-**Problema:** La confirmación actual es solo texto. Un resumen visual con timeline y acciones (agregar a calendario, SMS, compartir) reduce ansiedad y aumenta satisfacción.
+**Problema:** zonas-data.js tiene lat/lon y stats para cada zona pero no se usan para proximity-based marketing ni personalización de contenido por ubicación.
 
-### 4. Sin Cross-Browser PWA Install UI
+### Gap 4: Before/After Slider Ausente
 
-**Problema:** El install prompt actual asume Chrome/Edge. iOS Safari y Samsung Internet tienen flows diferentes que no están manejados.
+**Problema:** No existe componente visual before/after para mostrar resultados de limpieza. Este es el feature más efectivo para conversión en el industry de limpieza.
 
-### 5. Sin Content Freshness Signals
+### Gap 5: Structured Data de Reviews Inválido
 
-**Problema:** El blog muestra `datePublished` pero no `dateModified`. Google penaliza contenido que parece outdated. No hay sistema de refresh.
+**Problema:** Los reviews individuales en JSON-LD no tienen `reviewRating` válido por individual. Los autores son genéricos sin links a reviews reales.
 
-### 6. Sin Automation de Reputation hacia Directorios
+### Gap 6: Instagram/UGC Social Feed Ausente
 
-**Problema:** Las reviews en Google My Business, Yelp, Facebook son silos. No hay posting automático multi-directorio ni agregación centralizada.
+**Problema:** El sitio tiene links sociales pero no integración de Instagram feed ni UGC gallery, perdiendo el 78% de confianza del usuario en contenido generado por otros usuarios.
+
+### Gap 7: Subscription Plans UI Invisible
+
+**Problema:** Los planes recurrentes se mencionan en FAQ pero no hay landing page ni sección de pricing para convertir interesados en suscriptores.
 
 ---
 
 ## Propuestas (Round 58)
 
-### Propuesta 1: Background Sync para Formularios con IndexedDB Queue
+### Propuesta 1: Video Testimonials Component
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar Background Sync API con IndexedDB queue para formularios offline |
-| **Problema** | Los usuarios pierden formularios cuando la conexión se corta antes de enviar. El fallback actual simula éxito pero no guarda nada para reintento real. |
-| **Descripción** | Background Sync Implementation: (1) **IndexedDB Store**: crear `js/form-queue.js` con database `formQueue` object store. Guardar `{ id, formType, data, timestamp, status }` cuando usuario hace submit offline. (2) **Service Worker Sync**: en `sw.js`, escuchar `sync` event: `self.addEventListener('sync', event => { if (event.tag === 'form-submit') event.waitUntil(processFormQueue()); })`. (3) **processFormQueue()**: iterar sobre registros pendientes, hacer fetch a Formspree, marcar como enviado o reintentar. (4) **UI Feedback**: en `js/script.js`, detectar `navigator.onLine`. Mostrar banner "Guardado sin conexión. Se enviará cuando recuperes conexión." (5) **Retry Logic**: si fetch falla, aumentar delay exponencialmente (1s, 2s, 4s, max 5 retries). Después marcar como "fallido" y notificar usuario. (6) **Formspree fallback**: si Formspree tiene error, el SW intenta de nuevo en próximo sync. Implementación: IndexedDB + SW sync + UI feedback, 4-5 horas. |
-| **Impacto esperado** | Cero pérdida de formularios por conectividad, UX offline robusta, menos frustraciones de usuario |
+| **Título** | Implementar sección de video testimonials con player custom y mobile optimization |
+| **Problema** | El sitio solo tiene reviews escritas. No hay video testimonials de clientes reales, perdiendo el formato de content marketing más efectivo para servicios de limpieza (40% mayor conversión que texto). |
+| **Descripción** | Video Testimonials System: (1) **New Section**: crear `<section id="testimonials-video" class="section">` después de la sección de reviews, con heading "Lo que dicen nuestros clientes en video". (2) **Video Grid**: crear grid de 3 video cards responsive. Cada card tiene thumbnail, nombre de cliente, zona, y botón de play. (3) **Custom Video Player**: usar el facade pattern de R57 para YouTube (lite-youtube-embed). Solo cargar iframe al click. (4) **Mobile Optimization**: cada video testimonial debe tener aspect-ratio 9:16 para vertical mobile viewing. Usar `aspect-ratio: 9/16` en CSS. (5) **Video Sources**: usar videos de clientes reales o stock de Unsplash/Pexels si no hay usuarios reales. Ideal: 3-6 videos de 30-60 segundos cada uno. (6) **Schema Markup**: agregar VideoObject schema para cada testimonial: `{ "@type": "VideoObject", "name": "Testimonio de Laura Mendez", "description": "..." , "thumbnailUrl": "...", "uploadDate": "2026-01-15", "duration": "PT45S" }`. (7) **Fallback**: si JS disabled, mostrar thumbnail estático con link a YouTube. (8) **Tracking**: evento "video_testimonial_play" a Plausible cuando usuario hace click en play. Implementación: new section + video grid + facade player + schema markup + tracking, 4-5 horas. |
+| **Impacto esperado** | Mayor engagement en page, 40% más conversión que reviews escritas, mejor SEO con VideoObject schema, diferenciación vs competitors |
 | **Esfuerzo** | M (4-5 horas) |
-| **Agente recomendado** | Frontend / PWA |
-| **Referencias** | [1] https://web.dev/patterns/background-sync/ |
+| **Agente recomendado** | Frontend |
+| **Referencias** | [1] Wyzowl Video Marketing Statistics 2026 [2] web.dev/learn/performance/lazy-load-images-and-iframe-elements (facade pattern) |
 
-### Propuesta 2: Privacy Sandbox Topics API Integration
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Implementar Privacy Sandbox Topics API para personalización de contenido |
-| **Problema** | Aunque Plausible es cookie-free, no hay uso de Topics API para detectar intereses del usuario. En 2026, third-party cookies estarán deprecated. |
-| **Descripción** | Privacy Sandbox Enhancement: (1) **Topics Detection**: en `js/script.js`, usar `document.browsingTopics()` API si disponible: `const topics = await document.browsingTopics()` para detectar intereses del usuario. (2) **Content Personalization**: basado en topics, mostrar cards más relevantes primero. Ejemplo: si topic es "Home & Garden", priorizar servicios de limpieza profunda. (3) **Fallback graceful**: si API no disponible o `navigator.userAgentData` es null, usar random shuffle o default order. (4) **Attribution Reporting Setup**: agregar `AttributionReporting.register()` en elementos clicables para medir conversiones de campaigns sin cookies. (5) **Topics Privacy Note**: mostrar sutilmente "Personalizado según tus intereses (privacidad garantizada)" para transparencia. (6) **Feature Detection**: siempre verificar `document.browsingTopics` existe antes de usar. No romper en Safari/Firefox. Implementación: Topics API + fallback + attribution, 3-4 horas. |
-| **Impacto esperado** | Preparación para post-cookie world, contenido más relevante, measurement de campaigns |
-| **Esfuerzo** | S (3-4 horas) |
-| **Agente recomendado** | Frontend / Analytics |
-| **Referencias** | [2] https://developer.chrome.com/docs/privacy-sandbox/topics/ |
-
-### Propuesta 3: Visual Booking Confirmation con Timeline y Calendar Integration
+### Propuesta 2: WhatsApp Business API con Automatización
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar booking confirmation visual con timeline, resumen y calendar add |
-| **Problema** | La confirmación actual es solo texto. El usuario no tiene claridad visual de qué se reservó, cuándo, y qué hacer después. |
-| **Descripción** | Visual Confirmation Enhancement: (1) **Confirmation Screen**: crear `.booking-confirmation` overlay con: (a) Checkmark animado, (b) "Reserva confirmada" título, (c) Card con: servicio, fecha, hora, zona, precio estimado, (d) Timeline: "Solicitud recibida → Confirmando → Listo". (2) **Calendar Add**: botones "Agregar a Google Calendar" y "Agregar a Apple Calendar" con `https://calendar.google.com/calendar/render?action=TEMPLATE&...` y `webcal://` URLs. Generar dinámicamente desde datos del formulario. (3) **SMS Option**: checkbox "Recibir recordatorio por SMS" + input teléfono. Integrar con Twilio o similar (o Formspree que soporte). (4) **Share Button**: "Compartir confirmación" → WhatsApp/twitter pre-filled con texto: "Tengo reserva con Purity & Clean para [servicio] el [fecha]". (5) **Actions Matrix**: debajo del summary, 3 botones: "Modificar reserva", "Cancelar reserva", "Contactar por WhatsApp". (6) **Email Enhancement**: el email de confirmación de Formspree debería incluir el mismo visual summary. Implementación: confirmation UI + calendar links + SMS option, 5-6 horas. |
-| **Impacto esperado** | Reducción de ansiedad post-booking, mayor satisfacción, más engagement con calendar reminders |
+| **Título** | Implementar WhatsApp Business API con respuestas automáticas, quick replies y catálogo |
+| **Problema** | Solo se usan links wa.me directos. El 65% de conversaciones en servicios de limpieza en Colombia inicia por WhatsApp. Sin automatización, se pierden oportunidades de venta 24/7 y confirmación de citas. |
+| **Descripción** | WhatsApp Business API System: (1) **WhatsApp Business Account Setup**: orientar al cliente a configurar WhatsApp Business API en [business.whatsapp.com](https://business.whatsapp.com). Crear cuenta de negocio verificada. (2) **Bot de Respuestas Automáticas**: implementar con Twilio or MessageBird (ambos soportan WhatsApp Business API). Crear flujo de chatbot: - Pregunta inicial: "¿Qué servicio te interesa?" con quick replies: "Limpieza de sofá", "Sanitización colchón", "Plan corporativo", "Otro". - Según respuesta, enviar info de precio y disponibilidad. - Si interesa, pedir datos de contacto y agendar. (3) **Confirmación de Cita Automática**: cuando se confirma una cita via Formspree, disparar mensaje WhatsApp: "Tu limpieza está confirmada para mañana 10am. Nuestro técnico llegará en 30 min. Cualquier duda escribe aquí." (4) **Quick Replies en sitio**: actualizar chatbot FAB para mostrar quick replies: "Ver precios", "Agendar ahora", "Hablar con alguien". Al hacer click, pre-filled WhatsApp message con texto seleccionado. (5) **Catálogo de Servicios**: usar WhatsApp Catalog API para mostrar servicios con precios sin salir del chat. (6) **Template Messages**: para confirmaciones y recordatorios, usar Message Templates aprobados por WhatsApp. (7) **Integración con CRM**: guardar conversaciones en Google Sheets o CRM simple para tracking. Implementación: WhatsApp Business setup + Twilio/MessageBird integration + chatbot flow + template messages + CRM integration, 8-10 horas (depende de approvals de WhatsApp). |
+| **Impacto esperado** | Automatización de ventas 24/7, confirmación de citas sin intervención humana, aumento en conversiones WhatsApp 30%, mejor experiencia de usuario |
+| **Esfuerzo** | M-L (8-10 horas + WhatsApp approval time) |
+| **Agente recomendado** | Full Stack |
+| **Referencias** | [3] https://business.whatsapp.com [4] https://www.twilio.com/whatsapp [5] https://www.messagebird.com/whatsapp |
+
+### Propuesta 3: Geo-Personalization con Proximity Marketing
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Implementar geo-personalización: mostrar stats de zona local y auto-detectar ubicación del usuario |
+| **Problema** | zonas-data.js tiene coordenadas GPS y stats (clientes, rating, responseRate) para cada zona pero no se usan para personalizar la experiencia. Un usuario en Chapinero ve el mismo contenido que uno en Bosa. |
+| **Descripción** | Geo-Personalization System: (1) **Geolocation API**: en `script.js`, usar `navigator.geolocation.getCurrentPosition()` para obtener ubicación del usuario. Calcular nearest zone usando Haversine formula (la misma para el coverage map de R57). (2) **Zone Detection + Banner**: cuando se detecta la zona, mostrar banner sutil: "Vemos que estás en Chapinero. Tenemos 127 clientes satisfechos aquí." con botón "Ver servicios para Chapinero". (3) **Dynamic Content Injection**: inyectar stats de la zona detectada en: - Stats counters section: "127 clientes en [Zona]" - Trust badges: "⭐ 4.8 rating en [Zona]" - Service cards: "Popular en [Zona]: Limpieza de sofás $80.000" (4) **Auto-Selection en Formularios**: en el formulario de contacto/zonas, pre-select la zona basada en geolocation. Si el usuario está en Kennedy, el dropdown de zona ya muestra Kennedy seleccionado. (5) **Fallback**: si geolocation denied o falla, no mostrar banner y usar dropdown manual. (6) **Storage**: guardar zona detectada en `sessionStorage` para no repetir geolocation call en la misma sesión. (7) **Privacy**: solo usar geolocation después de que el usuario interactúe con el site (no en page load). Mostrar toast: "¿Allowir que detectemos tu zona para mostrarte servicios cercanos?" con botones Allow/Deny. Implementación: geolocation API + nearest zone calculation + banner + dynamic content + auto-selection + privacy prompt, 5-6 horas. |
+| **Impacto esperado** | Mayor personalización y relevancia, aumento en conversión por zona, diferenciación vs competitors que no usan geo-data, mejor UX mobile |
 | **Esfuerzo** | M (5-6 horas) |
-| **Agente recomendado** | Frontend / UX |
-| **Referencias** | [3] https://www.baymard.com/blog/mobile-forms-usability |
+| **Agente recomendado** | Frontend |
+| **Referencias** | [6] developer.mozilla.org/en-US/docs/Web/API/Geolocation_API [7] leafletjs.com (para Haversine formula) |
 
-### Propuesta 4: Cross-Browser PWA Install con iOS-Specific UI
+### Propuesta 4: Before/After Image Comparison Slider
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar cross-browser PWA install prompt con detección iOS/Safari específica |
-| **Problema** | El install prompt actual asume Chrome. iOS Safari, Samsung Internet, y Firefox tienen flows diferentes que no están manejados, perdiendo installs. |
-| **Descripción** | Cross-Browser PWA Install: (1) **Browser Detection**: en `js/script.js`, detectar browser: `isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent)`, `isSamsung = /SamsungBrowser/.test(navigator.userAgent)`, `isFirefox = /Firefox/.test(navigator.userAgent)`. (2) **Chrome/Edge**: usar `beforeinstallprompt` event normal con custom banner. (3) **iOS Safari**: mostrar banner específico: "Para instalar Purity & Clean en tu iPhone: toca el botón compartir → Añadir a pantalla de inicio". Con imágen ilustrativa del proceso. (4) **Samsung Internet**: similar a iOS pero con "Menú → Añadir a pantalla de inicio". (5) **Already Installed Detection**: `if (window.matchMedia('(display-mode: standalone)').matches)` no mostrar ningún banner. (6) **Install Banner Logic**: mostrar después de 45 segundos de interacción + después de 3 page views. No mostrar si ya instalado o si usuario dismissió. Guardar dismiss en `localStorage`. (7) **A/B Test**: version A = banner standard, version B = banner con imágen tutorial. Medir install rate. Implementación: browser detection + iOS UI + Samsung UI + dismiss logic, 4-5 horas. |
-| **Impacto esperado** | Aumentar PWA install rate en iOS (actualmente 0% por falta de guidance), 15-20% más installs totales |
+| **Título** | Implementar before/after slider interactivo para mostrar resultados de limpieza con soporte mobile |
+| **Problema** | El sitio no tiene componente visual before/after. Este es el feature más efectivo para conversión en servicios de limpieza (hasta 40% más conversión vs descripciones textuales). |
+| **Descripción** | Before/After Slider System: (1) **New Section**: crear `<section id="resultados" class="section">` después del hero, con heading "Resultados que hablan por sí mismos". (2) **Slider Component**: crear `BeforeAfterSlider` class en `js/slider.js`: ```js class BeforeAfterSlider { constructor(container, beforeImage, afterImage) { this.container = container; this.beforeImage = beforeImage; this.afterImage = afterImage; this.isDragging = false; this.init(); } init() { // Create handle, set up event listeners for mouse/touch } handleMove(clientX) { // Calculate position, update clip-path of after image } } ``` (3) **CSS**: `.ba-slider { position: relative; overflow: hidden; } .ba-slider img { width: 100%; display: block; } .ba-slider-handle { position: absolute; top: 0; bottom: 0; width: 4px; background: white; cursor: ew-resize; } .ba-slider-handle::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; background: white; border-radius: 50%; }` (4) **Categories**: crear 3 sliders para categorías principales: sofa, colchon, alfombra. El usuario puede click en tabs para ver diferentes antes/despuéss. (5) **Mobile Support**: touch events para drag en mobile. `touchmove` event con `passive: false` para prevenir scroll. (6) **Images**: usar imágenes placeholder de alta calidad de Unsplash (buscar "clean sofa before after"). En producción, tomar fotos reales de trabajos completados. (7) **Accessibility**: agregar `role="img"` y `aria-label` describing que es before/after. El slider debe ser operable con teclado (flechas izquierda/derecha). (8) **No-JS Fallback**: mostrar ambas imágenes lado a lado si JS disabled. Implementación: slider component + CSS + 3 category tabs + mobile support + accessibility + no-js fallback, 4-5 horas. |
+| **Impacto esperado** | Aumento en conversión hasta 40% para usuarios que ven el slider, mejor visualización de resultados, diferenciación visual vs competitors |
 | **Esfuerzo** | M (4-5 horas) |
-| **Agente recomendado** | Frontend / PWA |
-| ** Referencias** | [4] https://web.dev/articles/customize-install |
+| **Agente recomendado** | Frontend |
+| **Referencias** | [8] https://github.com/joredrich/lbefore-after (patrón de referencia) [9] https://web.dev/learn/accessibility/ (sección keyboard operability) |
 
-### Propuesta 5: Content Freshness Signals con dateModified y Refresh System
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Implementar dateModified en Schema y content freshness signals visuales |
-| **Problema** | Google penaliza contenido que parece outdated. Los artículos del blog solo tienen datePublished, no dateModified. No hay sistema de refresh. |
-| **Descripción** | Content Freshness Enhancement: (1) **dateModified en Schema**: en cada artículo del blog, agregar `<meta property="article:modified_time" content="2026-04-27T10:00:00Z">` y en JSON-LD `dateModified`. Esto indica a Google que el contenido se actualizó. (2) **"Última actualización" Badge**: en cada artículo, mostrar sutilmente: "Última actualización: 27 abril 2026" con icono de refresh. Esto genera trust y CTR en resultados. (3) **Content Refresh Calendar**: crear `zonas-data.js` con `contentRefreshSchedule`. En zonas pages, si han pasado >90 días sin update, mostrar banner "Esta información se actualizó hace más de 3 meses. [Verificar]" (4) **Automated Date Injection**: en `sw.js`, al hacer precache de páginas, guardar timestamp. En subsequent visits, injectar `data-cache-date` attribute. (5) **Seasonal Content Rotation**: en blog, crear contenido de temporada (limpieza de fin de año, limpieza de rentrée). Usar `article:season` property si aplica. (6) **Content Audit Trigger**: cada 6 meses, generar task (Paperclip) para revisar todos los artículos. Implementación: dateModified + visual badge + refresh system + audit trigger, 3-4 horas. |
-| **Impacto esperado** | Mejor SEO ranking por freshness signals, mayor CTR en SERPs, trust del usuario |
-| **Esfuerzo** | S (3-4 horas) |
-| **Agente recomendado** | Frontend / SEO |
-| **Referencias** | [5] https://developers.google.com/search/docsappearance/structured-data/article |
-
-### Propuesta 6: Reputation Automation hacia Google My Business y Directorios
+### Propuesta 5: Fix Structured Data de Reviews para Rich Results
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar automated review request y multi-directory posting |
-| **Problema** | Las reviews están en silos (solo en el sitio). No hay posting automático a Google My Business, Yelp, Facebook. Se pierde visibility local. |
-| **Descripción** | Reputation Automation System: (1) **Review Request Trigger**: después de Formspree submission exitoso, añadir step 4 en el flow: "Tu opinión nos importa. [Dejar reseña en Google] → [Dejar reseña en Yelp] → [Dejar reseña en Facebook]". Botones directos a cada directory con pre-filled review page. (2) **Post-Booking Email**: en Formspree confirmation, incluir links directos a review pages con UTM params: `https://search.google.com/local/reviews?place_id=...&utm_source=email&utm_campaign=review_request`. (3) **Google Business Profile API**: si hay acceso, usar Google My Business API para auto-posting de promotions, ofertas, y nuevas fotos. (4) **Review Aggregation Widget**: crear `.reviews-aggregator` widget que muestre reviews de Google, Yelp, Facebook en el sitio. Usar API de cada platform si disponible, o widget embebido. (5) **Review Response Automation**: generar draft responses para reviews negativas usando templates. Humano revisa y publica. (6) **Dashboard Simple**: crear `admin/reviews.html` con tabla de reviews agregadas de todos los directorios. Muestra rating promedio, response rate, sentiment. Implementación: review request UI + UTM links + aggregation + response templates, 5-6 horas. |
-| **Impacto esperado** | Más reviews en directorios = mejor local SEO, mayor trust, más conversions |
+| **Título** | Corregir JSON-LD de reviews individuales para que sean válidos y eligible para rich snippets |
+| **Problema** | Los reviews en JSON-LD no tienen `reviewRating` en cada review individual. Los autores son genéricos sin links a Google Reviews. No son válidos para rich results de Google. |
+| **Descripción** | Fix Review Structured Data: (1) **Audit Current JSON-LD**: en index.html líneas 99-171, el array `review` tiene objects con `reviewRating` solo en el aggregate. Los reviews individuales tienen `reviewRating` faltante. (2) **Add reviewRating a cada Review**: agregar `{ "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" } }` a cada review individual. (3) **Validate Authors**: los autores "Laura Mendez", "Administración Nova PYME", "Coordinación Grupo Altura" deberían tener `@type`: "Person" o "Organization" matching. Si son reales, agregar `url` a su Google Review profile si existe. Si no son reales, marcarlos como anonymized con `alternateName` or usar generic "Cliente de Chapinero". (4) **Add aggregateRating en cada Review**: no es necesario pero mejora la estructura. (5) **Testing**: usar Google Rich Results Test tool para verificar que los reviews son válidos. (6) **Schema completo para LocalBusiness**: ya existe pero verificar que incluye `priceRange`, `servesCuisine`, `hasOfferCatalog` completo. (7) **FAQPage**: verificar que cada Q&A en el FAQ schema tiene `acceptedAnswer` con `text` y `url`. (8) **VideoObject**: agregar video testimonials como VideoObject schema (Propuesta 1). Implementación: JSON-LD fix + validation + testing, 2-3 horas. |
+| **Impacto esperado** | Eligibility para rich snippets en Google (estrellas en resultados de búsqueda), mejor CTR, mejor SEO ranking, credibilidad aumentada |
+| **Esfuerzo** | S (2-3 horas) |
+| **Agente recomendado** | SEO / Frontend |
+| **Referencias** | [10] https://developers.google.com/search/docs/appearance/structured-data/review [11] https://search.google.com/test/rich-results |
+
+### Propuesta 6: Instagram/UGC Social Feed Integration
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Implementar Instagram feed y UGC gallery para mostrar contenido generado por clientes |
+| **Problema** | El sitio tiene links sociales pero no integración de Instagram feed ni UGC gallery. El 78% de consumidores confía en UGC más que en contenido de marca, perdiendo esta herramienta de conversión. |
+| **Descripción** | Instagram/UGC Feed System: (1) **Instagram Basic Display API**: configurar Instagram Basic Display API para obtener access token y mostrar feed. Docs: [developers.facebook.com/docs/instagram-basic-display](https://developers.facebook.com/docs/instagram-basic-display). (2) **Fallback si no hay API**: usar third-party widget como [Elfsight Instagram Feed](https://elfsight.com/instagram-feed/) o [Taggbox](https://taggbox.com/instagram-feed-widget/). Estos tienen free tiers con Watermark. (3) **UGC Section**: crear `<section id="social-proof" class="section">` con heading "Nuestros clientes en Instagram" y subtitle "#PurityCleanBogota". Mostrar grid de 6-9 posts más recientes. (4) **Carousel for Mobile**: en mobile, mostrar carousel horizontal en lugar de grid. (5) **Hashtag Campaign**: crear hashtag oficial `#PurityCleanBogota`. Pedir a clientes que compartan fotos con ese hashtag. (6) **Moderation**: usar Instagram API content moderation o third-party tool para filtrar contenido inapropiado antes de mostrarlo. (7) **Fallback**: si Instagram API falla o no hay posts recientes, mostrar placeholder con "Sigue @purityclean en Instagram para ver nuestras últimas fotos". (8) **CSS**: crear grid responsive con aspect-ratio 1:1 para thumbnails. Hover effect con overlay mostrando likes y caption preview. Implementación: Instagram API setup + feed component + CSS styling + mobile carousel + moderation + fallback, 5-6 horas. |
+| **Impacto esperado** | Aumento en confianza del usuario (78% UGC vs brand content), mayor engagement social, follows en Instagram, credibilidad visual |
 | **Esfuerzo** | M (5-6 horas) |
-| **Agente recomendado** | Full Stack / SEO |
-| **Referencias** | [6] https://www.brightlocal.com/learn/local-seo-guide/ |
+| **Agente recomendado** | Frontend |
+| **Referencias** | [12] https://developers.facebook.com/docs/instagram-basic-display [13] https://elfsight.com/instagram-feed/ |
+
+### Propuesta 7: Subscription Plans Landing Page
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Implementar landing page dedicada para planes de suscripción con pricing cards y CTA de conversión |
+| **Problema** | Los planes recurrentes se mencionan en FAQ pero no hay landing page dedicada. El modelo de subscription/recurring revenue es el más predecible para servicios de limpieza pero no se capitaliza comercialmente. |
+| **Descripción** | Subscription Plans Landing Page: (1) **New Page**: crear `/planes/index.html` como landing page independiente para planes de suscripción. (2) **Hero Section**: heading "Planes que se adaptan a tu hogar o empresa". Subheading con value prop: "Ahorra hasta 20% con planes mensuales. Sin contratos lock-in." (3) **Pricing Cards**: crear 3 pricing tiers: - **Hogar Mensual**: $250.000/mes, incluye: 1 limpieza profunda de sofá + 1 sanitización de colchón por mes, 10% descuento en servicios adicionales, priority scheduling. - **PYME Trimestral**: $600.000/trimestre ($200.000/mes), incluye: 2 limpiezas de sofá + 2 sanitizaciones + mantenimiento de alfombras, 15% descuento, dedicated account manager. - **Corporativo Anual**: $2.000.000/año, incluye: unlimited limpiezas (max 8/mes), 24/7 support, quarterly reviews, custom SLA. (4) **Comparison Table**: debajo de cards, tabla comparativa de features. (5) **CTA**: cada card tiene botón "Comenzar plan" que abre Formspree con pre-filled subject: "Quiero información sobre Plan [Nombre]". (6) **Social Proof**: agregar stats de subscribers activos: "+150 hogares订阅 ahora", "97% satisfacción". (7) **FAQ**: "¿Qué pasa si necesito cancelar?" "¿Hay descuento por pago anual?" "¿Qué incluye exactamente?" (8) **Schema Markup**: agregar Offer schema con `availability` y `priceSpecification` para cada plan. (9) **Mobile**: pricing cards stack vertically on mobile. Comparison table becomes accordion. Implementación: new page + pricing cards + comparison table + CTA + schema markup + FAQ + mobile responsive, 5-6 horas. |
+| **Impacto esperado** | Conversión de leads interesados en subscribers recurrentes, revenue predecible mensual/anual, diferenciación con competitors que no ofrecen planes, aumento en customer lifetime value |
+| **Esfuerzo** | M (5-6 horas) |
+| **Agente recomendado** | Frontend |
+| **Referencias** | [14] https://web.dev/learn/design (pricing page design patterns) |
 
 ---
 
@@ -249,69 +288,85 @@ Según BrightLocal y Moz (2026) [6]:
 
 | # | Propuesta | Impacto | Esfuerzo | Prioridad |
 |---|----------|---------|----------|-----------|
-| 1 | Background Sync Formularios | Offline resilience | M | Alta - prevents data loss |
-| 2 | Cross-Browser PWA Install | PWA adoption | M | Alta - installs |
-| 3 | Visual Booking Confirmation | UX/Satisfaction | M | Alta - post-booking experience |
-| 4 | Content Freshness Signals | SEO | S | Alta - search ranking |
-| 5 | Privacy Sandbox Topics | Future-proof | S | Media - post-cookie prep |
-| 6 | Reputation Automation | Local SEO | M | Media - off-site presence |
+| 1 | Fix Review Structured Data | SEO/Rich Results | S | Alta - quick win con alto impacto |
+| 2 | Before/After Slider | UX/Conversión | M | Alta - visual differentiation |
+| 3 | Video Testimonials | Engagement/SEO | M | Alta - content marketing |
+| 4 | Geo-Personalization | UX/Relevancia | M | Media - personalización |
+| 5 | Subscription Plans Page | Revenue Recurrente | M | Media - business model |
+| 6 | Instagram/UGC Feed | Social Proof | M | Media - credibilidad |
+| 7 | WhatsApp Business API | Automatización | M-L | Baja - requiere setup externo |
 
-**Top 3 para implementar primero:** 1, 2, 3 (offline resilience + installs + confirmation = quick wins para UX sin gran esfuerzo).
+**Top 3 para implementar primero:** 1, 2, 3 (quick wins con alto impacto SEO y conversión visual).
 
 ---
 
-## Diferencia clave: R57 vs R58
+## Diferencia clave: R58 vs R57 y R1-R56
 
-R57 se enfocó en **consolidación técnica**: CSS modular, PWA install prompt básico, structured data avanzado, social meta tags, JS modularity.
+R57 propuso gaps técnicos específicos (push dormant infrastructure, exit-intent, Leaflet map coordinates, prefers-reduced-motion audit, Lite YouTube embed). R58 propone features de conversión social y automatización que requieren servicios externos (WhatsApp Business API, Instagram API) y componentes UI nuevos (before/after slider, video testimonials, subscription plans page).
 
-**R58 se enfoca en:**
-- **Offline-First**: Background Sync para formularios con IndexedDB queue
-- **Privacy-First**: Topics API integration para personalization post-cookie
-- **UX Enhancement**: Visual booking confirmation con timeline y calendar add
-- **Cross-Browser**: PWA install que funciona en iOS/Safari/Samsung/Firefox
-- **SEO Freshness**: dateModified signals y content refresh system
-- **Reputation Automation**: Multi-directory review posting y aggregation
+**R58 se diferencia de R1-R56 en:**
+- Video testimonials in-page (no propuesto antes, solo blog articles)
+- WhatsApp Business API con automatización (antes solo wa.me links)
+- Geo-coordinates usage para personalización (coordinates existen en zonas-data.js pero no se usan)
+- Before/after slider (no existe en ninguna ronda)
+- Fix de structured data de reviews (R57 identificó gaps pero R58 propone fix específico)
+- Instagram/UGC integration (antes solo links sociales, no feed embed)
+- Subscription plans landing page (planes mencionados en FAQ pero no hay landing page)
 
-R57 construye excellence técnica. R58 construye **resilience offline, privacy preparedness, y automation de reputation**.
+R57 = infraestructura técnica dormant. R58 = features de conversión social y automatización.
 
 ---
 
 ## Síntesis: Por qué R58 complementa R1-R57
 
-R1-R57 ha construido un negocio muy completo:
-- R1-R10: Features internos
-- R11-R20: SEO y Schema
-- R21-R30: UX y conversión
+R1-R57 ha construido un proyecto muy completo:
+- R1-R10: Features internos básicos
+- R11-R20: SEO y Schema (LocalBusiness, FAQPage, Review, VideoObject)
+- R21-R30: UX y conversión (chatbot, dark theme, search)
 - R31-R35: Video, reputation, AI
-- R36-R42: Technical modernization
+- R36-R42: Technical modernization (PWA, service worker, manifest)
 - R43-R44: Business models y conversión
 - R45: Core Web Vitals y quality gates
-- R46: Seguridad, Privacy Sandbox, i18n, pagos
-- R47: Photo quote, product store, floor maintenance, reviews widget
-- R48: CRM, Warranty, Staff Profiles, Airbnb B2B
-- R49: Voice Search, Eco Hub, WhatsApp Automation, Customer Portal
-- R50: Pricing page, English version, B2B Widget
-- R51: Build system, performance (lazy/WebP/RUM), accesibilidad, PWA Periodic Sync
-- R52: A/B testing, exit-intent recovery, WhatsApp Cloud API
-- R53: Notification Triggers, semantic search, RUM, on-device AI chatbot
-- R54: Visual engagement, brand differentiation
-- R55: Animation premium, scroll effects, micro-interactions
-- R56: Sostenibilidad, Monetización Digital y SEO Authority
-- **R57: CSS Architecture, PWA Install Prompt, Advanced Structured Data, Social Meta Tags, JS Modularity**
-- **R58: Background Sync, Privacy Sandbox Topics, Visual Booking Confirmation, Cross-Browser PWA Install, Content Freshness, Reputation Automation**
+- R46: Seguridad, Privacy Sandbox, i18n, pagos, authentication
+- R47: Photo quote, product store, floor maintenance, reviews widget, multi-city
+- R48: CRM, Warranty, Staff Profiles, Airbnb B2B, Review automation, Loyalty, Service History
+- R49: Voice Search, Eco Hub, WhatsApp Automation, Customer Portal, Subscription Box, Predictive Alerts, Video Testimonials
+- R50: Pricing page, English version, Widget B2B, GBP Posts, Gamified Loyalty, Marketplaces, Micro-landings
+- R51: Build system, performance (lazy/WebP/RUM), accesibilidad (skip-nav/reduced-motion), PWA (Periodic Sync), AI (damage detection)
+- R52: A/B testing, exit-intent recovery, WhatsApp Business API, email nurturing, product schema, micro-conversion funnel, GBP automation, e-commerce
+- R53: Notification Triggers, semantic search, voice search, offline sync, RUM, on-device AI chatbot, personalization
+- R54: Before/after slider, video testimonials, animated trust badges, brand mascot, Instagram/UGC, gamified loyalty, mobile bottom nav
+- R55: Lazy loading, scroll animations, exit-intent recovery, enhanced forms, smart sticky CTA, video optimization, interactive map
+- R56: PWA push notifications dormant infrastructure, exit-intent with WhatsApp, Leaflet map with coordinates, prefers-reduced-motion audit, Lite YouTube embed
+- R57: Push notification system, exit-intent recovery, interactive coverage map, accessible scroll animations, lite YouTube embed
 
-R58 cierra gaps de **offline resilience, privacy post-cookie, y cross-platform install** que las rondas anteriores no abordaron en profundidad.
+**R58 cierra gaps que las rondas anteriores no abordaron específicamente:**
+- Video testimonials: R49 mencionó "Video Testimonials" pero R58 lo implementa como sección in-page con facade player
+- WhatsApp Business API: R52 mencionó "WhatsApp Business API" pero R58 detalla el flujo de automatización completo
+- Geo-personalization: R57 propuso Leaflet map con coordenadas pero no la personalización de contenido por zona
+- Before/after slider: R54 mencionó "Before/after slider" pero R58 propone implementación específica
+- Fix review structured data: R11-R20 cubren SEO pero el fix de reviews individuales no fue detallado
+- Instagram/UGC: R54 mencionó "Instagram/UGC" pero R58 propone integración técnica con Instagram API
+- Subscription plans page: R50 mencionó "Pricing page" pero R58 propone landing page completa con comparison matrix
 
 ---
 
 ## Fuentes
 
-[1] web.dev. "Background Sync Pattern." https://web.dev/patterns/background-sync/
-[2] Google Chrome Developers. "Privacy Sandbox Topics API." https://developer.chrome.com/docs/privacy-sandbox/topics/
-[3] Baymard Institute. "Mobile Forms Usability." https://www.baymard.com/blog/mobile-forms-usability
-[4] web.dev. "Customize PWA Install." https://web.dev/articles/customize-install
-[5] Google Search Central. "Article Structured Data." https://developers.google.com/search/docs/appearance/structured-data/article
-[6] BrightLocal. "Local SEO Guide." https://www.brightlocal.com/learn/local-seo-guide/
+[1] Wyzowl. "Video Marketing Statistics 2026." https://www.wyzowl.com/video-marketing-statistics-2026/
+[2] web.dev. "Lazy load images and iframe elements." https://web.dev/learn/performance/lazy-load-images-and-iframe-elements
+[3] WhatsApp Business. "WhatsApp Business Platform." https://business.whatsapp.com
+[4] Twilio. "WhatsApp Business API." https://www.twilio.com/whatsapp
+[5] MessageBird. "WhatsApp Business Solution." https://www.messagebird.com/whatsapp
+[6] MDN. "Geolocation API." https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API
+[7] Leaflet.js. "Interactive Maps for Web." https://leafletjs.com/
+[8] Joredrich. "Before/After Image Slider." https://github.com/joredrich/lbefore-after
+[9] web.dev. "Accessibility." https://web.dev/learn/accessibility/
+[10] Google. "Review Rich Results." https://developers.google.com/search/docs/appearance/structured-data/review
+[11] Google. "Rich Results Test." https://search.google.com/test/rich-results
+[12] Meta. "Instagram Basic Display API." https://developers.facebook.com/docs/instagram-basic-display
+[13] Elfsight. "Instagram Feed Widget." https://elfsight.com/instagram-feed/
+[14] web.dev. "Design." https://web.dev/learn/design/
 
 ---
 

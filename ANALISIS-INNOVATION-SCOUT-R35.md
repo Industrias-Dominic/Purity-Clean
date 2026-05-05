@@ -4,29 +4,23 @@
 **Fecha:** 2026-04-27
 **Analista:** Innovation Scout
 **Ronda:** 35
-**Issue padre:** DOMAA-423
+**Issue padre:** DOMAA-424
 
 ---
 
 ## Resumen Ejecutivo
 
-R35 se enfoca en **conversión, confianza y diferenciación** — territories que以前的 análisis no cubrieron en profundidad:
+R35 se enfoca en **AI Discovery y estrategia de reseñas post-LCRS 2026**. Con el crecimiento explosivo de ChatGPT como fuente de recomendaciones (6% → 45%) y Apple Maps duplicando su uso (14% → 27%), Purity & Clean necesita posicionarse activamente para ser recomendada por agentes de AI. 同时, la estrategia de reseñas debe actualizarse para cumplir con las nuevas expectativas de los consumidores: 31% solo usa negocios con 4.5+ estrellas (era 17%) y 74% solo lee reseñas de los últimos 3 meses.
 
-1. **Exit Intent Popup** para recuperar visitantes que están por abandonar el sitio
-2. **Video Testimonial Hub** para monetizar la reputación de 127 reseñas
-3. **Google Business Profile Optimization** para captar el 71% de búsquedas locales que aún van a Google
-4. **Smart Quote Follow-up** —序列 de emails/SMS post-cotizador para convertir cotizaciones en reservas
-5. **Trust Signals Expansion** — certificaciones, seguros, garantías con evidencia visual
-
-La investigación del LCRS 2026 confirma que 92% de consumidores usan reseñas para decidir [1]. Purity & Clean tiene 127 reseñas verificadas con 4.8/5 — la reputacion es el activo más subutilizado del sitio. No se está monetizando activamente esa confianza.
+**Descubrimiento clave:** La propuesta R24 de "Voice Commerce con Google Assistant" ya no es viable — la Transactions API fue deprecated en mayo 2023. En su lugar, Apple Business Connect es más relevante dado el crecimiento de Apple Maps.
 
 ---
 
 ## Stack tecnológico actual (resumen R34)
 
 - **Frontend:** HTML5 + CSS3 + JS vanilla ES6+
-- **CSS:** ~6212 líneas style.css
-- **JS:** ~1847 líneas script.js + js/script.js
+- **CSS:** 6212 líneas style.css
+- **JS:** 1847+ líneas script.js
 - **Fuentes:** Manrope + Raleway — Google Fonts
 - **Iconos:** Font Awesome 6.5 CDN (SRI verificado)
 - **Analítica:** Plausible Analytics (sin cookies, GDPR-compliant)
@@ -34,148 +28,148 @@ La investigación del LCRS 2026 confirma que 92% de consumidores usan reseñas p
 - **Testing:** Playwright E2E (9 suites)
 - **PWA:** Service Worker, push notifications, offline support
 - **SEO:** Schema LocalBusiness + FAQPage + Article + Review + VideoObject + HowTo + BreadcrumbList
-- **Chatbot:** FAQ routing → WhatsApp
-- **Booking:** Multi-step form con slot picker simulado
+- **Chatbot:** FAQ routing → WhatsApp con mensaje dinámico
+- **Booking:** Multi-step form con slot picker
 - **Theme:** Dark mode toggle con persistencia
 - **Cobertura:** 10 zonas en Bogotá
 - **Precios:** Cotizador interactivo + WhatsApp pre-filled
 - **Referidos:** Cupón de 15%
 - **Comparison sliders:** 6 pares antes/después
-- **Reputación:** 127 reviews verificadas, 4.8/5
+- **Reputación:** 127 reviews verificadas
 
 ---
 
-## Investigación: Hallazgos clave
+## Investigación: Hallazgos clave del LCRS 2026
 
-### Hallazgo 1: El cotizador tiene alta intención pero baja conversión
+### Hallazgo 1: ChatGPT se convirtió en la 3ra plataforma de discovery local (45%, era 6%)
+El uso de herramientas de AI generativa para recomendaciones de negocios locales creció de 6% a 45% en un año [1]. Esto significa que un porcentaje enorme de potenciales clientes ahora preguntan a ChatGPT "¿dónde puedo limpiar mis sofás en Bogotá?" La respuesta de ChatGPT depende de qué información existe en la web sobre Purity & Clean.
 
-El cotizador es una de las secciones con mayor engagement del sitio. Un usuario que usa el cotizador está en etapa de decisión activa. Sin embargo, el flujo después del cotizador depende exclusivamente de WhatsApp o del booking form. **No hay secuencia de follow-up** para usuarios que cotizan pero no reservan.
+**Implicación:** El sitio necesita estar optimizado para ser "AI-discoverable" — información estructurada, Schema.org completo, contenido en formatos que los LLMs puedan consumir fácilmente.
 
-**Fuente:** Patrones de comportamiento en sites de servicios en LatAm (hipótesis basada en R34).
+### Hallazgo 2: Apple Maps casi duplicó uso (14% → 27%) — Más relevante que Google Assistant
+Apple Maps se convirtió en la 4ta plataforma más usada para leer y escribir reseñas [1]. Esto es mucho más relevante que Google Assistant para voice commerce, porque:
+- iPhone users default a Apple Maps
+- Apple Business Connect permite verificar negocio directamente
+- Es más simple que Google Business Profile para muchas empresas
 
-### Hallazgo 2: 127 reseñas verificadas — contenido subutilizado
+**Implicación:** Verificar y optimizar presencia en Apple Business Connect es más importante que cualquier integración de voice assistant.
 
-Las reseñas en Schema son estáticas y no se muestran de forma prominente en el sitio. No hay:
-- Galería de reseñas con fotos
-- Video testimonials
-- Segmentación de reseñas por servicio o zona
-- Widget de reviews externo (Google, Trustpilot, Facebook)
-- Incentivo para que clientes satisfechos dejen reseñas
+### Hallazgo 3: 31% solo usa negocios con 4.5+ estrellas (era 17%) — Expectativa se duplicó
+El porcentaje de consumidores que solo usan negocios con 4.5+ estrellas subió de 17% a 31% en un año [1]. 68% solo considera negocios con 4+ estrellas (era 55%).
 
-### Hallazgo 3: Google Business Profile — el discovery más grande no está optimizado
+**Implicación:** Purity & Clean tiene 4.8/5 con 127 reseñas — excelente posición, pero necesita mantener la calificación y crecer el número de reseñas. No basta con tener buenas reseñas; hay que pedir activamente más.
 
-El LCRS 2026 muestra que Google sigue siendo la plataforma #1 para descubrimiento local (71%) [1]. El sitio tiene Schema LocalBusiness, pero **Google Business Profile (GBP)** no está verificado ni optimizado en el sitio. La ficha de GBP es lo que aparece en el Knowledge Panel y en el Maps pack.
+### Hallazgo 4: 74% solo lee reseñas de los últimos 3 meses
+La mitad de los consumidores buscan reseñas muy recientes [1]. Reseñas de hace 6 meses pierden relevancia. Esto significa que la colección de reseñas debe ser un proceso continuo, no puntual.
 
-### Hallazgo 4: 92% usa reseñas para decidir — exit intent no explorado
+**Implicación:** Implementar follow-up automatizado post-servicio para solicitar reseñas frescas en Google y Facebook.
 
-El mismo dato del LCRS 2026: 92% de consumidores usan reviews para tomar decisiones [1]. El sitio no tiene ningún mecanismo de exit intent que capitalice este comportamiento. Un popup que muestre una review aleatoria al momento en que el usuario intenta abandonar podría cambiar la decisión.
+### Hallazgo 5: 54% visita el sitio web después de leer reseñas positivas
+Más de la mitad de los consumidores que leen buenas reseñas visitan el sitio web del negocio [1]. Purity & Clean ya tiene buen sitio — lo que necesita es convertir mejor ese tráfico en reservas.
 
-### Hallazgo 5: Sin email marketing — el canal más alto ROI para servicios
+**Implicación:** Optimizar el funnel de conversión del sitio, especialmente en las páginas de zonas y en el cotizador.
 
-El sitio tiene newsletter subscription pero no hay:
-- Secuencia de bienvenida post-suscripción
-- Follow-up post-cotizador
-- Nurturing sequence para leads tibia
-- Email marketing ativo con contenido
+### Hallazgo 6: 80% de consumidores prefieren negocios que responden a TODAS las reseñas
+Responder a todas las reseñas (no solo negativas) es crucial: 80% dice que es más probable que elija un negocio que responde a todas sus reseñas [1].
 
-El newsletter es un canal de bajo costo y alto ROI para servicios de limpieza recurrentes.
+**Implicación:** Implementar sistema de respuestas personalizadas a cada reseña en Google y Facebook.
 
 ---
 
 ## Gaps identificados — Round 35 (NOVEDADES no cubiertas en R1-R34)
 
-### 1. Exit Intent Popup con social proof dinámico
+### 1. Sin presencia verificada en Apple Business Connect
 
-**Problema:** El sitio no tiene ningún mecanismo para recuperar visitantes que están por abandonar. El 92% de consumidores que usan reseñas para decidir podrían ser convertidos con el stimulus correcto al momento justo.
+**Problema:** Con Apple Maps duplicando uso (27%) y siendo la 4ta plataforma de reseñas, Purity & Clean no tiene presencia verificada en Apple Business Connect. Esto significa que cuando un usuario busca "limpieza de sofás Bogotá" en Apple Maps, Purity & Clean no aparece como opción verificada.
 
-**Impacto potencial:** +5-15% conversiones con exit intent optimizado.
+**Impacto potencial:** Pérdida de visibilidad en un canal creciente, percepción de menor confiabilidad vs competidores verificados.
 
-### 2. Video Testimonial Hub — monetizar la reputación
+### 2. Sin estrategia de AI discoverability (Schema para LLMs)
 
-**Problema:** Las 127 reseñas son texto estático en Schema. No hay video testimonials, ni galería visual, ni widgets de reviews externos. La reputación existe pero no se muestra de forma persuasiva.
+**Problema:** Los LLMs como ChatGPT extraen información de páginas web para generar respuestas. Purity & Clean tiene Schema LocalBusiness básico, pero no tiene optimizaciones específicas para AI discovery: no hay FAQPage estructurada de forma que ChatGPT la consuma fácilmente, no hay datos estructurados de servicios en formato que los LLMs puedan citar.
 
-**Impacto potencial:** Aumento de confianza en etapa de consideración, diferenciación vs competencia.
+**Impacto potencial:** Pérdida de recomendaciones orgánicas en ChatGPT, Gemini y future AI search.
 
-### 3. Google Business Profile Integration
+### 3. Sin proceso automatizado de recolección de reseñas frescas
 
-**Problema:** GBP es el canal de discovery #1 (71%). No hay presencia verificada ni integración activa con la ficha de GBP. El sitio no guía al usuario hacia la ficha de GBP ni optimiza para el Knowledge Panel.
+**Problema:** El sitio tiene 127 reseñas verificadas, pero no hay un sistema automatizado para solicitar reseñas post-servicio. 74% de consumidores solo lee reseñas de los últimos 3 meses — si Purity & Clean no pide reseñas activamente, el perfil se estanca.
 
-**Impacto potencial:** Más visibilidad en búsquedas locales, mejor posicionamiento en Maps.
+**Impacto potencial:** Drift en la percepción de calidad por falta de reseñas recientes.
 
-### 4. Smart Quote Follow-up — secuencia post-cotizador
+### 4. Sin respuesta sistemática a reseñas en Google/Facebook
 
-**Problema:** El cotizador genera leads pero no hay follow-up. Usuarios que cotizan pero no reservan se pierden. No hay email/SMS sequence para nurturing.
+**Problema:** Responder a reseñas es crucial (80% prefiere negocios que responden a todas), pero no hay evidencia de que Purity & Clean responda activamente a sus reseñas. Plantillas genéricas tienen impacto negativo (50% desconfía de plantillas).
 
-**Impacto potencial:** +20-30% conversión de leads cotizadores a reservas.
+**Impacto potencial:** Pérdida de confianza, percepción de descuido, menor conversión.
 
-### 5. Trust Signals Expansion — certificaciones y garantías con evidencia
+### 5. Sin integración con servicios de mapas para verificación multi-plataforma
 
-**Problema:** La sección "Confianza" tiene 5 badges pero son genéricos. No hay evidencia visual de certificaciones de productos, póliza de seguros, garantía escrita, ni procesos de control de calidad.
+**Problema:** Cada plataforma de mapas (Google, Apple, Bing) tiene su propio proceso de verificación. Sin una estrategia centralizada, la información puede ser inconsistente entre plataformas, causando confusión en los consumidores.
 
-**Impacto potencial:** Reducción de objeciones en etapa de consideración, diferenciación premium.
+**Impacto potencial:** Información desactualizada o contradictoria afecta confianza y SEO local.
 
 ---
 
 ## Propuestas (Round 35)
 
-### Propuesta 1: Exit Intent Popup con Social Proof Dinámico
+### Propuesta 1: Verificación Apple Business Connect + Estrategia Apple Maps
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Exit Intent Popup con review rotativa y discount on-demand |
-| **Problema** | Visitantes que se van sin reservar; 92% usa reviews pero el sitio no muestra social proof en el momento crítico |
-| **Descripción** | Implementar popup de exit intent (trigger con mouseout hacia arriba, en móvil con scroll-up rápido): (1) **Detecta intención de salida** con tracking de mouse movement y scroll velocity. (2) **Muestra review aleatoria** del pool de 127 con foto del cliente y Stars. (3) **Offer rotativo**: "30% off tu primera limpieza" o "Cupon de referidos" o "Garantía de satisfacción". (4) **No intrusivo**: solo se muestra una vez por sesión, con cooldown de 24h. (5) **Copy optimizado**: "Espera! Antes de irte..." + social proof hook. (6) **Mobile**: scroll-up rápido reemplaza mouseout. Tecnología: JS vanilla en script.js existente, localStorage para cooldown. Sin dependencias externas. Popup visible solo en desktop/mobile cuando el usuario muestra intención de abandono. |
-| **Impacto esperado** | +5-15% conversiones de visitantes que se iban sin acción |
+| **Título** | Verificación en Apple Business Connect y optimización para Apple Maps |
+| **Problema** | Apple Maps duplicó uso (27%); Purity & Clean no tiene presencia verificada en Apple Business Connect |
+| **Descripción** | Crear y verificar perfil en Apple Business Connect (apple.com/business/search): (1) **Claim del negocio** con dirección, teléfono, horarios, website. (2) **Fotos profesionales** del antes/después de servicios. (3) **Categorización correcta**: "Cleaning Service" + subcategorías. (4) **Agregar atributos**: "Pet-friendly", "Eco-friendly products", etc. (5) **Reviews de Apple Maps**:鼓励 clientes a dejar ratings en Apple Maps (más fácil que texto, solo estrellas). (6) **Mantener actualizado**: sincronizar horarios y servicios con Google Business Profile. Herramienta: Apple Business Connect (gratuito). |
+| **Impacto esperado** | Presencia verificada en 4ta plataforma de reseñas, credibilidad aumentada para usuarios de iPhone |
 | **Esfuerzo** | S |
-| **Agente recomendado** | Frontend (JS + CSS popup) |
+| **Agente recomendado** | Full Stack (datos) + Marketing (fotos y copy) |
 | **Referencias** | [1] BrightLocal LCRS 2026 |
 
-### Propuesta 2: Video Testimonial Hub — monetizar la reputación
+### Propuesta 2: AI Discoverability Enhancement — Schema Markup Optimization para LLMs
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Video Testimonial Hub: galería de video reviews y testimonios de clientes |
-| **Problema** | 127 reseñas son texto oculto en Schema; la reputación no se muestra de forma persuasiva |
-| **Descripción** | Crear sección `/testimonials` o hub en el homepage: (1) **Video testimonials cortos** (30-60 seg) de clientes reales: antes/después con quote del cliente. (2) **Galería de reviews con fotos**: clientes que subieron fotos del resultado. (3) **Reviews por servicio**: filtrar por tipo de servicio (sofas, colchones, etc.). (4) **Reviews por zona**: "Lo que dicen nuestros clientes en Chapinero..." (5) **Trust badges**: Google Reviews, Facebook Reviews con conteo y rating. (6) **CTA**: "Únete a nuestros 500+ clientes satisfechos". Tecnología: nueva sección HTML + CSS, videos embebidos de YouTube (canal del cliente) o Vimeo. Sin dependencias externas. Videos pueden ser grabados con móvil y editados con剪映 o similar. |
-| **Impacto esperado** | Aumento de confianza en etapa de consideración, diferenciación vs competencia, más shares sociales |
-| **Esfuerzo** | M |
-| **Agente recomendado** | Frontend (galería) + Content (coordinación videos) |
-| **Referencias** | [1] BrightLocal LCRS 2026 |
-
-### Propuesta 3: Google Business Profile Integration
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Google Business Profile Verification + Knowledge Panel Optimization |
-| **Problema** | GBP es discovery #1 (71%); el sitio no guía hacia GBP verificado ni optimiza para Knowledge Panel |
-| **Descripción** | (1) **Verificar GBP** si no está hecho: seguir flujo de Google Business Connect. (2) **Agregar CTA de GBP en sitio**: "Encuéntranos en Google Maps" con link directo a la ficha. (3) **Optimizar posts de GBP**: publicar ofertas semanales, promociones, novedades. (4) **Q&A en GBP**: agregar preguntas frecuentes con respuestas optimizadas para SEO local. (5) **Fotos de servicios**: subir fotos profesionales a GBP para que aparezcan en el Knowledge Panel. (6) **Reviews solicitation**: pedir a clientes satisfechos que dejen reviews en Google (hyperlink directo). Tecnología: sin código — es un proceso operativo y de marketing. Solo agregar link y CTA en el sitio. |
-| **Impacto esperado** | +15-25% visibilidad en búsquedas locales, mejor posicionamiento Maps, más reseñas en GBP |
-| **Esfuerzo** | S (operativo) |
-| **Agente recomendado** | Marketing (GBP) + Frontend (CTA link) |
-| **Referencias** | [1] BrightLocal LCRS 2026 |
-
-### Propuesta 4: Smart Quote Follow-up — secuencia post-cotizador
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Smart Quote Follow-up: email/SMS sequence para leads que cotizan pero no reservan |
-| **Problema** | Cotizador genera leads que se enfrían; no hay follow-up nurture; pérdida de conversiones |
-| **Descripción** | Implementar secuencia de follow-up post-cotizador: (1) **Captura email/WhatsApp** en el cotizador (opcional pero incentivado). (2) **Email Day 1**: "Aquí está tu cotización [monto]" + disponibilidad + link directo a reservas. (3) **Email Day 3**: "3 clientes en [zona del usuario] reservaron esta semana" + urgencia. (4) **Email Day 7**: "Último recordatorio — precio especial por tiempo limitado" + discount. (5) **WhatsApp follow-up**: mensaje con estado de cotización + disponibilidad. (6) **SMS Day 5**: reminder corto con link. (7) **Lead scoring**: marcar leads tibia vs hot según engagement. Tecnología: sin código — usar servicios como Mailchimp (free tier), WhatsApp Business API, o simple. El cotizador existente puede capturar email con consentimiento. Email marketing es 40x ROI según estudios de DMA. |
-| **Impacto esperado** | +20-30% conversión de cotizadores a reservas |
-| **Esfuerzo** | M |
-| **Agente recomendado** | Marketing (email/SMS) + Frontend (form capture) |
-| **Referencias** | [1] BrightLocal LCRS 2026, DMA Data-driven Marketing |
-
-### Propuesta 5: Trust Signals Expansion — certificaciones con evidencia visual
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Trust Signals Expansion: certificaciones, seguros y garantías con evidencia real |
-| **Problema** | La sección Confianza tiene 5 badges genéricos; no hay evidencia de certificaciones reales |
-| **Descripción** | Expandir la sección Confianza existente: (1) **Certificaciones de productos**: fotos de etiquetas de productos eco-certified (ECOS, Green Seal, etc.) con explicación de por qué son seguros. (2) **Póliza de seguros**: badge "Asegurados contra daños hasta $X" con link a términos. (3) **Garantía escrita**: "Garantía de satisfacción — si no estás feliz, devolvemos tu dinero" con link a política. (4) **Proceso de QC**: mini galeria del proceso de inspección post-servicio. (5) **Team badges**: fotos de técnicos con certificaciones reales (no stock). (6) **Prensa/Menciones**: logo strip de medios que han mencionado Purity & Clean. Tecnología: agregar nuevo HTML/CSS a la sección confianza existente. Evidence photos只需 cellphone. |
-| **Impacto esperado** | Reducción de objeciones, diferenciación premium vs competidores low-cost, más confianza B2B |
+| **Título** | Optimización de Schema.org para mejorar recomendación en ChatGPT y AI search |
+| **Problema** | ChatGPT es 3ra plataforma de discovery (45%); sitio no está optimizado para ser citado por LLMs |
+| **Descripción** | Mejorar el Schema markup existente para que sea más consumible por AI: (1) **Expandir OfferCatalog** con todos los servicios, precios y disponibilidad. (2) **Agregar FAQPage más completa** con las 20 preguntas más frecuentes, incluyendo las del chatbot. (3) **Service schema** para cada servicio con priceRange, areaServed, hasOfferCatalog. (4) **Agregar HowTo structured content** para el proceso de limpieza (demuestra expertise). (5) **AggregateRating con reviewCount alto** (ayuda a ChatGPT a citar rating). (6) **BreadcrumbList** para navegación clara. (7) **Crear /sitemap-video.xml** para video content. Tecnología: actualizar JSON-LD en index.html + zonas/*.html. Sin cambios en CSS/JS. |
+| **Impacto esperado** | Mayor probabilidad de ser citado en respuestas de ChatGPT, Gemini y futuros AI assistants |
 | **Esfuerzo** | S |
-| **Agente recomendado** | Frontend (nueva sección) + Content (textos y evidencia) |
+| **Agente recomendado** | Frontend (JSON-LD updates) + SEO (content) |
+| **Referencias** | [1] BrightLocal LCRS 2026 |
+
+### Propuesta 3: Automated Review Collection System — Post-Service Review Request
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Sistema automatizado de solicitud de reseñas post-servicio |
+| **Problema** | 74% solo lee reseñas de últimos 3 meses; sin proceso automatizado, el perfil se estanca |
+| **Descripción** | Implementar flujo de solicitud de reseñas post-servicio: (1) **Timing**: 30 minutos después de confirmar servicio completado (via WhatsApp o email). (2) **Mensaje personalizado**: "Gracias por confiar en Purity & Clean. Tu opinión nos ayuda a mejorar. ¿Podrías dejarnos una reseña en Google? [link directo] — solo te toma 1 minuto." (3) **Multi-plataforma**: ofrecer opciones en Google, Facebook, y Apple Maps. (4) ** Incentivo sutil**: "Como agradecimiento, recibirás un 10% de descuento en tu próximo servicio." (5) **Segmentación**: no pedir a todos (solo clientes satisfechos想象中). Tecnología: WhatsApp Business API o integrar con Formspree para收集 feedback. Para MVP: usar WhatsApp mensajes directos con link a Google Reviews. |
+| **Impacto esperado** | Flujo continuo de reseñas frescas, manteniendo perfil activo y relevante |
+| **Esfuerzo** | M |
+| **Agente recomendado** | Backend (automation) + Marketing (copy) |
+| **Referencias** | [1] BrightLocal LCRS 2026 |
+
+### Propuesta 4: Review Response Strategy — Personalized Responses to Every Review
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Sistema de respuestas personalizadas a todas las reseñas en Google y Facebook |
+| **Problema** | 80% prefiere negocios que responden a todas las reseñas; no hay evidencia de respuesta sistemática |
+| **Descripción** | Implementar estrategia de responses: (1) **Template bank**: 10+ templates personalizables para diferentes escenarios (reseña positiva genérica, reseña con pregunta, reseña con crítica sutil, reseña sobre precio, etc.). (2) **Personalización mínima**: cambiar nombre del cliente, servicio mencionado, y un detalle específico de la reseña. (3) **Tono**: amigable, profesional, nunca defensivo. (4) **Speed**: responder dentro de 24h (19% espera respuesta el mismo día). (5) **Centralized dashboard**: usar herramienta como Podium, BirdEye, o Google Business Profile app para manage todas las reseñas desde un solo lugar. (6) **Monitoring**: alerts para nuevas reseñas que requieren atención. Tecnología: Google Business Profile + Facebook Page response interface. Para escala: Podium o similar. |
+| **Impacto esperado** | Mejora en percepción de confiabilidad, diferenciación de competidores que ignoran reseñas |
+| **Esfuerzo** | M |
+| **Agente recomendado** | Marketing (copy y templates) + Customer Success (responses) |
+| **Referencias** | [1] BrightLocal LCRS 2026 |
+
+### Propuesta 5: Google Business Profile Enhancement — Posts, Photos y Q&A
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Optimización activa del Google Business Profile con posts, fotos y Q&A |
+| **Problema** | Google sigue siendo #1 para reseñas (71%); muchas empresas no lo aprovechan al máximo |
+| **Descripción** | Maximizar presencia en Google Business Profile: (1) **Weekly posts**: publicar ofertas, tips de mantenimiento, antes/después cada semana. (2) **Photos de alta calidad**: actualizar fotos de servicio regularmente (mínimo monthly). (3) **Q&A section**: seed con las 10 preguntas más frecuentes y sus respuestas. (4) **Attributes**: asegurar que todos los atributos están marcados (pet-friendly, eco-friendly, etc.). (5) **Messaging**: activar messaging directo desde Google para facilitar contacto. (6) **Products**: usar sección de productos para mostrar kits de limpieza. Tecnología: Google Business Profile (gratuito). Scheduling: buffer o similar para posts semanales. |
+| **Impacto esperado** | Mayor visibilidad en Google Maps y search, mejor conversión de tráfico de Google |
+| **Esfuerzo** | S |
+| **Agente recomendado** | Marketing (content y posts) |
 | **Referencias** | [1] BrightLocal LCRS 2026 |
 
 ---
@@ -183,14 +177,14 @@ El newsletter es un canal de bajo costo y alto ROI para servicios de limpieza re
 ## Orden de implementación recomendado
 
 | # | Propuesta | Impacto | Esfuerzo | Semana |
-|---|----------|--------|----------|--------|
-| 1 | Exit Intent Popup | Alto | Bajo | 1 |
-| 2 | Smart Quote Follow-up | Alto | Medio | 1-2 |
-| 3 | Video Testimonial Hub | Medio | Medio | 2-3 |
-| 4 | Trust Signals Expansion | Medio | Bajo | 2 |
-| 5 | Google Business Profile | Alto | Bajo (operativo) | 1 |
+|---|----------|---------|----------|--------|
+| 1 | Google Business Profile Enhancement | Alto | Bajo | 1 |
+| 2 | Verificación Apple Business Connect | Alto | Bajo | 1-2 |
+| 3 | Review Response System | Alto | Medio | 2 |
+| 4 | AI Discoverability Enhancement | Medio | Bajo | 1-2 |
+| 5 | Automated Review Collection | Medio | Medio | 2-3 |
 
-**Top 3 para implementar primero:** 1, 2, 5 (Exit intent y follow-up son quick wins de conversión; GBP es operativo y de alto impacto).
+**Top 3 para implementar primero:** 1, 2, 3 (quick wins en plataformas de reseñas).
 
 ---
 
@@ -198,43 +192,49 @@ El newsletter es un canal de bajo costo y alto ROI para servicios de limpieza re
 
 R34 iba por **operaciones y monetización** — cómo generar más revenue por cliente, nuevas líneas de negocio, sistematizar operaciones.
 
-R35 va por **conversión y confianza** — cómo convertir mejor el tráfico existente, cómo monetizar la reputación, cómo reducir la fuga de leads.
+R35 va por **discovery y reputación en la era AI** — cómo ser encontrado en los nuevos canales (AI search, Apple Maps), cómo mantener la calificación de 4.8 estrellas, y cómo convertir el tráfico de reseñas en reservas.
 
 El LCRS 2026 confirma que:
-- 92% usa reseñas para decidir [1]
-- 54% visita el sitio después de reseñas positivas [1]
-- Google sigue siendo #1 en discovery (71%) [1]
+- El mapa de discovery cambió radicalmente (AI tools + Apple Maps en ascenso)
+- Las expectativas de calidad subió (4.5+ estrellas ahora requerido por 31%, era 17%)
+- La respuesta a reseñas es más importante que nunca (80% prefiere negocios que responden)
 
-Purity & Clean ya tiene:
-- Reputación sólida (127 reviews, 4.8/5)
-- Sitio con tráfico cualificado
-- Herramientas de conversión (cotizador, booking, WhatsApp)
+Purity & Clean tiene una base sólida: 4.8/5 con 127 reseñas, sitio bien optimizado, presencia en 10 zonas. Lo que necesita para 2026 es:
+1. **Expandir presencia** a Apple Maps y AI search
+2. **Mantener frescura** del perfil de reseñas
+3. **Responder a todas** las reseñas con copy personalizado
+4. **Optimizar para AI discovery** con Schema mejorado
 
-Lo que falta para R35:
-1. **Reducir la fuga** (exit intent popup)
-2. **Captar leads que se enfrían** (follow-up sequence)
-3. **Monetizar la reputación** (video testimonials, trust signals)
-4. **Maximizar discovery** (GBP integration)
+---
+
+## Actualización importante: Voice Commerce (R24 Propuesta) — Ya no viable
+
+La propuesta R24 de "Voice Commerce — Alexa y Google Assistant" usaba Google Assistant Transactions API. **Esta API fue deprecated el 3 de mayo de 2023** y Conversational Actions se sunsetearon el 13 de junio de 2023 [2].
+
+**Reemplazar propuesta R24 por:**
+- Apple Business Connect (más relevante que Google Assistant para voice search en iOS)
+- AI Discoverability (Schema markup para que ChatGPT pueda recomendar)
 
 ---
 
 ## Síntesis: Por qué R35 es diferente
 
-R1-R34 se enfocaron en el sitio como plataforma de conversión, en features, UX, booking, pricing, operaciones, monetización, AI, móvil.
+R1-R34 construyeron una base sólida: sitio funcional, booking, pricing, reputación.
 
-**R35 se enfoca en el momento de decisión del usuario:**
-- ¿Cómo evitamos que se vayan sin reservar? (exit intent)
-- ¿Cómo convertimos leads tibios? (follow-up)
-- ¿Cómo mostramos la reputación de forma persuasiva? (video testimonials, trust signals)
-- ¿Cómo maximizamos el discovery en GBP? (operativo)
+**R35 se enfoca en la nueva frontera del discovery:**
+- AI search (ChatGPT como 3ra plataforma de recomendaciones)
+- Apple Maps (27% de uso, casi duplicado)
+- Expectativas de calidad en alza (4.5+ estrellas)
+- Respuesta a reseñas como diferenciador
 
-En 2026, donde el LCRS confirma que el sitio ya genera tráfico cualificado de reseñas positivas, y donde 92% usa reviews para decidir, Purity & Clean tiene la reputación para convertir mejor — solo necesita las herramientas correctas para hacerlo en el momento correcto.
+En 2026, donde el LCRS confirma que 54% visita el sitio después de reseñas positivas, y donde AI tools y Apple Maps están cambiando el juego del discovery, Purity & Clean necesita expandirse más allá de Google para capturar tráfico de estos nuevos canales.
 
 ---
 
 ## Fuentes
 
 [1] BrightLocal. "Local Consumer Review Survey 2026." Feb 2026. https://www.brightlocal.com/local-consumer-review-survey/
+[2] Google Developers. "Transactions API Deprecation." 2024. https://developers.google.com/assistant/transactions
 
 ---
 

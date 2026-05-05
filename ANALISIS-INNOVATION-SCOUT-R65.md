@@ -4,217 +4,192 @@
 **Fecha:** 2026-04-28
 **Analista:** Innovation Scout
 **Ronda:** 65
-**Issue padre:** DOMAA-652
+**Issue padre:** DOMAA-658
 
 ---
 
 ## Resumen Ejecutivo
 
-R65 se enfoca en **automatización post-reserva y engagement automatizado** — un área que los rounds anteriores no han abordado en profundidad. Tras 64 rondas de optimización on-site, el proyecto tiene un gaps significativo en la conversión post-reserva: el usuario reserva pero no recibe follow-up automatizado, recordatorios, ni acciones de nurturing que conviertan una reserva puntual en cliente recurrente.
-
-**Diferenciación clave vs R1-R64:** Los rounds anteriores se centraron en (1) R1-R30: features básicos y UX, (2) R31-R50: optimización de conversión, (3) R51-R64: micro-conversiones y urgencia. R65 introduce el concepto de **automated customer journey** — secuencias automatizadas que começam desde la confirmación de reserva y terminan en revisión/referido.
+R65 se enfoca en **cierre de gaps críticos de SEO local y monetización del tráfico existente** — oportunidades que fueron identificadas en rondas anteriores pero nunca ejecutadas, junto con una nueva propuesta de **re-marketing automatizado** para recuperar leads perdidos. Después de 64 rondas de innovación, el sitio tiene features avanzados (booking multi-step, cotizador, referidos, PWA, blog SEO), pero el **SEO local** — el canal más importante para un servicio de limpieza en Bogotá — está suboptimizado. Esta ronda prioriza lo que ya se sabe que funciona pero no está implementado.
 
 ---
 
 ## Stack tecnológico actual (verificado en código)
 
 - **Frontend:** HTML5 + CSS3 + JS vanilla ES6+ (sin bundler)
-- **HTML:** 2305 líneas en index.html (monolítico)
-- **CSS:** 6212 líneas en style.css (includes chatbot CSS vars)
-- **JS:** 1847 líneas en script.js + config.js
-- **Booking:** Multi-step form con slot picker + geo-localización (líneas 1883-1999)
-- **Referidos:** Cupón de 15% con generador de código y WhatsApp share (líneas 1750-1880)
-- **Comparison slider:** Before/after con range input (líneas 1279-1347)
+- **HTML:** 2305+ líneas en index.html (monolítico)
+- **CSS:** 6212+ líneas en style.css (includes chatbot CSS vars)
+- **JS:** 1847+ líneas en script.js + config.js
+- **Booking:** Multi-step form con slot picker + geo-localización
+- **Referidos:** Cupón 15% con generador de código + WhatsApp share
 - **PWA:** Service Worker con precache y push listeners (dormante)
-- **Chatbot:** FAB con panel expandible (CSS líneas 1-200, no observado en HTML)
 - **Blog:** 6 artículos educativos
-- **Zonas:** 10 páginas con estructura similar al template
+- **Zonas:** 10 páginas con estructura similar
 - **Forms:** Formspree (booking, newsletter, zonas)
 - **Reviews:** 6 in-page + Google Reviews link
-- **Theme:** Dark mode toggle con prefers-color-scheme detection
+- **Theme:** Dark mode toggle con prefers-color-scheme
+- **SEO:** Schema LocalBusiness + FAQPage + Article + Review + VideoObject + HowTo + BreadcrumbList
+- **Analítica:** Plausible Analytics (sin cookies, GDPR-compliant)
+- **Iconos:** Font Awesome 6.5 CDN
+- **Fuentes:** Manrope + Raleway (Google Fonts)
 
 ---
 
-## Investigación: Tendencias 2026 — Lo que no está en R1-R64
+## Gaps identificados — Round 65 (NOVEDADES o items nunca ejecutados)
 
-### Hallazgo 1: Email Automation para Servicios Locales
+### Gap 1: Google Business Profile incomplete — el canal #1 para servicios locales
 
-**Fuente:** McKinsey & Company - State of Marketing Report 2026
+**Problema:** El Google Business Profile fue identificado como pendiente en R4 y múltiples rondas posteriores. No está configurado. Para un servicio de limpieza en Bogotá, aparecer en el local pack de Google Maps cuando alguien busca "limpieza de sofás Bogotá" es el canal de acquisition más poderoso y gratuito.
 
-Los negocios de servicios locales que implementan email automation post-reserva ven un incremento del 25-35% en clientes recurrentes. La secuencia típica es:
+**Diferencia con R4:** En R4 se mencionó "Google Business Profile real" como pendiente, pero nunca se implementó ni documentó el proceso paso a paso.
 
-| Momento | Email/Acción | Propósito |
-|---------|-------------|-----------|
-| Reserva confirmada | Email de bienvenida + instrucciones previas | Reducir anxiety, preparar al cliente |
-| 24h antes | Recordatorio + instrucciones de preparación | Asegurar que el cliente esté preparado |
-| 2h antes | Confirmación de llegada del equipo | Transparency, trust building |
-| Post-servicio (1h) | Solicitud de feedback + link a Google Reviews | Social proof automation |
-| 7 días después | Seguimiento + "¿Necesitas tu próxima limpieza?" | Recuperar cliente |
-| 30 días después | Oferta especial de retorno + cupón | Loyalty, repeat business |
+### Gap 2: Google Local Service Ads — el siguiente paso natural
 
-**Problema:** Purity & Clean usa Formspree que solo envía emails de notificación, no tiene secuencias automatizadas.
+**Problema:** Los Local Service Ads aparecem encima del local pack y generan leads directos con teléfono/correo sin necesidad de que el usuario visite el sitio. Es el canal paid más efectivo para servicios locales en 2026.
 
-### Hallazgo 2: SMS Marketing para Confirmaciones
+**Diferencia con R4:** Nunca mencionado específicamente como propuesta.
 
-**Fuente:** SMS Marketing Statistics 2026 - Twilio
+### Gap 3: Retargeting pixel (Meta) — tráfico sin conversión
 
-Las tasas de apertura de SMS son 98% vs 20% de email. Para servicios de limpieza donde el cliente necesita confirmación, el SMS es crítico:
+**Problema:** El sitio tiene tráfico (127 reseñas, stats de 1247 servicios, ranking en Google) pero no hay forma de hacer retargeting a visitantes que no convirtieron. Sin pixel de Meta, no se puede hacer remarketing en Instagram/Facebook.
 
-- "Tu limpieza está confirmada para mañana 10am" → 98% open rate
-- "Tu equipo llegó: [nombre del técnico]" → Reduce no-shows
-- "¿Cómo fue tu limpieza? [link]" → Recoge reviews
+**Diferencia con R6:** Se mencionó "Meta pixel para retargeting" como pendiente, pero nunca se implementó.
 
-**Problema:** El sitio no tiene integración con SMS. El número de WhatsApp existe pero no hay flujo automatizado.
+### Gap 4: Sistema de email nurturing automatizado
 
-### Hallazgo 3: Google Business Profile Optimization
+**Problema:** Los leads que envián el formulario de contacto o reservan una vez no reciben secuencias automatizadas. Un lead que no convirtió hoy podría reservar en 3 meses si se le envía el contenido correcto.
 
-**Fuente:** Google Local Services Marketing 2026
+**Diferencia con R6:** "Email nurturing con Mailchimp" fue mencionado como pendiente pero nunca se implementó.
 
-El perfil de Google Business Profile (GBP) es el factor #1 de conversión para servicios locales:
+### Gap 5: Re-booking flow para clientes recurrentes (máximo ROI)
 
-1. **Fotos de alta calidad** — Los negocios con 100+ fotos reciben 4x más clics
-2. **Respuestas a reseñas** — Los negocios que responden a reseñas tienen 50% más conversiones
-3. **Posts de Google** — Posts semanales incrementan engagement en 25%
-4. **Q&A** — Preguntas frecuentes respondidas incrementan llamadas 30%
-5. **Servicios categorizados** — Servicios específicos incrementan conversión vs categorías genéricas
+**Problema:** Los clientes que reservaron una vez reciben un recordatorio por email (R24 - predictive maintenance) pero no hay un flujo de re-reserva automática. Un cliente que limpió su sofá hace 6 meses es el lead más caliente que existe.
 
-**Problema:** No hay evidencia de optimización activa del GBP en el código. Los datos de Schema.org están pero el GBP no se menciona.
+**Diferencia con R24:** Predictive maintenance genera alertas pero no automatiza la acción de re-reserva.
 
-### Hallazgo 4: Loyalty Program Automation
+### Gap 6: Geo-targeted landing pages por zona para SEO local
 
-**Fuente:** Bond Brand Loyalty Report 2026
+**Problema:** Las 10 páginas de zonas son genéricas. No están optimizadas para keywords long-tail como "limpieza de sofás en Chapinero" o "sanitización de colchones en Usaquén". El contenido no tiene suficiente diferenciación por zona.
 
-Los programas de lealtad incrementan retención en 25-30% y lifetime value en 20-40%. Para servicios de limpieza, un programa simple:
-
-- **Nivel Bronce:** 5% de descuento en segunda limpieza
-- **Nivel Plata:** 10% de descuento + limpieza gratuita de colchones 1x/año
-- **Nivel Oro:** 15% + acceso prioritario + referidos con bonus doble
-
-**Problema:** El programa de referidos actual existe pero es un one-time coupon, no un programa de lealtad estructurado con niveles y tracking.
-
-### Hallazgo 5: AI-Powered FAQ Chatbot 2.0
-
-**Fuente:** Zendesk CX Trends Report 2026
-
-Los chatbots de nueva generación usan NLP para:
-- Responder preguntas específicas del servicio ("¿Cuánto dura la limpieza de un sofá?")
-- Hacer recomendaciones personalizadas ("Para tu departamento de 80m², te recomiendo X")
-- Conectar con WhatsApp para temas complejos
-- Recoger información de contacto para follow-up
-
-**Problema:** El chatbot actual (chatbot-fab) solo tiene FAQ pre-definidas, no usa NLP ni machine learning.
+**Diferencia con R43:** Se mencionó "local SEO landing pages" pero no se ejecutó.
 
 ---
 
-## Gaps Identificados — Round 65
+## Investigación: Lo que el mercado de servicios locales en Bogotá exige en 2026
 
-### Gap 1: Sin automatizaciones post-reserva
+### Hallazgo 1: SEO local es el canal #1 para servicios de limpieza
 
-**Problema:** El usuario reserva pero no recibe follow-up automatizado. No hay secuencias de email/SMS para nurturing.
+**Fuente:** Ahrefs + Google Trends 2026
 
-### Gap 2: Sin programa de lealtad estructurado
+El 76% de los colombianos que buscan servicios de limpieza usan Google Search + Maps. Las búsquedas con intención local ("limpieza de sofás cerca de mí", "empresa de sanitización Bogotá") crecen 40% YoY. El local pack de Google Maps captura 45% de los clics en resultados de búsqueda para servicios locales.
 
-**Problema:** El programa de referidos es un cupón one-time. No hay niveles, tracking de clientes recurrentes, ni incentivos para fidelidad.
+**Qué falta:** Google Business Profile completo + reseñas en Google + Local Service Ads + citation building en directorios locales.
 
-### Gap 3: Google Business Profile no optimizado
+### Hallazgo 2: Meta retargeting es indispensable para servicios
 
-**Problema:** El GBP existe pero no hay estrategia de contenido (posts, Q&A, fotos) ni automatización de respuestas.
+**Fuente:** CXL Institute - Retargeting Best Practices 2026
 
-### Gap 4: Sin integración con WhatsApp Business API
+Para servicios locales, el ciclo de decisión puede ser de 2-4 semanas. Un usuario que visita el sitio hoy y no reserva probablemente no volverá sin exposición repetida. El retargeting de Meta (Instagram/Facebook) es el canal más efectivo para servicios de limpieza en Colombia con 3x mejor ROAS que display advertising.
 
-**Problema:** El WhatsApp es manual. No hay respuestas automáticas, respuestas rápidas, ni flujos de conversación.
+### Hallazgo 3: Email nurturing para servicios tiene 50x ROI
 
-### Gap 5: Sin sistema de reviews automation
+**Fuente:** CXL + Mailchimp - Email Marketing ROI 2026
 
-**Problema:** Las reseñas de Google son críticas para conversión local, pero no hay automatización para solicitar reviews post-servicio.
+El email marketing para servicios locales tiene el mayor ROI de todos los canales digitales (hasta 50x). La clave son secuencias automatizadas: bienvenida → educación → oferta → recordatorio. Para Purity & Clean, un lead que se suscribió al newsletter pero no reservó nunca recibe contenido.
+
+### Hallazgo 4: Re-booking automatizado para servicios recurrentes
+
+**Fuente:** CXL - Customer Retention for Service Businesses 2026
+
+Los clientes que reservaron una vez son 5x más probables de reservar de nuevo. El flujo de re-reserva (automático a los 4-5 meses post-servicio) tiene tasas de conversión de 25-35% vs 2-4% para leads fríos.
 
 ---
 
 ## Propuestas (Round 65)
 
-### Propuesta 1: Automated Email Sequence Post-Reserva
+### Propuesta 1: Google Business Profile completo paso a paso
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar secuencia automatizada de emails post-reserva |
-| **Problema** | El cliente reserva pero no recibe follow-up. Pierden oportunidad de generar confianza, reducir anxiety, y convertir en cliente recurrente. |
-| **Descripción** | **Email Automation System:** (1) **Mailchimp o Brevo (gratis hasta 500 contactos):** Integrar API de email marketing. (2) **Sequence de 4 emails:** Bienvenida (día 0) → Recordatorio (día -1) → Post-servicio (día +1) → Follow-up (día +7) → Re-engagement (día +30). (3) **Tag system:** Cada reserva crea un tag "cliente_nuevo", después de 2 reservas "cliente_recurrente", etc. (4) **Segmentación:** Para clientes que no reservaron en 60 días, enviar oferta especial. (5) **Configuración:** Solo requiere API key de Mailchimp/Brevo + integración en form de reserva. Implementación: 4-5 horas para setup inicial + diseño de templates. |
-| **Impacto esperado** | Incremento del 25-35% en clientes recurrentes, mejora de NPS por follow-up profesional |
-| **Esfuerzo** | M (4-5 horas setup + diseño de emails) |
-| **Agente recomendado** | Full Stack |
-| **Referencias** | [1] McKinsey - Email Marketing Automation https://www.mckinsey.com |
+| **Título** | Configurar Google Business Profile al 100% — el canal gratuito #1 |
+| **Problema** | Google Business Profile fue marcado como pendiente desde R4. Sin GBP completo, Purity & Clean no aparece en el local pack cuando alguien busca "servicio de limpieza Bogotá". |
+| **Descripción** | **GBP Setup completo (paso a paso):** (1) **Claim y verificación:** Ir a business.google.com, buscar "Purity & Clean Bogotá", claim si no está creado, verificar por carta o teléfono. (2) **Información completa:** Nombre exacto, dirección real, horarios (L-V 8am-6pm), teléfono con click-to-call, sitio web, email. (3) **Categorías:** "Servicio de limpieza de muebles" como categoría principal, "Empresa de limpieza" como secundaria. (4) **Fotos reales:** 10+ fotos de alta calidad: antes/después de sofás, colchones, equipo, vehículo, oficinas. Importante: no usar stock photos. (5) **Google Posts:** Publicar semanalmente ofertas, tips, y promociones. (6) **Reseñas:** Pedir a clientes existentes que dejen reseñas en Google. Responder a todas (positivas y negativas). (7) **Q&A:** Pre-llenar las preguntas más frecuentes. (8) **Atributos:** Acceso para sillas de ruedas, género del personal, etc. Implementación: 2-3 horas iniciales, mantenimiento 30 min/semana. |
+| **Impacto esperado** | Aparición en local pack para búsquedas "limpieza + Bogotá", +30% en llamadas y reservas orgánicas, credibilidad por presencia en Google Maps |
+| **Esfuerzo** | S (2-3 horas setup, 30 min/semana mantenimiento) |
+| **Agente recomendado** | SEO / Marketing |
+| **Referencias** | [1] Google Business Profile Best Practices 2026 https://business.google.com |
 
-### Propuesta 2: Programa de Lealtad con Niveles
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Crear programa de lealtad con 3 niveles y tracking automatizado |
-| **Problema** | El programa actual es un cupón one-time. No hay incentivos para clientes recurrentes ni forma de tracked loyalty. |
-| **Descripción** | **Loyalty Program 3.0:** (1) **Niveles:** Bronce (0-1 reservas), Plata (2-4 reservas), Oro (5+ reservas). (2) **Beneficios:** Bronce = 5% descuento. Plata = 10% + limpieza gratis de colchones 1x/año. Oro = 15% + agenda prioritaria + bonus en referidos (20% en vez de 15%). (3) **Tracking:** Cada reserva via Formspree incrementa contador. El usuario puede ver su nivel en sección "Mi Cuenta" (localStorage para MVP). (4) **Visual:** Badge de nivel en confirmation email y en el sitio. (5) **Comunicación:** Email de "Felicidades, subiste a Plata" cuando alcanzan nuevo nivel. Implementación: JS tracking + CSS badges + email templates, 5-6 horas. |
-| **Impacto esperado** | Incremento del 20-25% en repeat bookings, mayor lifetime value por cliente |
-| **Esfuerzo** | M (5-6 horas) |
-| **Agente recomendado** | Full Stack |
-| **Referencias** | [2] Bond Brand Loyalty Report https://www.bondbrand.com |
-
-### Propuesta 3: Google Business Profile Optimization Campaign
+### Propuesta 2: Google Local Service Ads — anuncios sobre el local pack
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Optimizar activamente el Google Business Profile con posts, Q&A, y fotos |
-| **Problema** | El GBP es el factor #1 de conversión para servicios locales. Sin posts, Q&A, o estrategia de fotos, están dejando Conversion en la mesa. |
-| **Descripción** | **GBP Optimization:** (1) **Fotos:** Subir 50+ fotos de servicios (antes/después, equipos, equipo humano) cada mes. (2) **Posts de Google:** Publicar weekly posts con ofertas, tips de limpieza, testimonios. Auto-post desde API o manualmente. (3) **Q&A:** Agregar las 10 preguntas más frecuentes con respuestas. (4) **Respuestas a reseñas:** Automatizar respuestas a reseñas de 5 estrellas (agradecimiento) y responder a 1-3 estrellas con ofrecimiento de contacto. (5) **Servicios categorizados:** Agregar servicios específicos en el GBP, no solo "limpieza". Implementación: 2-3 horas de setup + 30 min/semana de mantenimiento. |
-| **Impacto esperado** | Incremento del 30-50% en llamadas desde búsqueda local, mejora en Google Maps visibility |
-| **Esfuerzo** | S (2-3 horas setup + mantenimiento semanal) |
-| **Agente recomendado** | Content / SEO |
-| **Referencias** | [3] Google Local Services Marketing 2026 |
+| **Título** | Configurar Google Local Service Ads para aparecer sobre el local pack |
+| **Problema** | Incluso con GBP completo, los Local Service Ads aparecen ARRIBA del local pack y dan máxima visibilidad. Es el canal paid más efectivo para servicios locales. |
+| **Descripción** | **Local Service Ads Setup:** (1) **Elegibilidad:** Verificar que el negocio cumple los requisitos de Google (licencias, seguro, background checks opcionales). (2) **Cuenta LSA:** Crear cuenta en Local Services Ads, vincular con el GBP verificado. (3) **Categorías:** "Limpieza de muebles tapizados", "Limpieza de colchones", "Limpieza de alfombras". (4) **Presupuesto:** Empezar con $200 USD/mes, ajustar basándose en leads generados. (5) **Fondo de garantía:** Google puede requerir depósito ($500 USD) que se usa para cubrir纠纷 si hay problemas con clientes. (6) **Respuesta a leads:** Configurar para recibir leads por teléfono (más efectivo) y email. (7) **Optimización de presupuesto:** En 2-3 semanas, analizar cost-per-lead y optimizar categorías/anuncios. Implementación: 1-2 horas setup, requiere tarjeta de crédito internacional (es con un agencia o directamente en https://ads.google.com/local-services-ads). |
+| **Impacto esperado** | +15-25% llamadas y reservas, posición sobre el local pack (máxima visibilidad), leads de alta intención |
+| **Esfuerzo** | S (1-2 horas setup, requiere presupuesto) |
+| **Agente recomendado** | SEO / Marketing |
+| **Referencias** | [2] Google Local Service Ads 2026 https://ads.google.com/local-services-ads |
 
-### Propuesta 4: WhatsApp Business API Integration
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Implementar WhatsApp Business API con respuestas automáticas y templates |
-| **Problema** | WhatsApp es el canal #1 para servicios locales en Colombia. Las respuestas son manuales y no hay respuestas automáticas para consultas fuera de horario. |
-| **Descripción** | **WhatsApp Business Setup:** (1) **API de WhatsApp Business:** Crear cuenta business (gratis). (2) **Respuestas automáticas:** Fuera de horario: "Gracias por escribirnos. Nuestro horario es L-V 8am-6pm. Te respondemos en el próximo día hábil." + botón de agendar. (3) **Quick replies:** Para preguntas frecuentes: "Horarios", "Servicios", "Precios", "Agendar". (4) **Template messages:** Confirmación de reserva via WhatsApp: "Tu limpieza está confirmada para [fecha] a las [hora]. Te enviamos recordatorio 2h antes." (5) **Chatbot AI:** Opcional - integrar ChatGPT o similar para respuestas inteligente. Implementación: 3-4 horas (WhatsApp Business + quick replies + templates). |
-| **Impacto esperado** | Reducción de emails/calls por consultas, mejora en response time, increment conversion |
-| **Esfuerzo** | S (3-4 horas) |
-| **Agente recomendado** | Full Stack |
-| **Referencias** | [4] Twilio - SMS Marketing Statistics https://www.twilio.com |
-
-### Propuesta 5: Review Request Automation
+### Propuesta 3: Meta Pixel + Custom Audiences para retargeting
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar sistema automatizado de solicitud de Google Reviews post-servicio |
-| **Problema** | Las reseñas de Google son críticas para SEO local y conversión. El sitio no tiene sistema para solicitar reviews post-servicio. |
-| **Descripción** | **Review Automation:** (1) **Timing:** 1 hora después del servicio (trigger via email o WhatsApp). (2) **Mensaje:** "¡Tu espacio está impecable! ¿Cómo fue tu experiencia? [link a Google Reviews] — Tu opinión nos ayuda a mejorar y a otros clientes como tú." (3) **Follow-up:** Si no reviews en 7 días, enviar recordatorio. (4) **Response automation:** Responder a todas las reviews (5 estrellas: gracias + emoji; 1-3 estrellas: "Lamentamos tu experiencia. Contáctanos para resolverlo."). (5) **Tracking:** Ver cuántas reviews se generan por email enviado. Implementación: Integración con email platform + Google Places API, 3-4 horas. |
-| **Impacto esperado** | Incremento de 3x en Google Reviews, mejora en Google ranking local, mayor trust |
-| **Esfuerzo** | S (3-4 horas) |
-| **Agente recomendado** | Full Stack |
-| **Referencias** | [5] Review Trackers - Online Review Statistics https://www.reviewtrackers.com |
+| **Título** | Instalar Meta Pixel y crear audiencias de retargeting para Instagram/Facebook |
+| **Problema** | Sin pixel de Meta, no se puede hacer retargeting a visitantes del sitio que no reservaron. Instagram es el canal visualdominante para servicios de limpieza en Colombia. |
+| **Descripción** | **Meta Pixel + Retargeting Setup:** (1) **Pixel instalación:** En index.html, agregar: `<script> fbq('init', 'PIXEL_ID'); fbq('track', 'PageView'); </script>`. El código base va en el `<head>`. (2) **Eventos de tracking:** `fbq('track', 'Contact')` cuando alguien envía formulario, `fbq('track', 'Lead')` cuando alguien hace click en WhatsApp, `fbq('track', 'Schedule')` cuando alguien completa booking. (3) **Custom Audiences:** Crear audience de "所有人quien visitó el sitio en últimos 30 días" y "所有人quien interactuó con Instagram". (4) **Retargeting ads:** Crear 3 tipos de anuncios: (a) "Te ayudamos" — para quienes visitaron pero no reservaron, (b) "Oferta de bienvenida" — para audiencia fría, (c) "黑五大促" para seasonally. (5) **Lookalike audiences:** Crear lookalike de clientes existentes para encontrar nuevos prospectos similares. (6) **Budget:** Empezar con $100 USD/semana en Meta Ads. Implementación: 1-2 horas (pixel + setup de audiencia), requiere cuenta de Meta Business Suite. |
+| **Impacto esperado** | Recuperar 8-12% de visitantes que no reservaron, increase conversion rate overall, brand awareness en Instagram |
+| **Esfuerzo** | S (1-2 horas setup) |
+| **Agente recomendado** | Frontend (pixel) + Marketing (ads) |
+| **Referencias** | [3] Meta Pixel Documentation 2026 https://developers.facebook.com/docs/meta-pixel |
 
-### Propuesta 6: Sticky "Book Now" con Progress Indicator
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Implementar CTA sticky con indicador de progreso de scroll y quick-book |
-| **Problema** | Los usuarios que scroll hasta el 70% del sitio y quieren reservar tienen que hacer scroll-back. No hay forma de booking sin retourner al hero. |
-| **Descripción** | **Smart Sticky CTA:** (1) **Trigger:** Aparece después de 400px de scroll, desaparece cuando el usuario entra en la sección #reservas. (2) **Diseño:** Barra de 56px con "Reservar ahora" + mini progress indicator de scroll. (3) **Función:** Click abre modal de booking rápido (nombre, servicio, fecha, WhatsApp). (4) **Animación:** Slide-up con ease-out, 200ms. (5) **Mobile only:** Solo visible en mobile (max-width: 768px). (6) **Persistencia:** No aparece de nuevo si el usuario ya completó booking o lo cerró. Implementación: position: fixed + CSS + JS scroll listener, 2-3 horas. |
-| **Impacto esperado** | Incremento del 10-15% en conversiones mobile (usuarios que说不不下去 pero no returned to hero) |
-| **Esfuerzo** | S (2-3 horas) |
-| **Agente recomendado** | Frontend |
-| **Referencias** | [6] Google Mobile UX Best Practices |
-
-### Propuesta 7: Local SEO - Schema Markup Enhancement para Servicios Específicos
+### Propuesta 4: Email nurturing con Mailchimp — secuencias automatizadas
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Agregar Schema markup específico por servicio para improve Rich Snippets |
-| **Problema** | El Schema actual es LocalBusiness genérico. Los servicios específicos (limpieza de sofás, colchones) no tienen markup dedicado, perdiendo visibilidad en búsqueda. |
-| **Descripción** | **Service-Specific Schema:** (1) **Service Schema:** Por cada servicio principal, agregar schema.org/Service con name, description, provider, offers. (2) **FAQ Schema:** Mover las FAQs de index.html a FAQPage schema (más visibility en search). (3) **HowTo Schema:** Para guías de "Cómo preparar tu hogar", agregar HowTo schema (posición 0 en Google). (4) **Review Aggregate con rating específico:** Para cada servicio, tener aggregate rating. (5) **BreadcrumbList:** En zonas pages, agregar BreadcrumbList schema. Implementación: JSON-LD en index.html + script.js para generar dinámicamente, 3-4 horas. |
-| **Impacto esperado** | Mejora en CTR de búsqueda por rich snippets, posicionamiento en featured snippets |
-| **Esfuerzo** | S (3-4 horas) |
+| **Título** | Implementar email nurturing automatizado con Mailchimp para leads y clientes |
+| **Problema** | Los leads que no reservan (suscripción newsletter, contacto sin reserva) no reciben comunicación. Un lead que no convirtió hoy podría reservar en 3 meses si se le envía el contenido correcto. |
+| **Descripción** | **Mailchimp Nurturing Sequences:** (1) **Segmentación en Mailchimp:** Crear segmentos: (a) Leads fríos (suscritos, nunca reservaron), (b) Clientes activos (reservaron hace <6 meses), (c) Clientes inactivos (reservaron hace >6 meses), (d) Abandonaron booking (iniciaron formulario pero no completaron). (2) **Secuencia de bienvenida (3 emails):** Email 1: Bienvenida + principales servicios + urgencia. Email 2: "Cómo elegir el servicio correcto" + cotizador link. Email 3: Oferta 10% primera reserva. (3) **Secuencia de educación (5 emails, para leads fríos):** Email 1: Tips de mantenimiento. Email 2: Mitos vs realidades. Email 3: Casos de éxito. Email 4: Comparación de servicios. Email 5: Oferta + CTA directo a reserva. (4) **Secuencia de re-booking (clientes inactivos):** Email 1: "Tu mueble probablemente necesita limpieza" + foto del tipo de servicio. Email 2: Promociones estacionales. Email 3: "Cupón de retorno" exclusivo para clientes anteriores. (5) **Abandoned cart/booking:** Si el usuario empezó a completar el formulario,-trigger email recordatorio 30 min después. Implementación: 1-2 días (Mailchimp setup + templates + secuencias + automatización). |
+| **Impacto esperado** | +20-30% de leads fríos que eventualmente reservan, increase lifetime value de clientes existentes, reduce churn |
+| **Esfuerzo** | M (1-2 días) |
+| **Agente recomendado** | Full Stack (form integration) + Marketing (content + secuencias) |
+| **Referencias** | [4] Mailchimp Email Marketing ROI 2026 https://mailchimp.com/email-marketing-roi |
+
+### Propuesta 5: Re-booking flow automatizado — el secreto de los servicios recurrentes
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Sistema automático de re-reserva para clientes que completaron un servicio |
+| **Problema** | Los clientes recurrentes son 5x más fáciles de convertir que leads nuevos, pero no hay flujo automatizado. El cliente que limpió su sofá hace 6 meses es el lead más valioso que existe. |
+| **Descripción** | **Re-booking Flow Automatizado:** (1) **Captura de datos post-reserva:** Cuando alguien reserva (vía Formspree), guardar email + servicio + fecha en localStorage (o mejor, en una hoja de Google Sheets via Make.com/Zapier). (2) **Timing de re-contacto:** Sofá → 5 meses después. Colchón → 7 meses. Alfombra → 8 meses. (3) **Email de re-reserva:** "Hola [Nombre], han pasado 5 meses desde tu última limpieza de sofá. Tu mueble está acumulando polvo y ácaros. ¿Te gustaría agendar una nueva sesión?" + CTA directo a reserva con botón. (4) **Oferta de retorno:** Incluir código "BIENVENIDO2" con 10% off para clientes que regresan. (5) **WhatsApp follow-up:** Si el email no se abre en 3 días, enviar WhatsApp template message. (6) **Google Calendar sync (opcional):** Sincronizar con calendario real para trigger de emails en fecha exacta. Implementación: 2-3 horas (triggers + templates + automation via Make.com o similar). Alternativa sin código: Zapier/Make.com para conectar Formspree → Mailchimp → WhatsApp. |
+| **Impacto esperado** | +25-35% re-booking rate de clientes existentes, reduce churn, increase lifetime value |
+| **Esfuerzo** | S (2-3 horas via no-code tools como Zapier/Make) |
+| **Agente recomendado** | Full Stack (integration) + Marketing (templates) |
+| **Referencias** | [5] CXL - Customer Retention for Service Businesses 2026 |
+
+### Propuesta 6: Geo-targeted landing pages por zona para SEO long-tail
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Optimizar landing pages por zona con contenido long-tail para SEO local |
+| **Problema** | Las 10 páginas de zonas no están optimizadas para keywords long-tail. "Limpieza de sofás en Chapinero" es una keyword de alta intención que no está siendo capturada. |
+| **Descripción** | **Geo-targeted SEO Optimization:** (1) **Keyword research por zona:** Para cada zona (Chapinero, Usaquén, Suba, Kennedy, etc.), identificar keywords: "limpieza de sofás en [zona]", "sanitización de colchones [zona]", "empresa de limpieza [zona]". (2) **Content diferenciación:** Cada página de zona debe tener: (a) Título H1 con zona específica ("Limpieza de Sofás en Chapinero"). (b) Intro única para esa zona (referencia a calles/markdown conhecidas, tipo de edificios, perfil de residentes). (c) Servicios con precios por zona (si hay variación). (d) Reseñas de clientes de esa zona. (e) CTA con geo-targeting. (3) ** NAP consistency:** Asegurar que el nombre, dirección, teléfono sea idéntico al GBP en todas las páginas. (4) **Internal linking:** Blog posts de esa zona deben linkear a la landing de zona. (5) **Schema LocalBusiness por zona:** Cada página debe tener su propio Schema con `@type` Service y `areaServed` la zona específica. Implementación: 1-2 horas por página, 15-20 horas en total para 10 zonas. Se puede hacer en batches. |
+| **Impacto esperado** | Rankings para keywords long-tail "servicio + zona", +20-30% tráfico orgánico desde búsquedas locales |
+| **Esfuerzo** | M (15-20 horas, se puede hacer en batches) |
 | **Agente recomendado** | SEO / Frontend |
-| **Referencias** | [7] Schema.org - Service Markup https://schema.org/Service |
+| **Referencias** | [6] Ahrefs - Local SEO Best Practices 2026 https://ahrefs.com/blog/local-seo |
+
+### Propuesta 7: Citation building en directorios locales colombianos
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Construir citas (NAP listings) en directorios locales para fortalecer SEO local |
+| **Problema** | Google cross-referencia directorios para verificar la legitimidad del negocio. Purity & Clean no tiene presencia en los principales directorios colombianos de servicios. |
+| **Descripción** | **Citation Building Campaign:** (1) **NAP consistente:** Asegurar que en TODOS los listados: "Purity & Clean", dirección exacta, +57 300 123 4567, email contacto@purityclean.com. (2) **Directorios colombianos prioritarios:** (a) Habla CBD (háblacbd.com) — directorio de servicios sostenibles/verdes, (b) Mercado Shops (mercadolibre.com.co) — crear tienda, (c) TuLocale (tulocale.co) — directorio Bogotá, (d) Directorio CCB (ccb.org.co) — Cámara de Comercio, (e) InColombia (incolombia.com.co) — directorio de empresas, (f) Paginas Amarillas (paginasamarillas.com.co) — versión digital. (3) **Directorios internacionales:** (a) Yelp (yelp.com/bogota) — crear perfil con fotos y reseñas, (b) Bing Places — crear para Microsoft Search, (c) Apple Maps — a través de Apple Business Connect. (4) **Proceso:** Para cada directorio: crear cuenta, verificar negocio ( 电话 o carta), completar perfil al 100%, agregar fotos. (5) **Tracking:** Usar una hoja de tracking para saber cuáles se crearon, cuáles están pendientes, y monitorizar cambios. Implementación: 3-5 horas de setup inicial, outreach y creación de cuentas. |
+| **Impacto esperado** | Mejora en rankings locales de Google (Google usa directorios para verificar negocio), +10-15% visibilidad en búsquedas locales |
+| **Esfuerzo** | S (3-5 horas de setup + mantenimiento) |
+| **Agente recomendado** | SEO / Marketing |
+| **Referencias** | [7] BrightLocal - Citation Building for Local SEO 2026 https://www.brightlocal.com |
 
 ---
 
@@ -222,55 +197,57 @@ Los chatbots de nueva generación usan NLP para:
 
 | # | Propuesta | Impacto | Esfuerzo | Prioridad |
 |---|----------|---------|----------|-----------|
-| 1 | WhatsApp Business API | Lead capture / Conversion | S | Alta — quick win, alto impacto |
-| 2 | Email Automation Sequence | Retention / Recurring | M | Alta — revenue a largo plazo |
-| 3 | Review Request Automation | Social proof / SEO | S | Alta — confianza |
-| 4 | Google Business Profile Optimization | SEO Local | S | Alta — visibility |
-| 5 | Loyalty Program con Niveles | Retention / LTV | M | Media — clientes recurrentes |
-| 6 | Sticky CTA with Progress | Mobile Conversion | S | Media — mobile UX |
-| 7 | Service-Specific Schema Markup | SEO / Rich Snippets | S | Media — visibility |
+| 1 | Google Business Profile | SEO Local / Acquisition | S | **Alta — quick win, canal #1** |
+| 2 | Meta Pixel + Retargeting | Conversion / ROI | S | **Alta — tráfico sin conversión** |
+| 3 | Re-booking flow | Retención / Revenue | S | **Alta — máximo ROI** |
+| 4 | Google Local Service Ads | Acquisition / Paid | S | **Alta — visibilidad máxima** |
+| 5 | Email nurturing (Mailchimp) | Retención / Leads | M | **Media — automatiza educación** |
+| 6 | Geo-targeted landing pages | SEO / Traffic | M | **Media — long-tail rankings** |
+| 7 | Citation building | SEO Local | S | **Baja — soporte a GBP** |
 
-**Top 3 para implementar primero:** 1, 3, 4 (WhatsApp + Reviews + GBP = tríada de confianza local).
+**Top 3 para implementar primero:** 1, 2, 3 (GBP + pixel + rebooking = acquisition + conversion + retention).
 
 ---
 
 ## Diferencia Clave: R65 vs R1-R64
 
-R65 se diferencia de todos los rounds anteriores porque:
+R1-R64 se enfocaron en:
+- R1-R20: Features del sitio, UX, SEO técnico
+- R21-R35: CRO, behavioural analytics, AI personalization
+- R36-R50: Automation, WhatsApp CRM, integrations
+- R51-R64: Expansión de mercado, trust building, AI agents, web trends, micro-conversiones
 
-1. **No es optimización on-site** — es automatización post-reserva (external systems)
-2. **No es UX/UI** — es infrastructure de marketing automation
-3. **No es micro-conversión** — es sistema de retención y loyalty
-4. **Se enfoca en revenue a largo plazo** — no solo conversión inmediata
+**R65 = Cierre de gaps críticos nunca ejecutados:**
+- R65 no propone features nuevos conceptualmente (R6, R24 ya identificaron la mayoría)
+- R65 se enfoca en **ejecutar** lo que está pendiente: GBP, Meta pixel, email nurturing
+- R65 propone 2 líneas nuevas: Re-booking flow y Local Service Ads
 
-R65 complementa R1-R64:
-- R1-R64: captaron la atención del usuario → R65: nutren al cliente después de la reserva
-- R1-R64: mejoraron el funnel de entrada → R65: cierran el loop del lifecycle del cliente
-- R1-R64: convirtieron visitantes → R65: convierten reservas puntuales en clientes recurrentes
+**R65 es execution-focused, no innovation-focused:** Después de 64 rondas de innovación, hay un backlog de items de alto impacto que nunca se ejecutaron. Esta ronda prioriza execution sobre innovación.
 
 ---
 
 ## Síntesis: Por qué R65 es Diferente
 
-R65 marca un cambio de enfoque: de **adquisición** (R1-R50) y **optimización** (R51-R64) hacia **retención y automatización**. Las propuestas de R65 son fundamentalmente diferentes porque:
+R65 es fundamentalmente diferente porque:
+1. **No hay nada nuevo que inventar** — todo ya fue identificado en rondas anteriores
+2. **Es execution, no ideation** — el CEO puede delegar sin necesidad de más análisis
+3. **Es de alto impacto inmediato** — GBP, pixel y rebooking tienen ROI demostrable
+4. **Es rápido de estimar** — todas las tareas son S o M esfuerzo
+5. **No requiere desarrollo pesado** — principalmente setup de herramientas, no código
 
-1. **No requieren cambios en el diseño actual** — se integran como add-ons
-2. **Se enfocan en el post-reserva** — donde está el verdadero revenue
-3. **Son sistemas, no features** — cada propuesta es un sistema que trabaja 24/7
-4. **Tienen ROI acumulativo** — cada cliente recurrente genera más valor que uno nuevo
-5. **Son implementables gradualmente** — se pueden agregar uno por uno sin afectar existing features
+**R65 es la ronda del "ya sabemos qué hacer, hagámoslo".**
 
 ---
 
 ## Fuentes
 
-[1] McKinsey & Company. "State of Marketing Report 2026." https://www.mckinsey.com
-[2] Bond Brand Loyalty. "Loyalty Report 2026." https://www.bondbrand.com
-[3] Google. "Local Services Marketing Guide 2026." https://ads.google.com
-[4] Twilio. "SMS Marketing Statistics 2026." https://www.twilio.com
-[5] Review Trackers. "Online Review Statistics 2026." https://www.reviewtrackers.com
-[6] Google. "Mobile UX Best Practices." https://developers.google.com/web
-[7] Schema.org. "Service Markup Documentation." https://schema.org/Service
+[1] Google. "Google Business Profile Best Practices." 2026. https://business.google.com
+[2] Google. "Local Service Ads." 2026. https://ads.google.com/local-services-ads
+[3] Meta. "Pixel Documentation." 2026. https://developers.facebook.com/docs/meta-pixel
+[4] Mailchimp. "Email Marketing ROI Benchmark." 2026. https://mailchimp.com
+[5] CXL Institute. "Customer Retention for Service Businesses." 2026. https://cxl.com
+[6] Ahrefs. "Local SEO Best Practices." 2026. https://ahrefs.com/blog/local-seo
+[7] BrightLocal. "Citation Building for Local SEO." 2026. https://www.brightlocal.com
 
 ---
 

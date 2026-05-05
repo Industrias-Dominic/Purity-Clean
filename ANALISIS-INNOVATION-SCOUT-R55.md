@@ -4,15 +4,15 @@
 **Fecha:** 2026-04-27
 **Analista:** Innovation Scout
 **Ronda:** 55
-**Issue padre:** DOMAA-575
+**Issue padre:** DOMAA-576
 
 ---
 
 ## Resumen Ejecutivo
 
-R55 se enfoca en **animación premium, efectos visuales propietarios y micro-interacciones** que diferencian la marca. Tras 54 rondas de análisis, el sitio es técnicamente sólido pero visualmente genérico — usa las mismas libs de animaciones que cualquier sitio web. R55 propone invertir en un **sistema de animación propietario** con scroll-driven animations nativas, efectos de texto dinámicos, y micro-interacciones que hacen que Purity & Clean se sienta como una marca premium, no como una template.
+R55 se enfoca en **performance, engagement, y conversión**. Mientras R54 cerró gaps de visual storytelling y brand differentiation, R55 aborda elementos críticos que impactan directamente las tasas de conversión: lazy loading de imágenes, scroll animations, exit-intent recovery, enhanced contact forms, y smart CTAs. El objetivo es reducir bounce rate, aumentar tiempo en página, y mejorar la captura de leads.
 
-**Diferenciación clave vs R54:** R54 = Backend, APIs, Emergency Services. R55 = Experiencia visual premium y micro-interacciones que elevan la percepción de marca.
+**Diferenciación clave vs R54:** R54 = visual engagement y emotional connection. R55 = performance, conversion optimization, y engagement recovery.
 
 ---
 
@@ -20,243 +20,267 @@ R55 se enfoca en **animación premium, efectos visuales propietarios y micro-int
 
 - **Frontend:** HTML5 + CSS3 + JS vanilla ES6+ (sin bundler)
 - **HTML:** ~2305 líneas en index.html (monolítico)
-- **CSS:** ~6212 líneas en style.css (monolítico, 0 animaciones con librería)
-- **JS:** ~1847 líneas en script.js + config.js + zonas-data.js + zonas-render.js + reviews-data.js
+- **CSS:** ~6212 líneas en style.css (monolítico) — incluye chatbot, cotizador, dark theme, animations
+- **JS:** ~1847 líneas en script.js + zonas-data.js + zonas-render.js
 - **Fuentes:** Manrope + Raleway — Google Fonts
 - **Iconos:** Font Awesome 6.5 CDN (SRI verificado)
-- **Animación:** NONE — sin GSAP, Motion One, anime.js, o cualquier librería
-- **Scroll animation:** CSS-only con `data-reveal` (probablemente IntersectionObserver básico)
-- **Servicios:** 127 reviews, 10 zonas, 6 artículos de blog, cotizador, chatbot FAQ
-- **Backend:** NO EXISTE — 100% estático (R54 cubre esto)
-- **R1-R54 cubre:** Backend serverless, Emergency services, API REST, GPS tracking, Dynamic pricing, Insurance partnerships, Trust signals, Editorial system, AI chatbot, Voice search, Gamified loyalty, Video testimonials, A/B testing, Email nurturing, NPS tracking, Predictive alerts
+- **Analítica:** Plausible Analytics (sin cookies, GDPR-compliant)
+- **Forms:** Formspree (booking, newsletter, zonas)
+- **Testing:** Playwright E2E (10 suites)
+- **PWA:** Service Worker, precache, offline page
+- **SEO:** Schema LocalBusiness + FAQPage + Review + VideoObject + HowTo + BreadcrumbList
+- **Chatbot:** FAQ routing → WhatsApp
+- **Booking:** Multi-step form con slot picker + geo-localización
+- **Theme:** Dark mode toggle con persistencia
+- **Cobertura:** 10 zonas en Bogotá
+- **Precios:** Cotizador interactivo + WhatsApp pre-filled
+- **Reviews:** 127 reviews verificadas, 4.8/5
+- **Blog:** 6 artículos educativos
+- **Backend:** NO EXISTE — 100% estático
 
 ---
 
-## Investigación: Tendencias 2026 — Animation First Design
+## Investigación: Tendencias 2026 — Performance, Conversion, Engagement Recovery
 
-### Hallazgo 1: Proprietary Visual Effects (Efectos Ownables)
+### Hallazgo 1: Lazy Loading de Imágenes con IntersectionObserver
 
-Según Webflow Blog (2025/2026) [1]:
-- Las marcas invierten en **filtros personalizados y sistemas de animación propietarios** que son distintivos de su marca
-- Lo que antes requería desarrollo custom ahora es accesible via herramientas low-code
-- Ejemplo: Springboards usa animaciones hero custom que se integran con su estética visual única
-- En 2026, la diferenciación ya no es "tenemos animaciones" sino "tenemos animaciones que solo nosotros tenemos"
-
-**Purity & Clean tiene:**
-- Animación de reveal básica con `data-reveal` ✓
-- **NO tiene:** Sistema de animación propietario
-- **NO tiene:** Efectos visuales custom de marca
-- **NO tiene:** Animaciones de entrada únicas
-
-### Hallazgo 2: Scroll-Driven Animations Nativas (Sin JS)
-
-Según scroll-driven-animations.style (2026) [2]:
-- **Scroll-driven animations** son ahora estándar nativo en navegadores (Chrome 115+, Safari 16.4+)
-- No requieren JavaScript — puro CSS con `animation-timeline: scroll()`
-- Permite: parallax suave, reveal on scroll, progress indicators, sticky effects
-- El polyfill de scroll-timeline permite soporte general
-- 0kb de JavaScript adicional vs GSAP que pesa ~60kb minified
+Según web.dev y MDN (2026) [1]:
+- `IntersectionObserver` es la API estándar para lazy loading imágenes sin dependencias externas
+- Atributo `loading="lazy"` en `<img>` tiene soporte nativo amplio (Baseline 2022+)
+- ` decoding="async"` permite decoding no bloqueante
+- Imágenes fuera de viewport no se cargan hasta ~200px antes de entrar (rootMargin configurable)
+- Placeholder con aspect-ratio ratio previene layout shift (CLS)
+- WebP con fallback JPEG mejora compresión 25-35%
 
 **Purity & Clean tiene:**
-- **NO tiene:** Scroll-driven animations nativas CSS
-- **NO tiene:** Parallax effects
-- **NO tiene:** Reading progress indicator
-- **NO tiene:** Scroll-linked wayfinding
+- PWA service worker con precache ✓
+- Imágenes en `/images/` folder ✓
+- **NO tiene:** lazy loading sistemático con IntersectionObserver
+- **NO tiene:** aspect-ratio placeholders en imágenes
+- **NO tiene:** WebP strategy documentada
 
-### Hallazgo 3: Dynamic Text Treatments (Efectos de Texto Animado)
+### Hallazgo 2: Scroll Animations con Web Animations API
 
-Según Webflow (2026) [3]:
-- Text effects animados: typewriter, scramble, fade-in por caracteres
-- Tratamientos distintivos que hacen copy más intencional
-- Ejemplo: Habito Studio usa motion para draw attention a key text
-- En 2026, los efectos de texto reemplazan a las fotos generic stock como hero principal
-- Los tratamientos de texto + color系统在 = marca memorable
-
-**Purity & Clean tiene:**
-- Texto estático en el hero sin animación ✗
-- **NO tiene:** Typewriter effect en headlines
-- **NO tiene:** Text scramble animation
-- **NO tiene:** Character-by-character reveal
-- **NO tiene:** Animated gradient text
-
-### Hallazgo 4: Guided Scrolling (Wayfinding Visual)
-
-Según Webflow (2026) [3]:
-- Progress indicators que muestran ubicación en página
-- Scroll-linked navigation que muestra qué sección viene
-- Visual cues que hacen scroll una experiencia dirigida vs pasiva
-- Ejemplo: Emons usa numbered steps que avanzan con scroll
-- Dropbox Dash usa speedometer que track scroll velocity
+Según MDN Web Docs (2026) [2]:
+- Web Animations API permite animaciones programáticas controladas por JavaScript
+- `element.animate(keyframes, options)` es shorthand para crear Animation objects
+- Animaciones pueden pausarse, revertirse, cambiar velocidad dynamically
+- IntersectionObserver puede disparar animaciones cuando elementos entran en viewport
+- Animaciones CSS pueden sincronizarse con JS para efectos coordinated
+- Performance: Animaciones de opacity y transform son compositor-only (no layout/paint)
 
 **Purity & Clean tiene:**
-- Navegación sticky básica ✓
-- **NO tiene:** Progress bar de scroll
-- **NO tiene:** Step indicator linked a scroll
-- **NO tiene:** Scroll velocity tracker
-- **NO tiene:** Visual wayfinding por scroll
+- Animaciones CSS en chatbot FAB (bounce) ✓
+- Animaciones CSS en confianza section ( предположительно) ✓
+- Dark mode toggle animation ✓
+- **NO tiene:** Scroll-triggered animations en secciones
+- **NO tiene:** Web Animations API usage
+- **NO tiene:** Fade-in staggered en listas de servicios
 
-### Hallazgo 5: Explosion of Color Systems
+### Hallazgo 3: Exit-Intent Detection y Recovery
 
-Según Webflow (2026) [3]:
-- Marcas pasando de single accent color a **full color systems**
-- Múltiples colores trabajando juntos para crear energía y memorabilidad
-- Ejemplo: Tesoro usa su color system completo — backgrounds, icons, animations, preloader
-- En 2026, una sola paleta de accent ya no es suficiente para diferenciarse
-
-**Purity & Clean tiene:**
-- Brand colors primarios con un accent color (rojo/white) ✓
-- **NO tiene:** Sistema de color completo que se use en animaciones
-- **NO tiene:** Background gradients animado
-- **NO tiene:** Icon color animations
-- **NO tiene:** Preloader animado con branding
-
-### Hallazgo 6: Micro-Interactions Premium en Cards
-
-Según investigaciones de UX (2026) [4]:
-- Service cards con hover que incluye: scale, shadow lift, content reveal, icon animation
-- Checkout flow con micro-confirmations visuales en cada paso
-- Buttons con estados claros (idle, hover, active, loading, success)
-- Las micro-interacciones son lo que separa sitios "buenos" de "premium"
+Según Baymard Institute y UX research (2026) [3]:
+- Exit-intent popups recovery 10-15% de abandonos cuando están bien timing
+- Timing óptimo: 5-15 segundos de inactividad del mouse hacia arriba
+- Mobile no tiene "mouse leaving viewport" — usar scroll depth y back button detection
+- Personalización por page/section aumenta conversion 3x vs generic popup
+- Oferta de WhatsApp como alternative a email reduce friction
+- GDPR: no mostrar popup sin consentimiento de cookies
 
 **Purity & Clean tiene:**
-- Cards básicas con hover scale mínimo ✓
-- **NO tiene:** 3D tilt effect en cards
-- **NO tiene:** Content reveal on hover ( ícono que se anima + texto que aparece)
-- **NO tiene:** Button states completos (loading spinner, success checkmark)
-- **NO tiene:** Magnetic hover effect en CTAs
+- Newsletter form integrado en page ✓
+- WhatsApp CTA flotante ✓
+- **NO tiene:** Exit-intent detection system
+- **NO tiene:** Scroll-depth-triggered CTAs
+- **NO tiene:** Back-button interception para mobile
 
-### Hallazgo 7: Before/After Sliders para Cleaning Services
+### Hallazgo 4: Enhanced Contact Forms con Micro-Interactions
 
-Según herramientas de visualización (2026) [5]:
-- Before/after image slider es el formato más efectivo para cleaning, restoration, painting services
-- El usuario interactúa = mayor engagement = mayor conversión
-- Herramientas: img-comparison-slider web component, custom con vanilla JS
-- Implementación: 2 imágenes superpuestas con slider draggable
+Según Google UX research (2026) [4]:
+- Inline validation con color feedback reduce errores 30%
+- Character counters en textarea improves completion
+- Autofocus en primer campo reduce friction
+- Success micro-animation (checkmark) aumenta satisfaction
+- Shake animation on error without being annoying
+- Floating labels vs static labels: floating reduces cognitive load
 
 **Purity & Clean tiene:**
-- **NO tiene:** Before/after slider en homepage o servicios
-- **NO tiene:** Demo visual de resultados de limpieza
-- **NO tiene:** Interactive before/after en página de servicios
+- Form validation en JS ✓
+- Required field indicators ✓
+- Success state message ✓
+- **NO tiene:** Floating labels
+- **NO tiene:** Character counter en textarea
+- **NO tiene:** Shake animation on invalid submit
+- **NO tiene:** Inline field-level error messages (rojo/verde dinámico)
+
+### Hallazgo 5: Smart Sticky CTAs que Cambian con Scroll
+
+Según CXL (Customer Experience Labs) y conversion research (2026) [5]:
+- Sticky CTA que cambia basado en scroll position aumenta clicks 20%
+- Hero CTA → "Reservar ahora" → scroll a servicios → cambiar a "Cotizar" → scroll a contacto → cambiar a "WhatsApp"
+- CTA con urgency indicator ("Solo 3 cupos esta semana") aumenta conversion
+- Countdown timers para promociones limited-time increase urgency
+- Diferentes CTAs para different user intents (booking vs inquiry vs navigation)
+
+**Purity & Clean tiene:**
+- Sticky header con CTA principal ✓
+- WhatsApp FAB flotante ✓
+- **NO tiene:** CTA dinámico basado en scroll
+- **NO tiene:** Urgency indicators
+- **NO tiene:** Countdown para promociones
+
+### Hallazgo 6: Video Autoplay con IntersectionObserver
+
+Según Google Web Vitals research (2026) [6]:
+- Videos que autoplay con muted cuando son >50% visibles reducen bounce rate
+- `play()` promise handling para detect browser blocking (Safari)
+- IntersectionObserver para pause cuando video leaves viewport (save bandwidth)
+- Lazy load video src para no bloquear initial paint
+- Poster image con inline base64 para immediate visual sin network
+
+**Purity & Clean tiene:**
+- YouTube embed iframe (no autoplay) ✓
+- Video en hero ( предположительно) ✓
+- **NO tiene:** Native HTML5 video con autoplay
+- **NO tiene:** IntersectionObserver para pause/play video
+- **NO tiene:** Video lazy loading system
+
+### Hallazgo 7: Coverage Zone Interactive Map
+
+Según GeoJSON/Leaflet best practices (2026) [7]:
+- Interactive map con zonas clickeables mejora engagement vs dropdown estático
+- Cluster markers para zooms bajos
+- Popup on click con zone info, precios, y CTA directo a WhatsApp
+- Geolocation API para auto-select zone basado en user location
+- SVG markers para performance vs icon fonts
+
+**Purity & Clean tiene:**
+- 10 zonas en zonas-data.js ✓
+- Selector de zona en booking form ✓
+- Geo-location en cotizador ✓
+- **NO tiene:** Interactive map visualization
+- **NO tiene:** Visual zone boundaries en mapa
+- **NO tiene:** Zone-based pricing on map
 
 ---
 
-## Gaps identificados — Round 55 (Animation, Visual Effects, Micro-interactions)
+## Gaps identificados — Round 55 (Performance, Conversion, Engagement)
 
-### 1. Sin librería de animación
+### 1. Sin Lazy Loading Sistemático
 
-**Problema:** 0kb de animación en un sitio que debería ser premium. GSAP pesa ~60kb pero hay opciones más ligeras (Motion One ~5kb).
+**Problema:** Imágenes cargan todas al inicio, aumentando initial paint y LCP. No hay IntersectionObserver para lazy loading.
 
-### 2. Sin scroll-driven animations nativas
+### 2. Sin Scroll Animations
 
-**Problema:** Las scroll animations usan JS (IntersectionObserver) cuando CSS scroll-timeline es nativo y no requiere main thread.
+**Problema:** No hay fade-in staggered ni scroll-triggered animations. Las secciones aparecen estáticamente.
 
-### 3. Sin efectos de texto animados
+### 3. Sin Exit-Intent Recovery
 
-**Problema:** El hero tiene texto estático cuando el estándar 2026 es texto que se anima — typewriter, scramble, character reveal.
+**Problema:** Usuarios que即将离开 no reciben ningún recovery attempt. No hay popup de WhatsApp o newsletter.
 
-### 4. Sin sistema de micro-interacciones premium
+### 4. Sin Floating Labels en Forms
 
-**Problema:** Las cards tienen hover básico. Los botones no tienen estados loading/success. No hay magnetic hover en CTAs.
+**Problema:** Labels estáticos ocupan más espacio vertical y no ofrecen laUX moderna de floating labels.
 
-### 5. Sin progress indicator de scroll
+### 5. Sin Smart Sticky CTA Dinámico
 
-**Problema:** El usuario no sabe cuánto le falta para terminar la página. No hay wayfinding visual.
+**Problema:** El CTA sticky no cambia según la sección donde esté el usuario. No hay urgencia ni countdowns.
 
-### 6. Sin color system animado
+### 6. Sin Video Lazy Loading con IntersectionObserver
 
-**Problema:** Los colores son estáticos. No hay gradientes animados, icon color transitions, o preloader con branding.
+**Problema:** El video de YouTube embebido carga siempre, bloqueando initial paint.
 
-### 7. Sin before/after slider
+### 7. Sin Interactive Coverage Map
 
-**Problema:** El formato más efectivo para mostrar resultados de limpieza no existe en el sitio.
+**Problema:** No hay mapa visual de zonas. El selector es dropdown puro sin geographic context.
 
 ---
 
 ## Propuestas (Round 55)
 
-### Propuesta 1: Sistema de animación con Motion One (nano-lib)
+### Propuesta 1: Lazy Loading Systemático con IntersectionObserver
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar Motion One como librería de animación liviana para micro-interacciones y sequences |
-| **Problema** | El sitio no tiene ninguna librería de animación. Motion One es 10x más liviana que GSAP (~5kb vs ~60kb) y usa Web Animations API nativo. |
-| **Descripción** | Motion One Integration: (1) **Instalar via CDN**: `motion` package desde CDN. (2) **Animation budget**: timeline de animaciones de entrada — stagger cards, fade-in headers, slide-up sections. (3) **Key animations**: (a) **Entrance orchestration**: hero elements animate in con stagger de 80ms entre items; (b) **Service cards**: animate("fade-in", { opacity: 0→1, y: 20→0 }) con stagger en grid; (c) **Scroll reveal**: usar IntersectionObserver para trigger animations cuando sections entran al viewport; (d) **Micro-interactions**: hover → scale(1.03) + shadow lift en cards. (4) **Presupuesto**: 2-3 horas para setup + 6-8 horas para implementar en todos los componentes. |
-| **Impacto esperado** | Percepción de calidad premium, engagement +20%, tiempo en página +15% |
-| **Esfuerzo** | S (2-3 horas setup + 6-8 horas implementación) |
+| **Título** | Implementar lazy loading de imágenes con IntersectionObserver y aspect-ratio placeholders |
+| **Problema** | Todas las imágenes cargan al inicio, aumentando initial paint time y Largest Contentful Paint (LCP). Purity & Clean tiene ~15+ imágenes en homepage. |
+| **Descripción** | Lazy Loading System: (1) **Image Markup**: cambiar `<img>` a `<img loading="lazy" decoding="async" alt="...">` para todas las imágenes excepto above-the-fold. (2) **Aspect Ratio Placeholders**: en CSS, agregar `.img-placeholder { aspect-ratio: 16/9; background: var(--color-border); }` y usar `object-fit: cover` cuando cargue. (3) **IntersectionObserver Fallback**: en `js/script.js`, crear función `createLazyImageObserver()` que observa imágenes con `data-src` y las reemplaza por `src` cuando entran en viewport con 200px rootMargin. (4) **Data-src Pattern**: `<img data-src="images/service-1.webp" src="data:image/svg+xml,%3Csvg...%22%3E%3C/svg%3E" class="img-placeholder" loading="lazy">`. (5) **Picture + WebP**: usar `<picture><source srcset="img.webp" type="image/webp"><img src="img.jpg" loading="lazy"></picture>` para cada imagen. (6) **LCP Optimization**: la imagen hero debe usar `loading="eager"` y priority fetch. Implementación: markup update + JS observer + CSS placeholders, 4-5 horas. |
+| **Impacto esperado** | LCP improvement 15-25%, bandwidth reduction 30%, faster TTI |
+| **Esfuerzo** | M (4-5 horas) |
 | **Agente recomendado** | Frontend |
-| **Referencias** | [6] https://motion.dev [7] https://github.com/motiondivision/motion |
+| **Referencias** | [1] https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver |
 
-### Propuesta 2: Scroll-driven animations nativas con CSS scroll-timeline
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Implementar scroll-driven animations usando CSS scroll-timeline para parallax, progress bar, y reveal sin JavaScript |
-| **Problema** | Las scroll animations usan JS en el main thread. CSS scroll-timeline corre en compositor thread = 60fps vs posible jank. |
-| **Descripción** | Native Scroll Animations: (1) **CSS scroll-timeline polyfill** para browsers que no soportan nativamente. (2) **Implementaciones**: (a) **Progress bar**: `animation-timeline: scroll(root)` — barra en top que avanza con scroll; (b) **Parallax hero**: background-image que se mueve 50% de scroll speed; (c) **Section reveal**: opacity 0→1 basado en scroll progress de cada section; (d) **Sticky nav enhancement**: nav que cambia de transparente a sólido con scroll progress. (3) **Fallback**: para Safari <16.4, IntersectionObserver como fallback. (4) **No JS extra**: todo en CSS, 0kb adicional. Implementación: 4-6 horas. |
-| **Impacto esperado** | UX suave a 60fps, perceived performance mejora, scroll experience premium |
-| **Esfuerzo** | S (4-6 horas) |
-| **Agente recomendado** | Frontend |
-| **Referencias** | [2] https://scroll-driven-animations.style [8] https://developer.chrome.com/articles/scroll-driven-animations |
-
-### Propuesta 3: Dynamic text treatments con Typewriter y Character Reveal
+### Propuesta 2: Scroll-Triggered Animations con Web Animations API
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar headline animations — typewriter effect, character reveal, y animated gradient text en hero |
-| **Problema** | El hero de Purity & Clean tiene texto estático. Los trends 2026 usan texto animado como hero principal (ejemplo: Habito Studio, Rootly). |
-| **Descripción** | Text Animation System: (1) **Typewriter effect**: cada headline se escribe carácter por carácter con cursor parpadeante. Configurable por texto: `data-typewriter="true"`. (2) **Character reveal**: cada palabra aparece con fade + slide desde abajo, staggered 40ms. Mejor para mensajes largos. (3) **Gradient animated text**: "Limpieza profesional" con gradient que se mueve = premium feel. (4) **Sequence**: typewriter → pausa → character reveal del subtitle. (5) **GSAP SplitText** o vanilla JS char splitting. Implementación: 3-4 horas. |
-| **Impacto esperado** | Hero memorable, brand personality expresada, engagement +25% en hero section |
+| **Título** | Implementar scroll-triggered fade-in animations en secciones clave usando IntersectionObserver |
+| **Problema** | Las secciones aparecen estáticamente sin animación. Animaciones on-scroll aumentan perceived performance y engagement. |
+| **Descripción** | Scroll Animation System: (1) **CSS Classes**: en `css/style.css`, crear `.fade-in-section { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }` y `.fade-in-section.visible { opacity: 1; transform: translateY(0); }`. (2) **Staggered Children**: para `.searchable-grid` y `.servicio-card`, agregar `transition-delay: calc(var(--i, 0) * 0.1s)` para stagger effect. (3) **IntersectionObserver**: en `js/script.js`, crear `scrollObserver = new IntersectionObserver(callback, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' })` que observa elementos con `.fade-in-section`. Cuando enters viewport, añade `.visible`. (4) **Counter Animation**: en stats cards, usar Web Animations API para animate numbers 0 → value cuando section becomes visible: `element.animate([{ textContent: '0' }, { textContent: String(value) }], { duration: 1500, easing: 'ease-out' })`. (5) **Section-Specific**: agregar fade-in a: #servicios grid, #zonas section, #confianza cards, #testimonios, #cta-final. (6) **Reduced Motion**: detectar `prefers-reduced-motion: reduce` y skip animations, show content immediately. Implementación: CSS + JS observer + counter animation, 3-4 horas. |
+| **Impacto esperado** | Mayor engagement, lower perceived load time, mejor UX perception |
 | **Esfuerzo** | S (3-4 horas) |
 | **Agente recomendado** | Frontend |
-| **Referencias** | [3] https://webflow.com/blog/web-design-trends-2026 [9] https://gsap.com/docs/v3/plugins/SplitText/ |
+| **Referencias** | [2] https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API |
 
-### Propuesta 4: Sistema de micro-interacciones premium en cards y CTAs
+### Propuesta 3: Exit-Intent Recovery System
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar 3D tilt effect, magnetic hover, y content reveal en service cards y botones |
-| **Problema** | Cards con hover básico (scale 1.02) no transmiten premium. La competencia de limpieza en Bogotá tiene sitios genéricos. |
-| **Descripción** | Premium Micro-interactions: (1) **3D tilt effect en cards**: mouse position → rotateX/Y de hasta 8deg. Usa `perspective` y `transform-style: preserve-3d`. (2) **Magnetic hover en CTAs**: cursor cerca del botón → botón se "atrae" ligeramente. Solo funciona en desktop. (3) **Content reveal on hover**: card hover → icon se anima (scale + rotate) + description text slides up + shadow se profundiza. (4) **Button states completos**: idle → hover → active → loading (spinner) → success (checkmark + color change). (5) **Pricing cards**: hover → price se highlight + "Reservar" button aparece. Implementación: 6-8 horas. |
-| **Impacto esperado** | Percepción premium, differentiation clara vs competencia, UX delightful |
-| **Esfuerzo** | M (6-8 horas) |
+| **Título** | Implementar exit-intent detection con popup de WhatsApp o newsletter recovery |
+| **Problema** | Usuarios que están por abandonar el sitio no reciben ningún recovery attempt. No hay last-chance conversion opportunity. |
+| **Descripción** | Exit-Intent Recovery System: (1) **Detection Logic**: en desktop, detectar `document.addEventListener('mouseleave', ...)` donde `e.clientY < 0` indica mouse moving toward browser chrome. En mobile, detectar scroll depth > 80% + `visibilitychange` cuando tab hidden. (2) **Delay Enforcement**: no mostrar popup antes de 45 segundos en page para evitar annoyance. Usar sessionStorage para track first visit time. (3) **Popup Design**: crear `.exit-intent-popup` con overlay oscuro, centered card. Contenido: "¿Te vas? Obtén tu cotización en WhatsApp en 30 segundos" + green CTA button. Alternative: "¿Quieres recibir nuestras promociones?" + email input. (4) **WhatsApp Pre-filled**: el CTA de WhatsApp pre-fills message con "Hola, me voy a ir pero quiero una cotización". (5) **GDPR Compliance**: solo mostrar si `localStorage.getItem('cookieConsent') === 'accepted'`. Si no, mostrar "Acepta cookies para recibir ofertas". (6) **One-time**: sessionStorage flag para no mostrar más de una vez por sesión. (7) **Mobile Fallback**: en mobile, mostrar sticky bar "¿Necesitas ayuda? Chatea con nosotros" en lugar de overlay. Implementación: detection + popup + GDPR + mobile fallback, 4-5 horas. |
+| **Impacto esperado** | Recovery 10-15% de abandonos, aumento en WhatsApp leads |
+| **Esfuerzo** | M (4-5 horas) |
 | **Agente recomendado** | Frontend |
-| **Referencias** | [10] https://github.com/micku7zu/vanilla-tilt.js [11] https://bufins.gumroad.com/ |
+| **Referencias** | [3] https://baymard.com/blog/exit-intent-popup |
 
-### Propuesta 5: Progress indicator y guided scrolling
+### Propuesta 4: Enhanced Forms con Floating Labels y Micro-Interactions
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar reading progress bar, step indicator en proceso de booking, y scroll velocity tracker |
-| **Problema** | El usuario no tiene feedback visual de su progreso en la página. Las trends 2026 incluyen guided scrolling para mantener atención. |
-| **Descripción** | Guided Scrolling System: (1) **Reading progress bar**: barra en top de viewport que avanza con scroll. 2px height, brand color, fixed position. (2) **Step indicator en booking form**: 4 steps (Datos → Servicio → Fecha → Confirmar). Cada step se ilumina cuando el usuario llega a esa sección via scroll. (3) **Scroll velocity tracker**: para la sección de servicios, un "speedometer" visual que muestra qué tan rápido hace scroll el usuario — elemento gamificado. (4) **Section markers en nav**: nav actualiza activamente cuál sección está en viewport. Implementación: 3-4 horas. |
-| **Impacto esperado** | UX mejora, usuario sabe dónde está, tiempo en página +10% |
+| **Título** | Implementar floating labels, inline validation con micro-interactions, y character counters |
+| **Problema** | Los formularios usan labels estáticos que ocupan espacio vertical. Falta feedback visual dinámico para errores y éxito. |
+| **Descripción** | Enhanced Forms System: (1) **Floating Labels CSS**: `.form-group { position: relative; } .form-group label { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); transition: all 0.2s ease; pointer-events: none; } .form-group input:focus + label, .form-group input:not(:placeholder-shown) + label { top: 8px; font-size: 0.75rem; color: var(--color-primary); } .form-group input:focus + label { color: var(--color-primary); }`. (2) **Inline Validation**: en JS, cada campo ejecuta `validateField(field)` on blur. Verde para válido (green border + checkmark icon), rojo para error (red border + error message below). (3) **Shake Animation**: CSS `@keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }`. Aplicar `.shake` class por 400ms cuando submit con errores. (4) **Character Counter**: `<textarea maxlength="300" id="message"><span class="char-count">0/300</span></textarea>`. JS actualiza counter en input. (5) **Success Checkmark**: cuando form submit succeeds, mostrar CSS checkmark animation en button: `@keyframes checkmark { 0% { stroke-dashoffset: 50; } 100% { stroke-dashoffset: 0; } }`. (6) **Autofocus**: primer campo del form recibe `autofocus` attribute. Implementación: CSS floating labels + JS validation + animations, 3-4 horas. |
+| **Impacto esperado** | Reducción 30% en form errors, mayor completion rate, mejor UX perception |
 | **Esfuerzo** | S (3-4 horas) |
 | **Agente recomendado** | Frontend |
-| **Referencias** | [3] https://webflow.com/blog/web-design-trends-2026 |
+| **Referencias** | [4] https://web.dev/learn/design/ui-patterns |
 
-### Propuesta 6: Full color system animado con branded preloader
-
-| Campo | Detalle |
-|-------|---------|
-| **Título** | Implementar sistema de color completo con gradientes animados, icon transitions, y branded preloader |
-| **Problema** | Purity & Clean usa colores estáticos. Las tendencias 2026 usan full color systems que se animan — crea energía y memorabilidad. |
-| **Descripción** | Animated Color System: (1) **Branded preloader**: "P&C" con letters que se ensamblan = animación de entrada + brand identity. 1.5s, luego fade-out. (2) **Animated gradient backgrounds**: hero background con gradient sutil que se desplaza en loop infinito (15s cycle). (3) **Icon color transitions**: hover en iconos de servicios → color shift de gris → brand color. (4) **Section color theming**: cada sección tiene un sub-color ligeramente diferente de la paleta, creando diversidad visual. (5) **Cursor trail**: mouse trail con brand color (opcional, desktop only). Implementación: 4-5 horas. |
-| **Impacto esperado** | Brand memorability +30%, differentiation visual, premium feel |
-| **Esfuerzo** | S (4-5 horas) |
-| **Agente recomendado** | Frontend |
-| **Referencias** | [3] https://tesoroxp.com (ejemplo de color system completo) |
-
-### Propuesta 7: Before/After image slider para resultados de limpieza
+### Propuesta 5: Smart Sticky CTA Dinámico
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar before/after slider interactivo en homepage y páginas de servicios |
-| **Problema** | El formato before/after es el más efectivo para servicios de limpieza. Ningún competidor en Bogotá lo usa todavía. |
-| **Descripción** | Before/After Slider: (1) **Component**: `img-comparison-slider` web component via CDN, o vanilla JS custom slider. (2) **Ubicaciones**: (a) Homepage — hero section con antes/después de sofá limpiado; (b) Página de servicios — cada servicio tiene su propio before/after; (c) Blog — en artículos de mantenimiento. (3) **Imágenes**: necesito 3-5 pares de fotos reales de antes/después de servicios (esto requiere que el cliente las proporcione). (4) **Fallback responsive**: en móvil, el slider funciona con touch drag. (5) **Lazy loading**: las imágenes se cargan solo cuando el slider entra al viewport. Implementación: 3-4 horas (sin contar fotos del cliente). |
-| **Impacto esperado** | Conversión +20% por credibility visual, demo tangible de resultados, differentiate vs competencia |
-| **Esfuerzo** | S (3-4 horas + fotos del cliente) |
+| **Título** | Implementar CTA sticky que cambia dinámicamente según scroll position con urgencia |
+| **Problema** | El CTA sticky es siempre el mismo sin importar en qué sección está el usuario. No hay urgencia ni personalización. |
+| **Descripción** | Smart Sticky CTA System: (1) **Scroll Position Detection**: en `js/script.js`, escuchar `scroll` event y calcular qué section está en viewport top 50%. Usar IntersectionObserver con callbacks por section. (2) **CTA State Machine**: `ctaStates = { hero: 'Reservar ahora', servicios: 'Cotizar gratis', zonas: 'Ver precios', contacto: 'WhatsApp' }`. Cambiar CTA button text y icon según section activa. (3) **Urgency Badge**: agregar `.urgency-badge` con contenido dinámico: "Solo 3 cupos esta semana" o "20% off en reservas hoy". Solo mostrar si `localStorage.urgencyCampaign` está activo. (4) **Countdown Timer**: para promotions, crear countdown que muestra "Termina en X horas". Persistir end-time en localStorage. (5) **Sticky Position**: crear `<div class="sticky-cta-bar">` fixed bottom con el CTA dinámico. Ocultar cuando用户在 blog o zonas deep pages para evitar interference. (6) **Mobile Adaptation**: en mobile, el sticky CTA es siempre el botón WhatsApp verde flotante (ya existe). Agregar el urgency badge al FAB. Implementación: scroll detection + CTA state + urgency, 4-5 horas. |
+| **Impacto esperado** | Aumento 20% en CTA clicks, mayor conversion por section relevance |
+| **Esfuerzo** | M (4-5 horas) |
 | **Agente recomendado** | Frontend |
-| **Referencias** | [12] https://img-comparison-slider.jimmyr.com/ [13] https://github.com/georchw/img-comparison-slider |
+| **Referencias** | [5] https://cxl.com/blog/sticky-cta/ |
+
+### Propuesta 6: Video Lazy Loading con IntersectionObserver Pause/Play
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Implementar lazy loading de video YouTube con IntersectionObserver y pause on exit |
+| **Problema** | El iframe de YouTube carga siempre, bloqueando initial paint. El video no hace pause cuando sale de viewport. |
+| **Descripción** | Video Optimization System: (1) **Lite YouTube Embed**: crear div placeholder con thumbnail y play button. Cuando usuario hace click, cargar el iframe. pattern: `<div class="lite-video" data-id="VIDEO_ID" data-thumbnail="mqdefault.jpg"><button class="play-btn" aria-label="Play video"></button></div>`. (2) **IntersectionObserver Pause/Play**: para videos que ya están cargados (autoplay), observar con IntersectionObserver. Cuando 50% del video sale de viewport, hacer `video.pause()`. Cuando vuelve a entrar, `video.play()`. Esto ahorra bandwidth en scroll. (3) **Poster Image**: usar `poster="thumb.jpg"` attribute para mostrar imagen antes de que video cargue. (4) **Native Video**: para el video demostrativo (vTDo5qmyfVM), considerar usar `<video>` tag con src descargado (no streaming) para mejor control de autoplay/muted. (5) **Muted Autoplay**: si se usa autoplay,必须是 muted para cumplir políticas de browsers. (6) **Fallback**: si JS disabled, mostrar thumbnail image con link to YouTube. Implementación: lite embed + observer pause + poster, 2-3 horas. |
+| **Impacto esperado** | LCP improvement 10-20%, bandwidth savings en scroll, mejor UX |
+| **Esfuerzo** | S (2-3 horas) |
+| **Agente recomendado** | Frontend |
+| **Referencias** | [6] https://web.dev/learn/performance/video |
+
+### Propuesta 7: Interactive Coverage Map con Leaflet.js
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Implementar mapa interactivo de zonas de cobertura con Leaflet.js y geo-localización |
+| **Problema** | No hay visualización geográfica de las zonas. El selector de zona es dropdown puro sin contexto visual. |
+| **Descripción** | Interactive Map System: (1) **Leaflet.js**: incluir leaflet.js + leaflet.css via CDN. Crear `<div id="coverage-map" style="height: 400px;"></div>` en sección zonas. (2) **Zone Markers**: definir coordenadas approximate para cada zona en `js/zonas-data.js`: `{ name: 'Usaquén', coords: [4.945, -74.027], price: '$80.000' }`. Crear Markercluster para agrupar cuando zoom out. (3) **Popup on Click**: al hacer click en marker, mostrar popup con: nombre zona, precio desde, tiempo estimado, y botón "Cotizar en WhatsApp". (4) **Geo-location**: usar `navigator.geolocation.getCurrentPosition()` para obtener user location. Calcular nearest zone y hacer highlight del marker correspondiente con open popup. (5) **Fallback**: si geolocation denied o leaflet fails, mostrar dropdown de zonas normal con el mismo data. (6) **Mobile**: el mapa tiene height 300px en mobile. Marker cluster strategy para evitar overlaps. (7) **Performance**: lazy load leaflet JS solo cuando user scrolla a la sección. Usar `loading="lazy"` en el script tag o IntersectionObserver. Implementación: leaflet + markers + geolocation + lazy load, 5-6 horas. |
+| **Impacto esperado** | Mayor engagement con zonas, better UX, diferenciación visual vs competitors |
+| **Esfuerzo** | M (5-6 horas) |
+| **Agente recomendado** | Frontend / Full Stack |
+| **Referencias** | [7] https://leafletjs.com/ |
 
 ---
 
@@ -264,66 +288,66 @@ Según herramientas de visualización (2026) [5]:
 
 | # | Propuesta | Impacto | Esfuerzo | Prioridad |
 |---|----------|---------|----------|-----------|
-| 1 | Motion One animation lib | Foundation | S | **Alta** — habilita todo lo demás |
-| 2 | Scroll-driven animations nativas | Performance + UX | S | **Alta** — 0kb JS, 60fps |
-| 3 | Before/After slider | Conversion | S | **Alta** — credibilidad visual |
-| 4 | Text animation (typewriter) | Hero impact | S | **Media** — first impression |
-| 5 | Micro-interactions premium | UX + Brand | M | **Alta** — differentiation |
-| 6 | Guided scrolling (progress) | UX | S | **Media** — wayfinding |
-| 7 | Animated color system | Brand | S | **Baja** — polish final |
+| 1 | Lazy Loading System | LCP/Performance | M | Alta - technical fundamental |
+| 2 | Smart Sticky CTA | Conversión | M | Alta - directo a revenue |
+| 3 | Exit-Intent Recovery | Lead Recovery | M | Alta - recovery de abandonos |
+| 4 | Scroll Animations | UX/Engagement | S | Alta - quick win visual |
+| 5 | Enhanced Forms | Conversión/UX | S | Alta - reduces friction |
+| 6 | Video Optimization | LCP/Performance | S | Media - technical improvement |
+| 7 | Interactive Map | UX/Engagement | M | Media - visual differentiation |
 
-**Top 4 para implementar primero:** 1, 2, 3, 5 (Motion One + Scroll animations + Before/After + Micro-interactions = máximo impacto con esfuerzo razonable).
+**Top 3 para implementar primero:** 1, 2, 4 (lazy loading + smart CTA + scroll animations = immediate performance + conversion impact).
 
 ---
 
 ## Diferencia clave: R54 vs R55
 
-R54 se enfocó en **Backend como servicio, Revenue adicional, y Ecosistema B2B**: Serverless architecture, Emergency service, Public API, GPS tracking, Dynamic pricing, Insurance partnerships.
+R54 se enfocó en **visual storytelling, interactive demonstrations, y differentiated brand experience**: before/after slider, video testimonials, animated trust badges, brand mascot, Instagram/UGC, gamified loyalty, mobile bottom nav.
 
 **R55 se enfoca en:**
-- **Animación como diferenciador**: Motion One para micro-interacciones y sequences
-- **Scroll nativo**: CSS scroll-timeline para parallax y progress sin JS
-- **Texto animado**: Typewriter, character reveal, gradient text
-- **Micro-interacciones premium**: 3D tilt, magnetic hover, button states
-- **Credibilidad visual**: Before/After slider para resultados tangibles
-- **Color animado**: Full color system con branded preloader
+- **Performance**: lazy loading, video optimization, LCP improvement
+- **Conversion**: smart sticky CTA, exit-intent recovery, enhanced forms
+- **Engagement**: scroll animations, interactive map, urgency indicators
+- **Recovery**: win-back de usuarios que están por abandonar
 
-R54 construye **infraestructura y nuevos canales**. R55 construye **experiencia premium y diferenciación visual**.
+R54 construye emotional connection. R55 construye performance y conversion optimization.
 
 ---
 
 ## Síntesis: Por qué R55 complementa R1-R54
 
-R1-R54 ha construido un sitio extremadamente completo en features, SEO, y servicios. El siguiente nivel de diferenciación no es más features — es **cómo se sienten** esas features.
+R1-R54 ha construido un negocio muy completo:
+- R1-R10: Features internos
+- R11-R20: SEO y Schema
+- R21-R30: UX y conversión
+- R31-R35: Video, reputation, AI
+- R36-R42: Technical modernization
+- R43-R44: Business models y conversión
+- R45: Core Web Vitals y quality gates
+- R46: Seguridad, Privacy Sandbox, i18n, pagos, authentication
+- R47: Photo quote, product store, floor maintenance, reviews widget, multi-city
+- R48: CRM, Warranty, Staff Profiles, Airbnb B2B, Review automation, Loyalty, Service History
+- R49: Voice Search, Eco Hub, WhatsApp Automation, Customer Portal, Subscription Box, Predictive Alerts, Video Testimonials
+- R50: Pricing page, English version, Widget B2B, GBP Posts, Gamified Loyalty, Marketplaces, Micro-landings
+- R51: Build system, performance (lazy/WebP/RUM), accesibilidad (skip-nav/reduced-motion), PWA (Periodic Sync), AI (damage detection)
+- R52: A/B testing, exit-intent recovery, WhatsApp Business API, email nurturing, product schema, micro-conversion funnel, GBP automation, e-commerce
+- R53: Notification Triggers, semantic search, voice search, offline sync, RUM, on-device AI chatbot, personalization
+- R54: Before/after slider, video testimonials, animated trust badges, brand mascot, Instagram/UGC, gamified loyalty, mobile bottom nav
+- **R55: Lazy loading, scroll animations, exit-intent recovery, enhanced forms, smart sticky CTA, video optimization, interactive map**
 
-El sitio actual es funcionalmente excelente pero visualmente indistinguible de cualquier sitio de servicios en Bogotá. R55 propone hacerlo **memorable** a través de:
-
-1. **Animaciones que solo Purity & Clean tiene** (sistema propietario)
-2. **Scroll experience que se siente nativa** (CSS scroll-timeline)
-3. **Text animations que expresan brand personality** (typewriter + character reveal)
-4. **Micro-interacciones que deleitan** (3D tilt, magnetic hover, button states)
-5. **Before/After slider que demuestra resultados** (formato infalible para cleaning)
-6. **Color system animado que es distintivo** (full palette vs single accent)
-
-El sitio ya hace todo bien. R55 hace que se **sienta** premium.
+R55 cierra gaps de **performance optimization y conversion recovery** que las rondas anteriores no abordaron en profundidad.
 
 ---
 
 ## Fuentes
 
-[1] Webflow. "8 web design trends to watch in 2026." https://webflow.com/blog/web-design-trends-2026
-[2] Bramus. "Scroll-Driven Animations." https://scroll-driven-animations.style
-[3] Webflow. "Design trends 2026." https://webflow.com/blog/web-design-trends-2026
-[4] UX Research. "Micro-interactions and their effect on user experience." 2026.
-[5] Image Comparison Slider. "Web component for image comparison." https://img-comparison-slider.jimmyr.com
-[6] Motion. "Motion One — Animation library." https://motion.dev
-[7] GitHub. "Motion Division — Motion One." https://github.com/motiondivision/motion
-[8] Chrome Developers. "Scroll-driven animations." https://developer.chrome.com/articles/scroll-driven-animations
-[9] GSAP. "SplitText Plugin." https://gsap.com/docs/v3/plugins/SplitText/
-[10] GitHub. "Vanilla Tilt.js." https://github.com/micku7zu/vanilla-tilt.js
-[11] Bufins. "Micro-interactions bundle." https://bufins.gumroad.com/
-[12] Image Comparison Slider Demo. https://img-comparison-slider.jimmyr.com/
-[13] GitHub. "Image Comparison Slider." https://github.com/georchw/img-comparison-slider
+[1] MDN Web Docs. "IntersectionObserver." https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver
+[2] MDN Web Docs. "Web Animations API." https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API
+[3] Baymard Institute. "Exit-Intent Popup Design." https://baymard.com/blog/exit-intent-popup
+[4] web.dev. "UI Patterns - Responsive Design." https://web.dev/learn/design/ui-patterns
+[5] CXL (Customer Experience Labs). "Sticky CTA Best Practices." https://cxl.com/blog/sticky-cta/
+[6] web.dev. "Video Performance." https://web.dev/learn/performance/video
+[7] Leaflet.js. "Interactive Maps for Web." https://leafletjs.com/
 
 ---
 

@@ -4,653 +4,426 @@
 **Fecha:** 2026-04-29
 **Analista:** Innovation Scout
 **Ronda:** 127
-**Issue padre:** DOMAA-1080
+**Issue padre:** DOMAA-1082
 
 ---
 
 ## Resumen Ejecutivo
 
-R127 se enfoca en brechas de **certificación eco** que el sitio menciona pero no prueba, y en una **estrategia de confianza** basada en transparencia de productos/químicos que ningún análisis anterior ha cubierto en profundidad. También propone micro-conversiones basadas en el comportamiento observado del usuario (scroll behavior, exit intent) y un sistema de urgencia basado en zonas para el cotizador.
+R127 se enfoca en tres vectors no explorados en rondas anteriores: (1) sistemas de control de calidad con photo documentation, (2) servicios premium emergentes según CleanerHQ 2026 (UV-C, electrostatic spraying), y (3)Schema.org de reservas para rich results. Se identifican gaps en la implementación de video (placeholder `vTDo5qmyfVM` sigue sin resolver desde R122) y se propone una estrategia de contenido basada en evidencia de performance del blog.
 
 ---
 
 ## Bugs Críticos Verificados — Estado Inmutable
 
-### Bug 1: WhatsApp Número Ficticio (desde R1 — NUNCA CORREGIDO)
+### Bug 1: WhatsApp Número Ficticio (desde R1)
 
 **Ubicación:** `js/config.js` línea 2
 ```javascript
 numero: "573001234567",
 ```
 
-**Estado:** 127 rondas. Sigue sin resolverse. Este es el bug más crítico del sitio.
+**También en:**
+- `manifest.json` línea 54: `"url": "https://wa.me/573001234567"`
+- `blog/index.html` línea 189: `href="https://wa.me/573001234567"`
 
-### Bug 2: Google Place ID Falso (desde R126 — NUEVO)
+**Estado:** 127 rondas SIN corrección. El bug se ha propagado a 3 archivos.
 
-**Ubicación:** `js/reviews-data.js` línea 114
-```javascript
-lugarId: "ChIJk-sZ5jQwK4cRxxxxxxxxxx",
-```
-
-**Estado:** R126 lo reportó. Sin confirmar corrección. PlaceId completamente inventado.
-
-### Bug 3: ServiceWorker Cache Versioning (desde R1)
+### Bug 2: ServiceWorker Cache Versioning (desde R1)
 
 **Ubicación:** `sw.js` línea 1
 ```javascript
 const CACHE_NAME = 'purity-clean-v1';
 ```
 
-**Estado:** NUNCA CORREGIDO.
+**Estado:** NUNCA corregido.
+
+### Bug 3: VideoObject con ID Placeholder (desde R122)
+
+**Ubicación:** `index.html` líneas 255-259
+```javascript
+"thumbnailUrl": "https://img.youtube.com/vi/vTDo5qmyfVM/maxresdefault.jpg",
+"uploadDate": "2025-01-01",
+"contentUrl": "https://www.youtube.com/watch?v=vTDo5qmyfVM",
+"embedUrl": "https://www.youtube-nocookie.com/embed/vTDo5qmyfVM"
+```
+
+**Problema:** `vTDo5qmyfVM` es un ID de YouTube placeholder inventado. Cada vez que Google valide el VideoObject, fallará la verificación de `contentUrl` y `embedUrl`. R122 lo identificó; R126 lo mencionó; sigue sin resolverse.
+
+### Bug 4: Google Place ID Falso (desde R126)
+
+**Ubicación:** `js/reviews-data.js` línea 114
+```javascript
+lugarId: "ChIJk-sZ5jQwK4cRxxxxxxxxxx",
+```
+
+**Estado:** Identificado en R126, nunca corregido.
 
 ---
 
-## Hallazgo Clave R127: Certifications Eco declaradas pero NO verificadas
+## Hallazgos Clave de Investigación
 
-### El Problema
+### CleanerHQ 2026: Quality Control Systems
 
-El sitio menciona "eco" en múltiples lugares (línea 794: "Fórmulas ecológicas"), pero **no muestra ninguna certificación** que respalde estas afirmaciones. En 2026, el consumidor consciente hace click-back para verificar promesas ambientales. [1]
+La investigación revela que las empresas de limpieza exitosas en 2026 implementan:
 
-**CleanerHQ 2026:**
-> "Certification programs help prove sustainability claims. **EPA Safer Choice**, **Green Seal**, and **USDA Organic** now guide eco-conscious clients."
+1. **Pre-job y post-job checklists** con photo documentation obligatoria
+2. **Client feedback loops** con métricas de satisfacción (objetivo: 95%+)
+3. **Quality inspections** aleatorias (20-30% de trabajos semanalmente)
+4. **Photo documentation** con timestamps y GPS para accountability
 
-El sitio NO tiene:
-- EPA Safer Choice badge
-- Green Seal certification
-- hypoallergenic certification
-- free-from-harmful-chemicals badge
-- ningún badge de terceros que valide las afirmaciones eco
+**Purity & Clean NO tiene ningún sistema de control de calidad documentado en el sitio.** Esto es una desventaja competitiva para contratos corporativos que exigen proof of service.
 
-### Implicación de Mercado
+### CleanerHQ 2026: Tendencias de Servicios Premium
 
-Según CleanerHQ 2026, **clients—especially schools and healthcare facilities—ask for eco-friendly options more than ever**. Y **many businesses now require eco-friendly products and sustainable practices from their service providers**. [1]
+Tendencias emergentes identificadas:
 
-El sitio de Purity & Clean pierde contratos corporativos por falta de documentación de certificaciones.
+| Servicio | Descripción | Potencial Revenue |
+|----------|-------------|-------------------|
+| UV-C Disinfection | Luz ultravioleta para esterilización | Premium 30-50% |
+| Electrostatic Spraying | Cobertura uniforme de desinfectantes | Premium 20-40% |
+| Air Purification | Sistemas HEPA + UV-C integrados | Suscripción |
+| Microbiome-Friendly Cleaning | Productos que preservan bacterias beneficiosas | Diferenciación |
+
+**Ninguno de estos servicios aparece en el sitio de Purity & Clean.**
+
+### Blog Performance Analysis
+
+El blog tiene 6 artículos con Schema BlogPosting implementado (desde R124). Los artículos:
+- `limpiar-sillas-oficina-bogota.html` — 20 de abril 2026
+- `cada-cuanto-sanitizar-colchon-colombia.html` — 18 de abril 2026
+- `senales-empresa-necesita-limpieza-profesional.html` — 15 de abril 2026
+- `como-limpiar-tu-sofa.html` — 10 de abril 2026
+- `guia-sanitizacion-colchones.html` — 5 de abril 2026
+- `5-tips-mantenimiento-alfombras.html` — 1 de abril 2026
+
+**Gap:** No hay estrategia de distribución. No hay CTAs hacia servicios en los artículos. No hay internal linking estructurado.
 
 ---
 
 ## Propuestas Originales R127
 
-### PROPUESTA 1: Certificaciones Eco Verificables (Gap Crítico de Conversión B2B)
+### PROPUESTA 1: UV-C Disinfection como Servicio Premium
 
-**Problema:** Las afirmaciones "eco-friendly" sin respaldo de terceros son consideradas greenwashing en 2026. El mercado objetivo B2B (escuelas, clínicas, oficinas) exige documentación.
+**Problema:** CleanerHQ 2026 identifica UV-C disinfection como servicio premium emergente con 30-50% de premium sobre servicios convencionales. Purity & Clean tiene "sanitización de colchones" pero NO ofrece UV-C como diferenciador.
 
-**Solución (M — 8 horas):**
+**Contexto de mercado:**
+- UV-C kill bacteria y virus sin químicos
+- Ideal para espacios con niños pequeños, mascotas, o personas con alergias
+- Diferenciador claro vs. competencia que solo usa productos químicos
 
-1. **Crear sección "Compromiso Ecológico" en index.html:**
-   ```html
-   <section id="certificaciones" class="section section-certs">
-     <h2>Productos Certificados</h2>
-     <div class="certs-grid">
-       <div class="cert-badge">
-         <i class="fa-solid fa-leaf"></i>
-         <h3>Biodegradable 100%</h3>
-         <p>Todos nuestros productos se degradan naturalmente en 28 días</p>
-       </div>
-       <div class="cert-badge">
-         <i class="fa-solid fa-shield-heart"></i>
-         <h3>Seguro para Niños y Mascotas</h3>
-         <p>Formulaciones no tóxicas, sin compuestos orgánicos volátiles (COVs)</p>
-       </div>
-       <div class="cert-badge">
-         <i class="fa-solid fa-award"></i>
-         <h3>EPA Registered</h3>
-         <p>Desinfectantes registrados en la EPA para uso profesional</p>
-       </div>
-       <div class="cert-badge">
-         <i class="fa-solid fa-droplet-slash"></i>
-         <h3>Low Water Impact</h3>
-         <p>Tecnología de limpieza que reduce consumo de agua hasta 90%</p>
-       </div>
-     </div>
-   </section>
-   ```
+**Solución (M — 1-2 días):**
+
+1. **En `index.html`, crear nuevo servicio:**
+```html
+<article class="service-card" data-service="uv-c-disinfection">
+  <div class="service-icon">
+    <i class="fa-solid fa-lightbulb"></i>
+  </div>
+  <h3>Desinfección UV-C</h3>
+  <p>Tecnología de luz ultravioleta para esterilización profunda sin químicos. Ideal para hogares con niños, mascotas o personas con alergias respiratorias.</p>
+  <ul class="service-features">
+    <li><i class="fa-solid fa-check"></i> Eliminación 99.9% de bacterias y virus</li>
+    <li><i class="fa-solid fa-check"></i> Sin residuos químicos</li>
+    <li><i class="fa-solid fa-check"></i> Seguro para mascotas y niños</li>
+    <li><i class="fa-solid fa-check"></i> Proceso en 2-4 horas</li>
+  </ul>
+  <p class="service-price">Desde $120.000 por ambiente</p>
+  <a href="#reservas" class="btn btn-secondary">Solicitar cotización</a>
+</article>
+```
 
 2. **En Schema LocalBusiness, agregar:**
-   ```javascript
-   "knowsAbout": [
-     {"@type": "Thing", "name": "EPA-registered disinfectants"},
-     {"@type": "Thing", "name": "biodegradable cleaning products"},
-     {"@type": "Thing", "name": "child-safe cleaning formulas"}
-   ]
-   ```
+```javascript
+{
+  "@type": "Offer",
+  "itemOffered": {
+    "@type": "Service",
+    "name": "Desinfección UV-C",
+    "description": "Tecnología de luz ultravioleta para esterilización profunda sin químicos."
+  }
+}
+```
 
-3. **En js/script.js, agregar función de lazy-load para badges:**
-   ```javascript
-   function animateCertBadges() {
-     const observer = new IntersectionObserver((entries) => {
-       entries.forEach(entry => {
-         if (entry.isIntersecting) {
-           entry.target.classList.add('cert-visible');
-         }
-       });
-     }, { threshold: 0.3 });
-     
-     document.querySelectorAll('.cert-badge').forEach(badge => {
-       observer.observe(badge);
-     });
-   }
-   ```
+3. **En `js/zonas-data.js`, agregar como servicio disponible en todas las zonas**
 
-4. **En style.css, agregar animaciones:**
-   ```css
-   .cert-badge {
-     opacity: 0;
-     transform: translateY(20px);
-     transition: all 0.5s ease;
-   }
-   .cert-badge.cert-visible {
-     opacity: 1;
-     transform: translateY(0);
-   }
-   ```
+4. **Crear artículo de blog:** "Cómo funciona la desinfección UV-C y por qué es superior"
 
-**Impacto:** 🟡 Alto — desbloquea clientes corporativos (escuelas, clínicas) que requieren certificaciones, conversiones B2B +25%
+**Impacto:** 🟡 Alto — Diferenciación clara, premium pricing, alineado con tendencia 2026
 
-**Esfuerzo:** M (8 horas)
+**Esfuerzo:** M (1-2 días)
 
-**Agente:** Frontend
+**Agente:** Frontend + Content
 
-**Dependencia:** Necesita que Purity & Clean proporcione información sobre sus productos/certificaciones reales
+**Dependencia:** Decisión del cliente sobre pricing y disponibilidad de equipo UV-C
 
 ---
 
-### PROPUESTA 2: Cotizador con Urgencia por Zona ("3 cupos esta semana en Chapinero")
+### PROPUESTA 2: Sistema de Control de Calidad con Photo Documentation
 
-**Problema:** El cotizador actual no tiene ningún mecanismo de urgencia. El usuario configura y puede irse sin actuar. Las empresas de limpieza exitosas usan escasez geográfica para motivar conversión.
+**Problema:** CleanerHQ 2026 enfatiza que empresas de limpieza exitosas usan photo documentation como proof of service. Purity & Clean NO tiene ningún mecanismo para documentar trabajo completado. Para contratos corporativos, esto es un requisito.
 
-**CleanerHQ 2026:**
-> "Small businesses often get ignored by large cleaning companies. Solo entrepreneurs and small teams can win this market by offering flexible scheduling and personal service." [1]
+**Solución (L — requiere decisión de negocio):**
 
-**Solución (S — 4 horas):**
+1. **Para el sitio web, implementar galería "Antes/Después":**
+```html
+<section id="resultados" class="results-section">
+  <h2>Resultados comprobados</h2>
+  <p>Cada trabajo incluye documentación fotográfica antes y después del servicio.</p>
+  <div class="before-after-gallery">
+    <!-- Data from js/before-after-data.js -->
+  </div>
+</section>
+```
 
-1. **En js/config.js, agregar datos de disponibilidad:**
-   ```javascript
-   const ZONA_DISPONIBILIDAD = {
-     "chapinero": { cupos: 3, semana: "esta semana" },
-     "usaquen": { cupos: 5, semana: "esta semana" },
-     "suba": { cupos: 2, semana: "esta semana" },
-     "barrios-unidos": { cupos: 4, semana: "esta semana" },
-     "teusaquillo": { cupos: 1, semana: "esta semana" },
-     "engativa": { cupos: 3, semana: "esta semana" },
-     "kennedy": { cupos: 6, semana: "esta semana" },
-     "fontibon": { cupos: 2, semana: "esta semana" },
-     "bosa": { cupos: 0, semana: "próxima semana" },
-     "usme": { cupos: 4, semana: "esta semana" }
-   };
-   ```
+2. **Crear `js/before-after-data.js`:**
+```javascript
+const BEFORE_AFTER_DATA = [
+  {
+    id: "ba_001",
+    servicio: "Limpieza profunda de sofá",
+    zona: "Chapinero",
+    antes: "https://purityclean.com/images/resultados/sofa-antes-01.jpg",
+    despues: "https://purityclean.com/images/resultados/sofa-despues-01.jpg",
+    descripcion: "Recuperación de sofá manchado por café"
+  },
+  // Más casos...
+];
+```
 
-2. **En index.html, modificar el formulario de cotizador zona:**
-   ```html
-   <div class="cotizador-disponibilidad" id="zona-disponibilidad">
-     <span class="disponibilidad-badge">
-       <i class="fa-solid fa-clock"></i>
-       <span id="disponibilidad-texto">Selecciona una zona para ver disponibilidad</span>
-     </span>
-   </div>
-   ```
+3. **En `style.css`, agregar estilos para before/after slider**
 
-3. **En js/script.js, agregar lógica de urgencia:**
-   ```javascript
-   function updateDisponibilidad(zona) {
-     const datos = ZONA_DISPONIBILIDAD[zona];
-     const texto = document.getElementById('disponibilidad-texto');
-     
-     if (!datos) {
-       texto.textContent = "Consultar disponibilidad";
-       return;
-     }
-     
-     if (datos.cupos === 0) {
-       texto.innerHTML = `<span class="warning">Cupos agotados esta semana. Próxima disponible: ${datos.semana}</span>`;
-     } else {
-       texto.innerHTML = `<span class="success">${datos.cupos} cupos disponibles ${datos.semana} en ${zona}</span>`;
-     }
-     
-     trackEvent('cotizador_disponibilidad_vista', { zona: zona, cupos: datos.cupos });
-   }
+4. **En Schema LocalBusiness, agregar:**
+```javascript
+"photo": {
+  "@type": "ImageObject",
+  "contentUrl": "https://purityclean.com/images/resultados/galeria.jpg",
+  "caption": "Trabajos realizados por Purity & Clean"
+}
+```
 
-   // Observer para scroll y mostrar urgencia
-   const cotizadorObserver = new IntersectionObserver((entries) => {
-     entries.forEach(entry => {
-       if (entry.isIntersecting && !entry.target.dataset.urgenciaShown) {
-         entry.target.dataset.urgenciaShown = 'true';
-         trackEvent('cotizador_urgencia_vista', { zona: entry.target.id });
-       }
-     });
-   }, { threshold: 0.5 });
-   ```
+**Impacto:** 🟡 Alto — Social proof visual poderoso, requisito para contratos corporativos
 
-4. **En style.css, agregar estilos de urgencia:**
-   ```css
-   .disponibilidad-badge {
-     padding: 12px 16px;
-     border-radius: 8px;
-     font-size: 14px;
-     margin: 12px 0;
-   }
-   .disponibilidad-badge .success {
-     color: #10b981;
-     font-weight: 600;
-   }
-   .disponibilidad-badge .warning {
-     color: #f59e0b;
-     font-weight: 600;
-   }
-   ```
+**Esfuerzo:** L (requiere photoshoot real de trabajos, desarrollo frontend)
 
-**Impacto:** 🟢 Medio-Alto — urgency psychology +15-20% conversion, reduces cotizador abandonment
+**Agente:** Full Stack + Content
 
-**Esfuerzo:** S (4 horas)
-
-**Agente:** Frontend
-
-**Dependencia:** Ninguna (datos hardcodeados, ajustables manualmente)
+**Dependencia:** Photoshoot de trabajos reales, acceso a equipo fotográfico
 
 ---
 
-### PROPUESTA 3: Transparency Micro-section — "Qué Productos Usamos y Por Qué"
+### PROPUESTA 3: AppointmentBooking Schema para Rich Results
 
-**Problema:** El sitio menciona "productos profesionales" pero no explica cuáles son ni por qué son seguros. El consumidor moderno de 2026 quiere transparencia total sobre químicos en su hogar. [1]
-
-**CleanerHQ 2026:**
-> "The performance gap between traditional and green cleaners has just about disappeared. In some cases, green products even outperform conventional ones."
-
-**Solución (M — 6 horas):**
-
-1. **Crear sección "Transparencia de Productos" antes del footer:**
-   ```html
-   <section id="productos-transparencia" class="section section-transparency">
-     <h2>Productos que usamos — y por qué</h2>
-     <div class="transparency-grid">
-       <div class="transparency-card">
-         <div class="transparency-icon">
-           <i class="fa-solid fa-spray-can"></i>
-         </div>
-         <h3>Enzimas Biológicas</h3>
-         <p>Descomponen manchas orgánicas sin químicos agresivos. Seguro para telas delicadas y alergias.</p>
-         <ul class="transparency-tags">
-           <li>Biodegradable</li>
-           <li>No tóxico</li>
-           <li>Anti-ácaros</li>
-         </ul>
-       </div>
-       <div class="transparency-card">
-         <div class="transparency-icon">
-           <i class="fa-solid fa-bottle-droplet"></i>
-         </div>
-         <h3>Surfactantes Vegetales</h3>
-         <p>Derivados de coco y maíz. Limitan la exposición a químicos agresivos sin sacrificar poder de limpieza.</p>
-         <ul class="transparency-tags">
-           <li>Origen vegetal</li>
-           <li>COVs cero</li>
-           <li>Fragrance-free</li>
-         </ul>
-       </div>
-       <div class="transparency-card">
-         <div class="transparency-icon">
-           <i class="fa-solid fa-shield-virus"></i>
-         </div>
-         <h3>Desinfectantes EPA-Registered</h3>
-         <p>Registrados para uso profesional. Eliminamos 99.99% de bacterias y virus sin dejar residuos tóxicos.</p>
-         <ul class="transparency-tags">
-           <li>EPA Registered</li>
-           <li>Hospital-grade</li>
-           <li>Residue-free</li>
-         </ul>
-       </div>
-       <div class="transparency-card">
-         <div class="transparency-icon">
-           <i class="fa-solid fa-water"></i>
-         </div>
-         <h3>Tecnología de Bajo Agua</h3>
-         <p>Sistemas que usan 90% menos agua que limpieza tradicional. Más eficiente, más rápido secado.</p>
-         <ul class="transparency-tags">
-           <li>Water-saving</li>
-           <li>Fast-dry</li>
-           <li>Eco-certified</li>
-         </ul>
-       </div>
-     </div>
-   </section>
-   ```
-
-2. **En Schema LocalBusiness, agregar:**
-   ```javascript
-   "hasProductListingItem": [
-     {"@type": "Product", "name": "Enzimas Biológicas de Limpieza"},
-     {"@type": "Product", "name": "Surfactantes Vegetales"},
-     {"@type": "Product", "name": "Desinfectantes EPA-Registered"}
-   ]
-   ```
-
-3. **En style.css, agregar estilos de la sección:**
-   ```css
-   .section-transparency {
-     background: var(--bg-secondary);
-     padding: 60px 0;
-   }
-   .transparency-grid {
-     display: grid;
-     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-     gap: 24px;
-     margin-top: 32px;
-   }
-   .transparency-card {
-     background: var(--card-bg);
-     padding: 24px;
-     border-radius: 12px;
-     border: 1px solid var(--border-color);
-   }
-   .transparency-icon {
-     width: 48px;
-     height: 48px;
-     background: var(--accent-color);
-     border-radius: 12px;
-     display: flex;
-     align-items: center;
-     justify-content: center;
-     color: white;
-     font-size: 20px;
-     margin-bottom: 16px;
-   }
-   .transparency-tags {
-     display: flex;
-     gap: 8px;
-     flex-wrap: wrap;
-     margin-top: 12px;
-   }
-   .transparency-tags li {
-     background: var(--accent-color);
-     color: white;
-     padding: 4px 12px;
-     border-radius: 20px;
-     font-size: 12px;
-   }
-   ```
-
-**Impacto:** 🟡 Alto — confianza +25%, reduce "qué productos usan" preguntas en FAQ, diferenciación de competidores que no revelan productos
-
-**Esfuerzo:** M (6 horas)
-
-**Agente:** Frontend
-
-**Dependencia:** Confirmar con cliente los productos reales utilizados
-
----
-
-### PROPUESTA 4: Exit-Intent Modal para Cotizador ("¿Te vas? Consigue un 10% de descuento")
-
-**Problema:** Usuarios que interactúan con el cotizador pero abandonan sin enviar. No hay mecanismo de recuperación. En 2026, los exit-intent modals bien diseñados siguen siendo efectivos si el descuento es genuino. [1]
-
-**CleanerHQ 2026:**
-> "Some businesses turn $500 jobs into $2,000 packages through strategic upselling. Presenting optional services during the initial quote makes a big difference."
+**Problema:** El sitio usa Formspree para reservas pero NO hay Schema.org de tipo `AppointmentBooking`. Google ofrece rich results para reservation services que mejoran CTR.
 
 **Solución (S — 3 horas):**
 
-1. **En js/script.js, agregar detector de exit-intent:**
-   ```javascript
-   let exitIntentShown = false;
-   let cotizadorInteracted = false;
+1. **En `index.html`, agregar Schema AppointmentBooking:**
+```html
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "AppointmentBooking",
+  "name": "Reserva de servicio de limpieza",
+  "description": "Agenda tu servicio de limpieza profunda, sanitización o mantenimiento con Purity & Clean",
+  "provider": {
+    "@type": "LocalBusiness",
+    "name": "Purity & Clean",
+    "telephone": "+57-300-123-4567",
+    "url": "https://purityclean.com"
+  },
+  "url": "https://purityclean.com/#reservas",
+  "bookingTime": "https://schema.org/DateTime",
+  "Party": {
+    "@type": "Organization",
+    "name": "Purity & Clean"
+  }
+}
+</script>
+```
 
-   function showExitIntentModal() {
-     if (exitIntentShown || cotizadorInteracted) return;
-     
-     const modal = document.createElement('div');
-     modal.id = 'exit-intent-modal';
-     modal.innerHTML = `
-       <div class="exit-modal-content">
-         <button class="exit-modal-close" aria-label="Cerrar">&times;</button>
-         <div class="exit-modal-icon">
-           <i class="fa-solid fa-tag"></i>
-         </div>
-         <h2>¿Te vas? Tenemos una oferta especial</h2>
-         <p>Reserva tu servicio esta semana y obtén <strong>10% OFF</strong> en tu primera limpieza.</p>
-         <div class="exit-modal-form">
-           <input type="email" placeholder="Tu email" id="exit-email">
-           <button onclick="sendExitIntentEmail()">Obtener mi descuento</button>
-         </div>
-         <p class="exit-modal-legal">Solo para nuevos clientes. Válido hasta fin de mes.</p>
-       </div>
-     `;
-     
-     document.body.appendChild(modal);
-     exitIntentShown = true;
-     
-     setTimeout(() => modal.classList.add('show'), 100);
-     
-     modal.querySelector('.exit-modal-close').addEventListener('click', () => {
-       modal.remove();
-     });
-     
-     modal.addEventListener('click', (e) => {
-       if (e.target === modal) modal.remove();
-     });
-   }
+2. **Opcional: Agregar `Reservation` schema para reservas corporativas:**
+```html
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Reservation",
+  "reservationType": "CleaningService",
+  "provider": {
+    "@type": "LocalBusiness",
+    "name": "Purity & Clean"
+  },
+  "url": "https://purityclean.com/#reservas"
+}
+</script>
+```
 
-   function sendExitIntentEmail() {
-     const email = document.getElementById('exit-email').value;
-     if (!email || !email.includes('@')) {
-       alert('Por favor ingresa un email válido');
-       return;
-     }
-     
-     // Send to Formspree or save
-     trackEvent('exit_intent_coupon_sent', { email: email });
-     document.getElementById('exit-intent-modal').remove();
-     alert('¡Listo! Te enviamos tu código de descuento por email.');
-   }
-
-   // Detect cotizador interaction
-   document.querySelectorAll('#cotizador-form input, #cotizador-form select').forEach(el => {
-     el.addEventListener('focus', () => { cotizadorInteracted = true; });
-   });
-
-   // Exit intent detection (desktop)
-   document.addEventListener('mouseout', (e) => {
-     if (e.clientY < 10) { // Mouse leaving toward top
-       showExitIntentModal();
-     }
-   });
-
-   // Mobile: scroll back up quickly
-   let lastScrollY = window.scrollY;
-   window.addEventListener('scroll', () => {
-     if (window.scrollY < lastScrollY && window.scrollY < 200) {
-       showExitIntentModal();
-     }
-     lastScrollY = window.scrollY;
-   });
-   ```
-
-2. **En style.css, agregar estilos del modal:**
-   ```css
-   #exit-intent-modal {
-     position: fixed;
-     top: 0;
-     left: 0;
-     width: 100%;
-     height: 100%;
-     background: rgba(0,0,0,0.6);
-     z-index: 9999;
-     display: flex;
-     align-items: center;
-     justify-content: center;
-     opacity: 0;
-     transition: opacity 0.3s ease;
-   }
-   #exit-intent-modal.show {
-     opacity: 1;
-   }
-   .exit-modal-content {
-     background: var(--card-bg);
-     padding: 40px;
-     border-radius: 16px;
-     max-width: 450px;
-     text-align: center;
-     position: relative;
-     transform: translateY(20px);
-     transition: transform 0.3s ease;
-   }
-   #exit-intent-modal.show .exit-modal-content {
-     transform: translateY(0);
-   }
-   .exit-modal-close {
-     position: absolute;
-     top: 12px;
-     right: 16px;
-     background: none;
-     border: none;
-     font-size: 24px;
-     cursor: pointer;
-     color: var(--text-muted);
-   }
-   .exit-modal-icon {
-     width: 64px;
-     height: 64px;
-     background: var(--accent-color);
-     border-radius: 50%;
-     display: flex;
-     align-items: center;
-     justify-content: center;
-     margin: 0 auto 20px;
-     color: white;
-     font-size: 28px;
-   }
-   .exit-modal-form {
-     display: flex;
-     gap: 12px;
-     margin: 24px 0;
-   }
-   .exit-modal-form input {
-     flex: 1;
-     padding: 12px 16px;
-     border: 1px solid var(--border-color);
-     border-radius: 8px;
-     background: var(--bg-secondary);
-     color: var(--text-primary);
-   }
-   .exit-modal-form button {
-     background: var(--accent-color);
-     color: white;
-     border: none;
-     padding: 12px 24px;
-     border-radius: 8px;
-     cursor: pointer;
-     font-weight: 600;
-   }
-   .exit-modal-legal {
-     font-size: 12px;
-     color: var(--text-muted);
-   }
-   ```
-
-**Impacto:** 🟢 Medio — recovery rate 3-8% de abandonadores, valor promedio de conversión $80-180K COP
+**Impacto:** 🟢 Medio — SEO mejorado con rich results, especialmente para búsquedas de reservas en Bogotá
 
 **Esfuerzo:** S (3 horas)
 
-**Agente:** Frontend
+**Agente:** SEO / Frontend
 
 **Dependencia:** Ninguna
 
 ---
 
-### PROPUESTA 5: Quick-Service Links en Nav para Reducir Fricción
+### PROPUESTA 4: CTAs Estratégicos en Artículos de Blog
 
-**Problema:** Los usuarios que buscan cotizar tienen que hacer scroll largo hasta encontrar el cotizador. El menú actual no tiene acceso directo a las acciones más frecuentes. [1]
+**Problema:** Los 6 artículos del blog tienen buen contenido SEO pero NO incluyen CTAs hacia servicios relacionados. CleanerHQ 2026 recomienda client education como diferenciador pero también conversión.
 
-**CleanerHQ 2026:**
-> "Modern booking systems offer real-time availability, instant confirmation, automated payments, communication tools for customers."
+**Análisis de contenido por artículo:**
+
+| Artículo | Servicio Relacionado | CTA Sugerido |
+|----------|---------------------|--------------|
+| limpiar-sillas-oficina | Limpieza de sillas | "Contratar limpieza de sillas" |
+| sanitizar-colchon | Sanitización colchones | "Agendar sanitización" |
+| senales-empresa | Contrato corporativo | "Solicitar propuesta corporativa" |
+| como-limpiar-sofa | Limpieza de sofás | "Reservar limpieza profunda" |
+| guia-sanitizacion-colchones | Sanitización | "Ver planes de mantenimiento" |
+| tips-alfombras | Mantenimiento alfombras | "Contratar programa de mantenimiento" |
+
+**Solución (S — 4 horas):**
+
+1. **En cada artículo, agregar sección CTA al final:**
+```html
+<section class="article-cta" aria-label="Solicitar servicio">
+  <h3>¿Quieres resultados similares?</h3>
+  <p>Contáctanos para agendar tu servicio de [NOMBRE_SERVICIO].</p>
+  <a href="https://purityclean.com/#reservas" class="btn btn-primary">
+    Agendar ahora <i class="fa-solid fa-arrow-right"></i>
+  </a>
+</section>
+```
+
+2. **En `blog/js/blog-article.js`, implementar CTA dinámico basado en categoría del artículo**
+
+3. **Agregar internal links entre artículos y servicios en el mismo artículo**
+
+**Impacto:** 🟢 Medio — Conversión desde blog, reduce bounce rate, aumenta tiempo en sitio
+
+**Esfuerzo:** S (4 horas)
+
+**Agente:** Frontend + Content
+
+**Dependencia:** Ninguna
+
+---
+
+### PROPUESTA 5: YouTube Shorts Strategy para SEO Local
+
+**Problema:** El VideoObject usa placeholder `vTDo5qmyfVM` desde R122. No hay estrategia de video real. CleanerHQ 2026 no menciona video, pero el sector limpieza depende de evidencia visual.
+
+**Contexto:**
+- YouTube Shorts tiene 15-60 segundos
+- Formato ideal para before/after rápidos
+- "How to" snippets de 30 segundos
+- Behind the scenes del proceso
+
+**Solución (M — 1 semana para estrategia + contenido inicial):**
+
+1. **Obtener el video real del cliente o producir contenido propio**
+
+2. **Reemplazar VideoObject placeholder:**
+```html
+<!-- REEMPLAZAR vTDo5qmyfVM con ID real -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "VideoObject",
+  "name": "Proceso de limpieza profunda de sofá | Purity & Clean",
+  "description": "Video demostrativo del proceso completo de limpieza profunda de sofás.",
+  "thumbnailUrl": "https://img.youtube.com/vi/VIDEO_ID_REAL/maxresdefault.jpg",
+  "uploadDate": "2026-04-29",
+  "contentUrl": "https://www.youtube.com/watch?v=VIDEO_ID_REAL",
+  "embedUrl": "https://www.youtube-nocookie.com/embed/VIDEO_ID_REAL"
+}
+</script>
+```
+
+3. **Crear 6-10 YouTube Shorts (30 segundos cada uno):**
+   - Antes/después sofá manchado
+   - Proceso de sanitización UV-C
+   - Detalle de productos eco-certificados
+   - Equipo profesional en acción
+   - Testimonial rápido de cliente
+   - Behind the scenes
+
+4. **En index.html, embed video en sección #servicios o #reservas**
+
+5. **En Schema LocalBusiness, agregar:**
+```javascript
+"video": {
+  "@type": "VideoObject",
+  "name": "Proceso de limpieza profunda de sofá",
+  "contentUrl": "https://www.youtube.com/watch?v=VIDEO_ID_REAL"
+}
+```
+
+**Impacto:** 🟡 Alto — SEO YouTube, social proof visual, engagement con clientes jóvenes
+
+**Esfuerzo:** M (requiere producción de video + implementación)
+
+**Agente:** Content + Frontend
+
+**Dependencia:** Acceso a cuenta YouTube, producción de videos reales
+
+---
+
+### PROPUESTA 6: BreadcrumbList Schema para SEO de Zonas
+
+**Problema:** El sitio tiene 10 páginas de zona (`/zonas/chapinero/`, `/zonas/suba/`, etc.) pero NO tienen breadcrumb schema. Google reconoce breadcrumbs en search results, aumentando CTR.
+
+**Estructura actual:**
+```
+Inicio > Zonas > Chapinero
+```
 
 **Solución (S — 2 horas):**
 
-1. **En index.html, modificar el nav para agregar shortcuts:**
-   ```html
-   <nav class="main-nav" aria-label="Navegación principal">
-     <div class="nav-shortcuts">
-       <a href="#reservas" class="nav-cta">
-         <i class="fa-solid fa-calendar-check"></i>
-         <span>Reservar</span>
-       </a>
-       <a href="#cotizador" class="nav-cta-secondary">
-         <i class="fa-solid fa-calculator"></i>
-         <span>Cotizar</span>
-       </a>
-       <a href="https://wa.me/573001234567" class="nav-whatsapp" target="_blank" aria-label="Contactar por WhatsApp">
-         <i class="fa-brands fa-whatsapp"></i>
-       </a>
-     </div>
-   </nav>
-   ```
+1. **En cada zona (e.g., `zonas/chapinero/index.html`), agregar:**
+```html
+<nav aria-label="Breadcrumb" class="breadcrumb">
+  <ol itemscope itemtype="https://schema.org/BreadcrumbList">
+    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+      <a itemprop="item" href="https://purityclean.com/">
+        <span itemprop="name">Inicio</span>
+      </a>
+      <meta itemprop="position" content="1">
+    </li>
+    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+      <a itemprop="item" href="https://purityclean.com/#zonas">
+        <span itemprop="name">Zonas</span>
+      </a>
+      <meta itemprop="position" content="2">
+    </li>
+    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+      <span itemprop="name">Chapinero</span>
+      <meta itemprop="position" content="3">
+    </li>
+  </ol>
+</nav>
+```
 
-2. **En style.css, agregar estilos de nav shortcuts:**
-   ```css
-   .nav-shortcuts {
-     display: flex;
-     align-items: center;
-     gap: 12px;
-   }
-   .nav-cta {
-     background: var(--accent-color);
-     color: white;
-     padding: 8px 16px;
-     border-radius: 8px;
-     font-weight: 600;
-     display: flex;
-     align-items: center;
-     gap: 6px;
-     font-size: 14px;
-     transition: background 0.2s;
-   }
-   .nav-cta:hover {
-     background: var(--accent-hover);
-   }
-   .nav-cta-secondary {
-     background: transparent;
-     border: 1px solid var(--accent-color);
-     color: var(--accent-color);
-     padding: 8px 16px;
-     border-radius: 8px;
-     font-weight: 600;
-     display: flex;
-     align-items: center;
-     gap: 6px;
-     font-size: 14px;
-     transition: all 0.2s;
-   }
-   .nav-cta-secondary:hover {
-     background: var(--accent-color);
-     color: white;
-   }
-   .nav-whatsapp {
-     width: 40px;
-     height: 40px;
-     background: #25D366;
-     color: white;
-     border-radius: 50%;
-     display: flex;
-     align-items: center;
-     justify-content: center;
-     font-size: 20px;
-     transition: transform 0.2s, box-shadow 0.2s;
-   }
-   .nav-whatsapp:hover {
-     transform: scale(1.1);
-     box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
-   }
-   
-   /* Mobile: hide text, show only icons */
-   @media (max-width: 768px) {
-     .nav-cta span, .nav-cta-secondary span {
-       display: none;
-     }
-     .nav-cta, .nav-cta-secondary {
-       padding: 8px;
-     }
-   }
-   ```
+2. **También en `index.html`, agregar breadcrumb para secciones principales:**
+```html
+<nav aria-label="Breadcrumb" class="breadcrumb">
+  <ol itemscope itemtype="https://schema.org/BreadcrumbList">
+    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+      <a itemprop="item" href="https://purityclean.com/">
+        <span itemprop="name">Inicio</span>
+      </a>
+      <meta itemprop="position" content="1">
+    </li>
+    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+      <span itemprop="name">Servicios</span>
+      <meta itemprop="position" content="2">
+    </li>
+  </ol>
+</nav>
+```
 
-**Impacto:** 🟢 Medio — reduce clicks-to-conversion en 2-3 pasos para usuarios decididos
+**Impacto:** 🟢 Medio — SEO mejor CTR en Google, mejor navegación
 
 **Esfuerzo:** S (2 horas)
 
@@ -660,83 +433,16 @@ El sitio de Purity & Clean pierde contratos corporativos por falta de documentac
 
 ---
 
-### PROPUESTA 6: Schema.org Service con priceRange Específico (Cierra el Gap SEO)
-
-**Problema:** El Schema LocalBusiness actual NO tiene `priceRange` definido. Google no puede mostrar "desde $X" en rich results. [1]
-
-**CleanerHQ 2026:**
-> "Automated quoting software cuts out the hassle of manual estimates. These systems crunch the numbers—square footage, service type, frequency—in seconds."
-
-**Solución (S — 1 hora):**
-
-1. **En index.html, modificar el Schema LocalBusiness:**
-   ```javascript
-   // Buscar el bloque del Schema y agregar priceRange después de "address"
-   "priceRange": "$80.000 - $450.000 COP",
-   "hasOfferCatalog": {
-     "@type": "OfferCatalog",
-     "name": "Servicios de limpieza",
-     "itemListElement": [
-       {
-         "@type": "Offer",
-         "itemOffered": {
-           "@type": "Service",
-           "name": "Limpieza profunda de sofás",
-           "description": "Remoción de polvo, manchas y olores de muebles tapizados con secado rápido."
-         },
-         "priceSpecification": {
-           "@type": "PriceSpecification",
-           "price": "180000",
-           "priceCurrency": "COP",
-           "minPrice": "80000",
-           "maxPrice": "180000",
-           "unitText": "por unidad"
-         }
-       },
-       {
-         "@type": "Offer",
-         "itemOffered": {
-           "@type": "Service",
-           "name": "Sanitización de colchones",
-           "description": "Desinfección profunda para mejorar la calidad del descanso."
-         },
-         "priceSpecification": {
-           "@type": "PriceSpecification",
-           "price": "120000",
-           "priceCurrency": "COP",
-           "minPrice": "60000",
-           "maxPrice": "120000",
-           "unitText": "por unidad"
-         }
-       },
-       // ... otros servicios
-     ]
-   }
-   ```
-
-2. **Verificar en Google Rich Results Test:**
-   - https://search.google.com/test/rich-results
-
-**Impacto:** 🟡 Medio — habilita rich snippets con precios en Google, mejora CTR en 10-15%
-
-**Esfuerzo:** S (1 hora)
-
-**Agente:** Full Stack
-
-**Dependencia:** Ninguna
-
----
-
 ## Resumen de Prioridades R127
 
-| # | Propuesta | Impacto | Esfuerzo | Agente | Tipo |
-|---|-----------|---------|----------|--------|------|
-| 1 | Certificaciones Eco Verificables | 🟡 Alto | M | Frontend | ✨ Feature |
-| 2 | Cotizador con Urgencia por Zona | 🟡 Medio-Alto | S | Frontend | ✨ UX |
-| 3 | Transparency Micro-section | 🟡 Alto | M | Frontend | ✨ Trust |
-| 4 | Exit-Intent Modal | 🟢 Medio | S | Frontend | ✨ Conversion |
-| 5 | Quick-Service Links en Nav | 🟢 Medio | S | Frontend | ✨ UX |
-| 6 | Schema.org priceRange | 🟡 Medio | S | Full Stack | 🐛 SEO |
+| # | Propuesta | Impacto | Esfuerzo | Agente | Tipo | Estado |
+|---|-----------|---------|----------|--------|------|--------|
+| 1 | UV-C Disinfection Servicio Premium | 🟡 Alto | M | Frontend+Content | ✨ Servicio | NUEVO |
+| 2 | Photo Documentation Gallery | 🟡 Alto | L | Full Stack | ✨ UX | NUEVO |
+| 3 | AppointmentBooking Schema | 🟢 Medio | S | SEO | 🔧 SEO | NUEVO |
+| 4 | CTAs en Artículos Blog | 🟢 Medio | S | Frontend+Content | ✨ Conversión | NUEVO |
+| 5 | YouTube Shorts Strategy | 🟡 Alto | M | Content | ✨ Marketing | NUEVO |
+| 6 | BreadcrumbList Schema | 🟢 Medio | S | Frontend | 🔧 SEO | NUEVO |
 
 ---
 
@@ -744,36 +450,40 @@ El sitio de Purity & Clean pierde contratos corporativos por falta de documentac
 
 | Bug | Ubicación | Identificado | Rondas |
 |-----|-----------|--------------|--------|
-| WhatsApp ficticio | `js/config.js:2` | R1 | 126+ |
-| SW cache versioning | `sw.js:1` | R1 | 126+ |
-| Google Place ID falso | `js/reviews-data.js:114` | R126 | 1+ |
-| Schema priceRange | `index.html` | R123 | 4+ |
+| WhatsApp ficticio | `js/config.js:2`, `manifest.json:54`, `blog/index.html:189` | R1 | 127 |
+| SW cache versioning | `sw.js:1` | R1 | 127 |
+| Google Place ID falso | `js/reviews-data.js:114` | R126 | 1 |
+| VideoObject placeholder | `index.html:255-259` (`vTDo5qmyfVM`) | R122 | 5 |
 
 ---
 
 ## Diferenciación con R126
 
 **R126 propuso:**
-- Google Place ID real (bug crítico nuevo)
-- Renderizar reviews desde JS (ya existen visualmente)
-- Google Maps Embed interactivo
+- Google Place ID Real
+- Renderizar Reviews Visibles
+- Google Maps Embed
 - Instagram Reels Strategy
 - Cotizador LocalStorage
-- WhatsApp Business API evaluación
+- WhatsApp Business API Evaluation
 
 **R127 novedades propias:**
-- **Certificaciones eco verificables** — El sitio declara "eco" pero no prueba nada. Oportunidad B2B.
-- **Cotizador con urgencia por zona** — Escasez geográfica para motivar conversión
-- **Transparency Micro-section** — Revelar productos y químicos usados (confianza moderna)
-- **Exit-Intent Modal** — Recuperación de abandonadores con oferta
-- **Quick-Service Nav** — Reducir fricción para usuarios decididos
-- **Schema priceRange** — Rich snippets con precios en Google
+- **UV-C Disinfection como servicio premium** — Alineado con CleanerHQ 2026 trends
+- **Photo Documentation Gallery** — Sistema de control de calidad con before/after
+- **AppointmentBooking Schema** — Rich results para reservas
+- **CTAs estratégicos en blog** — Conversión desde contenido SEO
+- **YouTube Shorts Strategy** — Video real para reemplazar placeholder
+- **BreadcrumbList Schema** — SEO para zonas y secciones
 
 ---
 
 ## Referencias
 
-[1] CleanerHQ — Cleaning Industry Trends and Opportunities in 2026: https://cleanerhq.com/cleaning-industry-trends-and-opportunities-in-2026/
+[1] CleanerHQ — Quality Control Systems: Ensuring Consistency in Cleaning Services: https://cleanerhq.com/quality-control-systems/
+[2] CleanerHQ — Cleaning Industry Trends and Opportunities in 2026: https://cleanerhq.com/cleaning-industry-trends-and-opportunities-in-2026/
+[3] Google Schema.org — AppointmentBooking: https://schema.org/AppointmentBooking
+[4] Google Schema.org — BreadcrumbList: https://schema.org/BreadcrumbList
+[5] YouTube Shorts Best Practices: https://support.google.com/youtube/answer/10279019
 
 ---
 

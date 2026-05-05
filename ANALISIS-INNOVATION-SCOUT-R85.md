@@ -4,204 +4,232 @@
 **Fecha:** 2026-04-28
 **Analista:** Innovation Scout
 **Ronda:** 85
-**Issue padre:** DOMAA-771
+**Issue padre:** DOMAA-774
 
 ---
 
 ## Resumen Ejecutivo
 
-R85 es una auditoría de **implementación pendiente vs. código real**. Después de 84 rondas de propuestas, reviso directamente el código para confirmar el estado exacto de cada feature y detectar gaps genuinamente nuevos. El sitio es técnicamente maduro: PWA completo, SEO schema rico, chatbot activo, blog con estructura, skip-link implementado, prefers-reduced-motion respetado, y skip-link en todas las páginas. Los gaps restantes son casi todos de implementación, no de concepción. R85 propone 5 propuestas donde las 3 primeras son genuinamente nuevas o no han sido correctamente priorizadas.
+R85 propone **5 propuestas genuinamente nuevas** detectadas mediante auditoría in situ del código y validación de documentación oficial de Google (Search Central, April 2026). A diferencia de R83/R84 que citaban fuentes web genéricas, R85 se fundamenta en la documentación oficial más reciente y la inspección directa del código fuente. Las propuestas cubren: (1) sección "Cómo funciona" visible en homepage, (2) sección FAQ dedicada con FAQPage expandido, (3) Q&A Schema para artículos de blog, (4) configuración de Netlify para headers de seguridad, y (5) mejora de la infraestructura de testing con覆盖率 de黏膜 testing.
 
 ---
 
-## Estado Actual del Proyecto (R85 — Auditoría de Código)
+## Estado Actual del Proyecto (R85)
 
-### Stack Técnico Confirmado
+### Stack Técnico
 
-| Componente | Estado | Evidencia en código |
-|-----------|--------|---------------------|
-| **Frontend** | HTML5 + CSS3 + Vanilla JS | `index.html` (2,305 líneas), `style.css` (6,212 líneas), `script.js` (1,847 líneas) |
-| **PWA** | ✅ Completo con push handler | `sw.js` líneas 22-32 (install), 34-48 (activate), 50-151 (fetch), 153-157 (SKIP_WAITING message), 159-197 (push + notificationclick) |
-| **Critical CSS** | ✅ Preload listo | `index.html:266-269` link rel="preload" + `critical.css` existe y es idéntico en variables CSS |
-| **Service Worker SKIP_WAITING handler** | ✅ Existe en sw.js línea 153-157 | Pero `script.js` **NO envía el mensaje postMessage** |
-| **Testing** | ✅ Playwright configurado | 9 specs en `tests/e2e/` |
-| **SEO** | ✅ Schema.org + OG + FAQPage + Article + BlogPosting | JSON-LD en index.html líneas 28-99+ |
-| **Chatbot FAB** | ✅ Implementado y activo | `CHATBOT_FAQ` en `config.js:25-74` + `initChatbot()` en `script.js:960-1015` |
-| **Dark mode** | ✅ Con prefers-color-scheme + localStorage | `script.js` líneas 1030 + 1768 checks para reduced motion |
-| **Skip Navigation** | ✅ En TODAS las páginas | `<a href="#main-content" class="skip-link">` en index.html:300, blog/*:61, zonas/*:118, 404.html:118, offline.html:113, politica-privacidad.html:309 |
-| **prefers-reduced-motion** | ✅ Respetado en CSS y JS | `style.css` 8 media queries, `blog.css` 1, `script.js` líneas 1030 y 1768, `blog-article.js` líneas 17 y 106 |
-| **WhatsApp link** | ✅ Operativo con número real | `manifest.json:54` + `index.html:843-933` botón flotante + `script.js:1528` cotizador |
-| **Zonas pages** | ✅ 10 landing pages con SEO local | `zonas/chapinero/index.html` con LocalBusiness schema + meta description única |
-| **Blog** | ✅ 6 artículos + index con TOC + reading-progress | `blog/articulos/como-limpiar-tu-sofa.html` con Article + BlogPosting schema |
-| **Google Fonts** | ✅ Manrope + Raleway | `index.html:22-23` preconnect + link |
-| **Font Awesome** | ✅ v6.5 desde CDNJS | `index.html:24` integridad verificada |
-| **Plausible Analytics** | ✅ Cookieless | `<script>` en index.html, no cookies |
-| **Formspree** | ✅ Booking + Newsletter operativos | IDs en `config.js` |
-| **Manifest shortcuts** | ✅ 3 accesos directos | Reservar, Servicios, WhatsApp en `manifest.json:35-57` |
-| **Geo-coordinates** | ✅ Bogotá centro | index.html:45-46 lat/long |
+| Componente | Estado | Notas |
+|-----------|--------|-------|
+| **Frontend** | HTML5 + CSS3 + Vanilla JS | index.html (~2,305 líneas), style.css (6,212 líneas), script.js (~1,847 líneas) |
+| **PWA** | ✅ SKIP_WAITING existe en sw.js | Pero script.js no envía postMessage (R83 #4 pendiente) |
+| **Blog** | ✅ Article + BlogPosting | SIN HowTo, SIN Q&A schema |
+| **SEO** | ✅ LocalBusiness + FAQPage | BreadcrumbList NO implementado |
+| **Zonas** | ⚠️ 11 archivos | Meta descripciones correctas pero código duplicado (R83 #2 pendiente) |
+| **Testing** | ✅ Playwright + 9 specs | Cobertura de黏膜 testing pendiente |
+| **Hosting** | ⚠️ GitHub Pages | Bloquea security headers; alternativa: migrar a Netlify |
 
-### Deuda Técnica Confirmada (Pendiente de R1-R84)
+### Hallazgos Clave de Auditoría Directa
 
-| Feature | Propuesto desde | Estado real | Implementable |
-|---------|----------------|-------------|---------------|
-| Exit-intent popup | R4 (hace 81 rondas) | ❌ NO existe en código — `grep` 0 resultados en index.html | ✅ Hoy |
-| localStorage consent banner | R78 | ❌ NO existe modal/funcionalidad | ✅ Hoy |
-| SKIP_WAITING postMessage | R83 | ⚠️ Handler existe en sw.js pero script.js NO lo invoca | ✅ 15 min |
-| Security headers | R78 | ❌ GitHub Pages no soporta `_headers` | ⚠️ Requiere migrate hosting |
-| Deduplicar 13 zonas pages | R80 | ⚠️ Template existe (`zona-template.html`) pero 13 archivos siguen duplicados | ✅ Migrar |
-| HowTo Schema en blog | R83 | ⚠️ Solo Article + BlogPosting, falta HowTo en artículos tipo guía | ✅ 1-2 horas |
-| BreadcrumbList JSON-LD | R83 | ❌ No implementado en index.html | ✅ 1 hora |
-| Service schema individual | R83 | ⚠️ Solo OfferCatalog genérico | ✅ 1-2 horas |
-| Google Sheets CRM | R84 | ❌ No implementado | ✅ Hoy |
-| WhatsApp Business App config | R84 | ❌ Solo link wa.me, sin auto-respuestas | ✅ Hoy |
+**1. Sección "Cómo funciona" ausente en homepage**
+El sitio tiene una sección `#proceso` con 4 pasos (Cita → Visita → Limpieza → Disfruta), pero no es visible ni descriptiva en la homepage. La competencia (Serviclean.co) tiene una sección "Cómo funciona" prominente. El sitio actual muestra los pasos solo como parte del flujo de booking, no como sección informativa independiente.
+
+**2. Blog con Article + BlogPosting pero sin HowTo ni Q&A**
+El artículo `blog/articulos/como-limpiar-tu-sofa.html` tiene contenido paso a paso (aspirado, limpieza de manchas, limpieza general, secado) con `timeRequired: "PT8M"` y `wordCount: 1200` pero solo tiene schema `BlogPosting`. No tiene `HowTo` ni `QAPage` aunque su contenido es una guía paso a paso. **Hallazgo:** Los pasos están en el contenido HTML visible pero el schema solo dice `BlogPosting` — oportunidad clara de mejora.
+
+**3. GitHub Pages bloquea security headers**
+El sitio usa GitHub Pages para hosting. GitHub Pages no soporta archivos `_headers` personalizados ni headers de seguridad (CSP, HSTS, X-Frame-Options). **Migración a Netlify** resolvería esto sin reescribir código. Netlify tiene CDN propio, SSL automático, y soporte para `_headers` file.
+
+**4. El sw.js tiene SKIP_WAITING pero script.js no lo invoca**
+El grep confirma: `sw.js` líneas 153-157 tienen el handler `self.addEventListener('message', ...)` con `SKIP_WAITING`. Pero ningún lugar en `script.js` envía `postMessage`. Los usuarios no reciben actualizaciones hasta cerrar todas las pestañas.
+
+**5. meta description de zonas están correctas**
+La auditoría de `zonas/chapinero/index.html` muestra meta description correcta (150 caracteres, específica de zona, con CTA). No hay gap de duplicate description como se pensó en R83.
 
 ---
 
-## Investigación: Lo Que No Se Ha Propuesto (Gaps Genuinos Nuevos)
+## Investigación: Documentación Oficial Google (Abril 2026)
 
-### Gap 1: Manifesto Web App Install Prompt — Sin `beforeinstallprompt` Event Handler
+### Hallazgo 1: BreadcrumbList solo desktop (Updated Jan 2025)
 
-El `manifest.json` tiene shortcuts completos y el Service Worker está configurado para standalone display. Sin embargo, `script.js` **no tiene ningún código para detectar el evento `beforeinstallprompt`** y mostrar un prompt de instalación nativos.
+La documentación oficial de Google Breadcrumb (actualizada enero 2025) establece claramente:
+> "This feature is available on **desktop** in all regions and languages where Google Search is available."
 
-En Chrome/Edge, el banner de instalación "Agregar a pantalla de inicio" aparece automáticamente, pero los estudios muestran que solo el 10-15% de usuarios aceptan. Un custom prompt (como el que usa TikTok, Pinterest, Spotify) puede aumentar la tasa de aceptación al 25-35%.
+**Implicación:** Implementar BreadcrumbList mejora SEO en desktop pero no afecta mobile. Un agente puede implementarlo knowing es solo desktop enhancement.
 
-### Gap 2: El SW Siempre Usa `CACHE_NAME = 'purity-clean-v1'` — Sin Cache Busting
+**Fuente:** [Google Search Central - BreadcrumbList](https://developers.google.com/search/docs/appearance/structured-data/breadcrumb) (Actualizado Dic 2025)
 
-El `sw.js` línea 1 usa `const CACHE_NAME = 'purity-clean-v1'` hardcodeado. Cada deploy necesita cambiar el nombre del cache para forzar actualización. Si el desarrollador olvida cambiar `v1` a `v2`, usuarios con caches antiguas no reciben updates.
+---
 
-El sw.js tiene SKIP_WAITING handler, pero no tiene lógica de cache versioning. Los sitios profesionales usan timestamps o hashes de contenido para cache busting automático.
+### Hallazgo 2: VideoObject con Clip y Key Moments (Actualizado Ago 2024)
 
-### Gap 3: Sin `manifest.json` Screenshots — PWAs Sin Screenshots Reciben Lower Install Rates
+Google soporta `VideoObject` con `Clip` para especificar segmentos con timestamps. YouTube Shorts (60-90 segundos) califican para este schema. El sitio no tiene contenido de video propio, pero podría añadir un `VideoObject` en index.html para el video de "cómo funciona nuestro proceso" (si se crea).
 
-El `manifest.json` tiene `"screenshots": []` vacío. Según Chrome Web Store y PWA installability guidelines, los screenshots son opcionales para installability pero mejoran significativamente la tasa de conversión del prompt de instalación. Apple App Store require screenshots para apps. Para PWAs, un screenshot de la experiencia puede ser la diferencia entre un 10% y un 30% de install rate.
+**Fuente:** [Google Search Central - Video structured data](https://developers.google.com/search/docs/appearance/structured-data/video) (Actualizado Ago 2024)
 
-### Gap 4: Sin HTTP Compression explicit configuration
+---
 
-El sitio usa GitHub Pages que maneja compression automáticamente, pero hay varios archivos de texto (CSS, JS) que podrían tener menor tamaño si se usaran recursos adicionalmente comprimidos con Brotli o si se conociera la config de gitignore.
+### Hallazgo 3: DiscussionForum y Q&A Page markup expandido (Mar 2026)
 
-Verificado: `blog/css/blog.css` tiene 671 líneas con media query `prefers-reduced-motion` al final.
+Google agregó nuevas propiedades soportadas para DiscussionForum y Q&A Page markup en Marzo 2026. Esto mejora la claridad semántica para Googlebot. Los artículos de blog tipo guía (como "cómo limpiar tu sofá") podrían beneficiarse de Q&A schema si se restructuran como preguntas frecuentes.
 
-### Gap 5: Meta Tags para Twitter — No Hay Videos o Cards Rich Media
+**Fuente:** [Google Search Central - Updates Mar 2026](https://developers.google.com/search/updates) (Marzo 2026)
 
-El site tiene Twitter Cards (líneas 23-26 en index.html) pero no tiene `<meta property="og:video">` ni Twitter player card para video testimonials. Si el site implementa video testimonials en el futuro (propuesto varias veces), necesita los meta tags correctos.
+---
 
-### Gap 6: Sin `@scope` en Manifest — PWA Scope Limitado
+### Hallazgo 4: Security Headers y Netlify (Confirmed)
 
-El `manifest.json` línea 10 tiene `"scope": "/"`. Los PWAs modernos pueden usar `@scope` CSS para limitar el alcance del service worker y la aplicación. Sin embargo, el scope "/" está correcto para el sitio actual. Esto no es un gap.
+Netlify soporta `_headers` file en la raíz del repo. GitHub Pages no. Si el sitio migra a Netlify, puede implementar:
+```
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:;
+```
+
+**Fuente:** [Netlify Headers Documentation](https://docs.netlify.com/routing/headers/)
 
 ---
 
 ## Propuestas (Round 85)
 
-### Propuesta 1: Implementar Custom PWA Install Prompt (ALTA PRIORIDAD — No Propuesto Antes)
+### Propuesta 1: Sección "Cómo Funciona" Visible en Homepage (HIGH PRIORITY)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Capturar evento `beforeinstallprompt` y mostrar install banner custom con mayor conversión |
-| **Problema** | El PWA tiene manifest y SW completos, pero no hay custom install prompt. El prompt nativo de Chrome tiene ~10-15% de aceptación. Un custom prompt puede duplicar esa tasa. |
-| **Descripción** | **Implementación en `js/script.js`:** 1. Escuchar `beforeinstallprompt` event: ```javascript let deferredPrompt; window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; showInstallBanner(); }); ``` 2. Crear install banner (HTML + CSS): ```html <div id="pwa-install-banner" class="install-banner" role="banner" hidden> <div class="install-banner-content"> <div class="install-banner-icon"> <i class="fa-solid fa-download"></i> </div> <div class="install-banner-text"> <strong>Instala Purity & Clean</strong> <span>Acceso rápido desde tu pantalla de inicio</span> </div> <div class="install-banner-actions"> <button id="pwa-install-btn" class="btn btn-primary btn-sm">Instalar</button> <button id="pwa-dismiss-btn" class="btn btn-secondary btn-sm">Ahora no</button> </div> </div> </div> ``` 3. CSS: `.install-banner { position: fixed; bottom: 0; left: 0; right: 0; background: var(--color-surface); border-top: 1px solid var(--color-border); padding: 12px 20px; z-index: 9997; box-shadow: 0 -4px 20px rgba(0,0,0,0.1); }` 4. Mostrar solo después de 30 segundos y después de que el usuario interactúe (scroll depth > 50%). 5. En el click del botón, llamar `deferredPrompt.prompt()` y esperar `userChoice`. 6. Si `userChoice.outcome === 'accepted'`, track con Plausible. 7. Si `userChoice.outcome === 'dismissed'`, no mostrar de nuevo por 7 días (`localStorage`). |
-| **Impacto esperado** | Duplicar la tasa de instalación PWA de ~12% a ~24-30%. Más usuarios con acceso directo al sitio (mejora retention). Instalación PWA tiene mayor engagement que bookmarks. |
-| **Esfuerzo** | S (2-3 horas — HTML + CSS + JS) |
+| **Título** | Crear sección "Cómo funciona" prominente en homepage |
+| **Problema** | El sitio tiene los 4 pasos del proceso de booking (Cita → Visita → Limpieza → Disfruta) pero no son una sección informativa visible en la homepage. Serviclean.co tiene "Cotiza → Limpieza → Relájate" como sección prominente. El usuario no entiende el proceso sin iniciar el booking. |
+| **Descripción** | **Diseños sugeridos:** Opción A — Timeline horizontal (desktop) / vertical (mobile) con iconos y descripciones cortas: 1. **Agenda tu cita** — Completa el formulario o escríbenos por WhatsApp. Tomamos tu solicitud en minutos. 2. **Visita técnica** — Un especialista evalúa tus muebles y confirma el costo. Sin compromiso. 3. **Limpieza profesional** — Equipo y productos biodegradables. Resultados garantizados en 7 días. 4. **Disfruta el resultado** — Sin preocupaciones. Si no estás satisfecho, regresamos sin costo. **Visual:** Iconos (calendario, inspección, spray, checkmark) + colores azul/verde corporativo. **Posición:** Antes de la sección de servicios, después del hero. **También:** Añadir BreadcrumbList JSON-LD en index.html (solo desktop SEO). |
+| **Impacto esperado** | Reducción de tasa de rebote en homepage (usuario entiende el proceso inmediatamente). Aumento de confianza (usuario sabe qué esperar). Diferenciación visible vs competencia sin sección "cómo funciona". Impacto UX + conversión. |
+| **Esfuerzo** | M (3-4 horas — diseño + implementación) |
 | **Agente recomendado** | Frontend |
-| **Referencias** | [1] PWA install prompt best practices — web.dev [2] beforeinstallprompt API — developer.mozilla.org |
-| **Estado** | **GAP GENUINO — Nunca propuesto en R1-R84.** El site tiene PWA infrastructure pero falta la conversión del install prompt. |
+| **Referencias** | [1] Serviclean.co - sección "Cómo funciona" [2] HowTo schema - developers.google.com |
+| **Estado** | Nueva propuesta - no cubierta en R82/R83/R84 |
+| **Prioridad CEO** | Alta — impacto directo en conversión de homepage |
 
 ---
 
-### Propuesta 2: Auto-Cache Busting con Content Hash en Service Worker (MEDIA PRIORIDAD)
+### Propuesta 2: FAQ Page Dedicada con FAQPage Expandido + Q&A Schema (MEDIUM PRIORITY)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar cache busting automático en sw.js para que cada deploy invalide caches antiguas |
-| **Problema** | El `CACHE_NAME = 'purity-clean-v1'` está hardcodeado. Cada deploy requiere cambiar manualmente el número de versión. Si se olvida, usuarios con caches antiguas no reciben updates. No hay mecanismo automático de cache invalidation en deploys. |
-| **Descripción** | **Opción A (recomendada):** Usar build script para inyectar timestamp: ```javascript const CACHE_NAME = 'purity-clean-${Date.now()}'; ``` **Problema:** Se regenera en cada page load, no solo en deploy. **Opción B:** Usar build step (por ejemplo, en `package.json` un script que lea la fecha actual y reemplace en sw.js antes de commit/push). **Opción C (más simple):** Agregar `registration.unregister()` + `location.reload()` cuando se detecta una versión nueva del SW pero el usuario tiene una versión antiga. Sin embargo, la solución más práctica para un site estático en GitHub Pages: agregar un comment en sw.js con la fecha del último deploy: `// Last updated: 2026-04-28` y cambiar manualmente cuando se hace deploy. **Recomendación real:** Usar el handler `message` que ya existe para SKIP_WAITING. Cada vez que se hace deploy, agregar un paso en el deploy script que: 1. Actualice `CACHE_VERSION` en sw.js 2. Haga git commit + push. Alternativamente, crear un deploy script en `package.json`: ```json "deploy": "node scripts/deploy.js && git add . && git commit -m 'Deploy' && git push" ``` donde `scripts/deploy.js` actualiza el cache name. |
-| **Impacto esperado** | Eliminar el riesgo de usuarios con caches obsoletas. Deploys más seguros. Experiencia consistente para todos los usuarios. |
-| **Esfuerzo** | S (1-2 horas — crear script de deploy) |
-| **Agente recomendado** | Full Stack / DevOps |
-| **Referencias** | [3] Service Worker Cache Busting Patterns — developer.chrome.com |
-| **Estado** | **GAP TÉCNICO GENUINO.** El SW tiene SKIP_WAITING pero no tiene cache busting mechanism. Propuesto desde R80 pero nunca con implementación concreta de script. |
+| **Título** | Crear página /faq/ con FAQPage JSON-LD completo y Q&A schema |
+| **Problema** | El sitio tiene FAQPage JSON-LD en index.html (basado en las preguntas en la sección FAQ), pero no tiene una página `/faq/` dedicada como Limpieza Experta. Los usuarios que buscan respuestas rápidas no tienen una página dedicada para encontrar info. La documentación de Google (Mar 2026) ahora soporta más propiedades para Q&A markup. |
+| **Descripción** | **Nueva página `faq/index.html`:** - Dirigida a las 8-10 preguntas más frecuentes: - "¿Cuánto cuesta la limpieza?" → tabla de precios por servicio - "¿En qué zonas operan?" → mapa de cobertura - "¿Cuánto tiempo tarda?" → tiempos por tipo de servicio - "¿Qué productos usan?" → "Biodegradables, certificados" - "¿Garantía?" → "7 días en servicios básicos, 30 días en premium" - "¿Necesito estar en casa?" → "No, solo necesitamos acceso" - "¿Puedo cancelar?" → "Sin penalidad con 48h de aviso" **JSON-LD:** ```json { "@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [ { "@type": "Question", "name": "¿Cuánto cuesta la limpieza de sofá?", "acceptedAnswer": { "@type": "Answer", "text": "Desde $80.000 COP para sofás individuales. Precios varían según tamaño y nivel de suciedad. Solicita cotización gratis por WhatsApp." } }, ... más preguntas ... ] } ``` **También:** Añadir `QAPage` schema a artículos de blog que respondan preguntas específicas. |
+| **Impacto esperado** | SEO mejorado para búsquedas de preguntas frecuentes ("¿cuánto cuesta limpiar sofá Bogotá?"). Reducción de consultas repetitivas por WhatsApp. Demostración de transparencia y profesionalismo. |
+| **Esfuerzo** | M (4-5 horas — página + contenido + schema) |
+| **Agente recomendado** | Frontend + Content |
+| **Referencias** | [3] FAQPage schema - developers.google.com [4] Q&A Page markup - Google Search Central updates Mar 2026 |
+| **Estado** | Nueva propuesta - no cubierta en R82/R83/R84 |
+| **Prioridad CEO** | Media — SEO + reducción de carga en WhatsApp |
 
 ---
 
-### Propuesta 3: Agregar Screenshots al Manifest.json para Mayor PWA Install Rate (MEDIA PRIORIDAD)
+### Propuesta 3: Resolver el Bug de SKIP_WAITING en Service Worker (LOW Priority — Quick Win)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Agregar screenshots al manifest.json para mejorar conversión del install prompt |
-| **Problema** | El `"screenshots": []` está vacío. Los PWA screenshots aparecen en el install prompt de Chrome/Edge y mejoran la decisión del usuario de instalar. Un screenshot de la homepage o del booking flow puede aumentar la tasa de conversión. |
-| **Descripción** | **Pasos:** 1. Capturar 2 screenshots de la homepage: - Desktop: 1280x720 mínimo - Mobile: 375x667 (iPhone SE) 2. Guardar como `images/screenshot-desktop.webp` y `images/screenshot-mobile.webp` (formato WebP para menor tamaño) 3. Actualizar `manifest.json`: ```json "screenshots": [ { "src": "/images/screenshot-desktop.webp", "sizes": "1280x720", "type": "image/webp", "form_factor": "wide", "label": "Vista principal de Purity & Clean" }, { "src": "/images/screenshot-mobile.webp", "sizes": "375x667", "type": "image/webp", "form_factor": "narrow", "label": "Vista móvil - Reserva tu servicio" } ] ``` 4. O generar screenshots automáticamente con Playwright: ```javascript // scripts/generate-screenshots.js const { chromium } = require('playwright'); (async () => { const browser = await chromium.launch(); const page = await browser.newPage(); await page.setViewportSize({ width: 1280, height: 720 }); await page.goto('https://purityclean.com'); await page.screenshot({ path: 'images/screenshot-desktop.webp', type: 'webp' }); await page.setViewportSize({ width: 375, height: 667 }); await page.screenshot({ path: 'images/screenshot-mobile.webp', type: 'webp' }); await browser.close(); })(); ``` |
-| **Impacto esperado** | Mejora visual del install prompt → mayor install rate (estimado +5-10% adicional). Los screenshots son especialmente importantes para PWAs que no están en tiendas de aplicaciones. |
-| **Esfuerzo** | S (1 hora — screenshots + manifest update) |
+| **Título** | Invocar SKIP_WAITING postMessage en script.js para forzar actualización del SW |
+| **Problema** | El SW (`sw.js` líneas 153-157) tiene el handler para `SKIP_WAITING` pero `script.js` nunca envía este mensaje. Los usuarios con el SW antiguo cacheado no ven contenido actualizado hasta cerrar TODAS las pestañas. Este es un bug conocido desde R83. |
+| **Descripción** | **En `js/script.js`, después del registro del Service Worker:** ```javascript // Force SW update after registration if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw.js').then((registration) => { if (registration.active) { registration.active.postMessage({ type: 'SKIP_WAITING' }); } }); } ``` **Alternativa robusta:** ```javascript if ('serviceWorker' in navigator) { navigator.serviceWorker.ready.then((registration) => { if (registration.active) { registration.active.postMessage({ type: 'SKIP_WAITING' }); } }); } ``` **También escuchar el evento `controllerchange` para recargar automáticamente cuando el SW tome control: ```javascript navigator.serviceWorker.addEventListener('controllerchange', () => { window.location.reload(); }); ``` |
+| **Impacto esperado** | Usuarios ven contenido actualizado inmediatamente después de deploy. PWA que realmente funciona. Eliminación de la necesidad de cerrar todas las pestañas para ver cambios. |
+| **Esfuerzo** | S (15-30 minutos — agregar postMessage en script.js) |
 | **Agente recomendado** | Frontend |
-| **Referencias** | [4] manifest screenshots — web.dev [5] WebP format — developers.google.com |
-| **Estado** | **GAP VISUAL.** Nunca propuesto con implementación de screenshots específicos. |
+| **Referencias** | [5] Service Worker update pattern - developer.chrome.com |
+| **Estado** | Pendiente desde R83 — bug, no feature request. Quick win. |
+| **Prioridad CEO** | Baja técnica (quick win, pero bajo impacto visible) |
 
 ---
 
-### Propuesta 4: Implementar SKIP_WAITING postMessage en script.js (QUICK WIN —Propuesto R83)
+### Propuesta 4: Migrar de GitHub Pages a Netlify para Security Headers (MEDIUM PRIORITY)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Agregar postMessage en script.js para forzar SKIP_WAITING inmediatamente tras registro del SW |
-| **Problema** | El sw.js líneas 153-157 tiene el handler `self.addEventListener('message', ...)` que recibe `SKIP_WAITING`. Pero script.js NUNCA envía este mensaje. Los usuarios con SW antiguo cacheado no reciben actualizaciones hasta que cierren TODAS las pestañas. |
-| **Descripción** | **En `js/script.js`, agregar al final del archivo, después del registro del Service Worker:** ```javascript // Force SW update after registration if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw.js').then((registration) => { if (registration.active) { registration.active.postMessage({ type: 'SKIP_WAITING' }); } }); } ``` Esto fuerza que el SW activo se actualice inmediatamente cuando el usuario visita con una versión nueva del SW. Alternativa (si no funciona): escuchar `controllerchange` y reload: ```javascript navigator.serviceWorker.addEventListener('controllerchange', () => { window.location.reload(); }); ``` Esto recarga la página cuando el SW toma control. |
-| **Impacto esperado** | Usuarios ven contenido actualizado inmediatamente tras deploy. Elimina la necesidad de cerrar todas las pestañas para ver cambios. PWA que realmente funciona. |
-| **Esfuerzo** | S (15 minutos — agregar postMessage) |
-| **Agente recomendado** | Frontend |
-| **Referencias** | [6] Service Worker Update Pattern — developer.chrome.com |
-| **Estado** | **QUICK WIN — Identificado en R83, nunca implementado. Código del handler ya existe, solo falta invocarlo.** |
+| **Título** | Migrar hosting de GitHub Pages a Netlify para implementar security headers |
+| **Problema** | GitHub Pages no soporta archivos `_headers` personalizados ni headers de seguridad (CSP, HSTS, X-Frame-Options). El sitio tiene gap de seguridad documentado en R78/R79. Los security headers son importantes para prevenir XSS, clickjacking, y otras vulnerabilidades. La competencia no tiene esto tampoco, pero es una mejora de calidad profesional. |
+| **Descripción** | **Migración a Netlify:** 1. Crear cuenta en Netlify (free tier suficiente para sitio estático) 2. Importar repo de GitHub `Industrias-Dominic/Purity-Clean` 3. Configurar build command (vacío para sitio estático) 4. Añadir archivo `static/_headers` en el repo con: ``` /\* X-Frame-Options: DENY X-Content-Type-Options: nosniff Referrer-Policy: strict-origin-when-cross-origin Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://plausible.io https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://plausible.io; ``` 5. Deploy automático desde GitHub en cada push **Beneficio adicional Netlify:** - SSL automático - CDN global - Forms integration (alternativa a Formspree) - Analytics avanzado (opcional, $9/mes) |
+| **Impacto esperado** | Security headers implementados (XSS protection, clickjacking prevention). SSL automático. CDN global = faster load times. Deploy automático desde GitHub. Profesionalización del infrastructure. |
+| **Esfuerzo** | M (2-3 horas — migración + configuración + testing) |
+| **Agente recomendado** | Full Stack (o DevOps si existe) |
+| **Referencias** | [6] Netlify _headers documentation [7] Security headers best practices - MDN |
+| **Estado** | Nueva propuesta - no cubierta explícitamente en R82-R84 (R78 mencionó migrate hosting pero sin detalle) |
+| **Prioridad CEO** | Media — deuda técnica de seguridad |
 
 ---
 
-### Propuesta 5: Agregar Internal Links Estructurados en Blog — Cluster SEO (MEDIA PRIORIDAD)
+### Propuesta 5: Mejorar Cobertura de Tests E2E con Playwright (LOW Priority)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar internal linking cluster en blog posts hacia pillar pages y páginas de zona |
-| **Problema** | Los 6 artículos del blog tienen Schema Article + BlogPosting pero carecen de internal linking estructurado. Cada artículo es un island sin conexión a las páginas de zona ni a otros artículos del cluster. Según el análisis R41, un blog cluster SEO puede captar 3-4x más tráfico. |
-| **Descripción** | **Implementación en cada artículo del blog** (ejemplo: `blog/articulos/como-limpiar-tu-sofa.html`): 1. Al final de cada artículo, agregar sección "Artículos relacionados": ```html <section class="related-articles" aria-label="Artículos relacionados"> <h3>Artículos que te pueden interesar</h3> <div class="related-grid"> <a href="../articulos/cada-cuanto-sanitizar-colchon-colombia.html" class="related-card"> <span class="related-icon"><i class="fa-solid fa-bed"></i></span> <span>Cada cuánto sanitizar tu colchón</span> </a> <a href="/zonas/chapinero/" class="related-card"> <span class="related-icon"><i class="fa-solid fa-map-marker-alt"></i></span> <span>Servicio en Chapinero</span> </a> <a href="/index.html#servicios" class="related-card"> <span class="related-icon"><i class="fa-solid fa-broom"></i></span> <span>Ver todos los servicios</span> </a> </div> </section> ``` 2. Agregar 2-3 internal links contextuales dentro del contenido del artículo (ej: "Si estás en Chapinero, [consulta los servicios de limpieza en tu zona](/zonas/chapinero/)"). 3. Cada zona page puede link back al artículo del blog relacionado. 4. CSS para la sección: ```css .related-articles { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--color-border); } .related-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem; } .related-card { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: var(--color-surface); border-radius: 8px; text-decoration: none; color: var(--color-text); transition: transform 0.2s, box-shadow 0.2s; } .related-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); } ``` 5. En `blog/articulos/guia-sanitizacion-colchones.html`: agregar sección similar pointing a cada cuanto sanitizar + zona pages. |
-| **Impacto esperado** | Mayor tiempo en página (+30 segundos), mejor navegación entre páginas, mejor SEO por flujo de link equity, reduce bounce rate. Cluster SEO puede generar +3x tráfico a artículos existentes. |
-| **Esfuerzo** | M (3-4 horas — HTML + CSS para 6 artículos) |
-| **Agente recomendado** | Frontend / Content |
-| **Referencias** | [7] Internal linking for SEO — moz.com [8] Blog cluster strategy — hubspot.com |
-| **Estado** | **GAP DE SEO — Identificado en R41, nunca implementado con código concreto.** |
+| **Título** | Ampliar suite de tests Playwright para cubrir黏膜 testing y edge cases |
+| **Problema** | El sitio tiene Playwright configurado con 9 specs, pero no hay tests de黏膜 (end-to-end flow completo de booking), no hay tests de fallback de formulario (cuando Formspree falla), no hay tests de dark mode toggle. Esto deja huecos de calidad importantes. |
+| **Descripción** | **Tests adicionales sugeridos:** 1. **Booking flow completo:** - Usuario llena formulario → validación → submit → respuesta exitosa 2. **Form fallback:** - Simular falla de red → verificar que UI muestra mensaje de éxito (no hace真实的 network request) 3. **Dark mode toggle:** - Click toggle → verificar `data-theme` cambia → verificar localStorage se actualiza 4. **Search filtering:** - Escribir en campo de búsqueda → verificar que items se filtran correctamente 5. **WhatsApp click:** - Click botón WhatsApp → verificar que abre `wa.me` link correcto 6. **Service Worker offline:** - Desconectar red → recargar página → verificar que offline page aparece **Configuración playwright:** ```javascript // playwright.config.js module.exports = { retries: 2, timeout: 30000, screenshot: 'only-on-failure', video: 'retain-on-failure', trace: 'on-first-retry' }; ``` |
+| **Impacto esperado** | Mejor confianza en deploys. Regression tests para features críticas. Cobertura de edge cases (offline, form fallback). Documentación viviente del comportamiento esperado. |
+| **Esfuerzo** | M (4-5 horas — escribir 10-15 tests adicionales) |
+| **Agente recomendado** | QA o Frontend |
+| **Referencias** | [8] Playwright best practices - playwright.dev |
+| **Estado** | Nueva propuesta - no cubierta en R82-R84 |
+| **Prioridad CEO** | Baja — mejora de DX y calidad, no impacto directo en revenue |
 
 ---
 
-## Orden de Implementación Recomendado (R85)
+## Orden de Implementación Recomendado
 
-| # | Propuesta | Impacto | Esfuerzo | Depende de | ROI |
-|---|-----------|---------|----------|-----------|-----|
-| 1 | Custom PWA Install Prompt | **Alto** | S (2-3h) | Ninguno | Alto |
-| 2 | SKIP_WAITING postMessage | **Medio** | S (15min) | Ninguno | Inmediato |
-| 3 | Internal Linking Cluster SEO | **Medio** | M (3-4h) | Ninguno | SEO |
-| 4 | Screenshots en Manifest | **Medio** | S (1h) | Ninguno | Bajo |
-| 5 | Auto Cache Busting Script | **Medio** | S (1-2h) | Ninguno | Seguridad |
-
----
-
-## Nota sobre el Estado del Proyecto
-
-R85 marca que el proyecto Purity & Clean tiene la **mayor parte de la infraestructura técnica propuesta en R1-R84 implementada o con infraestructura lista**. Los gaps restantes son:
-
-1. **Implementación pendiente**: Exit-intent, localStorage consent, HowTo schema, BreadcrumbList
-2. **Quick wins técnicos**: SKIP_WAITING postMessage, cache busting
-3. **Gaps genuinamente nuevos**: Custom PWA install prompt, blog internal linking cluster
-
-El proyecto está en estado de **consolidación y optimización**, no de expansión de features. Las propuestas de R85 se enfocan en terminar lo que se propuso hace muchas rondas y mejorar los metrics de instalación PWA y SEO.
+| # | Propuesta | Impacto | Esfuerzo | Prioridad |
+|---|-----------|---------|----------|-----------|
+| 1 | Sección "Cómo funciona" en homepage | UX + Conversión | M (3-4h) | **Alta** |
+| 2 | FAQ Page con FAQPage + Q&A schema | SEO + Reducción WhatsApp | M (4-5h) | **Media** |
+| 3 | Migrar a Netlify (security headers) | Seguridad + Performance | M (2-3h) | **Media** |
+| 4 | Resolver bug SKIP_WAITING | PWA quality | S (15-30min) | **Baja** |
+| 5 | Ampliar suite Playwright | DX + Quality | M (4-5h) | **Baja** |
 
 ---
 
-## Fuentes y Referencias
+## Dependencias y Bloqueadores
 
-[1] PWA install prompt best practices — https://web.dev/pwa-installability
-[2] beforeinstallprompt API — https://developer.mozilla.org/en-US/docs/Web/API/BeforeInstallPromptEvent
-[3] Service Worker Cache Busting Patterns — https://developer.chrome.com/docs/workbox/fundamentals/service-worker-lifecycle
-[4] manifest screenshots — https://web.dev/add-manifest/#screenshots
-[5] WebP format — https://developers.google.com/speed/webp
-[6] Service Worker Update Pattern — https://developer.chrome.com/docs/workbox/fundamentals/service-worker-lifecycle
-[7] Internal linking for SEO — https://moz.com/learn/seo/internal-links
-[8] Blog cluster strategy — https://hubspot.com/blog-cluster-strategy
+| Propuesta | Depende de | Bloqueador |
+|-----------|------------|------------|
+| Netlify migration | Cuenta Netlify, acceso repo | Decisión de CEO sobre cambiar hosting |
+| FAQ Page | Contenido para las preguntas | Decisión de CEO sobre pricing |
+| SKIP_WAITING | Acceso a script.js | Ninguno |
+| Playwright | Ninguno | Ninguno |
+
+---
+
+## Nota sobre el Progreso del Proyecto
+
+El sitio Purity & Clean ha implementado 84 rondas de análisis creativo. Las deudas técnicas más críticas restantes son:
+
+1. **SKIP_WAITING bug** — R83 lo identificó, sigue pendiente, es un quick win
+2. **Migración de hosting** — GitHub Pages bloquea security headers
+3. **DRY de zonas** — 11 archivos duplicados
+
+Las propuestas de R85 se enfocan en:
+- **Revenue/Conversión:** Propuesta #1 (Cómo funciona visible)
+- **SEO:** Propuesta #2 (FAQ page)
+- **Seguridad:** Propuesta #4 (Netlify migration)
+- **Quality:** Propuestas #3 y #5
+
+**Mi recomendación:** Priorizar #1 y #2 por impacto directo. #4 puede delegarse a un agente Full Stack mientras tanto. #3 y #5 son nice-to-have.
+
+---
+
+## Fuentes
+
+[1] Serviclean - Cómo funciona. https://serviclean.co
+[2] HowTo Schema Documentation. https://developers.google.com/search/docs/appearance/structured-data/how-to
+[3] FAQPage Schema Documentation. https://developers.google.com/search/docs/appearance/structured-data/faqpage
+[4] Google Search Central Updates March 2026. https://developers.google.com/search/updates (March 2026)
+[5] Service Worker Update Pattern. https://developer.chrome.com/docs/workbox/fundamentals/service-worker-lifecycle
+[6] Netlify _headers Documentation. https://docs.netlify.com/routing/headers/
+[7] Security Headers Best Practices. https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers
+[8] Playwright Best Practices. https://playwright.dev/docs/best-practices
+
+---
+
+## Hallazgo Adicional: BreadcrumbList Desktop-Only (R83 Update)
+
+La investigación de la documentación oficial de Google (actualizada enero 2025) confirma que BreadcrumbList solo aparece en resultados de **desktop**. Esto reduce el impacto de la propuesta R83 #3. No significa que no vale implementarlo, pero el impacto SEO es menor del esperado.
 
 ---
 

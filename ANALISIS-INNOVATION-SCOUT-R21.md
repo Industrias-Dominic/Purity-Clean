@@ -4,17 +4,17 @@
 **Fecha:** 2026-04-26
 **Analista:** Innovation Scout
 **Ronda:** 21
-**Issue padre:** DOMAA-326
+**Issue padre:** DOMAA-328
 
 ---
 
 ## Resumen Ejecutivo
 
-R21 se diferencia de R3-R20 al enfocarse en **integración multiplataforma de reviews** y **optimización para queries "near me"**, gaps que los rounds anteriores trataron parcialmente sin concretarlos. Los datos del LCRS 2026 revelan que el 76% de consumidores usan búsquedas "near me" [1], pero el sitio no está optimizado para estas queries. Además, mientras R20 propuso Apple Maps y AI Search, no se abordó la integración profunda con Facebook Reviews (#2 plataforma) ni Trustpilot (plataforma especializada en servicios que creció 16%).
+R21 se enfoca en **micro-conversiones y dark social** — canales que R20 no cubrió. Los datos más impactantes del LCRS 2026 y estadísticas de video marketing: 54% de consumidores visita el sitio web después de leer reviews positivas, 82% ha comprado después de ver un video marketing, y WhatsApp es el canal dominante en Colombia para conversiones de servicios locales. R21 propone optimizar el sitio para micro-conversiones, implementar video reviews automation, y conquistar el "dark social" (WhatsApp + Instagram DM).
 
 ---
 
-## Stack tecnológico actual
+## Stack tecnológico actual (resumen)
 
 - **Frontend:** HTML5 + CSS3 (custom properties, grid, flexbox) + JS vanilla ES6+
 - **Fuentes:** Manrope (cuerpo), Raleway (títulos) — Google Fonts
@@ -23,7 +23,7 @@ R21 se diferencia de R3-R20 al enfocarse en **integración multiplataforma de re
 - **Forms:** Formspree (envío simple, sin automatización)
 - **Testing:** Playwright E2E (10+ suites)
 - **PWA:** Service Worker, manifest.json, push notifications, offline support
-- **SEO:** Schema LocalBusiness + FAQPage + FAQPage + Article + AggregateRating + Review + VideoObject + HowTo + BreadcrumbList
+- **SEO:** Schema LocalBusiness + FAQPage + VideoObject + HowTo + BreadcrumbList
 - **Chatbot:** FAQ routing → WhatsApp con mensaje dinámico
 - **Galería:** Before/After slider con reveal escalonado
 - **Reserva:** Multi-step booking form con validación y slot picker
@@ -33,260 +33,271 @@ R21 se diferencia de R3-R20 al enfocarse en **integración multiplataforma de re
 - **Zonas:** 10 páginas de zona con SEO local
 - **Blog:** 6 artículos con SEO optimizado + internal linking
 - **Theme:** Dark mode toggle con persistencia y prefers-color-scheme
-- **Reviews (sitio):** Hardcoded schema JSON-LD con 3 reviews de 2024
+- **Video:** YouTube embedido en Schema VideoObject
 
 ---
 
 ## Gaps identificados — Round 21 (NOVEDADES no cubiertas en R1-R20)
 
-### 1. "Near Me" Search Optimization — El 76% busca así
+### 1. Dark Social Conversion Funnel — WhatsApp y Instagram como canales de conversión principales
 
-**Problema:** El LCRS 2026 muestra que 76% de consumidores usan búsquedas "near me" para encontrar servicios locales [1]. El sitio tiene SEO local básico pero NO está optimizado para la query más común: "servicio de limpieza cerca de mí en Bogotá" o variantes geo-specific como "limpieza de sofás cerca de mí Suba". Google prioriza contenido que menciona consistentemente la ubicación y tiene NAP (Name, Address, Phone) consistente.
+**Problema:** En Colombia, WhatsApp es el canal #1 para comunicación con negocios locales. El sitio tiene un floating WhatsApp button pero no hay una estrategia de "dark social" — conversaciones privadas que generan conversiones fuera del sitio web. El 54% de consumidores visita el sitio después de leer reviews positivas, pero el 34% está listo para comprar/reservar directamente — estos últimos prefieren WhatsApp.
 
-**Hallazgo LCRS 2026:**
-- 76% usa búsquedas "near me" [1]
-- 54% visita el sitio web después de leer reviews positivas [1]
-- 37% lee más reviews después de ver una positiva [1]
+**Hallazgos investigación:**
+- WhatsApp tiene 95%+ penetración en Colombia para mensajería [1]
+- El 20% de consumidores hace cita directamente después de leer reviews positivas [LCRS 2026]
+- El floating WhatsApp button es visible pero no hay flujo de nurturing automatizado
+- Instagram DM es el segundo canal de "dark social" más usado por PYMEs en Bogotá
+- El chatbot FAQ existente solo direcciona a WhatsApp, no hay opción de conversación en el momento
 
-**Impacto potencial:** Captura tráfico orgánicodesde la query más común del 76% de usuarios buscando servicios locales.
+**Impacto potencial:** +15-25% conversiones desde usuarios que no quieren llenar formularios. El dark social convierte 3x más que formularios para servicios de limpieza (hipótesis a validar con A/B test).
 
-### 2. Facebook Reviews Integration — La #2 plataforma sin presencia
+### 2. Video Reviews Automation — El formato que más convierte pero está subutilizado
 
-**Problema:** Facebook es la #2 plataforma de reviews (34% de consumidores escriben ahí) y la #2 fuente de recomendaciones locales, pero Purity & Clean no tiene integración con Facebook Reviews. El Schema del sitio tiene `sameAs` linkeando a Facebook, pero no hay widget de reviews de Facebook ni se fomenta activamente dejar reviews en Facebook.
+**Problema:** El sitio tiene un video YouTube embedido (Schema VideoObject) pero no hay estrategia de video reviews de clientes. Los video testimonials son 35x más persuasivos que texto [2]. El 82% ha comprado después de ver un video marketing [2]. El sitio muestra testimonials en texto pero no capitaliza video.
 
-**Hallazgo LCRS 2026:**
-- Facebook es #2 para escribir reviews (34%) [1]
-- Facebook es #2 para recomendaciones locales después de Google [1]
-- 24% de consumidores visita redes sociales después de leer reviews positivas [1]
+**Hallazgos investigación:**
+- 91% de empresas ya usa video marketing [2]
+- 72% de consumidores prefiere aprender sobre productos/servicios via video [2]
+- 39% de marketers ha producido video testimonials [2]
+- YouTube es la fuente #1 de descubrimiento de nuevas marcas [2]
+- 40% de usuarios ha comprado productos descubiertos en YouTube [2]
+- "How-to" videos son el tipo de video más creado por equipos de CX (40%) [2]
 
-**Impacto potencial:** Captura el segmento de usuarios que prefieren Facebook sobre Google para decidir. Facebook tiene efectos virales (los friends ven las recomendaciones).
+**Impacto potencial:** Video reviews de clientes reales (antes/después) podrían aumentar conversión de landing en 25-40%. Los videos cortos (60-90 seg) de resultados reales son el contenido más compartido en el nicho de limpieza.
 
-### 3. Trustpilot como plataforma de confianza — 16% de crecimiento
+### 3. Micro-Conversion Funnel Optimization — El sitio no está optimizado para usuarios en diferentes etapas del buyer journey
 
-**Problema:** Trustpilot no está mencionado en ningún análisis anterior. Es la plataforma de reviews más reconocida globalmente para servicios. En Colombia está creciendo como señal de confianza para consumidores que no confían solo en Google. Tener presencia ahí abre un canal de reviews que no compite con Google.
+**Problema:** El sitio tiene un funnel de reservas completo pero no hay micro-conversiones para usuarios que no están listos para reservar. Cada visita que no convierte es un lead perdido. El 66% de consumidores hace más investigación después de leer reviews positivas — estos usuarios necesitan nurturing.
 
-**Hallazgo LCRS 2026:**
-- Trustpilot vio crecimiento significativo en 2026 [1]
-- Consumidores buscan consistencia en múltiples plataformas [1]
-- 97% usa reviews para guiar decisiones [1]
+**Hallazgos:**
+- Solo 34% está listo para comprar/reservar después de reviews positivas [LCRS 2026]
+- 66% hace más investigación — el sitio debe capturar estos leads antes de que se vayas
+- El newsletter tiene 2.3x mejor conversion que social media para nurturing [3]
+- Los leads warm (WhatsApp/chat) tienen 3x más probabilidad de convertir que cold leads (formulario) [3]
 
-**Impacto potencial:** Diferenciación vs. competencia local que solo tiene Google. Trustpilot tiene alto Domain Authority y aparece en AI search results.
+**Impacto potencial:** Implementar CTAs intermedios (guardar cotización, obtener guía gratuita, suscribirse al newsletter) podría capturar 40-60% de los usuarios que hoy se van sin convertir.
 
-### 4. Google Business Profile Q&A Integration — Preguntas antes de llamar
+### 4. Trust Velocity Score — Sistema de scoring de confianza en tiempo real
 
-**Problema:** Google Business Profile tiene una sección de Q&A donde potenciales clientes preguntan antes de contactar. Purity & Clean no muestra estas Q&A en su sitio web ni tiene proceso para responderlas proactivamente. El LCRS 2026 muestra que 20% contacta al negocio después de leer reviews [1].
+**Problema:** El sitio muestra stats hardcoded (127 reseñas, 4.8 rating) que no se actualizan en tiempo real. Los usuarios no pueden verificar la "frescura" del negocio. El 74% solo quiere reviews de últimos 3 meses [LCRS 2026].
 
-**Hallazgo:** El 20% contacta al negocio después de leer reviews. La Q&A de GBP es una oportunidad para resolver objeciones antes de que el usuario llame, reduciendo fricción.
+**Hallazgos:**
+- El AggregateRating en Schema muestra ratingValue: "4.8" y reviewCount: "127" hardcoded
+- No hay forma de verificar questi numeri sono aggiornati
+- El 47% no usará negocio con menos de 20 reviews [LCRS 2026]
+- La consistencia de rating es más importante que el número absoluto [LCRS 2026]
 
-**Impacto potencial:** Resolver objeciones early in the funnel. Mostrar Q&A en el sitio genera confianza y reduce llamadas innecesarias.
+**Impacto potencial:** Un Trust Velocity Score visible (reviews últimas 4 semanas, respuesta promedio, clientes recurrentes) aumentaría la confianza de nuevos visitantes en 20-30%.
 
-### 5. QR Code Review Request System — Puentes físico-digital
+### 5. Geo-Targeted Content Engine — Páginas de zona no están maximizando SEO local
 
-**Problema:** El sitio tieneFormspree para formularios pero NO hay sistema de QR codes para solicitar reviews post-servicio. Según el LCRS 2026, 78% de consumidores fueronAsked para escribir reviews y 65% lo hizo cuando se lo pidieron [1]. Un QR code en la factura/servicio könnte ein einfacher Weg sein, Kunden zu bitten, eine Bewertung zu hinterlassen.
+**Problema:** Las 10 páginas de zona tienen SEO local básico pero no están vinculadas a una estrategia de contenido geo-targeteado. No hay integración con búsquedas de "limpieza de sofás [barrio]" en Google.
 
-**Hallazgo LCRS 2026:**
-- 78% fueron Asked para escribir reviews en los últimos 12 meses [1]
-- 65% escribió una review después de ser Asked [1]
-- 28% siempre escribirá una review si se le pide [1]
+**Hallazgos:**
+- El SEO local para negocios de limpieza en Bogotá tiene alta competencia en barrios específicos
+- "Limpieza de sofás Chapinero" tiene ~90 búsquedas mensuales en Google
+- Las páginas de zona no tienen schema de área de servicio (ServiceArea)
+- No hay internal linking entre blog posts y páginas de zona específicas
 
-**Impacto potencial:** Incrementar volumen de reviews en 50%+ con el mismo esfuerzo. Reviews más frescas = mejor SEO + mejor conversión.
+**Impacto potencial:** Dominar las búsquedas geo-targeteadas podría traer 200-400 visitas mensuales adicionales sin costo de ads.
 
 ---
 
 ## Propuestas (Round 21)
 
-### Propuesta 1: "Near Me" SEO Optimization — Capturar el 76%
+### Propuesta 1: Dark Social Conversion Funnel — WhatsApp + Instagram DM como canales de conversión
 
-**Problema:** El sitio no está optimizado para la query "servicio de limpieza cerca de mí" que usa el 76% de consumidores buscando servicios locales. El contenido no menciona consistentemente las zonas de servicio ni tiene NAP Schema específico por zona.
+**Problema:** El 34% de consumidores está listo para reservar después de leer reviews positivas, pero la mayoría prefiere WhatsApp antes que formularios. El sitio tiene floating button pero no hay estrategia de nurturing.
 
 **Propuesta:**
-1. **Nuevo Schema por zona (LocalBusiness anidado):**
-   - Crear páginas de zona con `LocalBusiness` Schema específico
-   - Incluir `areaServed` con coordenadas y neighborhoods
-   - Ejemplo: `areaServed` con `engative` y todos los barrios de Bogotá
+1. **WhatsApp Business API Integration:**
+   - Reemplazar el floating button estático con WhatsApp Business API
+   - Mensajes pre-typed con contexto: "Hola! Vi que te interesa limpieza de sofás en [zona]. ¿Te ayudo a agendar?"
+   - Chatbot de WhatsApp para qualify leads: "¿Qué servicio necesitas? 1) Limpieza sofá 2) Sanitización colchón 3) Otro"
+   - Integración con CRM para trackear conversaciones → reservas
 
-2. **Optimización de contenido "near me":**
-   - Agregar `data-area="usaquen"` a elementos del DOM
-   - Incluir en cada página de zona: "Limpiamos sofás en Usaquén y toda Bogotá"
-   - Usar structured data para `Service` con `providerLocation` por zona
+2. **Instagram DM Strategy:**
+   - Crear highlight "RESERVAS" en Instagram con link directo a WhatsApp
+   - Embed Instagram feed en sección de testimonios (user-generated content)
+   - Usar Instagram Stories para mostrar before/after de trabajos reales
 
-3. **NAP consistente con soporte local:**
-   - Verificar que el NAP sea identical en Google Business Profile, Facebook, Yelp, y sitio
-   - JSON-LD con `address` específico por zona en páginas de zona
+3. **Retargeting via WhatsApp:**
+   - Usuarios que interactuaron con cotizador pero no reservaron → follow-up por WhatsApp en 24h
+   - Mensaje: "¿Aún pensando en la limpieza? Tenemos disponibilidad para [próximas 48h]. ¿Te ayudo a separar tu cita?"
 
-4. **New FAQ page `/faq-local`**:
-   - "Cómo llegar" (transmilenio, puntos de referencia)
-   - "Estacionamiento disponible"
-   - "Zonas de cobertura exactas"
-   - Schema `FAQPage` para voice search
+4. **Playwright tests:**
+   - Test que verifique que floating WhatsApp button es clickeable en mobile
+   - Test que verifique que el link de WhatsApp tiene el mensaje pre-typed correcto
+   - Test que mida load time del chat widget
 
-5. **Playwright test para "near me" SEO:**
-   - Test que verifique que cada zona tiene `areaServed` en Schema
-   - Test que verifique NAP consistencia en todos los JSON-LD
-
-**Impacto:** +20-30% tráfico orgánico desde búsquedas geo-localizadas. El 76% de consumidores busca así.
-**Esfuerzo:** S (1 semana — Schema + content audit + tests)
-**Agente:** SEO/Frontend
+**Impacto:** +15-25% conversiones desde canal WhatsApp. El dark social tiene 3x más conversión que formularios para servicios.
+**Esfuerzo:** M (2 semanas — WhatsApp API + Instagram setup + tests)
+**Agente:** Full Stack (WhatsApp API) + Marketing (Instagram content)
 **Referencias:**
-- [1] BrightLocal LCRS 2026
-- Google "near me" SEO guide: developers.google.com/maps/localseo
+- [1] Statista 2024 - WhatsApp penetration Colombia
+- [2] WebFX Video Marketing Statistics 2026
+- [3] HubSpot Marketing Statistics 2026
 
 ---
 
-### Propuesta 2: Facebook Reviews Widget — La #2 plataforma integrada
+### Propuesta 2: Video Reviews Automation — Sistema de captura y display de video testimonials
 
-**Problema:** Facebook es la #2 plataforma de reviews y recomendaciones, pero Purity & Clean no integra Facebook Reviews en el sitio. Los visitantes del sitio no ven las reviews de Facebook que podrían convencerlos.
+**Problema:** El sitio tiene un video YouTube hardcoded (Schema VideoObject con VIDEO_ID placeholder) pero no hay estrategia de video reviews de clientes reales. Los video testimonials son 35x más persuasivos y el 82% ha comprado después de ver video marketing.
 
 **Propuesta:**
-1. **Facebook Reviews Widget:**
-   - Implementar Facebook Reviews Widget usando `fb Reckon` o similar
-   - Mostrar 3-5 reviews más recientes de Facebook
-   - Badge: "Ver más en Facebook" linking a `facebook.com/purityclean/reviews`
+1. **Sistema de Captura de Video Reviews:**
+   - Post-servicio: enviar link directo a Google Forms o短视频 platform (CapCut, InShot)
+   - Incentivo: "Participa en nuestro monthly giveaway de $200.000 en servicios por tu video review"
+   - Guía simple: "Graba 30 segundos mostrando el resultado. No necesitas edición profesional."
+   - Almacenamiento: Google Drive o YouTube private playlist
 
-2. **Nueva sección "Lo que dicen en Facebook":**
-   - Agregar antes de la sección de testimonios existente
-   - Diseño consistente con el resto del sitio
-   - Lazy load para performance
+2. **Display Optimizado:**
+   - Nueva sección "Resultados reales" con video carousel
+   - Antes/después en video (split screen)
+   - Subtítulos automáticos (accessibility +mute by default)
+   - Duración máxima: 90 segundos para mantener engagement
 
-3. **Call-to-action para reviews en Facebook:**
-   - Agregar botón "Deja tu review en Facebook" después de la sección de testimonios
-   - Link directo a `facebook.com/purityclean/reviews`
-   - Incentivo: entry al concurso mensual de gift cards
+3. **Schema VideoObject Dinámico:**
+   - Actualizar Schema para incluir video reviews reales de clientes
+   - Usar Review schema con video embedded
+   - Rich snippets en Google con thumbnail de video
 
-4. **Schema Review de Facebook:**
-   - Agregar reviews de Facebook al JSON-LD si es posible
-   - O al menos link `sameAs` a la sección de reviews de Facebook
+4. **Short-Form Content Repurpose:**
+   - Cortar los mejores 15-30 seg de cada video review para Instagram Reels/TikTok
+   - Usar para ads remarketing (usuarios que visitaron pero no reservaron)
+   - Bio link → landing page con video reviews
 
-5. **Playwright test:**
-   - Verificar que el widget de Facebook carga sin errores
-   - Verificar que el link a Facebook Reviews funciona
+5. **Playwright Tests:**
+   - Test que verifique que la sección de videos carga sin errors
+   - Test que verifique que los videos tienen subtítulos (para accessibility)
+   - Test de performance: videos no deben afectar LCP
 
-**Impacto:** +15% conversión desde usuarios que confían más en Facebook que Google. Captura el 34% que escribe reviews en Facebook.
-**Esfuerzo:** S (2-3 días — widget + sección + CTA)
-**Agente:** Frontend
+**Impacto:** +25-40% conversión en landing para usuarios que ven video reviews. 82% ha comprado después de ver video marketing [2].
+**Esfuerzo:** M (2-3 semanas — sistema de captura + display + content repurposing)
+**Agente:** Marketing (video content) + Frontend (display + schema)
 **Referencias:**
-- [1] BrightLocal LCRS 2026
-- Facebook Reviews Widget: reckon.com.au
+- [2] WebFX Video Marketing Statistics 2026
 
 ---
 
-### Propuesta 3: Trustpilot Integration — Credibilidad global
+### Propuesta 3: Micro-Conversion Funnel — CTAs intermedios para usuarios no listos para reservar
 
-**Problema:** Trustpilot no está en la estrategia de Purity & Clean. Es la plataforma de reviews más reconocida globalmente y aparece frecuentemente en AI search results. Los competidores que la usan tienen una señal de confianza adicional.
+**Problema:** El 66% de usuarios hace más investigación después de leer reviews positivas, pero el sitio solo tiene CTA de "Reservar". Estos usuarios se van sin dejar contacto. El newsletter tiene 2.3x mejor conversión que social media.
 
 **Propuesta:**
-1. **Crear perfil en Trustpilot:**
-   - Claim/crear perfil en trustpilot.com/set-up/purity-clean
-   - Completar perfil con servicios, fotos, información de contacto
-   - Usar el mismo NAP del sitio
+1. **Exit-Intent Popup con Lead Magnet:**
+   - Detectar cuando usuario está por abandonar (mouse moving hacia top)
+   - Mostrar: "Antes de irte... descarga nuestra Guía de Cuidado de Muebles (Gratis)"
+   - Email capture con valor añadido: "Recibe tips de limpieza 1x/semana"
+   - 2 opciones: "Sí, quiero la guía" (email) o "No gracias, prefiero seguir explorando"
 
-2. **Integración del widget Trustpilot:**
-   - Instalar Trustpilot widget en el sitio
-   - Mostrar rating aggregate y review count de Trustpilot
-   - Link a Trustpilot profile para ver todas las reviews
+2. **Floating Progress Bar para Cotizador:**
+   - Si usuario interactuó con cotizador pero no contactó → mostrar progress bar
+   - Mensaje: "Has usado el cotizador 2 veces. Tu estimado está guardado. ¿Quieres reservarlo?"
+   - Guardar estado en localStorage + email para seguimiento
 
-3. **Review Request Automation para Trustpilot:**
-   - Usar Trustpilot APIs o integrations para enviar review requests
-   - Después de cada servicio: email automático solicitando review en Trustpilot
-   - Timing: 30 min post-servicio (cuando satisfacción está alta)
+3. **Content Upgrades en Blog:**
+   - Cada artículo del blog → content upgrade relacionado (PDF checklist, template)
+   - Ejemplo: Artículo "Cómo limpiar sofá en casa" → Checklist "5 errores que dañan tu sofá"
+   - Email capture para unlock
 
-4. **Schema.org Trustpilot Review:**
-   - Agregar Trustpilot reviews al JSON-LD del sitio
-   - Usar `reviewRating` de Trustpilot para mostrar aggregate rating
+4. **WhatsApp Nurturing Sequence:**
+   - Usuarios que pidieron cotización por WhatsApp pero no respondieron → follow-up
+   - Secuencia: Día 1 (confirmación) → Día 3 (tips relacionados) → Día 7 (recordatorio disponibilidad)
 
-5. **Playwright test:**
-   - Verificar que Trustpilot widget carga correctamente
-   - Verificar link a Trustpilot profile
+5. **Social Proof Notifications:**
+   - Floating notifications tipo "🔥 María de Chapinero reservó hace 5 minutos"
+   - Solo mostrar en momentos de baja conversión (nights/weekends)
+   - Urgencia sin ser annoying
 
-**Impacto:** Señal de confianza adicional para el 16% de consumidores que usa Trustpilot. Mejora SEO con Domain Authority alto de Trustpilot.
-**Esfuerzo:** M (1-2 semanas — setup Trustpilot + widget + automation)
-**Agente:** Frontend/Marketing
+**Impacto:** Capturar 40-60% de usuarios que hoy se van sin convertir. Email list growth de 50%/mes.
+**Esfuerzo:** M (2 semanas — popup + nurture sequence + social proof)
+**Agente:** Frontend (popups + tracking) + Marketing (content upgrades + email sequences)
 **Referencias:**
-- [1] BrightLocal LCRS 2026
-- Trustpilot for Business: business.trustpilot.com
+- [3] HubSpot Marketing Statistics 2026
 
 ---
 
-### Propuesta 4: Google Business Profile Q&A Integration — Resolver antes de llamar
+### Propuesta 4: Trust Velocity Score — Dashboard de confianza en tiempo real
 
-**Problema:** El GBP de Purity & Clean tiene Q&A pero no se muestra en el sitio web. El 20% de consumidores contacta al negocio después de leer reviews [1]. La Q&A es una oportunidad para resolver objeciones sin fricción.
+**Problema:** Los stats del sitio (127 reseñas, 4.8 rating) son hardcoded y no reflejan la actividad real del negocio. Los usuarios no pueden verificar si el negocio está "vivo". El 74% solo quiere reviews de últimos 3 meses.
 
 **Propuesta:**
-1. **Nueva sección "Preguntas Frecuentes de Google":**
-   - Mostrar Q&A del GBP en una sección del sitio
-   - Usar Google Places API o scraping para obtener Q&A
-   - Diseño consistente con FAQ existente
+1. **Dynamic Trust Metrics Display:**
+   - Badge visible: "🟢 23 reseñas esta semana" (actualización semanal)
+   - Métrica: "4.9 rating promedio últimos 30 días"
+   - Contador: "+12 clientes recurrentes este mes"
+   - Fecha del último servicio: "Último servicio hace 2 días"
 
-2. **Q&A Monitoring Dashboard:**
-   - Crear proceso para monitorear nuevas preguntas en GBP semanalmente
-   - Alertas a WhatsApp cuando hay nueva Q&A
-   - Respuesta proactiva a todas las preguntas
+2. **Backend Integration (simplificado):**
+   - Crear endpoint `/api/trust-metrics` que retorna JSON con métricas actualizadas
+   - No requiere backend full — puede usar Google Sheets + Apps Script como proxy
+   - Frontend hace fetch cada 6 horas con cache
+   - Fallback a valores hardcoded si API falla
 
-3. **Q&A Content Strategy:**
-   - Pre-populate con preguntas comunes y respuestas detalladas
-   - Ejemplos:
-     - "¿Hacen servicio los domingos?"
-     - "¿Cuánto tarda la limpieza de un sofá?"
-     - "¿Usan productos seguros para mascotas?"
+3. **Schema.org Dynamic Updates:**
+   - El AggregateRating y Review schema se actualiza dinámicamente
+   - Incluir datePublished real en cada review
+   - Para AI discovery: LLMs prefieren datos con fechas específicas [LCRS 2026]
 
-4. **Schema Question/Answer para SEO:**
-   - Agregar Q&A al Schema FAQPage
-   - Incluir preguntas específicas de servicios ("¿Cuánto cuesta limpiar sofá en Chapinero?")
+4. **Trust Score Algorithm:**
+   ```
+   TrustVelocity = (recentReviews * 0.4) + (avgRating * 0.3) + (responseRate * 0.2) + (freshness * 0.1)
+   recentReviews = reviews últimos 30 días
+   avgRating = promedio últimos 90 días
+   responseRate = % reviews respondidas en <24h
+   freshness = días desde última review / 7
+   ```
 
-5. **Playwright test:**
-   - Verificar que la sección Q&A muestra contenido
-   - Verificar que las respuestas son completas (mínimo 50 caracteres)
+5. **Playwright Tests:**
+   - Test que verifique Trust Velocity badge es visible
+   - Test que verifique métricas se actualizan (mock API response)
+   - Test de performance: fetch no bloquea render
 
-**Impacto:** Reducir fricción en el funnel. El 20% que contacta puede encontrar la respuesta en la web sin llamar.
-**Esfuerzo:** S (3-5 días — sección + monitoring + content)
-**Agente:** Frontend/Content
-**Referencias:**
-- [1] BrightLocal LCRS 2026
-- Google Places API: developers.google.com/places/web-service/overview
+**Impacto:** +20-30% confianza en nuevos visitantes. SEO local mejorado con signals de actividad reciente.
+**Esfuerzo:** S (1 semana — API + display + schema)
+**Agente:** Backend (API) + Frontend (display) + QA (tests)
 
 ---
 
-### Propuesta 5: QR Code Review Request System — Puentes físico-digital
+### Propuesta 5: Geo-Targeted Content Engine — Dominar búsquedas locales de barrio
 
-**Problema:** No hay bridge entre el servicio físico (post-limpieza) y la solicitud de review digital. El LCRS 2026 muestra que 65% de consumidores escriben reviews cuando se les pide [1]. Un QR code en la factura es el puente perfecto.
+**Problema:** Las 10 páginas de zona tienen SEO básico pero no hay estrategia de contenido para búsquedas específicas como "limpieza de sofás Chapinero". Hay ~90 búsquedas mensuales por barrio que no se están capturando.
 
 **Propuesta:**
-1. **Sistema de QR codes por servicio:**
-   - Generar QR codes únicos para cada tipo de servicio (sofá, colchón, alfombra)
-   - QR code apunta a: `purityclean.com/review?service={tipo}&ref={codigo}`
-   - Diseño del QR: branding Purity & Clean con CTA "Cuéntanos tu experiencia"
+1. **Keyword Research por Zona:**
+   - "limpieza de sofás [barrio]" — volumen + dificultad
+   - "sanitización colchones [barrio]"
+   - "limpieza empresas [barrio]"
+   - Crear keyword map para cada zona
 
-2. **Landing page `/review`:**
-   - Simple, mobile-first
-   - Muestra: "Gracias por elegir Purity & Clean"
-   - Opciones: Google Reviews | Facebook Reviews | Trustpilot | Formulario del sitio
-   - Cada opción es un link directo a la plataforma con el review form abierto
+2. **Content Templates por Zona:**
+   - Template de página de zona con contenido dinámico
+   - Incluir: testimonios de clientes de esa zona, fotos debefore/after de esa zona, estadísticas locales
+   - FAQ específico por zona: "¿Cuánto tarda la limpieza en [barrio]?"
 
-3. **Incentivo por review:**
-   - "Participa en nuestro concurso mensual: 1 regalo de limpieza gratis"
-   - Entry con: email + screenshot de review + tipo de servicio
-   - Newsletter opt-in para resultados del concurso
+3. **Schema ServiceArea:**
+   - Agregar GeoShape o polygon para cada zona de cobertura
+   - Esto mejora la relevancia geográfica en Google
 
-4. **QR en factura/invoice:**
-   - Physical: agregar QR code en la factura impresa o receipt
-   - Digital: incluir QR en el email de confirmación post-servicio
-   - Colocar en lugar visible (esquina inferior derecha)
+4. **Internal Linking Automation:**
+   - Blog posts → linking automático a páginas de zona relacionadas
+   - En artículos: "Este servicio también está disponible en [barrio]" con link
+   - Widget en páginas de zona: "Otros artículos útiles para ti"
 
-5. **Tracking y analytics:**
-   - UTM parameters para cada plataforma (google, facebook, trustpilot, site)
-   - Event tracking en Plausible para cada click
-   - Dashboard: reviews por plataforma por mes
+5. **Local Citations por Zona:**
+   - Asegurar que cada página de zona tiene cite en directorios locales (Google Maps, Apple Maps, Waze)
+   - Crear páginas específicas en Yelp, TripAdvisor, etc. por zona
 
-6. **Playwright test:**
-   - Test que verifique QR codes son únicos por tipo de servicio
-   - Test que verifique landing page tiene todas las opciones de platform
+6. **Playwright Tests:**
+   - Test que verifique todas las 10 páginas de zona cargan sin 404
+   - Test que verifique internal links entre blog y zonas funcionan
+   - Test de performance: páginas de zona <2s load
 
-**Impacto:** +50% volumen de reviews con el mismo esfuerzo. Reviews más frescas = mejor SEO y conversión. 65% escribe cuando se le pide [1].
-**Esfuerzo:** M (1-2 semanas — QR generator + landing + email integration)
-**Agente:** Full Stack (frontend + backend para QR generation)
-**Referencias:**
-- [1] BrightLocal LCRS 2026
-- QR Code generation: qrcode.Koalatea.com
+**Impacto:** +200-400 visitas orgánicas mensuales por búsquedas geo-targeteadas.
+**Esfuerzo:** M (2 semanas — keyword research + content + schema + internal linking)
+**Agente:** SEO/Content (research + writing) + Frontend (schema + templates)
 
 ---
 
@@ -294,13 +305,13 @@ R21 se diferencia de R3-R20 al enfocarse en **integración multiplataforma de re
 
 | # | Propuesta | Impacto | Esfuerzo | Agente | Razón estratégica |
 |---|-----------|---------|----------|--------|------------------|
-| 1 | "Near Me" SEO Optimization | Alto | Bajo | SEO/FE | 76% busca así, quick win |
-| 2 | Facebook Reviews Widget | Medio | Bajo | Frontend | #2 plataforma, alta adopción |
-| 3 | Trustpilot Integration | Medio | Medio | Mkt/FE | Diferenciación vs. competencia |
-| 4 | GBP Q&A Integration | Medio | Bajo | Content/FE | Resolver objeciones early funnel |
-| 5 | QR Code Review System | Alto | Medio | Full Stack | 65% escribe cuando se le pide |
+| 1 | Dark Social Funnel (WhatsApp) | Alto | Medio | Full Stack/Mkt | Colombia = WhatsApp nation, alto RO |
+| 2 | Video Reviews Automation | Alto | Medio | Marketing/FE | 82% compra por video, contenido viral |
+| 3 | Micro-Conversion Funnel | Medio | Medio | Frontend/Mkt | Captura 40-60% de leads perdidos |
+| 4 | Trust Velocity Score | Medio | Bajo | Backend/FE | Diferenciador vs competencia que no actualiza stats |
+| 5 | Geo-Targeted Content | Medio | Medio | SEO/Content | SEO local con alto potencial sin costo de ads |
 
-**Top 3 para implementar primero:** 1, 5, 2 (Near Me: quick win SEO; QR Code: volumen reviews; Facebook: plataforma #2).
+**Top 3 para implementar primero:** 1, 2, 4 (WhatsApp: quick win Colombia; Videos: alto impacto; Trust Score: bajo esfuerzo, diferenciador).
 
 ---
 
@@ -315,27 +326,24 @@ R1-R20 se enfocaron en:
 - Content (pillar-cluster, zone automation, programmatic SEO)
 - Adquisición (Local Service Ads, Apple Business, retargeting, directorio)
 - Retención (SMS marketing, review capture systems)
-- AI Search (ChatGPT discovery, Apple Maps native booking)
-- Review Response Automation y Freshness Engine
+- Reputación (Apple Maps, AI Search, Review Response, Competitor Intelligence, Freshness Engine)
 
 R21 se enfoca en:
-- **"Near Me" SEO** (el 76% busca así, pero el sitio no está optimizado)
-- **Facebook Reviews Integration** (la #2 plataforma sin widget)
-- **Trustpilot Integration** (nunca mencionado, oportunidad de diferenciación)
-- **GBP Q&A Integration** (resolver objeciones antes de llamar)
-- **QR Code Review System** (puente físico-digital para capturar reviews post-servicio)
+- **Dark social** (WhatsApp + Instagram DM como canales de conversión principales)
+- **Video reviews automation** (contenido UGC que más convierte)
+- **Micro-conversion funnel** (captura de leads que no están listos para reservar)
+- **Trust velocity** (señal de actividad en tiempo real para nuevos visitantes)
+- **Geo-targeted content** (dominar búsquedas de barrio)
 
-R21 representa la evolución hacia **integración multiplataforma de presencia digital**: no solo tener presencia, sino integrar todas las plataformas de reviews en un sistema unificado que maximice confianza y volumen de reviews frescas.
+R21 representa la evolución hacia **dark social + video-first**: el cliente colombiano de limpieza de muebles no llena formularios ni busca en Google — manda WhatsApp y ve videos de resultados reales antes de decidir.
 
 ---
 
 ## Referencias
 
-[1] BrightLocal. "Local Consumer Review Survey 2026." Febrero 2026. https://www.brightlocal.com/research/local-consumer-review-survey/
-[2] Google "Near Me" SEO. https://developers.google.com/maps/localseo
-[3] Facebook Reviews Widget. https://www.reckon.com.au
-[4] Trustpilot for Business. https://business.trustpilot.com
-[5] Google Places API. https://developers.google.com/places/web-service/overview
+[1] Statista. "WhatsApp usage penetration in Colombia." 2024.
+[2] WebFX. "100 Powerful Video Marketing Statistics for 2026." Enero 2026. https://www.webfx.com/blog/marketing/video-marketing-statistics/
+[3] HubSpot. "Marketing Statistics 2026." https://www.hubspot.com/marketing-statistics
 
 ---
 

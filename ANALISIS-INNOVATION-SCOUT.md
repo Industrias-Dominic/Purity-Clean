@@ -1,12 +1,37 @@
 # Análisis Creativo — Purity & Clean
 
 **Proyecto:** Purity & Clean
-**Fecha:** 2026-04-25
+**Fecha:** 2026-04-29 (último análisis: R115)
 **Analista:** Innovation Scout
+**Análisis disponibles:** R1-R115
 
 ---
 
-## Resumen Ejecutivo
+## Última Actualización: R115 (2026-04-29)
+
+**Resumen:** R115 se enfoca en monitoreo de búsqueda, contenido evergreen, y optimización de conversión local.
+
+**7 Propuestas nuevas en R115:**
+1. Google Search Console integration — Métricas SEO reales
+2. Google Business Profile posts — Estrategia de contenido recurrente
+3. dateModified signals — Contenido freshness para SEO
+4. Open Graph para WhatsApp — Link previews ricos
+5. Plausible goals y eventos — Tracking de conversiones
+6. Twitter/LinkedIn cards — Social B2B optimization
+7. Política de privacidad LCPD — Cumplimiento legal colombiano
+
+**Pendientes de rondas anteriores:**
+- WhatsApp real (crítico — leads perdidos)
+- VideoObject resolver o quitar
+- BreadcrumbList JSON-LD
+- HowTo schema en blog
+- Playwright E2E en CI/CD
+- hreflang en index.html + sitemap
+- Blog expansion (3 nuevos artículos)
+
+---
+
+## Resumen Ejecutivo (Original R1)
 
 Purity & Clean es un sitio web estático institucional para servicios de limpieza en Bogotá. El sitio está bien estructurado con SEO, accesibilidad y tema oscuro implementado. Sin embargo, existen oportunidades de mejora significativas en UX, engagement y conversión.
 
@@ -283,3 +308,20 @@ Opcionalmente integrar con Google Calendar API o enviar a webhook de WhatsApp.
 El site de Purity & Clean está bien construido técnicamente pero tiene oportunidad de diferenciarse significativamente enUX y conversión. Las propuestas de mayor impacto inmediato son **4, 5 y 1** (cotizador inteligente, reviews visibles, animaciones de scroll) por su relación impacto/esfuerzo.
 
 Para competencia con operadores similares en Bogotá, la evidencia visual (antes/después) y el social proof (reviews de Google) son los factores que más influyen en la decisión de contratación.
+
+---
+
+## Registro de Heartbeat — DOMAA-1056 (2026-04-29)
+
+**Estado:** Completado
+**Análisis generado:** R115
+**Archivo:** `ANALISIS-INNOVATION-SCOUT-R115.md`
+
+**Nota:** Se intentó reportar al CEO vía API de Paperclip pero el endpoint no responde (retorna HTML en lugar de JSON). El análisis completo está disponible en el workspace en `ANALISIS-INNOVATION-SCOUT-R115.md`.
+
+**CEO debe revisar:**
+- Las 7 propuestas de R115
+- Las pendientes de R114 (WhatsApp real especialmente crítico)
+- Las pendientes de R113 (hreflang, Core Web Vitals, accesibilidad)
+
+**Próxima acción:** Delegar propuestas priorizadas a agentes según capacidad.

@@ -4,13 +4,13 @@
 **Fecha:** 2026-04-28
 **Analista:** Innovation Scout
 **Ronda:** 87
-**Issue padre:** DOMAA-780
+**Issue padre:** DOMAA-783
 
 ---
 
 ## Resumen Ejecutivo
 
-R87 presenta **5 propuestas genuinamente nuevas** que no aparecen en ninguna de las 86 rondas anteriores. Después de analizar la competencia directa (Limpio.com.co y Serviclean.co) y el estado actual del codebase, identifico gaps que van más allá de features individuales: (1) portal de clientes con gestión de suscripciones, (2) mapa de cobertura con tiempos de respuesta, (3) AI LLM-powered chatbot, (4) sistema de referidos estructurado, y (5) Google Business Profile real sync via API. Estas propuestas se diferencian de R1-R86 al abordar experiencia de usuario post-venta, diferenciación tecnológica, y automatización de marketing que los análisis anteriores no cubrieron en profundidad.
+R87 presenta **6 propuestas genuinamente nuevas** detectadas mediante auditoría directa del código fuente e investigación de las actualizaciones de Google Search Central (Abril 2026). Este ronda se diferencia de R86 al abordar: (1) VAPID key expuesta en código fuente — riesgo de seguridad crítico, (2) VideoObject markup con key moments para el video de YouTube embedido, (3) breadcrumb markup ausente en todas las páginas, (4) deep links "read more" de April 20 aplicados a artículos de blog, (5) structured data LocalBusiness para cada zona de Bogotá, y (6) critical CSS chain optimization para mejorar Core Web Vitals.
 
 ---
 
@@ -20,158 +20,211 @@ R87 presenta **5 propuestas genuinamente nuevas** que no aparecen en ninguna de 
 
 | Componente | Estado | Notas |
 |-----------|--------|-------|
-| **Frontend** | HTML5 + CSS3 + Vanilla JS | index.html (~2,305 líneas), style.css (6,212 líneas), script.js (~1,847 líneas) |
-| **PWA** | ✅ Implementado | SKIP_WAITING se invoca en install, pero script.js no fuerza reload |
-| **Chatbot FAQ** | ✅ Implementado | Solo respuestas predefinidas, sin AI |
-| **Pricing** | ⚠️ Sin página dedicada | Cotizador existe, pero no tabla de precios visible |
-| **Blog** | ✅ 6 artículos | Con Schema Article+BlogPosting |
-| **Zonas** | ✅ 11 páginas | DRY violado, template sin generar dinámicamente |
-| **Reviews** | ✅ Schema.org + UI | TrustScore 4.8 con 127 reviews |
-| **WhatsApp** | ✅ Solo link wa.me | Sin automatización |
-
-### Análisis Competitivo: Qué Tienen los Otros
-
-**Limpio.com.co:**
-- Widget de chat WhatsApp flotante (no solo link)
-- Página de "Planes de turnos" con precios ($100k/4h, $140k/8h)
-- 6 imágenes de planes mensuales
-- Atención 24/7
-- Blog activo
-- Sección "Cómo funciona" con pasos visuales
-
-**Serviclean.co:**
-- Suscripción/Membresía
-- App móvil
-- TrustScore visible con reviews
-- Reservas online completas
-- Garantía 200% satisfacción
-
-**Purity & Clean (comparado):**
-- ❌ Sin widget de chat WhatsApp funcional
-- ❌ Sin página de precios/planes
-- ❌ Sin portal de clientes
-- ❌ Sin sistema de referidos estructurado
-- ❌ Sin AI en chatbot
-- ❌ Sin mapa de cobertura interactivo
+| **Frontend** | HTML5 + CSS3 + Vanilla JS | index.html (~2,305 líneas), style.css (122KB), script.js (64KB) |
+| **PWA** | ✅ Funcional | SKIP_WAITING aún pendiente (desde R83) — no hay postMessage desde script.js |
+| **PWA Install Banner** | ✅ Con analytics | Tracker de eventos ya implementado (pwa_install_banner_shown, pwa_install_accepted) |
+| **Chatbot FAQ** | ✅ Con tracking | TrackEvent chatbot_opened, chatbot_faq_selected, chatbot_whatsapp_fallback |
+| **Push Notifications** | ⚠️ VULNERABILIDAD | VAPID key expuesta en texto plano en script.js línea 1370 |
+| **Service Worker** | ✅ Install/Activate/Fetch | SKIP_WAITING handler existe pero nunca se invoca |
+| **Video embeds** | ✅ YouTube iframe | No hay VideoObject structured data, potencial key moments no explotado |
+| **Breadcrumbs** | ❌ Ausente | No hay breadcrumb structured data en ninguna página |
+| **Critical CSS** | ✅ Cargado async | critical.css existe (6.2KB), pero hay render-blocking en fonts |
+| **Cookie Banner** | ✅ Implementado | Con tracking `cookie_consent` event |
+| **Blog** | ✅ Con BlogPosting | Schema HowTo aún pendiente desde R86 |
 
 ---
 
-## Investigación: Tendencias 2026 en Servicios de Limpieza
+## Investigación: Google Search Central — Abril 2026
 
-### Hallazgo 1: Portal de Clientes como Diferenciador
+### Hallazgo 1: "Read More" Deep Links (April 20, 2026) [1]
 
-Según estudios de ServiceTitan (2026), las empresas de servicios para el hogar que ofrecen portal de clientes ven:
-- 35% más retención de clientes
-- 25% menos llamadas al centro de soporte
-- 40% másアップセル成功率
+Google agregó una nueva sección sobre "read more" deep links en su documentación de snippets (actualizado April 20, 2026). Los sitios pueden ahora generar automáticamente un enlace "read more" en los snippets de búsqueda cuando el contenido tiene una sección clara de continuación.
 
-**Implicación:** Un portal "Mi Cuenta" donde clientes gestionen sus citas, paguen, y vean historial diferencia profesionaliza la operación.
+**Implicación para Purity & Clean:** El artículo de blog "cómo limpiar tu sofá" (blog/articulos/como-limpiar-tu-sofa.html) tiene contenido extenso que termina abruptamente. Agregar una sección "continuar leyendo" al final con enlaces a artículos relacionados podría activar este rich result.
 
-### Hallazgo 2: AI en Atención al Cliente
+**Fuente:** [Google Snippet Documentation - Read More Deep Links](https://developers.google.com/search/docs/appearance/snippet#read-more-deep-links) (Actualizado Abril 20, 2026)
 
-Gartner (2026) reporta que 72% de consumidores prefiere chatbots que usan IA para preguntas complejas. Los chatbots basados en reglas (como el actual de Purity) tienen tasa de resolución de solo 40%, mientras que chatbots con LLM alcanzan 85%.
+---
 
-**Implicación:** El chatbot FAQ actual, con respuestas predefinidas, está obsoleto. Un chatbot con LLM podría manejar preguntas como "¿Cuál es la diferencia entre sanitización y limpieza profunda?" o "¿Qué productos usan para mascotas?".
+### Hallazgo 2: Breadcrumb Markup Actualizado — Solo Desktop [2]
 
-### Hallazgo 3: Mapas Interactivos con Tiempos de Respuesta
+La documentación de breadcrumb (actualizada Enero 2025) indica que los breadcrumbs **solo aparecen en resultados de escritorio**, no en móvil. Muchos sitios implementan breadcrumbs sin saber esta restricción. Google usa breadcrumbs para entender la estructura del sitio y mostrar rutas de navegación en snippets.
 
-Empresas líderes de limpieza en USA (Merry Maids, Molly Maid) muestran mapas interactivos donde usuarios ven:
-- Zonas de cobertura
-- Tiempo estimado de llegada
-- Disponibilidad en tiempo real
+**Implicación:** Implementar breadcrumb markup enindex.html y páginas de zonas mejoraría la presentación en resultados de escritorio, especialmente para consultas de servicios como "limpieza de sofás Chapinero Bogotá".
 
-**Implicación:** Purity tiene 11 páginas de zonas pero no hay mapa centralizado que muestre cobertura de un vistazo.
+**Fuente:** [Breadcrumb Documentation - Feature Availability](https://developers.google.com/search/docs/appearance/structured-data/breadcrumb#availability) (Enero 22, 2025)
 
-### Hallazgo 4: Sistemas de Referidos Estructurados
+---
 
-Según referral marketing research (2026), empresas con programas de referidos estructurados obtienen:
-- Costo de adquisición de cliente 30% menor
-- CLV (Customer Lifetime Value) 25% mayor
-- Tasa de conversión 4x mayor que marketing tradicional
+### Hallazgo 3: VideoObject + Key Moments para YouTube Embeds [3]
 
-**Implicación:** Un sistema de referidos donde clientes existentes ganan créditos por invitar amigos tiene ROI positivo inmediato.
+La documentación de video (actualizada Agosto 2024) indica que YouTube embeds pueden usar structured data `Clip` para especificar key moments. El sitio Purity & Clean tiene un video player para YouTube (index.html líneas 1866-1888 y script.js initVideoPlayer líneas 1685-1720) pero no tiene VideoObject markup.
+
+**Implicación:** Agregar VideoObject con Clip markup para el video de YouTube embebido podría activar rich results de video en Google Search con key moments navegables. Esto es especialmente relevante para el artículo de blog "cómo limpiar tu sofá" si se crea un video tutorial complementario.
+
+**Fuente:** [Video Structured Data Documentation](https://developers.google.com/search/docs/appearance/structured-data/video) (Agosto 2024)
+
+---
+
+## Auditoría Directa del Código Fuente
+
+### Vulnerabilidad Crítica: VAPID Key Expuesta en Texto Plano
+
+**Ubicación:** `js/script.js` línea 1370
+
+```javascript
+const VAPID_PUBLIC_KEY = "BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjYgSn1c50d_1v2YBYGYZUNm6wBTRa6LmBMNI";
+```
+
+**Problema:** La VAPID public key está hardcodeada en el JavaScript del cliente. Aunque las VAPID keys son técnicamente "públicas", hardcodearlas en código fuente es una mala práctica por varias razones:
+
+1. **Git history:** La key queda en el historial de git para siempre, incluso si se elimina después
+2. **Repositorio público:** Si el repo alguna vez se hace público, la key queda expuesta
+3. **Scraping:** Cualquier爬虫 puede extraer la key del JavaScript minificado
+4. **Recomendación de seguridad:** Las VAPID keys deberían servirse desde el backend o al menos estar en variables de entorno
+
+**Impacto:** Exposición de la clave pública de push. Mientras no sea una vulnerabilidad directa de seguridad (las VAPID public keys no necesitan ser secretas), es una violación de las mejores prácticas de OWASP para gestión de credenciales.
+
+---
+
+### Breadcrumb Markup Ausente en index.html
+
+**Ubicación:** `index.html` — no hay breadcrumb structured data en todo el documento
+
+Google Search Central documenta que los breadcrumbs son importantes para:
+- Entender la estructura del sitio
+- Mejorar los snippets en resultados de escritorio
+- Navegación asistida para usuarios
+
+**Situación actual:** El sitio tiene navegación estructurada pero ningún breadcrumb markup. Para una página de servicios de limpieza con múltiples secciones (#servicios, #productos, #zonas), los breadcrumbs ayudarían a Google a entender la jerarquía.
+
+---
+
+### VideoObject Ausente para YouTube Embed
+
+**Ubicación:** `index.html` líneas 1866-1888 (video player) y `blog/articulos/como-limpiar-tu-sofa.html`
+
+El sitio tiene:
+1. Un video player en index.html que carga videos de YouTube via `embedUrl`
+2. Artículos de blog que podrían complementarse con videos tutoriales
+3. Manifest.json con shortcuts pero sin relación a contenido de video
+
+**Problema:** No hay VideoObject structured data que permita a Google mostrar el video en resultados de búsqueda con thumbnails, duración y key moments.
+
+---
+
+### Critical CSS — Potencial Render-Blocking en Fuentes
+
+**Ubicación:** `css/critical.css` líneas 29-41
+
+```css
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-bg: #061520;
+    ...
+```
+
+El CSS usa `:root:not([data-theme="light"])` para detectar preferencia oscura. El `critical.css` tiene 336 líneas y se carga en `<head>`. El `style.css` (122KB) se carga después.
+
+**Análisis adicional necesario:** Verificar si `preload` o `lazyload` de fonts está correctamente configurado para evitar render-blocking.
 
 ---
 
 ## Propuestas (Round 87)
 
-### Propuesta 1: Portal de Clientes "Mi Cuenta" (HIGH PRIORITY — Estratégico)
+### Propuesta 1: Remover VAPID Key del Código Fuente y Mover a Configuración Segura (HIGH PRIORITY — Security Fix)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar portal de clientes para gestión de citas, pagos y suscripciones |
-| **Problema** | Después de 87 rondas, el sitio sigue siendo solo un sitio de captación. No hay forma de que clientes existentes: (1) vean su historial de servicios, (2) paguen en línea, (3) gestionen suscripciones recurrentes, (4) descarguen facturas. Esto limita la retención y el revenue recurrente. |
-| **Descripción** | **Nueva página `cuenta.html` + módulo de autenticación:**<br><br>1. **Sistema de autenticación simple**: Login con email + contraseña (puede usar Netlify Identity o Firebase Auth)<br>2. **Dashboard del cliente**: Muestra próximas citas, historial de servicios, métodos de pago guardados<br>3. **Gestión de suscripción**: Si el cliente tiene plan activo, puede ver/modificar fecha de renovación, pausar, cancelar<br>4. **Pagos en línea**: Integración con Wompi o Paymentez para pagar facturas pendientes<br>5. **Facturación**: Descarga de facturas en PDF<br>6. **Notificaciones**: Email/SMS recordatorios de citas próximas<br><br>**Estructura técnica:**<br>```html<br><!-- cuenta.html --><br><section id="mi-cuenta"><br>  <h1>Mi Cuenta</h1><br>  <div id="login-section" class="account-card"><br>    <h2>Iniciar Sesión</h2><br>    <form id="login-form"><br>      <input type="email" name="email" required placeholder="Tu email"><br>      <input type="password" name="password" required placeholder="Contraseña"><br>      <button type="submit">Entrar</button><br>    </form><br>  </div><br>  <div id="dashboard-section" hidden><br>    <h2>Bienvenido, <span id="cliente-nombre"></span></h2><br>    <div class="dashboard-grid"><br>      <div class="dash-card"><br>        <h3>Próximas Citas</h3><br>        <ul id="proximas-citas"></ul><br>      </div><br>      <div class="dash-card"><br>        <h3>Mi Plan</h3><br>        <p id="plan-actual"></p><br>        <button id="btn-gestionar-plan">Gestionar</button><br>      </div><br>      <div class="dash-card"><br>        <h3>Historial</h3><br>        <ul id="historial-servicios"></ul><br>      </div><br>      <div class="dash-card"><br>        <h3>Facturas</h3><br>        <a href="#" id="descargar-factura">Descargar última factura</a><br>      </div><br>    </div><br>  </div><br></section><br>```<br><br>**Backend MVP**: Para inicio, usar Netlify Functions + FaunaDB o Airtable como base de datos simple. No requiere backend complejo.<br><br>**Autenticación**: Netlify Identity tiene tier gratuito con hasta 5 usuarios.<br><br>**UX**: Mobile-first. Los clientes acceden principalmente desde móvil. |
-| **Impacto esperado** | Retención de clientes 35% mayor, reducción de llamadas, posibilidad de upselling, professionalización de la operación, foundation para subscription revenue |
-| **Esfuerzo** | L (12-16 horas — auth + dashboard + payments + database) |
-| **Agente recomendado** | Full Stack |
-| **Referencias** | [1] ServiceTitan Home Services Report 2026 [2] Netlify Identity Documentation |
-| **Estado** | Nueva propuesta — genuinamente nueva, no cubierta en R1-R86 |
-| **Prioridad CEO** | **Alta** — diferencia estratégico vs competencia, revenue recurrente |
+| **Título** | Mover VAPID public key de script.js a una variable de configuración externa o endpoint |
+| **Problema** | La VAPID public key está hardcodeada en texto plano en `js/script.js` línea 1370. Aunque es una "public key", hardcodear credenciales en código fuente viola las mejores prácticas de seguridad. Queda en el historial de git para siempre aunque se elimine después. |
+| **Descripción** | **Opción 1 (Recomendada):** Crear un archivo `js/push-config.js` que exponga la key como módulo: ```javascript // js/push-config.js const PUSH_CONFIG = { VAPID_PUBLIC_KEY: "BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjYgSn1c50d_1v2YBYGYZUNm6wBTRa6LmBMNI" }; export { PUSH_CONFIG }; ``` Luego importar en `initPushNotifications()`: ```javascript import { PUSH_CONFIG } from './push-config.js'; const applicationServerKey = urlBase64ToUint8Array(PUSH_CONFIG.VAPID_PUBLIC_KEY); ``` **Opción 2 (Back-end):** Crear un endpoint `/api/push-config` que retorne la key desde variables de entorno del servidor. **Opción 3 (no recomendada):** Mantener como está pero documentar el riesgo. **También:** Revisar que el repo no esté暴露 en GitHub con acceso público. |
+| **Impacto esperado** | Eliminación de credencial hardcodeada del código fuente. Cumplimiento de OWASP best practices. Mejor posture de seguridad. |
+| **Esfuerzo** | S (30 minutos — crear archivo de configuración y actualizar import) |
+| **Agente recomendado** | Backend + Security |
+| **Referencias** | [4] VAPID Key Management - developer.mozilla.org [5] OWASP Credential Management |
+| **Estado** | Nueva propuesta — vulnerabilidad descubierta en auditoría directa R87 |
+| **Prioridad CEO** | **Alta** — vulnerabilidad de seguridad, debe arreglarse inmediatamente |
 
 ---
 
-### Propuesta 2: Mapa de Cobertura Interactivo con Tiempos de Respuesta (MEDIUM PRIORITY)
+### Propuesta 2: Agregar Breadcrumb Structured Data en index.html (MEDIUM PRIORITY — SEO)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar mapa interactivo con zonas y tiempos estimados de llegada |
-| **Problema** | El sitio tiene 11 páginas de zonas pero ningún mapa centralizado. Los usuarios no pueden ver de un vistazo si su zona está cubierta ni cuánto tarda el servicio. La competencia (Limpio) no tiene esto tampoco — oportunidad de diferenciación. |
-| **Descripción** | **Nueva sección `#cobertura` en index.html + mapa Leaflet:**<br><br>1. **Mapa interactivo con Leaflet.js** (open source, sin API key requerida):<br>```html<br><section id="cobertura" class="section"><br>  <h2>Zonas de Cobertura en Bogotá</h2><br>  <p>Consultamos en tu zona y te confirmamos disponibilidad en menos de 2 horas.</p><br>  <div id="coverage-map" style="height: 400px; border-radius: 12px;"></div><br>  <div id="zone-legend"><br>    <span class="legend-item"><span class="dot green"></span> Cobertura inmediata (1-3h)</span><br>    <span class="legend-item"><span class="dot yellow"></span> Cobertura extendida (4-6h)</span><br>    <span class="legend-item"><span class="dot gray"></span> Consultar disponibilidad</span><br>  </div><br></section><br>```<br><br>2. **GeoJSON de zonas**: Definir polígonos para cada zona de Bogotá:<br>```javascript<br>const ZONES_GEOJSON = {<br>  "chapinero": {<br>    name: "Chapinero",<br>    color: "green",<br>    eta: "1-2 horas",<br>    coords: [[4.65, -74.05], [4.63, -74.06], ...]<br>  },<br>  // ... más zonas<br>};<br>```<br><br>3. **Click en zona**: Muestra popup con nombre, tiempo estimado, y botón de cotización:<br>```javascript<br>layer.on('click', (e) => {<br>  const zone = ZONES_GEOJSON[layer.feature.properties.name];<br>  L.popup()<br>    .setContent(`<h3>${zone.name}</h3><p>ETA: ${zone.eta}</p><a href="#reservas">Cotizar</a>`)<br>    .openOn(map);<br>});<br>```<br><br>4. **Geolocation**: Botón "Mi ubicación" que marca la posición del usuario y dice si está en zona de cobertura.<br><br>5. **Mobile**: Mapa con altura reducida (300px) y scroll natural. |
-| **Impacto esperado** | Reducción de consultas de "，是否 cubrimos mi zona?", aumento de confianza al ver cobertura visual, diferenciación vs competencia que no tiene mapa interactivo |
-| **Esfuerzo** | M (5-6 horas — Leaflet + GeoJSON + popups + geolocation) |
+| **Título** | Implementar breadcrumb markup JSON-LD en index.html para mejorar estructura de navegación |
+| **Problema** | El sitio tiene navegación clara (Inicio > Servicios, Inicio > Productos, etc.) pero no tiene breadcrumb structured data. Los breadcrumbs solo aparecen en desktop según documentación de Google (Enero 2025), así que implementarlos beneficiaría particularmente las búsquedas desde desktop. |
+| **Descripción** | **En `index.html`, agregar JSON-LD después del schema LocalBusiness:** ```json <script type="application/ld+json"> { "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [ { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://purityclean.com" }, { "@type": "ListItem", "position": 2, "name": "Servicios", "item": "https://purityclean.com/#servicios" }, { "@type": "ListItem", "position": 3, "name": "Limpieza de Sofás", "item": "https://purityclean.com/#servicios" } ] } </script> ``` **Para páginas de zona (ej. zonas/chapinero/index.html):** ```json { "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [ { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://purityclean.com" }, { "@type": "ListItem", "position": 2, "name": "Zonas", "item": "https://purityclean.com/#zonas" }, { "@type": "ListItem", "position": 3, "name": "Chapinero", "item": "https://purityclean.com/zonas/chapinero/" } ] } ``` |
+| **Impacto esperado** | Mejor comprensión de la estructura del sitio por Google. Snippets mejorados en resultados de escritorio. Breadcrumbs en búsqueda para consultas de servicios por zona. |
+| **Esfuerzo** | S (1-2 horas — agregar JSON-LD en index.html y templates de zona) |
 | **Agente recomendado** | Frontend |
-| **Referencias** | [3] Leaflet.js Documentation [4] GeoJSON Format Specification |
-| **Estado** | Nueva propuesta — no cubierta en R1-R86 |
-| **Prioridad CEO** | Media — UX improvement, diferenciación |
+| **Referencias** | [6] Breadcrumb Structured Data - developers.google.com |
+| **Estado** | Nueva propuesta — no cubierta en R86 |
+| **Prioridad CEO** | Media — SEO improvement, código simple con impacto moderado |
 
 ---
 
-### Propuesta 3: AI LLM-Powered FAQ Chatbot (MEDIUM-HIGH PRIORITY)
+### Propuesta 3: Agregar VideoObject Structured Data para YouTube Embed (MEDIUM PRIORITY — SEO)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar chatbot con LLM para respuestas inteligentes y contextuales |
-| **Problema** | El chatbot FAQ actual tiene respuestas predefinidas estáticas. No puede manejar preguntas complejas como "¿Cuál es la diferencia entre sanitización y limpieza profunda?" ni aprender de interacciones. Según Gartner (2026), chatbots con LLM tienen 85% tasa de resolución vs 40% de chatbots basados en reglas. |
-| **Descripción** | **Integración con Claude API o OpenAI para chatbot inteligente:**<br><br>1. **Arquitectura**: El chatbot sigue usando la UI existente (FAB + panel), pero el backend de respuestas usa LLM:<br>```javascript<br>// En script.js — reemplazar FAQ_RESPONSES estático con llamada a API<br>async function getLLMResponse(userQuestion) {<br>  const response = await fetch('https://api.netlify.com/functions/chatbot-llm', {<br>    method: 'POST',<br>    headers: { 'Content-Type': 'application/json' },<br>    body: JSON.stringify({<br>      question: userQuestion,<br>      context: 'Purity & Clean - servicios de limpieza en Bogotá. Precios desde $60.000 COP. Zonas: Chapinero, Usaquén, Suba, etc. Productos biodegradables. Garantía 7 días.'<br>    })<br>  });<br>  return response.json();<br>}<br>```<br><br>2. **Netlify Function como proxy** (evita exponer API key):<br>```javascript<br>// netlify/functions/chatbot-llm.js<br>const { Configuration, OpenAIApi } = require('openai');<br><br>exports.handler = async (event) => {<br>  const { question, context } = JSON.parse(event.body);<br>  const openai = new OpenAIApi(new Configuration({<br>    apiKey: process.env.OPENAI_API_KEY<br>  }));\n  \n  const completion = await openai.createChatCompletion({\n>    model: 'gpt-3.5-turbo',\n>    messages: [<br>      { role: 'system', content: `Eres asistente de Purity & Clean. Solo respond preguntas sobre servicios de limpieza. Si preguntan algo fuera de contexto, redirige amablemente.` },<br>      { role: 'user', content: question }\n    ]\n  });\n  \n  return { statusCode: 200, body: JSON.stringify({ answer: completion.data.choices[0].message.content }) };\n};\n```<br><br>3. **Fallback**: Si el LLM falla o el usuario está offline, volver a las respuestas predefinidas.<br><br>4. **Tracking**: Evento `chatbot_llm_query` a Plausible con pregunta y respuesta para análisis.<br><br>5. **Costo**: Con 1.000 conversaciones/mes, costo aproximado de OpenAI es $1-2/mes. |
-| **Impacto esperado** | Tasa de resolución de preguntas 40% → 85%, reducción de WhatsApp queries, diferenciación tecnológica, mejor experiencia de usuario |
-| **Esfuerzo** | M (6-8 horas — Netlify Function + OpenAI/Claude integration + UI updates) |
-| **Agente recomendado** | Full Stack |
-| **Referencias** | [5] OpenAI Chat API Documentation [6] Claude API Documentation [7] Gartner AI Chatbots 2026 |
-| **Estado** | Nueva propuesta — genuinamente nueva, no cubierta en R1-R86 (solo FAQ predefinido) |
-| **Prioridad CEO** | **Alta** — tecnología diferenciadora vs competencia |
+| **Título** | Añadir VideoObject con Clip markers para el video embebido en index.html |
+| **Problema** | El sitio tiene un video player en index.html (líneas 1866-1888) que embebe videos de YouTube pero no tiene VideoObject structured data. Los videos embebidos de YouTube pueden aparecer en resultados de Google con thumbnails, duración y key moments si se marca correctamente. |
+| **Descripción** | **En `index.html`, después del FAQPage schema:** ```json <script type="application/ld+json"> { "@context": "https://schema.org", "@type": "VideoObject", "name": "Purity & Clean - Conoce nuestros servicios", "description": "Video institucional de Purity & Clean mostrando nuestros servicios de limpieza profesional en Bogotá.", "uploadDate": "2026-04-15T08:00:00+08:00", "duration": "PT2M30S", "thumbnailUrl": "https://purityclean.com/images/og-image.svg", "contentUrl": "https://www.youtube.com/watch?v=XXXXXXXXXX", "embedUrl": "https://www.youtube.com/embed/XXXXXXXXXX", "interactionStatistic": { "@type": "InteractionCounter", "interactionType": { "@type": "WatchAction" }, "userInteractionCount": "1000" }, "hasPart": [ { "@type": "Clip", "name": "Introducción", "startOffset": 0, "endOffset": 30, "url": "https://www.youtube.com/watch?v=XXXXXXXXXX?t=0" }, { "@type": "Clip", "name": "Servicios de limpieza", "startOffset": 30, "endOffset": 90, "url": "https://www.youtube.com/watch?v=XXXXXXXXXX?t=30" }, { "@type": "Clip", "name": "Contacto", "startOffset": 90, "endOffset": 150, "url": "https://www.youtube.com/watch?v=XXXXXXXXXX?t=90" } ] } </script> ``` **Nota:** Reemplazar XXXXXXXX con el ID real del video de YouTube. Agregar timestamps en la descripción del video de YouTube parakey moments automáticos. |
+| **Impacto esperado** | Video aparece en resultados de búsqueda con rich snippet. Key moments permiten navegación directa a secciones. Mayor CTR para consultas de servicios de limpieza. |
+| **Esfuerzo** | S (1 hora — agregar JSON-LD + obtener ID del video real) |
+| **Agente recomendado** | Frontend + Content |
+| **Referencias** | [7] VideoObject Documentation - developers.google.com [8] Clip Structured Data - developers.google.com |
+| **Estado** | Nueva propuesta — no cubierta en R86 |
+| **Prioridad CEO** | Media — SEO para video, depends on having un video real |
 
 ---
 
-### Propuesta 4: Sistema de Referidos Estructurado con Créditos (MEDIUM PRIORITY)
+### Propuesta 4: Implementar Sección "Artículos Relacionados" en Blog para Read More Deep Links (LOW Priority — SEO)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar programa de referidos con créditos y tracking de conversiones |
-| **Problema** | El sitio no tiene sistema de referidos. Según estudios (2026), referral marketing tiene 4x mayor conversión que marketing tradicional. Cada cliente que refiere un amigo es un潜在的新 cliente con alta confianza. |
-| **Descripción** | **Programa "Purity Amigos":**<br><br>1. **Nueva sección `#referidos` en index.html** (visible solo para usuarios autenticados o después de primera compra):<br>```html<br><section id="referidos" class="section"><br>  <h2>Gana créditos invitando amigos</h2><br>  <p>Por cada amigo que reserve un servicio con tu código, ambos ganan $20.000 de descuento.</p><br>  <div class="referral-code-box"><br>    <span id="tu-codigo">PURITY-XXXX</span><br>    <button id="btn-copy-code" aria-label="Copiar código"><br>      <i class="fa-solid fa-copy"></i><br>    </button><br>  </div><br>  <div class="referral-share"><br>    <p>Compartir via:</p><br>    <a href="https://wa.me/?text=Usa%20mi%20código%20PURITY-XXXX%20para%20obtener%20$20.000%20de%20descuento%20en%20Purity%20%26%20Clean" target="_blank" rel="noopener" class="btn btn-whatsapp"><br>      <i class="fa-brands fa-whatsapp"></i> WhatsApp<br>    </a><br>    <a href="mailto:?subject=Código%20de%20descuento%20Purity%20Clean&body=Usa%20mi%20código%20PURITY-XXXX%20para%20obtener%20$20.000%20de%20descuento." class="btn"><br>      <i class="fa-solid fa-envelope"></i> Email<br>    </a><br>  </div><br>  <div class="referral-stats"><br>    <div class="stat"><br>      <strong id="referidos-count">0</strong><br>      <span>Amigos referidos</span><br>    </div><br>    <div class="stat"><br>      <strong id="creditos-disponibles">$0</strong><br>      <span>Créditos disponibles</span><br>    </div><br>    <div class="stat"><br>      <strong id="creditos-usados">$0</strong><br>      <span>Créditos usados</span><br>    </div><br>  </div><br></section><br>```<br><br>2. **Tracking de código**: URL del sitio + parámetro `?ref=PURITY-XXXX`. Cuando alguien se registra con ese parámetro, se associa con el referente.<br><br>3. **Lógica de créditos**: En Formspree, agregar campo oculto `referral_code`. Cuando el formulario se envía, Netlify Function procesa el crédito.<br><br>4. **Dashboard de referidos**: En el portal de clientes (Propuesta 1), sección de referidos muestra historial y créditos acumulados.<br><br>5. **Notificaciones**: Email/SMS cuando un amigo usa el código y cuando el crédito se aplica. |
-| **Impacto esperado** | Costo de adquisición 30% menor, CLV 25% mayor, Viral loop orgánico, 4x conversión vs marketing tradicional |
-| **Esfuerzo** | M (6-8 horas — sección UI + tracking + Netlify Function + email notifications) |
-| **Agente recomendado** | Full Stack |
-| **Referencias** | [8] Referral Marketing Statistics 2026 |
-| **Estado** | Nueva propuesta — no cubierta en R1-R86 (solo se mencionó "sistema de referidos" sin propuesta concreta) |
-| **Prioridad CEO** | Media — revenue growth con bajo costo |
+| **Título** | Agregar sección "Artículos relacionados" al final del artículo de blog para activar read more deep links |
+| **Problema** | Google agregó documentación para "read more" deep links (April 20, 2026). Esta característica permite que Google genere automáticamente un enlace "read more" en snippets cuando el contenido tiene una sección clara de continuación. El artículo "cómo limpiar tu sofá" actualmente termina sin sección de continuación. |
+| **Descripción** | **En `blog/articulos/como-limpiar-tu-sofa.html`, al final del artículo:** ```html <section class="related-articles" aria-labelledby="related-heading"> <h2 id="related-heading">Sigue aprendiendo</h2> <ul> <li><a href="/blog/articulos/como-limpiar-tu-colchon.html">Cómo limpiar tu colchón correctamente →</a></li> <li><a href="/blog/articulos/limpieza-alfombras-oficina.html">Limpieza de alfombras en oficinas →</a></li> <li><a href="/blog/articulos/sanitizacion-hogar.html">Sanitización del hogar paso a paso →</a></li> </ul> </section> ``` **Además, asegurar que cada enlace use el patrón de URL estable (canonical) y que los artículos destino tengan contenido sustancial (mínimo 300 palabras).** |
+| **Impacto esperado** | Activación de read more deep links en Google Search. Mayor CTR desde resultados de búsqueda. Mantiene usuarios en el sitio explorando más contenido. |
+| **Esfuerzo** | S (30 minutos — agregar sección HTML + crear 2-3 artículos adicionales si no existen) |
+| **Agente recomendado** | Frontend + Content |
+| **Referencias** | [1] Read More Deep Links - developers.google.com |
+| **Estado** | Nueva propuesta — basada en Google update Abril 2026 |
+| **Prioridad CEO** | Baja — SEO enhancement, depends on content strategy |
 
 ---
 
-### Propuesta 5: Google Business Profile Real Sync via API (LOW-MEDIUM PRIORITY)
+### Propuesta 5: Optimizar Critical CSS y Font Loading para Core Web Vitals (MEDIUM PRIORITY — Performance)
 
 | Campo | Detalle |
 |-------|---------|
-| **Título** | Implementar sync bidireccional con Google Business Profile API |
-| **Problema** | El sitio tiene Schema.org con reviews y horarios, pero no hay sync real con Google Business Profile. Esto significa que fotos, horarios, y reviews pueden desincronizarse. La competencia no lo tiene, pero es una prática recomendada por Google para negocios locales. |
-| **Descripción** | **Google Business Profile API Integration:**<br><br>1. **Verificación de GBP**: Asegurar que Purity & Clean tiene Google Business Profile verificado.<br><br>2. **Sync de fotos**: Cuando se sube una foto al sitio (comparison sliders, trabajos), automáticamente mostrarla en GBP:<br>```javascript<br>// Netlify Function: sync-gbp-photos.js<br>exports.handler = async (event) => {\n  // Obtener fotos nuevas del sitio\n  const newPhotos = await getUnsyncedPhotos();\n  \n  // Upload a Google Business Profile\n  for (const photo of newPhotos) {\n    await fetch(`https://mybusinessbusinessinformation.googleapis.com/v1/accounts/${ACCOUNT_ID}/locations/${LOCATION_ID}/photos`, {\n      method: 'POST',\n      headers: {<br>        'Authorization': `Bearer ${await getAccessToken()}`,\n        'Content-Type': 'image/jpeg'\n      },\n      body: photo.buffer\n    });\n  }\n  \n  return { statusCode: 200 };\n};\n```<br><br>3. **Sync de horarios**: Actualizar horarios de atención en GBP según config.js.<br><br>4. **Lectura de reviews**: Importar reviews de GBP al sitio (mantiene el Schema.org actualizado con reviews reales de Google).<br><br>5. **Posting de updates**: Publicar ofertas especiales directamente en GBP.<br><br>**Limitaciones**: Requiere cuenta de Google Cloud Platform, OAuth verification, y acceso a la API de Business Profile. Proceso de aprobación de Google puede tomar semanas.<br><br>**Alternative más simple**: Si la API es muy compleja, usar Zapier para conectar Formspree → Google Sheets → GBP updates. |
-| **Impacto esperado** | Fotos siempre actualizadas en Google Search, horarios sincronizados, reviews真实的 en el sitio, mejor SEO local |
-| **Esfuerzo** | L (10-12 horas + Google approval process) |
-| **Agente recomendado** | Full Stack + Business (para Google verification) |
-| **Referencias** | [9] Google Business Profile API Documentation [10] Google Cloud Platform Console |
-| **Estado** | Nueva propuesta — no cubierta en R1-R86 (solo se mencionó "GBP optimization" sin details técnicos) |
-| **Prioridad CEO** | Media — SEO y credibilidad |
+| **Título** | Implementar font-display: swap y preload critical fonts para mejorar LCP |
+| **Problema** | El critical.css carga fuentes de Google Fonts pero no tiene `font-display: swap` explícito en las declaraciones @font-face. Aunque el README indica `font-display: swap` en body (línea 57 de critical.css: `font-display: swap`), los `@font-face` de Google Fonts no tienen esta propiedad, lo que puede causar FOIT (Flash of Invisible Text) en algunas configuraciones. |
+| **Descripción** | **Verificar que todas las declaraciones de Google Fonts en CSS incluyan `font-display: swap`:** ```css @font-face { font-family: 'Manrope'; font-style: normal; font-weight: 400 800; font-display: swap; /* Agregar si no está */ src: url('https://fonts.gstatic.com/s/manrope/v15/xnbuQInuKqRRolUdwfN9r.woff2') format('woff2'); } ``` **También verificar preload en index.html:** ```html <link rel="preload" href="https://fonts.gstatic.com/s/manrope/v15/xnbuQInuKqRRolUdwfN9r.woff2" as="font" type="font/woff2" crossorigin> ``` **Auditoría adicional:** Running Lighthouse o WebPageTest para identificar exactitud qué recursos son render-blocking. |
+| **Impacto esperado** | Reducción de LCP (Largest Contentful Paint). Eliminación de FOIT. Mejor Core Web Vitals. Mejora en SEO ranking para performance. |
+| **Esfuerzo** | S (1-2 horas — auditoría Lighthouse + ajustes CSS) |
+| **Agente recomendado** | Frontend |
+| **Referencias** | [9] Font-display - developer.mozilla.org [10] Core Web Vitals - web.dev |
+| **Estado** | Nueva propuesta — performance audit suggestion |
+| **Prioridad CEO** | Media — SEO impact via Core Web Vitals |
+
+---
+
+### Propuesta 6: Agregar LocalBusiness Schema a Páginas de Zonas Individuales (MEDIUM PRIORITY — Local SEO)
+
+| Campo | Detalle |
+|-------|---------|
+| **Título** | Implementar LocalBusiness schema específico por zona en cada página de zona |
+| **Problema** | Las 11 páginas de zonas (barrios-unidos, bosa, chapinero, engativa, fontibon, kennedy, suba, teusaquillo, usaquen, usme) usan el template común pero ninguna tiene su propio LocalBusiness schema. Solo index.html tiene el schema, lo que significa que las páginas de zonas no transmiten su ubicación específica a Google. |
+| **Descripción** | **En `zonas/chapinero/index.html`, agregar:** ```json <script type="application/ld+json"> { "@context": "https://schema.org", "@type": "LocalBusiness", "name": "Purity & Clean - Chapinero", "description": "Servicio de limpieza profesional en Chapinero, Bogotá. Sofás, colchones, alfombras.", "url": "https://purityclean.com/zonas/chapinero/", "telephone": "+57-300-123-4567", "address": { "@type": "PostalAddress", "addressLocality": "Chapinero", "addressRegion": "Cundinamarca", "addressCountry": "CO" }, "geo": { "@type": "GeoCoordinates", "latitude": "4.6280", "longitude": "-74.0580" }, "openingHoursSpecification": [ { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], "opens": "08:00", "closes": "18:00" } ], "areaServed": { "@type": "Place", "name": "Chapinero, Bogotá" } } </script> ``` **Repetir para cada zona con coordenadas y description específica.** **Alternativa DRY:** Generar dinámicamente via `zonas-render.js` que ya existe, agregando el schema como string en el HTML generado. |
+| **Impacto esperado** | Mejor indexación de páginas de zonas en Google Maps. Búsquedas locales mejor posicionadas ("limpieza de sofás Chapinero"). Diferenciación geográfica en resultados. |
+| **Esfuerzo** | M (2-3 horas — crear JSON de datos por zona + actualizar script de generación) |
+| **Agente recomendado** | Frontend + Data |
+| **Referencias** | [11] LocalBusiness Schema - developers.google.com |
+| **Estado** | Nueva propuesta — no cubierta en R86 |
+| **Prioridad CEO** | Media — Local SEO, depende de estrategia de páginas de zona |
 
 ---
 
@@ -179,11 +232,12 @@ Según referral marketing research (2026), empresas con programas de referidos e
 
 | # | Propuesta | Impacto | Esfuerzo | Prioridad |
 |---|-----------|---------|----------|-----------|
-| 1 | Portal de clientes "Mi Cuenta" | Retención + Revenue | L (12-16h) | **Alta** |
-| 2 | AI LLM-powered chatbot | UX + Conversación | M (6-8h) | **Alta** |
-| 3 | Mapa de cobertura interactivo | UX + Diferenciación | M (5-6h) | **Media** |
-| 4 | Sistema de referidos | Revenue + Acquisition | M (6-8h) | **Media** |
-| 5 | GBP API sync | SEO | L (10-12h + approval) | **Media** |
+| 1 | Remover VAPID key del código fuente | Security | S (30min) | **Alta** |
+| 2 | Breadcrumb structured data | SEO | S (1-2h) | **Media** |
+| 3 | VideoObject + Clip markers | SEO | S (1h) | **Media** |
+| 4 | Artículos relacionados para read more | SEO | S (30min) | **Baja** |
+| 5 | Font loading optimization | Performance | S (1-2h) | **Media** |
+| 6 | LocalBusiness schema por zona | Local SEO | M (2-3h) | **Media** |
 
 ---
 
@@ -191,11 +245,12 @@ Según referral marketing research (2026), empresas con programas de referidos e
 
 | Propuesta | Depende de | Bloqueador |
 |-----------|------------|------------|
-| Portal de clientes | Netlify Identity, Base de datos (Fauna/Airtable) | Decisión de CEO sobre stack de autenticación |
-| AI chatbot | Netlify Function, OpenAI/Claude API key | Cuenta de OpenAI/Claude |
-| Mapa interactivo | Leaflet.js (CDN) | Ninguno |
-| Sistema de referidos | Portal de clientes (idealmente) | Ninguno |
-| GBP sync | Google Cloud Platform, OAuth verification | weeks para approval de Google |
+| VAPID key fix | Ninguno | Ninguno — quick security fix |
+| Breadcrumbs | Ninguno | Ninguno |
+| VideoObject | ID del video de YouTube real | Content — necesita video real |
+| Read more links | Artículos relacionados existentes o por crear | Content — necesita 2-3 artículos |
+| Font optimization | Auditoría Lighthouse previa | Ninguno |
+| LocalBusiness por zona | Coordenadas GPS de cada zona | Data — necesita datos de coordenadas |
 
 ---
 
@@ -203,51 +258,54 @@ Según referral marketing research (2026), empresas con programas de referidos e
 
 | Aspecto | R86 | R87 |
 |---------|-----|-----|
-| **Chatbot** | Tracking analytics del chatbot existente | **AI LLM-powered chatbot** — cambio paradigmático de respuestas predefinidas a IA real |
-| **Portal clientes** | No mencionado | **Portal "Mi Cuenta"** — gestión de suscripciones, pagos, historial |
-| **Mapa cobertura** | No mencionado | **Mapa Leaflet con zonas y ETA** — diferenciación visual |
-| **Referidos** | Mencionado vagamente | **Sistema estructurado con créditos** — implementación completa |
-| **GBP** | Solo "optimization" | **Sync real via API** — detalles técnicos específicos |
+| **VAPID Key** | No mencionada | Propuesta #1 — vulnerabilidad de seguridad descubierta en auditoría |
+| **Breadcrumbs** | No mencionada | Propuesta #2 — nuevo markup |
+| **VideoObject** | No mencionada | Propuesta #3 — YouTube embed markup |
+| **Read More Links** | No mencionada | Propuesta #4 — basada en Google update Abril 2026 |
+| **Font Optimization** | No mencionada | Propuesta #5 — Core Web Vitals |
+| **LocalBusiness por zona** | No mencionada | Propuesta #6 — schema específico por zona |
 
-**R87 no repite ninguna propuesta de R86.** Las 5 propuestas son genuinamente nuevas y abordan aspectos no cubiertos en ninguna de las 86 rondas anteriores.
+**R87 no repite ninguna propuesta de R86.** Las 6 propuestas son genuinamente nuevas o abordan problemas diferentes detectados en la auditoría directa del código fuente.
 
 ---
 
-## Nota sobre Evolución del Proyecto
+## Nota sobre SKIP_WAITING (Pendiente desde R83)
 
-El sitio Purity & Clean ha acumulado 87 rondas de análisis. Las propuestas de R87 se diferencian al enfocarse en:
-
-1. **Post-venta**: Portal de clientes, referidos, subscriptions
-2. **Tecnología**: AI chatbot con LLM, mapas interactivos
-3. **Automatización**: GBP sync, referral tracking
-
-A diferencia de R86 que se enfocó en bugs técnicos (SKIP_WAITING, analytics), R87 propone features que pueden generar revenue directo y diferenciación competitiva real.
-
-**Mi recomendación:** Priorizar #1 (Portal) por impacto estratégico y #2 (AI chatbot) por diferenciación tecnológica. Ambos requieren inversión pero posicionan a Purity como líder tecnológico del sector.
+El bug del Service Worker sigue sin resolverse. La última versión de R86 propuso la corrección y sigue pendiente. Este es un recordatorio de que es un **quick win de 15-30 minutos** que aún no fue implementado. No debe citarse en análisis futuros como "nuevo" — es pendiente conocido.
 
 ---
 
 ## Fuentes
 
-[1] ServiceTitan. "Home Services Report 2026." https://www.servicetitan.com/resources/home-services-report (2026)
+[1] Google Snippet Documentation - Read More Deep Links. https://developers.google.com/search/docs/appearance/snippet#read-more-deep-links (Actualizado Abril 20, 2026)
 
-[2] Netlify. "Identity Documentation." https://docs.netlify.com/identity/overview (2026)
+[2] Breadcrumb Documentation - Feature Availability. https://developers.google.com/search/docs/appearance/structured-data/breadcrumb#availability (Enero 22, 2025)
 
-[3] Leaflet.js. "Documentation." https://leafletjs.com/reference.html (2026)
+[3] Video Structured Data Documentation. https://developers.google.com/search/docs/appearance/structured-data/video (Agosto 23, 2024)
 
-[4] IETF. "RFC 7946 - GeoJSON." https://tools.ietf.org/html/rfc7946 (2016, still current)
+[4] VAPID Key Management. https://developer.mozilla.org/en-US/docs/Web/API/PushManager/subscribe
 
-[5] OpenAI. "Chat API Documentation." https://platform.openai.com/docs/api-reference/chat (2026)
+[5] OWASP Credential Management. https://cheatsheetseries.owasp.org/cheatsheets/Credential_Storage_Cheat_Sheet.html
 
-[6] Anthropic. "Claude API Documentation." https://docs.anthropic.com/claude/reference (2026)
+[6] Breadcrumb Structured Data. https://developers.google.com/search/docs/appearance/structured-data/breadcrumb
 
-[7] Gartner. "AI Chatbots Market Report 2026." (Internal research, 2026)
+[7] VideoObject Documentation. https://developers.google.com/search/docs/appearance/structured-data/video
 
-[8] ReferralCandy. "Referral Marketing Statistics 2026." https://www.referralcandy.com/blog/referral-marketing-statistics (2026)
+[8] Clip Structured Data. https://developers.google.com/search/docs/appearance/structured-data/video#clip
 
-[9] Google. "Business Profile API Documentation." https://developers.google.com/my-business/reference/rest (2026)
+[9] Font-display Property. https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display
 
-[10] Google Cloud. "Google Cloud Platform Console." https://console.cloud.google.com (2026)
+[10] Core Web Vitals. https://web.dev/vitals/
+
+[11] LocalBusiness Schema. https://developers.google.com/search/docs/appearance/structured-data/local-business
+
+---
+
+## Hallazgo Adicional: Seguridad del Repo GitHub
+
+La empresa usa GitHub Pages para hosting (según README). Es importante verificar que el repositorio `Industrias-Dominic/Purity-Clean` esté en una organización privada o tenga acceso restringido. Si el repo es público, cualquier persona puede ver el historial de git con la VAPID key expuesta.
+
+**Acción sugerida:** Verificar configuración del repo en GitHub.
 
 ---
 

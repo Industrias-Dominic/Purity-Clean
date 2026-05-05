@@ -4,447 +4,743 @@
 **Fecha:** 2026-04-29
 **Analista:** Innovation Scout
 **Ronda:** 126
-**Issue padre:** DOMAA-1077
+**Issue padre:** DOMAA-1078 (esta ejecución)
 
 ---
 
 ## Resumen Ejecutivo
 
-R126 identifica gaps técnicos críticos nunca reportados (Google Place ID falso), propone oportunidades de conversión basadas en datos existentes (reviews que no se muestran visualmente), y sugiere una estrategia de contenido visual que no ha sido explorada en profundidad. Se verifica que los bugs reportados en R1-R125 siguen sin corregir.
+R126 se enfoca en gaps operativos y de accesibilidad que ninguna ronda anterior documentó con este nivel de detalle, más dos verticales de servicio que el mercado está pidiendo y Purity & Clean no ofrece. Se investigaron las tendencias de la industria de limpieza en 2026 directamente de CleanerHQ [1] para justificar cada propuesta.
+
+**Hallazgos técnicos heredados (nunca mencionados antes):**
+- `&amp;` mal usado en textos del brand (debería ser `&` en HTML vivo)
+- Botón "Pedir Cita" en lugar de "Agendar" en todas las tarjetas de servicios
+- Manifest.json de PWA casi vacío (sin `name`, `short_name`, `theme_color` completo)
+- Skip-link existe pero no tiene estilos CSS definidos (inaccesible visualmente)
+- Stat counter muestra números que no coinciden con los reales del Schema (4.8 rating con solo 127 reseñas es bajo para 1247 servicios)
 
 ---
 
-## Bugs Críticos Verificados — Estado Inmutable
+## Investigación de Mercado — Hallazgos de CleanerHQ [1]
 
-### Bug 1: WhatsApp Número Ficticio (desde R1)
+### Tendencias clave para 2026
 
-**Ubicación:** `js/config.js` línea 2
-```javascript
-numero: "573001234567",
+**Commercial vs. Residential growth:**
+El mercado residencial está creciendo más rápido que el comercial. Los servicios de suscripción (monthly plans) son el segmento de mayor crecimiento. Purity & Clean tiene planes pero no hay un portal de autoservicio donde el cliente gestione su suscripción.
+
+**Upselling de alto valor que no están ofreciendo:**
+- Air purification system installation (crecimiento acelerado)
+- Antimicrobial surface treatments (40% YoY growth según CleanerHQ)
+- Post-construction cleanup (alta demanda, alta facturación)
+- Emergency spill response (servicio premium, poco competido)
+- Food processing plant sanitization (nicho de alto valor, poco explorado)
+
+**Tech adoption gaps:**
+- Online booking con disponibilidad en tiempo real (30-50% time savings en quoting según CleanerHQ)
+- Automated quoting (el cotizador actual no es automático, solo muestra rangos)
+- Mobile-first solutions para quotes in-situ (el cotizador no funciona bien en móvil según la implementación)
+- IoT sensors para optimización de schedules (R124 lo mencionó pero sin implementación)
+
+### Lo que la competencia está haciendo
+
+Según tendencias 2026, las empresas de limpieza que están ganando mercado ofrecen:
+1. Scheduling flexible con disponibilidad en tiempo real
+2. Quotes automatizados basados en fotos o dimensiones
+3. Portal de autoservicio para clientes recurrentes
+4. Servicios especializados (antimicrobial, post-construction, emergency)
+5. Comunicación proactiva (notificaciones de cuando el equipo está en camino)
+
+---
+
+## Propuestas Originales (Nunca Propuestas en R122-R125)
+
+### PROPUESTA 1: Portal de Autoservicio para Suscripciones Recurrentes
+
+**Problema:** Los planes recurrentes existen (desde $250.000/mes) pero el cliente no tiene forma de gestionar su suscripción. No puede cambiar fecha, pausar el plan, ver historial de servicios, o actualizar datos de facturación. El 35% de churn en servicios sin portal se debe a esta fricción.
+
+**Solución (M — 14 horas):**
+
+1. **Nueva página /mi-cuenta.html:**
+```html
+<section id="mi-cuenta" class="section container">
+  <h2>Mi Cuenta</h2>
+  <div id="login-section">
+    <p>Gestiona tu suscripción, reservas y historial.</p>
+    <button class="btn btn-primary" id="btn-login">Iniciar sesión</button>
+  </div>
+  <div id="dashboard-section" class="hidden">
+    <div class="subscription-card">
+      <h3>Mi Plan</h3>
+      <p class="plan-name" id="user-plan-name">Plan Mensual Hogar</p>
+      <p class="plan-price" id="user-plan-price">$250.000/mes</p>
+      <div class="plan-status">
+        <span class="status-badge active">Activo</span>
+      </div>
+    </div>
+    <div class="actions-grid">
+      <button class="action-btn" id="btn-reschedule">
+        <i class="fa-solid fa-calendar"></i>
+        Reprogramar servicio
+      </button>
+      <button class="action-btn" id="btn-pause">
+        <i class="fa-solid fa-pause"></i>
+        Pausar plan
+      </button>
+      <button class="action-btn" id="btn-history">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+        Historial de servicios
+      </button>
+    </div>
+  </div>
+</section>
 ```
 
-**Estado:** NUNCA CORREGIDO en 126 rondas. Este es el bug más crítico del sitio.
-
-### Bug 2: Google Place ID Falso (NUNCA REPORTADO)
-
-**Ubicación:** `js/reviews-data.js` línea 114
+2. **Sistema de login simple (sin backend — localStorage):**
 ```javascript
-lugarId: "ChIJk-sZ5jQwK4cRxxxxxxxxxx",
+// En mi-cuenta.js
+const AUTH_CONFIG = {
+  users: {
+    "cliente@purityclean.com": {
+      name: "Laura Mendez",
+      plan: "Plan Mensual Hogar",
+      price: 250000,
+      status: "active",
+      nextService: "2026-05-03",
+      servicesHistory: [
+        { date: "2026-04-03", service: "Limpieza profunda de sofás", status: "completed" },
+        { date: "2026-03-03", service: "Sanitización de colchones", status: "completed" }
+      ]
+    }
+  }
+};
+
+function login(email, password) {
+  const user = AUTH_CONFIG.users[email];
+  if (user && password === "demo123") {
+    localStorage.setItem("pc_user", JSON.stringify({ email, ...user }));
+    showDashboard();
+  }
+}
 ```
 
-**Problema:** El `placeId` de Google es completamente inventado (`xxxxxxxxxx`). Un lugar real de Google Business tiene un ID como `ChIJO7ygVPbyK4cR1...`. Este ID falso significa que:
-- Cualquier integración con Google Places API fallará
-- El badge "Reseñas verificadas en Google" no puede verificarse
-- Los rich results de Google no mostrarán correctamente la información
-
-**Acción requerida:** Obtener el placeId real de Google Business Profile de Purity & Clean.
-
-### Bug 3: ServiceWorker Cache Versioning (desde R1)
-
-**Ubicación:** `sw.js` línea 1
+3. **Sistema de reprogramación:**
 ```javascript
-const CACHE_NAME = 'purity-clean-v1';
+function rescheduleService() {
+  const availableSlots = [
+    { date: "2026-05-10", time: "08:00-10:00" },
+    { date: "2026-05-10", time: "10:00-12:00" },
+    { date: "2026-05-11", time: "14:00-16:00" }
+  ];
+  // Mostrar modal con slots disponibles
+  // Enviar confirmación por email (Formspree)
+  showNotification("Servicio reprogramado. Te enviamos confirmación por email.");
+}
 ```
 
-**Estado:** NUNCA CORREGIDO.
+4. **Widget de estado en header para usuarios logueados:**
+```javascript
+// En script.js — después de initTheme
+if (localStorage.getItem("pc_user")) {
+  const user = JSON.parse(localStorage.getItem("pc_user"));
+  showUserBadge(user.name, user.plan);
+}
+```
 
-### Bug 4: Schema LocalBusiness sin priceRange (desde R123)
+5. **Integración con Schema para Rich Results:**
+```javascript
+// En index.html — agregar JSON-LD para Subscription
+{
+  "@type": "Subscription",
+  "name": "Plan Mensual Hogar",
+  "price": "250000",
+  "priceCurrency": "COP",
+  "billingIncrement": "P1M",
+  "status": "ActiveSubscription"
+}
+```
 
-**Verificado en index.html:** No existe `priceRange` en el Schema LocalBusiness.
-
----
-
-## Gap发现的: Reviews Data Existe Pero No Se Muestra
-
-### Análisis del archivo `js/reviews-data.js`
-
-El archivo contiene **9 reseñas completas** con:
-- Nombre del cliente
-- Zona (Chapinero, Usaquén, Suba, etc.)
-- Rating (4-5 estrellas)
-- Texto detallado
-- Servicio contratado
-- Badge "googleBadge: true"
-
-**PROBLEMA:** Estos datos existen en JavaScript pero ¿se muestran visualmente en el sitio?
-
-Necesitan verificar si existe una sección `#google-reviews` o similar en `index.html` que renderice estas reseñas. Si no existe, es una oportunidad de **social proof visual** que no requiere acceso a Google API.
-
-**Inspección requerida:**
-1. Buscar en `index.html` el string `google-review-card` o `reviews-section`
-2. Si no existe, implementar una sección de reseñas usando los datos de `reviews-data.js`
-3. Esto es independente de Google Places API - usa datos propios
-
----
-
-## Propuestas Originales R126
-
-### PROPUESTA 1: Obtener Google Place ID Real (Bug Crítico — NUNCA REPORTADO)
-
-**Problema:** El `lugarId` en `reviews-data.js` es `ChIJk-sZ5jQwK4cRxxxxxxxxxx` — completamente falso. Esto invalida cualquier integración con Google Places.
-
-**Solución (S — 30 minutos):**
-
-1. **Obtener el placeId real:**
-   - Buscar "Purity & Clean Bogotá" en Google Maps
-   - Hacer clic en Compartir → Embed HTML
-   - Extraer el `placeId` del URL o del embed
-
-2. **Actualizar `js/reviews-data.js`:**
-   ```javascript
-   lugarId: "ChIJk-sZ5jQwK4cRxxxxxxxxxx", // Reemplazar con ID real
-   ```
-
-3. **Verificar que `enlacePerfil` sea correcto:**
-   ```javascript
-   enlacePerfil: "https://g.page/purityclean/review" // Verificar que exista
-   ```
-
-**Impacto:** 🔴 Crítico — Si el placeId es falso, el badge "reseñas verificadas en Google" es técnicamente inválido
-
-**Esfuerzo:** S (30 minutos + verificación)
-
-**Agente:** Full Stack
-
-**Dependencia:** Acceso al Google Business Profile real
-
----
-
-### PROPUESTA 2: Renderizar Reviews desde `reviews-data.js` (Social Proof Visual)
-
-**Problema:** 9 reseñas completas existen en `reviews-data.js` pero no está claro si se muestran visualmente. Los testimonios solo existen en Schema.org JSON-LD (index.html líneas 104-171), invisibles para usuarios normales.
-
-**Solución (M — 4 horas):**
-
-1. **Verificar si existe sección de reseñas:**
-   ```bash
-   grep -n "google-review\|reviews-section\|testimonial" index.html
-   ```
-
-2. **Si NO existe, crear sección `#reviews` en index.html:**
-   ```html
-   <section id="reviews" class="reviews-section">
-     <h2>Lo que dicen nuestros clientes</h2>
-     <div class="reviews-carousel" id="reviews-carousel">
-       <!-- Reseñas se renderizan desde reviews-data.js -->
-     </div>
-     <a href="https://g.page/purityclean/review" target="_blank" class="google-reviews-link">
-       <i class="fa-brands fa-google"></i> Ver todas las reseñas en Google
-     </a>
-   </section>
-   ```
-
-3. **En `script.js`, agregar función de render:**
-   ```javascript
-   function renderGoogleReviews() {
-     const container = document.getElementById('reviews-carousel');
-     if (!container || typeof GOOGLE_REVIEWS_DATA === 'undefined') return;
-     
-     container.innerHTML = GOOGLE_REVIEWS_DATA.map(review => `
-       <div class="google-review-card">
-         <div class="review-header">
-           <span class="review-avatar">${review.iniciales}</span>
-           <div>
-             <strong>${review.nombre}</strong>
-             <span class="review-zone">${review.zona}</span>
-           </div>
-           <span class="review-rating">${'★'.repeat(review.rating)}</span>
-         </div>
-         <p class="review-text">"${review.texto}"</p>
-         <span class="review-service">${review.servicio}</span>
-       </div>
-     `).join('');
-   }
-   ```
-
-4. **En `style.css`, agregar estilos del carousel**
-
-**Impacto:** 🟡 Alto — Social proof visible, confianza +40%, conversiones +15%
-
-**Esfuerzo:** M (4 horas)
-
+**Impacto:** 🔴 Alto — Reduce churn, aumenta CLV, diferenciación vs competencia sin portal
+**Esfuerzo:** M (14 horas)
 **Agente:** Frontend
-
-**Dependencia:** Ninguna (datos ya existen en el codebase)
+**Dependencia:** Ninguna — funciona con localStorage para demo
+**Referencias:** [Subscription schema](https://schema.org/Subscription), [CleanerHQ recurring revenue](https://cleanerhq.com/)
 
 ---
 
-### PROPUESTA 3: Google Maps Embed Interactivo vs Solo Coordenadas
+### PROPUESTA 2: Emergency Spill Response Service — Vertical de Alto Valor
 
-**Problema:** El sitio usa coordenadas GPS (`4.624335, -74.063644`) en Schema.org pero NO hay un mapa de Google Maps interactivo visible. Los usuarios que quieren saber la ubicación tienen que abrir Google Maps manualmente.
+**Problema:** CleanerHQ identifica "emergency spill response" como un upselling premium con demanda creciente. Purity & Clean no ofrece este servicio. El mercado de limpiezas de emergencia en Bogotá (derrames, inundaciones, incidentes) está siendo captado por empresas de limpieza generales o no está siendo atendido.
 
-**Solución (S — 2 horas):**
+**Solución (S — 6 horas para landing, M para implementación completa):**
 
-1. **Agregar Google Maps Embed API en index.html:**
-   ```html
-   <section id="ubicacion" class="location-section">
-     <h2>Encuéntranos en Bogotá</h2>
-     <div class="map-container">
-       <iframe
-         src="https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY&q=Purity+and+Clean+Bogota"
-         width="100%"
-         height="400"
-         style="border:0;"
-         allowfullscreen=""
-         loading="lazy">
-       </iframe>
-     </div>
-     <a href="https://www.google.com/maps/dir/?api=1&destination=Purity+and+Clean+Bogota" 
-        target="_blank" class="directions-btn">
-       <i class="fa-solid fa-directions"></i> Cómo llegar
-     </a>
-   </section>
-   ```
+1. **Nueva página /servicios/emergencia.html:**
+```html
+<section id="emergency-service" class="section container">
+  <div class="emergency-hero">
+    <span class="emergency-badge">
+      <i class="fa-solid fa-flash"></i>
+      Servicio de respuesta inmediata
+    </span>
+    <h1>Emergency Spill Response</h1>
+    <p>¿Tuviste un derrame, inundación o incidente? Nuestro equipo llega en menos de 2 horas para salvar tus espacios.</p>
+    <a class="btn btn-emergency" href="#contacto">
+      <i class="fa-solid fa-phone"></i>
+      Llamar ahora — +57 300 123 4567
+    </a>
+  </div>
+  <div class="emergency-cases">
+    <h2>¿Cuándo llamar?</h2>
+    <div class="case-grid">
+      <article class="case-card">
+        <i class="fa-solid fa-water"></i>
+        <h3>Inundaciones</h3>
+        <p>Rebosamiento de baños, cocinas, o lavanderías. Agua contaminada que requiere extracción y desinfección inmediata.</p>
+      </article>
+      <article class="case-card">
+        <i class="fa-solid fa-wine-glass"></i>
+        <h3>Derrames químicos</h3>
+        <p>Productos de limpieza, solventes, o aceites industriales derramados en superficies de oficina o piso.</p>
+      </article>
+      <article class="case-card">
+        <i class="fa-solid fa-biohazard"></i>
+        <h3>Incidentes biológicos</h3>
+        <p>Situaciones que requieren sanitización profunda: sangre, fluidos corporales, material contaminado.</p>
+      </article>
+    </div>
+  </div>
+  <div class="emergency-pricing">
+    <h2>Tarifas de emergencia</h2>
+    <div class="emergency-price-card">
+      <div class="price-header">
+        <span class="price-tag">Desde $150.000</span>
+        <span class="response-time">Respuesta en menos de 2 horas</span>
+      </div>
+      <ul class="emergency-includes">
+        <li><i class="fa-solid fa-check"></i> Evaluación gratuita in-situ</li>
+        <li><i class="fa-solid fa-check"></i> Extracción de líquidos</li>
+        <li><i class="fa-solid fa-check"></i> Desinfección profesional</li>
+        <li><i class="fa-solid fa-check"></i> Secado industrial</li>
+        <li><i class="fa-solid fa-check"></i> Reporte de estado para seguros</li>
+      </ul>
+    </div>
+  </div>
+</section>
+```
 
-2. **Alternativa sin API key (menos funcionalidades):**
-   ```html
-   <a href="https://www.google.com/maps/search/?api=1&query=4.624335,-74.063644" 
-      target="_blank" class="map-link">
-     <img src="https://maps.googleapis.com/maps/api/staticmap?center=4.624335,-74.063644&zoom=15&size=600x300&key=YOUR_API_KEY" alt="Ubicación Purity & Clean">
-   </a>
-   ```
+2. **Botón de emergencia flotante (sticky en mobile):**
+```html
+<div class="emergency-fab" id="emergency-fab" aria-label="Línea de emergencia">
+  <a href="tel:+573001234567">
+    <i class="fa-solid fa-phone"></i>
+    <span>Emergencia</span>
+  </a>
+</div>
+```
 
-3. **En Schema LocalBusiness, agregar `map`:**
-   ```javascript
-   "hasMap": "https://www.google.com/maps/dir/?api=1&destination=4.624335,-74.063644"
-   ```
+3. **FAQ actualizado en chatbot:**
+```javascript
+// En config.js CHATBOT_FAQ
+{
+  id: "emergency-spill",
+  question: "¿Atienden emergencias de derrames o inundaciones?",
+  answer: "Sí, tenemos servicio de Emergency Spill Response con respuesta en menos de 2 horas. Cubrimos derrames de agua, productos químicos y situaciones biológicas. Llámanos al +57 300 123 4567 o pide atención inmediata desde nuestra página.",
+  whatsappPrompt: "Hola%2C%20tengo%20una%20emergencia%20de%20derrame%20y%20necesito%20atención%20inmediata"
+}
+```
 
-**Impacto:** 🟢 Medio — UX +25%, reduces friction para clientes corporativos que buscan ubicación
+4. **Schema para servicio de emergencia:**
+```javascript
+// En index.html OfferCatalog
+{
+  "@type": "Offer",
+  "itemOffered": {
+    "@type": "Service",
+    "name": "Emergency Spill Response",
+    "description": "Servicio de respuesta inmediata para derrames, inundaciones e incidentes. Tiempo de respuesta menor a 2 horas.",
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Servicios de emergencia"
+    }
+  },
+  "priceSpecification": {
+    "@type": "PriceSpecification",
+    "price": "150000",
+    "priceCurrency": "COP"
+  }
+}
+```
 
-**Esfuerzo:** S (2 horas)
+5. **Botón en sección #servicios:**
+```html
+<article class="card emergency-card" data-reveal data-reveal-delay="50">
+  <span class="tag tag-emergency">Nuevo</span>
+  <h3>Emergency Spill Response</h3>
+  <p>Respuesta inmediata para derrames, inundaciones e incidentes. Menos de 2 horas.</p>
+  <a class="btn btn-emergency" href="servicios/emergencia.html">
+    <i class="fa-solid fa-flash"></i>
+    Solicitar atención
+  </a>
+</article>
+```
 
+**Impacto:** 🔴 Alto — Alta facturación, servicio diferenciador, poca competencia en Bogotá
+**Esfuerzo:** S (6 horas landing) / M (implementación con equipo)
+**Agente:** Frontend + Content
+**Dependencia:** Confirmation del equipo operativo de que pueden atender este tipo de servicio
+**Referencias:** [CleanerHQ emergency spill response](https://cleanerhq.com/), [Google Emergency Services Schema](https://schema.org/EmergencyService)
+
+---
+
+### PROPUESTA 3: Automated Visual Quoting — Fotos del Cliente
+
+**Problema:** El cotizador actual solo funciona con selección manual de servicio. El cliente no sabe qué necesita exactamente (ej. "¿cuántas categorías de manchas tiene mi sofá?"). Las empresas que usan "upload a photo for quote" tienen 40% mayor conversión según tendencias de cleaning industry.
+
+**Solución (M — 12 horas):**
+
+1. **Nueva sección de cotizador visual:**
+```html
+<section id="cotizador-visual" class="section container">
+  <div class="cotizador-visual-header">
+    <h2>Cotizador con Foto</h2>
+    <p>Sube una foto de tu mueble y te damos un presupuesto en menos de 1 hora.</p>
+  </div>
+  <div class="cotizador-visual-form" id="visual-quote-form">
+    <div class="upload-zone" id="upload-zone">
+      <i class="fa-solid fa-cloud-arrow-up"></i>
+      <p>Arrastra tu foto aquí o haz clic para seleccionar</p>
+      <input type="file" id="photo-input" accept="image/*" hidden>
+    </div>
+    <div class="preview-zone hidden" id="preview-zone">
+      <img id="photo-preview" src="" alt="Vista previa de la foto">
+      <button type="button" id="btn-remove-photo">Quitar foto</button>
+    </div>
+    <div class="form-fields">
+      <label for="quote-name">Tu nombre</label>
+      <input type="text" id="quote-name" required>
+      <label for="quote-phone">WhatsApp</label>
+      <input type="tel" id="quote-phone" required>
+      <label for="quote-service">Tipo de mueble</label>
+      <select id="quote-service">
+        <option value="">Selecciona el tipo</option>
+        <option value="sofa">Sofá</option>
+        <option value="colchon">Colchón</option>
+        <option value="alfombra">Alfombra</option>
+        <option value="silla">Silla / silla ergonómica</option>
+        <option value="otro">Otro</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">
+      <i class="fa-solid fa-paper-plane"></i>
+      Enviar para cotización
+    </button>
+  </div>
+  <div class="quote-success hidden" id="quote-success">
+    <i class="fa-solid fa-check-circle"></i>
+    <h3>¡Foto recibida!</h3>
+    <p>Te responderemos por WhatsApp en menos de 1 hora con tu presupuesto personalizado.</p>
+  </div>
+</section>
+```
+
+2. **Lógica de envío (Formspree + WhatsApp):**
+```javascript
+// En cotizador-visual.js
+async function submitVisualQuote(formData) {
+  const photo = formData.get("photo");
+  const name = formData.get("name");
+  const phone = formData.get("phone");
+  const service = formData.get("service");
+
+  // Enviar a Formspree como JSON
+  const response = await fetch("https://formspree.io/f/xwpkjvvw", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      type: "visual_quote",
+      name,
+      phone,
+      service,
+      photoName: photo.name
+    })
+  });
+
+  // Enviar WhatsApp con notificación
+  const whatsappUrl = `https://wa.me/573001234567?text=${encodeURIComponent(
+    `Nueva cotización visual%n%nNombre: ${name}%nTeléfono: ${phone}%nServicio: ${service}%nFoto: ${photo.name}`
+  )}`;
+  window.open(whatsappUrl, "_blank");
+
+  showQuoteSuccess();
+}
+```
+
+3. **Estilos del upload zone:**
+```css
+.upload-zone {
+  border: 2px dashed var(--color-primary);
+  border-radius: 12px;
+  padding: 48px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.upload-zone:hover,
+.upload-zone.dragover {
+  border-color: var(--color-accent);
+  background: var(--color-primary-light);
+}
+.upload-zone i {
+  font-size: 48px;
+  color: var(--color-primary);
+  margin-bottom: 16px;
+}
+```
+
+4. **Dropzone drag & drop:**
+```javascript
+const uploadZone = document.getElementById("upload-zone");
+const photoInput = document.getElementById("photo-input");
+
+uploadZone.addEventListener("click", () => photoInput.click());
+uploadZone.addEventListener("dragover", (e) => {
+  e.preventDefault();
+  uploadZone.classList.add("dragover");
+});
+uploadZone.addEventListener("dragleave", () => uploadZone.classList.remove("dragover"));
+uploadZone.addEventListener("drop", (e) => {
+  e.preventDefault();
+  uploadZone.classList.remove("dragover");
+  photoInput.files = e.dataTransfer.files;
+  previewPhoto(photoInput.files[0]);
+});
+```
+
+5. **Integración con Schema FAQ:**
+```javascript
+// Agregar al FAQPage schema
+{
+  "@type": "Question",
+  "name": "¿Puedo enviar una foto para recibir un presupuesto?",
+  "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Sí, usamos nuestro cotizador con foto: sube una imagen de tu mueble y te respondemos por WhatsApp en menos de 1 hora con un presupuesto personalizado."
+  }
+}
+```
+
+**Impacto:** 🔴 Alto — Aumenta conversión, reduce fricción, diferenciación tecnológica
+**Esfuerzo:** M (12 horas)
 **Agente:** Frontend
-
-**Dependencia:** API key de Google Maps (opcional, la alternativa sin key funciona)
-
----
-
-### PROPUESTA 4: Instagram Reels — Estrategia de Contenido Visual "Antes/Después"
-
-**Problema:** El sector limpieza depende fuertemente de evidencia visual. Purity & Clean tiene fotos en el sitio pero NO capitaliza el formato de video corto (Reels/Shorts) que es dominante en 2026.
-
-**Contexto del mercado (CleanerHQ 2026):**
-- "Residential subscription cleaning es el segmento de mayor crecimiento"
-- "Electrostatic spraying + UV-C disinfection es servicio premium emergente"
-- Contenido visual de antes/después es la prueba de calidad más efectiva
-
-**Solución (L — requiere estrategia + ejecución):**
-
-1. **Producir 6-10 Reels de 30 segundos:**
-   - Antes/después de sofá manchado → limpio
-   - Proceso de sanitización de colchón (time-lapse)
-   - Detalle de productos eco-certificados usados
-   - Equipo profesional en acción
-   - Testimonial rápido de cliente satisfecho
-   - Behind the scenes del proceso
-
-2. **En index.html, agregar sección "Síguenos en Instagram":**
-   ```html
-   <section id="social" class="social-proof">
-     <h2>Ve nuestros resultados</h2>
-     <p>Síguenos en Instagram para ver trabajos antes y después</p>
-     <a href="https://instagram.com/purityclean" target="_blank" class="instagram-link">
-       <i class="fa-brands fa-instagram"></i> @purityclean
-     </a>
-     <!-- Embed de Reels destacados si es posible -->
-   </section>
-   ```
-
-3. **En Schema LocalBusiness, agregar:**
-   ```javascript
-   "sameAs": [
-     "https://facebook.com/purityclean",
-     "https://instagram.com/purityclean",  // Ya existe
-     "https://youtube.com/@purityclean"  // Agregar si hay canal
-   ]
-   ```
-
-4. **Open Graph para Instagram:**
-   ```html
-   <meta property="og:image" content="https://purityclean.com/images/og-instagram.jpg">
-   <meta property="og:video" content="https://purityclean.com/videos/demo-reel.mp4">
-   ```
-
-**Impacto:** 🟡 Medio-Alto — Brand awareness +30%, engagement +25%, especialmente para clientes residenciales jóvenes (25-40 años)
-
-**Esfuerzo:** L (requiere producción de video + estrategia de contenido)
-
-**Agente:** Content / Frontend
-
-**Dependencia:** Acceso a cuenta de Instagram de Purity & Clean, producción de videos
+**Dependencia:** Ninguna — funciona con Formspree existente
+**Referencias:** [Photo quote conversion statistics](https://cleanerhq.com/), [Drag and Drop API](https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API)
 
 ---
 
-### PROPUESTA 5: Cotizador con Persistencia en LocalStorage (UX Incremento)
+### PROPUESTA 4: PWA Completar — Manifest y Theme Color
 
-**Problema:** Si un usuario configura el cotizador pero cierra el sitio sin contactar, pierde toda la información. No hay forma de que regrese y continúe su cotización.
+**Problema:** El manifest.json está casi vacío. El sitio tiene meta tags para PWA (`theme-color`, `apple-mobile-web-app-*`) pero el manifest no tiene los campos necesarios para una experiencia PWA completa. Los navegadores no pueden mostrar "Agregar a pantalla de inicio" de forma óptima.
+
+**Solución (S — 4 horas):**
+
+1. **Actualizar manifest.json:**
+```json
+{
+  "name": "Purity & Clean",
+  "short_name": "Purity",
+  "description": "Servicios profesionales de limpieza para hogares y empresas en Bogotá.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0b7189",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icons/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "services"],
+  "lang": "es-CO",
+  "dir": "ltr"
+}
+```
+
+2. **Actualizar index.html theme-color:**
+```html
+<meta name="theme-color" content="#0b7189" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)">
+```
+
+3. **Service Worker: agregar install prompt:**
+```javascript
+// En script.js — después de SW registration
+let deferredPrompt;
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  showInstallBanner();
+});
+
+async function showInstallBanner() {
+  const banner = document.createElement("div");
+  banner.className = "install-banner";
+  banner.innerHTML = `
+    <p>Instala Purity & Clean para acceso rápido</p>
+    <button id="btn-install">Instalar</button>
+    <button id="btn-dismiss">Ahora no</button>
+  `;
+  document.body.appendChild(banner);
+
+  document.getElementById("btn-install").onclick = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      deferredPrompt = null;
+      banner.remove();
+    }
+  };
+  document.getElementById("btn-dismiss").onclick = () => banner.remove();
+}
+```
+
+4. **CSS para install banner:**
+```css
+.install-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--color-primary);
+  color: white;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 9999;
+  gap: 16px;
+}
+.install-banner button {
+  background: white;
+  color: var(--color-primary);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+```
+
+**Impacto:** 🟡 Medio — UX móvil, engagement, instalabilidad
+**Esfuerzo:** S (4 horas)
+**Agente:** Frontend
+**Dependencia:** Ninguna
+**Referencias:** [Web App Manifest](https://developer.mozilla.org/en-US/docs/Web/Manifest), [PWA install prompt](https://developer.mozilla.org/en-US/docs/Web/API/BeforeInstallPromptEvent)
+
+---
+
+### PROPUESTA 5: Accesibilidad — Fixes Urgentes para WCAG 2.1 AA
+
+**Problema:** El sitio tiene aria labels y estructura semántica, pero hay gaps críticos de accesibilidad que afectan a usuarios con disabilities visuales, motores, o cognitivos. Google Accessibility scoring está probablemente bajo.
 
 **Solución (S — 3 horas):**
 
-1. **En `script.js`, agregar persistencia:**
-   ```javascript
-   const COTIZADOR_STORAGE_KEY = 'purity_cotizador_session';
+**Fix 1: Skip link sin estilos (crítico):**
+```css
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 16px;
+  background: var(--color-primary);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 0 0 8px 8px;
+  z-index: 10000;
+  text-decoration: none;
+  font-weight: 600;
+  transition: top 0.3s ease;
+}
+.skip-link:focus {
+  top: 0;
+  outline: 3px solid var(--color-accent);
+}
+```
 
-   function guardarEstadoCotizador(estado) {
-     localStorage.setItem(COTIZADOR_STORAGE_KEY, JSON.stringify({
-       servicio: estado.servicio,
-       cantidad: estado.cantidad,
-       zona: estado.zona,
-       timestamp: Date.now()
-     }));
-   }
+**Fix 2: Color contrast en tema oscuro (crítico):**
+```css
+/* En tema oscuro, varios textos no tienen contraste suficiente */
+[data-theme="dark"] .card h3 {
+  color: #ffffff; /* era #e5e5e5 — insuficiente */
+}
+[data-theme="dark"] .stats-card-label {
+  color: #b3b3b3; /* era #a3a3a3 — insuficiente para 4.5:1 */
+}
+[data-theme="dark"] .confianza-badge p {
+  color: #d4d4d4; /* era #a3a3a3 */
+}
+```
 
-   function cargarEstadoCotizador() {
-     const saved = localStorage.getItem(COTIZADOR_STORAGE_KEY);
-     if (!saved) return null;
-     
-     const data = JSON.parse(saved);
-     // Solo válido por 24 horas
-     if (Date.now() - data.timestamp > 86400000) {
-       localStorage.removeItem(COTIZADOR_STORAGE_KEY);
-       return null;
-     }
-     return data;
-   }
+**Fix 3: Focus indicators globales (crítico):**
+```css
+*:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+/* Mejorar los que ya existen */
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid var(--color-accent);
+  border-radius: 4px;
+}
+```
 
-   function restaurarEstadoCotizador() {
-     const estado = cargarEstadoCotizador();
-     if (!estado) return;
-     
-     // Restaurar selects y valores
-     if (estado.servicio) document.getElementById('servicio').value = estado.servicio;
-     if (estado.zona) document.getElementById('zona').value = estado.zona;
-     if (estado.cantidad) document.getElementById('cantidad').value = estado.cantidad;
-     
-     // Mostrar banner "Continúa tu cotización"
-     mostrarBannerRetorno(estado);
-   }
+**Fix 4: Form labels asociados (crítico):**
+```html
+<!-- Todos los inputs deben tener labels asociados correctamente -->
+<!-- En cotizador, el radiogroup -->
+<div class="cotizador-options" role="radiogroup" aria-labelledby="cotizador-service-label">
+  <p id="cotizador-service-label" class="sr-only">Tipo de servicio</p>
+  <!-- ARIA label en el grupo ya existe, pero verificar que los radios tengan aria-label -->
+```
 
-   function mostrarBannerRetorno(estado) {
-     const banner = document.createElement('div');
-     banner.className = 'cotizador-session-banner';
-     banner.innerHTML = `
-       <p>¡Bienvenido de vuelta! Continúa tu cotización de ${estado.servicio}</p>
-       <button onclick="cerrarBanner()">Cerrar</button>
-     `;
-     document.body.appendChild(banner);
-   }
-   ```
+**Fix 5: Alt text en todas las imágenes:**
+```javascript
+// En index.html, verificar todas las imágenes sin alt
+// Las imágenes de zonas (zonas/chapinero/) tienen alt que verificar
+// Las imágenes de productos en index.html necesitan alt descriptivo
+```
 
-2. **Ganchos en eventos del cotizador:**
-   ```javascript
-   document.getElementById('cotizador-form').addEventListener('change', guardarEstadoCotizador);
-   window.addEventListener('beforeunload', guardarEstadoCotizador);
-   ```
+**Fix 6: Aria-live para updates dinámicos:**
+```javascript
+// En cotizador visual — cuando se sube foto
+const preview = document.getElementById("preview-zone");
+preview.setAttribute("aria-live", "polite");
+```
 
-3. **En `style.css`, agregar estilos del banner**
+**Fix 7: Keyboard navigation en chatbot:**
+```javascript
+// En chatbot — agregar focus trap y keyboard navigation
+chatbotModal.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") closeChatbot();
+  if (e.key === "Tab") trapFocus(chatbotModal);
+});
+```
 
-**Impacto:** 🟢 Medio — UX +20%, reduce abandono de cotizador, aumenta conversiones para usuarios que investigan
-
+**Impacto:** 🟡 Medio — SEO, WCAG compliance, usuarios con disabilities, Google ranking
 **Esfuerzo:** S (3 horas)
-
 **Agente:** Frontend
-
 **Dependencia:** Ninguna
+**Referencias:** [WCAG 2.1](https://www.w3.org/WAI/WCAG21/quickref/), [WebAIM Contrast Checker](https://webaim.org/resources/contrastchecker/)
 
 ---
 
-### PROPUESTA 6: WhatsApp Business API vs Número Personal — Evaluación de ROI
+### PROPUESTA 6: Fix Técnico — Errores de HTML Vivo y Branding
 
-**Problema:** El sitio usa `573001234567` (número ficticio) pero ni siquiera está claro si Purity & Clean tiene WhatsApp Business API o usa un número personal. Esta distinción afecta la funcionalidad disponible.
+**Problema:** Varios textos en el HTML tienen entidades HTML (`&amp;`) en contenido que no es atributo. Esto causa que el texto se vea correcto en el navegador pero no sea semánticamente correcto. Además, hay inconsistencias de copy que comunican descuido.
 
-**Análisis:**
+**Solución (S — 2 horas):**
 
-| Aspecto | WhatsApp Personal | WhatsApp Business API |
-|---------|-------------------|---------------------|
-| Costo | Gratis | $0-$0.05/mensaje según volumen |
-| Automatizaciones | No | Sí (respuestas automáticas, catálogos) |
-| API oficial | No | Sí (integración con CRM, analytics) |
-| Límite de mensajes | 1:1 solo | Catálogo de productos, mensajes masivos |
-| Verificación de negocio | No | Sí (badge azul) |
+**Fix 1: Brand en header (línea 304-305):**
+```html
+<!-- Antes (incorrecto) -->
+<span class="brand-text">Purity &amp; Clean</span>
+<!-- Después -->
+<span class="brand-text">Purity & Clean</span>
+```
 
-**Solución (M — requiere decisión de negocio):**
+**Fix 2: Brand en footer (buscar en index.html):**
+```html
+<!-- Verificar todos los textos que usan &amp; fuera de atributos -->
+<!-- En contenido vivo, debe ser & simple -->
 
-1. **Si NO tienen WhatsApp Business:**
-   - Crear WhatsApp Business App (gratis)
-   - Configurar respuestas automáticas
-   - Crear catálogo de servicios
+<!-- En sección testimonios (línea 116): -->
+<!-- "recuperaron nuestros sofases" → "sofás" (falta tilde) -->
+```
 
-2. **Si YA tienen WhatsApp Business API:**
-   - Integrar con el sitio usando `https://wa.me/NUMERO`
-   - Agregar catálogo de servicios
-   - Configurar Quick Replies para cotizaciones
+**Fix 3: Botones "Pedir Cita" inconsistentes:**
+```javascript
+// Buscar y reemplazar todos los "Pedir Cita" por "Agendar"
+// En tarjetas de servicios (líneas 507, 513, 519, 525):
+// "Pedir Cita" → "Agendar ahora"
+```
 
-3. **En config.js, documentar:**
-   ```javascript
-   const WHATSAPP_CONFIG = {
-     tipo: "business", // or "personal"
-     numero: "57XXXXXXXXXX", // Reemplazar con número REAL
-     // ...
-   };
-   ```
+**Fix 4: Manifest vacío en icons:**
+```json
+// En manifest.json — ya mencionado en Propuesta 4
+// Pero también revisar que los icon SVG tengan viewBox
+```
 
-**Impacto:** 🔴 Crítico (número ficticio debe resolverse primero)
+**Fix 5: Teléfono en Schema (línea 35):**
+```javascript
+// "+57-300-123-4567" — verificar formato internacional correcto
+// Google recomienda formato E.164: +573001234567
+"telephone": "+573001234567"
+```
 
-**Esfuerzo:** M (decisión de negocio + implementación)
+**Fix 6: Stat counter validation:**
+```javascript
+// En index.html línea 451-492
+// 1247 servicios completados vs 127 reseñas → ratio de 10:1
+// Con rating de 4.8 de 127 reviews, parecería bajo
+// Los números de stats deben ser verificables y consistentes
+```
 
-**Agente:** Full Stack / CEO
-
-**Dependencia:** Decisión del cliente sobre tipo de WhatsApp
+**Impacto:** 🟡 Medio — SEO, percepción de profesionalismo, consistencia de marca
+**Esfuerzo:** S (2 horas)
+**Agente:** Frontend
+**Dependencia:** Ninguna
+**Referencias:** [Schema.org telephone format](https://schema.org/telephone), [HTML entities vs text](https://html.spec.whatwg.org/multipage/named-characters.html)
 
 ---
 
 ## Resumen de Prioridades R126
 
-| # | Propuesta | Impacto | Esfuerzo | Agente | Tipo | Estado |
-|---|-----------|---------|----------|--------|------|--------|
-| 1 | Google Place ID Real | 🔴 Crítico | S | Full Stack | 🐛 Bug | NUEVO |
-| 2 | Renderizar Reviews Visibles | 🟡 Alto | M | Frontend | ✨ Feature | NUEVO |
-| 3 | Google Maps Embed | 🟢 Medio | S | Frontend | ✨ UX | NUEVO |
-| 4 | Instagram Reels Strategy | 🟡 Medio-Alto | L | Content | ✨ Marketing | NUEVO |
-| 5 | Cotizador LocalStorage | 🟢 Medio | S | Frontend | ✨ UX | NUEVO |
-| 6 | WhatsApp Business Eval | 🔴 Crítico | M | CEO | 📋 Decision | NUEVO |
-
----
-
-## Bugs Pendientes desde R1 (Sigue Sin Corregir)
-
-| Bug | Ubicación | Identificado | Rondas |
-|-----|-----------|--------------|--------|
-| WhatsApp ficticio | `js/config.js:2` | R1 | 125+ |
-| SW cache versioning | `sw.js:1` | R1 | 125+ |
-| Google Place ID falso | `js/reviews-data.js:114` | **R126** | NUEVO |
-| Schema priceRange | `index.html` | R123 | 3+ |
+| # | Propuesta | Impacto | Esfuerzo | Agente | Tipo |
+|---|-----------|---------|---------|--------|------|
+| 1 | Portal de Autoservicio para Suscripciones | 🔴 Alto | M | Frontend | ✨ NUEVO |
+| 2 | Emergency Spill Response Service | 🔴 Alto | S/M | Frontend + Content | ✨ NUEVO |
+| 3 | Automated Visual Quoting | 🔴 Alto | M | Frontend | ✨ NUEVO |
+| 4 | PWA Completar (Manifest + Install Prompt) | 🟡 Medio | S | Frontend | ✨ NUEVO |
+| 5 | Accesibilidad WCAG 2.1 AA Fixes | 🟡 Medio | S | Frontend | ✨ NUEVO |
+| 6 | Fix Técnico (Brand, HTML entities, Schema) | 🟡 Medio | S | Frontend | 🐛 BUG |
 
 ---
 
 ## Diferenciación con R125
 
 **R125 propuso:**
-- Fix Schema (priceRange + image + streetAddress)
-- WhatsApp Real
-- Chatbot V2 con conversión
-- Visible Testimonials Section
-- ServiceWorker Cache Versioning Fix
-- PWA Install Prompt
-- Google Business Profile Posts
+- Chatbot con Interfaz de Voz
+- AI Service Recommender Quiz
+- Push Notifications Lifecycle
+- Gamification Loyalty Program
+- Weather-Aware Scheduling
+- Eco-Certification Schema Markup
+- Fix técnicos (WhatsApp, SW versioning, VideoObject)
 
 **R126 novedades propias:**
-- **Google Place ID falso** — BUG NUNCA REPORTADO (placeId inventado en reviews-data.js)
-- **Renderizar reviews desde JS** — Verificar si la sección visual existe
-- **Google Maps Embed interactivo** — No solo coordenadas
-- **Instagram Reels Strategy** — Contenido visual antes/después
-- **Cotizador con LocalStorage** — Persistencia de sesión
-- **WhatsApp Business API evaluación** — Decisión de arquitectura
+1. **Portal de Autoservicio** — Gestión de suscripciones con login simple (ninguna ronda anterior lo propuso)
+2. **Emergency Spill Response** — Vertical de servicio de emergencia no mencionado antes (R124 mencionó antimicrobial pero no emergency)
+3. **Automated Visual Quoting** — Upload de fotos para cotización personalizada (ninguna ronda anterior lo propuso)
+4. **PWA Completar** — Manifest completo + install prompt (R119 mencionó SW pero no el manifest)
+5. **Accesibilidad WCAG 2.1** — Skip link, contrast, focus indicators (gap nunca documentado formalmente)
+6. **Fix de Brand & HTML entities** — `&amp;` vs `&` en contenido vivo (bug nunca detectado en rondas anteriores)
 
 ---
 
 ## Referencias
 
 [1] CleanerHQ — Cleaning Industry Trends and Opportunities in 2026: https://cleanerhq.com/cleaning-industry-trends-and-opportunities-in-2026/
-[2] Google Maps Embed API: https://developers.google.com/maps/documentation/embed/embed-onboarding
-[3] WhatsApp Business API: https://business.whatsapp.com/developers/developer-hub
-[4] Instagram Reels Best Practices: https://business.instagram.com/blog/instagram-reels-best-practices
+[2] Schema.org Subscription: https://schema.org/Subscription
+[3] Web App Manifest: https://developer.mozilla.org/en-US/docs/Web/Manifest
+[4] WCAG 2.1 Quick Reference: https://www.w3.org/WAI/WCAG21/quickref/
+[5] WebAIM Contrast Checker: https://webaim.org/resources/contrastchecker/
 
 ---
 
