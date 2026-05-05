@@ -52,6 +52,15 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
+  const isCdnFont = url.hostname.includes('fonts.googleapis.com') ||
+    url.hostname.includes('fonts.gstatic.com') ||
+    url.hostname.includes('cdnjs.cloudflare.com');
+
+  // Append cache-busting query param to CDN resources
+  if (isCdnFont && url.searchParams.get('v') === null) {
+    url.searchParams.set('v', CACHE_VERSION);
+    request = new Request(url.toString(), request);
+  }
 
   if (url.origin !== location.origin && !url.hostname.includes('fonts.googleapis.com') && !url.hostname.includes('fonts.gstatic.com') && !url.hostname.includes('cdnjs.cloudflare.com') && !url.hostname.includes('youtube-nocookie.com')) {
     return;

@@ -81,6 +81,107 @@ function updateSearchResults(query) {
   searchStatus.textContent = `Se encontraron ${visibleCount} resultado(s) para "${query.trim()}".`;
 }
 
+/**
+ * UTM Tracking — R8 Proposal #2 Implementation
+ * Captures UTM parameters from URL and appends them to conversions
+ */
+(function initUTMTracking() {
+  const utmParams = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
+  const stored = {};
+
+  // Capture from URL once per session
+  const urlParams = new URLSearchParams(window.location.search);
+  let captured = false;
+  utmParams.forEach(function(param) {
+    const value = urlParams.get(param);
+    if (value) {
+      stored[param] = value;
+      captured = true;
+    }
+  });
+
+  // Store in sessionStorage for use across pages in same session
+  if (captured) {
+    try {
+      sessionStorage.setItem('pc_utm', JSON.stringify(stored));
+    } catch (e) { /* storage unavailable */ }
+  }
+
+  // Persist in localStorage so UTM survives across sessions (30 day window)
+  if (captured) {
+    try {
+      localStorage.setItem('pc_utm_captured', JSON.stringify({
+        utms: stored,
+        timestamp: Date.now()
+      }));
+    } catch (e) { /* storage unavailable */ }
+  }
+})();
+
+/**
+ * Get stored UTM params from session or localStorage
+ * Returns object with utm_source, utm_medium, utm_campaign, etc.
+ */
+function getStoredUTMs() {
+  try {
+    // Try session first (current page session)
+    const session = sessionStorage.getItem('pc_utm');
+    if (session) return JSON.parse(session);
+
+    // Fall back to localStorage (within 30 days)
+    const local = localStorage.getItem('pc_utm_captured');
+    if (local) {
+      const data = JSON.parse(local);
+      const age = Date.now() - data.timestamp;
+      const thirtyDays = 30 * 24 * 60 * 60 * 1000;
+      if (age < thirtyDays) return data.utms;
+    }
+  } catch (e) { /* storage unavailable */ }
+  return {};
+}
+
+/**
+ * Build UTM query string for appending to URLs
+ * Example: ?utm_source=google&utm_medium=cpc&utm_campaign=spring_cleaning
+ */
+function buildUTMString(prefix) {
+  const utms = getStoredUTMs();
+  const parts = [];
+  Object.keys(utms).forEach(function(key) {
+    parts.push(key + '=' + encodeURIComponent(utms[key]));
+  });
+  if (parts.length === 0) return '';
+  return (prefix || '&') + parts.join('&');
+}
+
+/**
+ * Append UTM params to a WhatsApp URL
+ */
+function appendUTMsToURL(url) {
+  const utmString = buildUTMString('&');
+  if (!utmString) return url;
+  // Insert UTM before the text= param if present, else at end
+  const textIdx = url.indexOf('text=');
+  if (textIdx !== -1) {
+    return url.substring(0, textIdx - 1) + utmString + '&' + url.substring(textIdx);
+  }
+  return url + utmString;
+}
+
+/**
+ * Track a conversion event with UTM data attached
+ */
+function trackConversion(source, medium, props) {
+  const utms = getStoredUTMs();
+  const eventProps = Object.assign({}, props || {}, {
+    utm_source: utms.utm_source || '(none)',
+    utm_medium: utms.utm_medium || '(none)',
+    utm_campaign: utms.utm_campaign || '(none)',
+    conversion_source: source
+  });
+  trackEvent('conversion_' + source, { props: eventProps });
+}
+
 function trackEvent(eventName, props) {
   if (typeof plausible !== "undefined") {
     plausible(eventName, props);
@@ -194,6 +295,7 @@ function initBookingForm() {
   const prevBtn = bookingForm.querySelector("#booking-prev-btn");
   const nextBtn = bookingForm.querySelector("#booking-next-btn");
   const submitBtn = bookingForm.querySelector("#booking-submit-btn");
+  const bookingResetBtn = document.querySelector("#booking-reset-btn");
 
   const params = new URLSearchParams(window.location.search);
   const preselectedService = params.get("service");
@@ -725,7 +827,8 @@ function buildWhatsAppUrl(couponCode, nombre) {
   const texto = encodeURIComponent(
     `¡Hola! Soy ${nombre} y te recomiendo Purity & Clean. Usa mi código \`${couponCode}\` y obtén 15% de descuento en tu primera limpieza. https://purityclean.com/#contacto`
   );
-  return `https://wa.me/${numero}?text=${texto}`;
+  let url = `https://wa.me/${numero}?text=${texto}`;
+  return appendUTMsToURL(url);
 }
 
 function getSaludoPorHora() {
@@ -743,7 +846,8 @@ function getWhatsAppUrl(zonaKey) {
   } else {
     mensaje = WHATSAPP_CONFIG.zonas[zonaKey] || WHATSAPP_CONFIG.mensajePorDefecto;
   }
-  return `https://wa.me/${base}?text=${mensaje}`;
+  let url = `https://wa.me/${base}?text=${mensaje}`;
+  return appendUTMsToURL(url);
 }
 
 function showReferidosResult(couponCode) {
@@ -1152,6 +1256,14 @@ function initComparisonSliders() {
       observer.observe(slider);
     }
 
+    // React to system prefers-reduced-motion preference changes at runtime
+    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    motionQuery.addEventListener("change", (e) => {
+      if (e.matches) {
+        stopAutoplayAndBlock();
+      }
+    });
+
     updateSlider(slider, range, beforeWrap, 50, false);
   });
 }
@@ -1342,66 +1454,7 @@ function initPwaInstallPrompt() {
   });
 }
 
-function initPushNotifications() {
-  if (!("PushManager" in window) || !("serviceWorker" in navigator)) return;
-
-  const pushBanner = document.getElementById("push-notification-banner");
-  const pushAcceptBtn = document.getElementById("push-notification-accept");
-  const pushDeclineBtn = document.getElementById("push-notification-decline");
-  if (!pushBanner || !pushAcceptBtn || !pushDeclineBtn) return;
-
-  const STORAGE_KEY_PUSH = "purity_push_notification_dismissed";
-  const STORAGE_KEY_PUSH_ENABLED = "purity_push_enabled";
-  if (localStorage.getItem(STORAGE_KEY_PUSH_ENABLED) === "true") return;
-
-  navigator.serviceWorker.ready.then((registration) => {
-    registration.pushManager.getSubscription().then((subscription) => {
-      if (subscription || localStorage.getItem(STORAGE_KEY_PUSH)) return;
-      setTimeout(() => {
-        pushBanner.hidden = false;
-        pushBanner.classList.add("revealed");
-        trackEvent("push_notification_banner_shown");
-      }, 5000);
-    });
-  });
-
-  function subscribeUser() {
-    navigator.serviceWorker.ready.then((registration) => {
-      const applicationServerKey = urlBase64ToUint8Array(window.VAPID_PUBLIC_KEY);
-      registration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: applicationServerKey
-      }).then((subscription) => {
-        localStorage.setItem(STORAGE_KEY_PUSH_ENABLED, "true");
-        pushBanner.hidden = true;
-        trackEvent("push_notification_accepted");
-      }).catch((err) => {
-        trackEvent("push_notification_error", { props: { error: String(err) } });
-      });
-    });
-  }
-
-  pushAcceptBtn.addEventListener("click", () => {
-    subscribeUser();
-  });
-
-  pushDeclineBtn.addEventListener("click", () => {
-    localStorage.setItem(STORAGE_KEY_PUSH, "true");
-    pushBanner.hidden = true;
-    trackEvent("push_notification_dismissed");
-  });
-}
-
-function urlBase64ToUint8Array(base64String) {
-  const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
-  const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
-  const rawData = window.atob(base64);
-  const outputArray = new Uint8Array(rawData.length);
-  for (let i = 0; i < rawData.length; ++i) {
-    outputArray[i] = rawData.charCodeAt(i);
-  }
-  return outputArray;
-}
+// Push notifications removed — no backend service configured
 
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", initPwaInstallPrompt);
@@ -1840,6 +1893,30 @@ if (document.readyState === "loading") {
         var errorEl = zonaPhoneInput?.parentElement?.querySelector(".field-error");
         if (errorEl) errorEl.textContent = "Error al enviar. Intenta de nuevo.";
       });
+    });
+  }
+})();
+
+// ── Urgency Banner (R16 Proposal) ──
+(function() {
+  var banner = document.getElementById('urgency-banner');
+  var closeBtn = document.getElementById('urgency-close');
+  var countEl = document.getElementById('urgency-count');
+
+  // Persist dismissal in localStorage
+  if (banner && localStorage.getItem('urgencyBannerDismissed') === '1') {
+    banner.style.display = 'none';
+  } else if (banner && countEl) {
+    // Dynamic scarcity: vary count 2-4 based on day of week
+    var day = new Date().getDay();
+    var counts = [2, 3, 3, 2, 4, 2, 3];
+    countEl.textContent = counts[day % counts.length];
+  }
+
+  if (closeBtn && banner) {
+    closeBtn.addEventListener('click', function() {
+      banner.style.display = 'none';
+      localStorage.setItem('urgencyBannerDismissed', '1');
     });
   }
 })();

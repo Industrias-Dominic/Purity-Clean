@@ -6210,3 +6210,68 @@ a {
 [data-theme="dark"] .slot-btn.selected .slot-period {
   color: #bbf7d0;
 }
+
+/* ── Urgency Banner (R16 Proposal) ── */
+.urgency-banner {
+  background: linear-gradient(90deg, #dc2626 0%, #b91c1c 100%);
+  color: #fff;
+  padding: 0.6rem 0;
+  font-size: 0.9rem;
+  position: relative;
+  z-index: 9999;
+}
+
+.urgency-banner-inner {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.urgency-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.urgency-text {
+  flex: 1;
+  line-height: 1.4;
+}
+
+.urgency-count {
+  font-weight: 700;
+  font-size: 1.05em;
+}
+
+.urgency-cta {
+  color: #fef08a;
+  font-weight: 700;
+  text-decoration: underline;
+  white-space: nowrap;
+}
+
+.urgency-cta:hover {
+  color: #fef9c3;
+}
+
+.urgency-close {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.7);
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 0.25rem;
+  flex-shrink: 0;
+}
+
+.urgency-close:hover {
+  color: #fff;
+}
+
+[data-theme="dark"] .urgency-banner {
+  background: linear-gradient(90deg, #7f1d1d 0%, #991b1b 100%);
+}
+
+[data-theme="dark"] .urgency-cta {
+  color: #fde68a;
+}

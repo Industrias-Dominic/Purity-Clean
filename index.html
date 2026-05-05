@@ -18,6 +18,9 @@
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:site_name" content="Purity & Clean">
+  <link rel="alternate" hreflang="es" href="https://purityclean.com/">
+  <link rel="alternate" hreflang="es-co" href="https://purityclean.com/">
+  <link rel="alternate" hreflang="x-default" href="https://purityclean.com/">
   <meta property="og:locale" content="es_CO">
 
   <meta name="twitter:card" content="summary_large_image">
@@ -32,6 +35,9 @@
     "name": "Purity & Clean",
     "description": "Servicios y productos profesionales de limpieza para hogares, PYMEs y empresas.",
     "url": "https://purityclean.com",
+    "image": [
+      "https://purityclean.com/images/og-image.svg"
+    ],
     "telephone": "+57-300-123-4567",
     "email": "contacto@purityclean.com",
     "address": {
@@ -323,12 +329,36 @@
       </ul>
     </nav>
 
+  <div class="urgency-banner" id="urgency-banner" role="banner" aria-label="Oferta limitada">
+    <div class="container urgency-banner-inner">
+      <span class="urgency-icon" aria-hidden="true"><i class="fa-solid fa-bolt"></i></span>
+      <span class="urgency-text"><strong>¡Últimos cupos de la semana!</strong> Solo quedan <span class="urgency-count" id="urgency-count">3</span> espacios disponibles. <a href="#reservas" class="urgency-cta">Reserva ahora con 10% off</a></span>
+      <button class="urgency-close" id="urgency-close" aria-label="Cerrar banner">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+    </div>
+  </div>
+
 <section class="hero container">
       <div class="hero-copy" data-reveal>
         <p class="eyebrow" data-reveal-item>Ambientes limpios, espacios saludables</p>
         <h1 data-reveal-item>Soluciones de limpieza para hogares, PYMEs y grandes organizaciones</h1>
         <p data-reveal-item>En Purity &amp; Clean cuidamos tus muebles, oficinas y espacios de trabajo con procesos seguros, productos especializados y atencion personalizada.</p>
         <a class="btn btn-primary" href="#contacto" data-reveal-item>Pedir Cita</a>
+        <div class="cta-guarantees" data-reveal-item aria-label="Garantías de este llamado a la acción">
+          <span class="cta-guarantee-item">
+            <i class="fa-solid fa-shield-check" aria-hidden="true"></i>
+            Cotización gratuita
+          </span>
+          <span class="cta-guarantee-item">
+            <i class="fa-solid fa-shield-check" aria-hidden="true"></i>
+            Garantía de satisfacción
+          </span>
+          <span class="cta-guarantee-item">
+            <i class="fa-solid fa-shield-check" aria-hidden="true"></i>
+            Respuesta en menos de 1 hora
+          </span>
+        </div>
       </div>
       <div class="hero-panel" data-reveal data-reveal-delay="150" aria-hidden="true">
         <h2>Busqueda rapida</h2>
@@ -345,6 +375,21 @@
       </div>
     </section>
   </header>
+
+  <div id="emergency-banner" class="emergency-banner" role="alert" aria-live="polite" hidden>
+    <div class="banner-content container">
+      <div class="banner-icon" aria-hidden="true">
+        <i class="fa-solid fa-cloud-rain"></i>
+      </div>
+      <div class="banner-text">
+        <strong>Temporada de lluvia <i class="fa-solid fa-umbrella" aria-hidden="true"></i></strong>
+        <span>Los daños por agua en sofás y colchones aumentan un 40%. Agenda tu limpieza antes de que el daño se agrave. <a href="#reservas">Cotiza ahora</a></span>
+      </div>
+      <button class="banner-close" id="banner-close" aria-label="Cerrar notificación">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+    </div>
+  </div>
 
   <main id="main-content">
     <section class="business-lines container" aria-label="Lineas de negocio">
@@ -776,6 +821,54 @@
           <i class="fa-solid fa-info-circle" aria-hidden="true"></i>
           Los precios pueden variar según tamaño, material y estado del mueble. <strong>Cotización final al evaluar el espacio.</strong>
         </p>
+      </div>
+    </section>
+
+    <section id="como-funciona" class="section" aria-labelledby="como-funciona-heading">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow" data-reveal-item>Proceso simple</p>
+          <h2 id="como-funciona-heading" data-reveal-item>Reserva en 4 pasos</h2>
+          <p class="section-intro" data-reveal-item>Sin complicaciones. Te acompañamos desde la cotización hasta el resultado final.</p>
+        </div>
+        <ol class="pasos-grid" role="list">
+          <li class="paso-item" data-reveal data-reveal-delay="50">
+            <div class="paso-numero" aria-hidden="true">1</div>
+            <div class="paso-icon" aria-hidden="true">
+              <i class="fa-solid fa-clipboard-list"></i>
+            </div>
+            <h3>Cotiza tu servicio</h3>
+            <p>Usa el cotizador o contáctanos por WhatsApp. Te confirmamos el costo en menos de 1 hora.</p>
+          </li>
+          <li class="paso-item" data-reveal data-reveal-delay="100">
+            <div class="paso-numero" aria-hidden="true">2</div>
+            <div class="paso-icon" aria-hidden="true">
+              <i class="fa-solid fa-calendar-check"></i>
+            </div>
+            <h3>Agenda la fecha</h3>
+            <p>Elige el día y horario que prefieras. Trabajamos los 7 días de la semana.</p>
+          </li>
+          <li class="paso-item" data-reveal data-reveal-delay="150">
+            <div class="paso-numero" aria-hidden="true">3</div>
+            <div class="paso-icon" aria-hidden="true">
+              <i class="fa-solid fa-sparkles"></i>
+            </div>
+            <h3>Realizamos la limpieza</h3>
+            <p>Nuestro equipo especializado llega a tu espacio con todos los equipos y productos.</p>
+          </li>
+          <li class="paso-item" data-reveal data-reveal-delay="200">
+            <div class="paso-numero" aria-hidden="true">4</div>
+            <div class="paso-icon" aria-hidden="true">
+              <i class="fa-solid fa-thumbs-up"></i>
+            </div>
+            <h3>Disfruta el resultado</h3>
+            <p>Recibe espacios impecables. Si no estás satisfecho, devolvemos tu dinero.</p>
+          </li>
+        </ol>
+        <div class="pasos-cta" data-reveal>
+          <a href="#reservas" class="btn btn-primary btn-lg">Comenzar cotización</a>
+          <span class="cta-note">Sin compromiso &bull; Respuesta en menos de 1 hora</span>
+        </div>
       </div>
     </section>
 
