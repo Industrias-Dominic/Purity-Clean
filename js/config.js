@@ -73,6 +73,8 @@ const CHATBOT_FAQ = [
   }
 ];
 
+const VAPID_PUBLIC_KEY = "BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjYgSn1c50d_1v2YBYGYZUNm6wBTRa6LmBMNI";
+
 const FORMSPREE_CONFIG = {
   booking: "xwpkjvvw",
   newsletter: "xbzykezv",

@@ -1367,9 +1367,7 @@ function initPushNotifications() {
 
   function subscribeUser() {
     navigator.serviceWorker.ready.then((registration) => {
-      const VAPID_PUBLIC_KEY = "BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjYgSn1c50d_1v2YBYGYZUNm6wBTRa6LmBMNI";
-
-      const applicationServerKey = urlBase64ToUint8Array(VAPID_PUBLIC_KEY);
+      const applicationServerKey = urlBase64ToUint8Array(window.VAPID_PUBLIC_KEY);
       registration.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: applicationServerKey
