@@ -102,11 +102,62 @@
         }
       ]
     },
+    "priceRange": "$$",
+    "areaServed": [
+      {
+        "@type": "City",
+        "name": "Bogotá"
+      },
+      {
+        "@type": "AdministrativeArea",
+        "name": "Cundinamarca"
+      }
+    ],
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Servicios de limpieza para hogares y empresas",
+      "itemListElement": [
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Limpieza profunda de sofás y muebles tapizados",
+            "description": "Servicio profesional de limpieza profunda de sofás, sillas y muebles tapados. Incluye remoción de polvo, manchas y olores con secado rápido."
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Sanitización y desinfección de colchones",
+            "description": "Eliminación de ácaros, bacterias y olores en colchones. Mejora la calidad del descanso con productos seguros para toda la familia."
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Mantenimiento de alfombras corporativas",
+            "description": "Programa periódico de limpieza para oficinas, salas de reuniones y espacios de alto tráfico. Limpieza profesional con equipos industriales."
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Limpieza de sillas ergonómicas y estaciones de trabajo",
+            "description": "Proceso especializado para oficinas y estaciones de trabajo. Elimina polvo, manchas y sanitiza superficies."
+          }
+        }
+      ]
+    },
     "aggregateRating": {
       "@type": "AggregateRating",
       "ratingValue": "4.8",
       "reviewCount": "127"
     },
+    "paymentAccepted": "Cash, Credit Card, Debit Card, Transferencia",
+    "currenciesAccepted": "COP",
     "review": [
       {
         "@type": "Review",
@@ -187,7 +238,15 @@
         "name": "¿Cuánto cuesta la limpieza profunda de un sofá?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "El servicio de limpieza profunda de sofás tiene un rango de precio entre $80.000 y $180.000 por unidad, dependiendo del tamaño, material y estado del mueble. La cotización final se realiza al evaluar el espacio."
+          "text": "El servicio de limpieza profunda de sofás tiene un rango de precio entre 80.000 y 180.000 pesos por unidad, dependiendo del tamaño, material y estado del mueble. La cotización final se realiza al evaluar el espacio."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Cuánto cobran por limpiar un sofá en Bogotá?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Los precios de limpieza de sofás en Bogotá van desde 80.000 hasta 180.000 pesos por unidad. El precio depende del tamaño del sofá, el tipo de tela y el estado de suciedad. Puedes contactarnos por WhatsApp para una cotización exacta."
         }
       },
       {
@@ -195,7 +254,7 @@
         "name": "¿Cómo funciona la sanitización de colchones?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "La sanitización de colchones incluye una desinfección profunda que elimina ácaros, bacterias y olores, mejorando la calidad del descanso. El servicio ranges entre $60.000 y $120.000 por unidad."
+          "text": "La sanitización de colchones incluye una desinfección profunda que elimina ácaros, bacterias y olores, mejorando la calidad del descanso. El servicio va desde 60.000 hasta 120.000 pesos por unidad."
         }
       },
       {
@@ -203,7 +262,7 @@
         "name": "¿Qué incluye el mantenimiento de alfombras corporativas?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "El mantenimiento de alfombras corporativas es un programa periódico para oficinas, salas de reuniones y recepciones de alto tráfico. El precio ranges entre $200.000 y $450.000 por área m²."
+          "text": "El mantenimiento de alfombras corporativas es un programa periódico para oficinas, salas de reuniones y recepciones de alto tráfico. El precio va desde 200.000 hasta 450.000 pesos por área metro cuadrado."
         }
       },
       {
@@ -216,6 +275,14 @@
       },
       {
         "@type": "Question",
+        "name": "¿Cuánto tarda en secar un sofá después de la limpieza?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "El secado después de nuestra limpieza profesional de sofás toma entre 2 y 6 horas dependiendo del tipo de tela, el clima y la ventilación del espacio. Usamos equipos de secado rápido."
+        }
+      },
+      {
+        "@type": "Question",
         "name": "¿Los productos utilizados son seguros para mascotas y niños?",
         "acceptedAnswer": {
           "@type": "Answer",
@@ -224,10 +291,26 @@
       },
       {
         "@type": "Question",
+        "name": "¿Puedo contratar un servicio de limpieza si tengo gatos o perros en casa?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Sí, nuestros productos de limpieza son completamente seguros para hogares con mascotas. Además, mantenemos a los animales en otra habitación durante el servicio por su comodidad y seguridad."
+        }
+      },
+      {
+        "@type": "Question",
         "name": "¿Ofrecen planes de limpieza recurrentes?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Sí, ofrecemos planes recurrentes con descuentos por compromiso prolongado: Plan Mensual Hogar desde $250.000/mes, Plan Trimestral PYME desde $600.000/trimestre, y Planes Corporativos desde $2.000.000/año."
+          "text": "Sí, ofrecemos planes recurrentes con descuentos por compromiso prolongado: Plan Mensual Hogar desde 250.000 pesos por mes, Plan Trimestral PYME desde 600.000 pesos por trimestre, y Planes Corporativos desde 2.000.000 pesos por año."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Hay descuento si contrato limpieza mensual?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Sí, ofrecemos el Plan Mensual Hogar desde 250.000 pesos mensuales con descuento por contrato prolongado. También tenemos planes trimestrales y anuales con ahorros de hasta el 20 por ciento."
         }
       },
       {
@@ -245,6 +328,141 @@
           "@type": "Answer",
           "text": "Atendemos hogares y empresas en toda Bogotá y áreas metropolitanas. Para zonas outside de la ciudad principal, consulta disponibilidad al contactarnos."
         }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Purity & Clean llega a Suba, Chapinero, Usaquén y otras zonas de Bogotá?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Sí, cubrimos toda Bogotá incluyendo las zonas de Suba, Chapinero, Usaquén, Fontibón, Teusaquillo, Kennedy, Engativá, Bosa y Usme. Consulta disponibilidad para tu zona específica por WhatsApp."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Necesito llevar los muebles a algún lugar o el servicio es a domicilio?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "El servicio es completamente a domicilio. No necesitas mover los muebles. Nuestros técnicos llegan a tu casa, evalúan los muebles en sitio y realizan la limpieza en el lugar."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Cómo puedo contratar el servicio de limpieza de sofás?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Para contratar nuestro servicio de limpieza de sofás, envía un WhatsApp al +57 300 123 4567 indicando el tipo y cantidad de muebles. Te responderemos con un presupuesto en menos de una hora."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Limpian sillas de oficina y estaciones de trabajo?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Sí, ofrecemos el servicio de limpieza técnica de sillas ergonómicas y estaciones de trabajo para oficinas y espacios corporativos. El servicio elimina polvo, manchas y sanitiza las superficies de trabajo."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿El servicio de limpieza de colchones elimina ácaros y alergias?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Sí, nuestra sanitización de colchones elimina ácaros, bacterias, hongos y alérgenos acumulados. Es ideal para personas con alergias o asma. El servicio mejora significativamente la calidad del descanso."
+        }
+      }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "Cómo contratar el servicio de limpieza de sofás en Bogotá",
+    "description": "Guía paso a paso para contratar el servicio de limpieza profunda de sofás y muebles tapados con Purity & Clean en Bogotá, Colombia.",
+    "totalTime": "PT10M",
+    "estimatedCost": {
+      "@type": "MonetaryAmount",
+      "currency": "COP",
+      "minValue": "80000",
+      "maxValue": "180000"
+    },
+    "supply": [
+      {
+        "@type": "HowToSupply",
+        "name": "Agenda de contacto o WhatsApp",
+        "image": "https://purityclean.com/images/icons/whatsapp.svg"
+      }
+    ],
+    "step": [
+      {
+        "@type": "HowToStep",
+        "name": "Contacto inicial",
+        "text": "Envía un mensaje por WhatsApp al +57 300 123 4567 indicando el tipo de mueble que necesitas limpiar y tu ubicación en Bogotá.",
+        "position": "1"
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Valoración del servicio",
+        "text": "Nuestro equipo te preguntará detalles sobre el tipo de mueble, tamaño, material y nivel de suciedad para darte un presupuesto preciso.",
+        "position": "2"
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Agenda la cita",
+        "text": "Acuerdan la fecha y hora de la visita. El servicio se realiza en tu domicilio sin necesidad de mover los muebles.",
+        "position": "3"
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Servicio profesional",
+        "text": "Llega nuestro técnico con equipos industriales, aplica los productos especializados y realiza la limpieza profunda con secado rápido.",
+        "position": "4"
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Disfruta tus muebles",
+        "text": "En pocas horas tus muebles están secos y listos para usar. El resultado dura meses con el mantenimiento adecuado.",
+        "position": "5"
+      }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "Cómo preparar tu hogar para el servicio de limpieza profesional",
+    "description": "Pasos para preparar tu hogar antes de que llegue el equipo de Purity & Clean para garantizar el mejor resultado en limpieza de sofás, colchones o alfombras.",
+    "totalTime": "PT20M",
+    "step": [
+      {
+        "@type": "HowToStep",
+        "name": "Retira objetos pequeños",
+        "text": "Retira cojines decorativos, control remoto, revistas y objetos personales de los muebles a limpiar.",
+        "position": "1"
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Aspira superficialmente",
+        "text": "Pasa la aspiradora por encima de sofás y colchones para quitar polvo y migas sueltas antes del servicio.",
+        "position": "2"
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Identifica las manchas",
+        "text": "Señala al técnico las manchas que más te preocupan para que les dé tratamiento especial durante la limpieza.",
+        "position": "3"
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Asegura ventilación",
+        "text": "Abre ventanas para ayudar al secado. El técnico dejará ventiladores si es necesario para acelerar el proceso.",
+        "position": "4"
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Mantén mascotas away",
+        "text": "Mantén a tus mascotas en otra habitación durante el servicio para su seguridad y para que el técnico pueda trabajar sin interrupciones.",
+        "position": "5"
       }
     ]
   }

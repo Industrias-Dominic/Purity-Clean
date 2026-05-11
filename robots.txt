@@ -3,9 +3,14 @@ Allow: /
 
 Sitemap: https://purityclean.com/sitemap.xml
 
+# Voice Assistant Crawlers
 User-agent: Googlebot
 User-agent: Bingbot
 User-agent: Slurp
+User-agent: DuckDuckBot
+User-agent: Applebot
+User-agent: Alexa
+User-agent: Amazonbot
 Crawl-delay: 1
 
 User-agent: AhrefsBot
